@@ -1,6 +1,6 @@
 # Spec da Feature — Estrutura Base do Portfólio Público
 
-Status: Rascunho  
+Status: Aprovada
 Projeto: Portfólio Profissional — Marcos Santos  
 Onde vive no código: `src/app/features/portfolio/presentation/`
 

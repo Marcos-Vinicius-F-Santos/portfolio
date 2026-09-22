@@ -65,7 +65,7 @@ que implementa e define como verificar que ficou pronta.
   - Arquivos/módulos: diff completo da feature e documentação de entrega, se necessária.
   - Verificação: confirmar que não houve alteração em Supabase, banco, autenticação ou features fora do escopo; registrar o commit/estado de referência e o procedimento de reversão.
 
-- [ ] T-013 [FR-001, FR-002, FR-003, FR-004] Submeter a feature para revisão de Marcos antes de qualquer deploy.
+- [x] T-013 [FR-001, FR-002, FR-003, FR-004] Submeter a feature para revisão de Marcos antes de qualquer deploy.
   - Arquivos/módulos: resultado final da feature.
   - Verificação: revisão humana concluída e aprovação registrada; nenhum deploy deve ser executado antes dessa aprovação.
 
