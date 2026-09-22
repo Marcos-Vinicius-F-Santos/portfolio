@@ -1,0 +1,149 @@
+:host {
+  --ink: #11130f;
+  --paper: #f4f1e9;
+  --paper-strong: #e8e4d9;
+  --red: #a8322d;
+  --green: #176b4d;
+  --green-light: #b9efd2;
+  --line: #c9c4b7;
+  display: block;
+  color: var(--ink);
+}
+
+.portfolio-page {
+  background: var(--paper);
+  min-height: 100vh;
+}
+
+.page-header {
+  display: grid;
+  gap: 2rem;
+  min-height: min(42rem, 78vh);
+  padding: clamp(2rem, 6vw, 5.5rem) clamp(1.25rem, 8vw, 8rem);
+  align-content: space-between;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.eyebrow,
+.section-index {
+  margin: 0;
+  color: var(--green-light);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 0.86;
+}
+
+.intro {
+  max-width: 34rem;
+  margin: 0;
+  color: #d8d9cf;
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  line-height: 1.5;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  border: 1px solid #59635c;
+  padding: 0.65rem 0.9rem;
+  color: var(--paper);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.84rem;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+  border-color: var(--green-light);
+  background: var(--green-light);
+  color: var(--ink);
+  outline: none;
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 4rem) clamp(1.25rem, 8vw, 8rem) 5rem;
+}
+
+section {
+  min-height: 22rem;
+  border-top: 1px solid var(--line);
+  padding: 2rem clamp(1rem, 3vw, 2.5rem) 2rem 0;
+}
+
+section + section {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(1rem, 3vw, 2.5rem);
+}
+
+section:nth-child(2) .section-index {
+  color: var(--red);
+}
+
+section h2 {
+  margin: 3rem 0 1.25rem;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+section p:last-child {
+  max-width: 24rem;
+  margin: 0;
+  color: #44463f;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 760px) {
+  .page-header {
+    min-height: auto;
+    gap: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: clamp(3.5rem, 18vw, 6rem);
+  }
+
+  .sections {
+    display: block;
+    padding-top: 0;
+  }
+
+  section,
+  section + section {
+    min-height: auto;
+    border-left: 0;
+    padding: 2.5rem 0 3rem;
+  }
+
+  section h2 {
+    margin-top: 2rem;
+  }
+}

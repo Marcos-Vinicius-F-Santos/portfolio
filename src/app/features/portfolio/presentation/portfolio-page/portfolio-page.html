@@ -1,0 +1,44 @@
+<main class="portfolio-page" data-testid="portfolio-page">
+  <header class="page-header">
+    <p class="eyebrow">Portfólio profissional</p>
+    <h1>Marcos Santos</h1>
+    <p class="intro">
+      Engenharia de software, arquitetura de soluções e transformação digital.
+    </p>
+
+    <nav aria-label="Navegação principal">
+      <ul>
+        @for (item of navigationItems; track item.targetId) {
+          <li>
+            <a
+              [href]="'#' + item.targetId"
+              (click)="navigateToSection($event, item.targetId)"
+            >
+              {{ item.label }}
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+  </header>
+
+  <div class="sections">
+    <section id="sobre-mim" aria-labelledby="sobre-mim-title">
+      <p class="section-index">01</p>
+      <h2 id="sobre-mim-title">Sobre mim</h2>
+      <p>Conteúdo profissional da apresentação será conectado nas próximas features.</p>
+    </section>
+
+    <section id="experiencias" aria-labelledby="experiencias-title">
+      <p class="section-index">02</p>
+      <h2 id="experiencias-title">Experiências</h2>
+      <p>As experiências profissionais serão apresentadas nesta seção.</p>
+    </section>
+
+    <section id="stack-tecnica" aria-labelledby="stack-tecnica-title">
+      <p class="section-index">03</p>
+      <h2 id="stack-tecnica-title">Stack técnica</h2>
+      <p>As tecnologias e competências serão apresentadas nesta seção.</p>
+    </section>
+  </div>
+</main>
