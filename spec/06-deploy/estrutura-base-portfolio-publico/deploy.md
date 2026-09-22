@@ -2,21 +2,21 @@
 
 Ambiente: Vercel Production, projeto Angular estático em `E:\Projects\portfolio`
 Data: 2026-09-22
-Status: Procedimento preenchido — aguardando aprovação explícita para deploy
+Status: Deploy executado e validação pós-deploy concluída
 
 ## Escopo e valores operacionais
 
 Este procedimento publica a aplicação Angular da feature `estrutura-base-portfolio-publico` como site estático na Vercel, seguindo a arquitetura aprovada: código no GitHub e deploy conectado ao branch de produção na Vercel.
 
-Os valores abaixo ainda não estão registrados no repositório e precisam ser preenchidos durante a configuração inicial da Vercel:
+Valores operacionais registrados para esta execução:
 
-- Repositório GitHub: `<OWNER>/<REPOSITORY>`
-- Projeto Vercel: `<VERCEL_PROJECT_NAME_OR_ID>`
-- Escopo Vercel: `<VERCEL_SCOPE_OR_ACCOUNT>`
-- URL de produção: `<PRODUCTION_URL>`
+- Repositório GitHub: ainda não configurado (`<OWNER>/<REPOSITORY>`)
+- Projeto Vercel: `portfolio` (`prj_2Hvxo06nKqzUcJgYB0i0Gq7Kwnlj`)
+- Escopo Vercel: `marcos-vinicius-f-santos-projects`
+- URL de produção: `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app`
 - Branch de produção: `main`
 
-Não inventei esses valores porque não há remote GitHub, projeto Vercel ou domínio registrados no ambiente local revisado.
+O projeto Vercel foi criado durante este deploy. O remote GitHub e um domínio personalizado continuam não configurados.
 
 ## Pré-condições
 
@@ -24,11 +24,11 @@ Não inventei esses valores porque não há remote GitHub, projeto Vercel ou dom
 - [x] A feature foi implementada no projeto Angular em `E:\Projects\portfolio`.
 - [x] O build local produz os artefatos em `dist/portfolio`.
 - [x] Não há banco de dados nem migration nesta feature.
-- [ ] O aprovador revisou o diff final e aprovou o deploy.
+- [x] O aprovador revisou o diff final e aprovou o deploy.
 - [ ] O repositório GitHub foi criado e o remote `origin` aponta para `<OWNER>/<REPOSITORY>`.
-- [ ] O projeto Vercel está conectado ao repositório GitHub e usa `main` como branch de produção.
-- [ ] Existe uma implantação Preview conhecida como válida para esta versão.
-- [ ] O projeto Vercel tem uma implantação Production anterior conhecida como válida, ou o aprovador aceitou que o primeiro deploy não terá rollback para uma versão anterior.
+- [ ] O projeto Vercel está conectado ao repositório GitHub e usa `main` como branch de produção. Nesta execução, o deploy foi feito diretamente pela CLI.
+- [ ] Existe uma implantação Preview conhecida como válida para esta versão. Nesta execução, a aprovação foi dada para publicação direta.
+- [x] O aprovador aceitou que o primeiro deploy não tinha uma implantação Production anterior para rollback.
 
 ## Passos do deploy
 
@@ -118,6 +118,26 @@ Depois da validação da Preview e da aprovação do responsável pelo deploy:
 5. Registre o SHA do commit, o ID/URL da implantação e a URL de produção nesta documentação ou no registro de entrega.
 
 Esse fluxo usa o mecanismo GitHub → Vercel previsto para o produto. O deploy não deve ser feito diretamente com um build local copiado manualmente para a Vercel.
+### Registro da execução aprovada
+
+Como não havia remote GitHub nem projeto Vercel existente, a execução autorizada usou o caminho direto da CLI:
+
+```powershell
+Set-Location E:\Projects\portfolio
+npx vercel --prod --yes
+```
+
+Resultado:
+
+- Commit local de origem: `33a3bde docs: register convergence and deploy procedure`
+- Projeto criado: `marcos-vinicius-f-santos-projects/portfolio`
+- Deployment ID: `7M6Jq5zq7CfR5XzdgXHnje3syKA2`
+- URL Production: `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app`
+- URL alternativa da implantação: `https://portfolio-eight-pied-855iwa1x0n.vercel.app`
+- Status: `Ready`
+- Build remoto: Angular detectado; `npm run build` concluído; saída efetiva em `/vercel/path0/dist/portfolio`
+
+Esta é uma divergência operacional do fluxo GitHub → Vercel previsto originalmente. O próximo deploy deve configurar o remote GitHub e conectar o projeto Vercel antes de publicar mudanças.
 
 ## Ordem de migration de banco (se houver)
 
@@ -125,7 +145,7 @@ Não se aplica. Esta feature é uma aplicação Angular estática e não cria, a
 
 ## Validação depois do deploy
 
-Na URL registrada em `<PRODUCTION_URL>`:
+Na URL `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app`:
 
 1. Abra a página em uma janela anônima.
 2. Confirme que a resposta é carregada pela Vercel e que a página não exibe erro de build.
@@ -155,10 +175,10 @@ Use este caminho quando a Production estiver quebrada. Ele restaura uma implanta
    npx vercel rollback status
    ```
 
-   Execute `npx vercel login` e `npx vercel link` somente se a máquina ainda não estiver autenticada ou o diretório ainda não estiver vinculado ao projeto `<VERCEL_PROJECT_NAME_OR_ID>`; escolha o escopo `<VERCEL_SCOPE_OR_ACCOUNT>` e o projeto correto quando a CLI perguntar.
+   Execute `npx vercel login` e `npx vercel link` somente se a máquina ainda não estiver autenticada ou o diretório ainda não estiver vinculado ao projeto `portfolio`; escolha o escopo `marcos-vinicius-f-santos-projects` e o projeto correto quando a CLI perguntar.
 
 3. Aguarde `vercel rollback status` indicar que o rollback terminou.
-4. Abra `<PRODUCTION_URL>` em uma janela anônima.
+4. Abra `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app` em uma janela anônima.
 5. Repita os oito itens da seção **Validação depois do deploy**.
 6. Se o rollback tiver restaurado a versão errada, promova explicitamente a implantação conhecida como válida:
 
@@ -196,7 +216,7 @@ npx vercel rollback status
 4. Valide a nova Preview antes de permitir que ela chegue a `main`. Se a correção já foi revertida em uma branch separada, faça o merge apenas depois de a Preview passar.
 5. Depois de uma nova implantação Production válida, confirme a URL e o commit no dashboard da Vercel.
 
-O commit atual da feature é um commit raiz (`118f2b1`); portanto, `git revert 118f2b1` não é um rollback comprovado para uma versão anterior do produto. Para esta primeira publicação, o rollback operacional é o rollback/promote da Vercel. O rollback por Git passa a ser aplicável depois que houver um commit posterior com um pai conhecido e uma versão anterior efetivamente publicada.
+O commit inicial da feature (`118f2b1`) era um commit raiz; portanto, `git revert 118f2b1` não é um rollback comprovado para uma versão anterior do produto. Para esta primeira publicação, o rollback operacional é o rollback/promote da Vercel. O rollback por Git passa a ser aplicável depois que houver um commit posterior com um pai conhecido e uma versão anterior efetivamente publicada.
 
 ## Mudanças de variáveis de ambiente e segredos
 
@@ -219,3 +239,5 @@ O commit atual da feature é um commit raiz (`118f2b1`); portanto, `git revert 1
 - [Documentação Vercel — configurar build](https://vercel.com/docs/builds/configure-a-build)
 - [Documentação Vercel — promover uma implantação](https://vercel.com/docs/deployments/promoting-a-deployment)
 - [Documentação Vercel — rollback de uma implantação Production](https://vercel.com/docs/deployments/rollback-production-deployment)
+
+
