@@ -301,6 +301,7 @@ Migrations Supabase: aplicadas e verificadas
 Início: 2026-09-23 17:51 BRT
 Conclusão: 2026-09-23 17:56 BRT
 Validação: página Angular e runtime-config.js confirmados via vercel curl
+Observabilidade: nenhum log de erro encontrado na última hora
 Rollback necessário: não
 Aprovação de Marcos: recebida
 ```
