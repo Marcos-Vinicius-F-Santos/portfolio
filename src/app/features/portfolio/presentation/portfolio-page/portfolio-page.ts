@@ -3,6 +3,7 @@ import { afterNextRender, Component, computed, inject, viewChild, ElementRef } f
 import { ORIGINAL_COPY, PortfolioCopy, selectPortfolioCopy } from '../../content/portfolio-content';
 import { PortfolioLanguageService } from '../../content/portfolio-language.service';
 import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../content/portfolio-translations';
+import { PortfolioContentService } from '../../content/portfolio-content.service';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -13,9 +14,14 @@ import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../content/portfolio-transl
 export class PortfolioPage {
   protected readonly language = inject(PortfolioLanguageService);
   private readonly translationSource = inject(TRANSLATION_SOURCE);
-  protected readonly copy = computed(() =>
-    selectPortfolioCopy(this.language.language(), this.translationSource),
-  );
+  private readonly content = inject(PortfolioContentService);
+  protected readonly copy = computed(() => {
+    const localCopy = selectPortfolioCopy(this.language.language(), this.translationSource);
+    const remoteCopy = this.content.remoteCopy();
+    return Object.keys(remoteCopy).length === 0
+      ? localCopy
+      : { ...localCopy, ...remoteCopy };
+  });
   protected readonly original = ORIGINAL_COPY;
   protected readonly english = ENGLISH_COPY;
   protected readonly navigationItems = [
@@ -36,6 +42,7 @@ export class PortfolioPage {
     afterNextRender(() => {
       this.language.initialize();
       this.document.documentElement.lang = this.language.language();
+      void this.content.loadCopy(this.language.language());
       if (this.language.showSuggestion()) this.suggestion()?.nativeElement.showModal?.();
     });
   }
@@ -44,12 +51,14 @@ export class PortfolioPage {
     if (language !== 'pt-BR' && language !== 'en') return;
     this.language.choose(language);
     this.document.documentElement.lang = this.language.language();
+    void this.content.loadCopy(this.language.language());
   }
 
   protected respond(accept: boolean): void {
     if (accept) this.language.acceptSuggestion();
     else this.language.declineSuggestion();
     this.document.documentElement.lang = this.language.language();
+    void this.content.loadCopy(this.language.language());
     this.suggestion()?.nativeElement.close?.();
     this.selector()?.nativeElement.focus({ preventScroll: true });
   }
