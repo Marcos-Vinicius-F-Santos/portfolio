@@ -18,10 +18,10 @@ Vercel CLI, já vinculada ao projeto local por `.vercel/project.json`.
 - [x] `npm test -- --watch=false --no-progress` passou com 58 testes.
 - [x] `npm run build` passou.
 - [x] Nenhum `service_role`, segredo ou senha está no código.
-- [ ] As variáveis `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` foram adicionadas à
+- [x] As variáveis `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` foram adicionadas à
   Vercel para `production` e `preview`.
-- [ ] O diff final foi revisado por Marcos.
-- [ ] Marcos respondeu explicitamente **“Aprovado pra deploy?”**.
+- [x] O diff final foi revisado por Marcos.
+- [x] Marcos respondeu explicitamente **“Aprovado”** para este deploy.
 
 ## Variáveis de ambiente e segredos
 
@@ -178,16 +178,20 @@ as migrations antes de publicar o novo frontend.
 
 ## Validação depois do deploy
 
-Substitua `$TargetUrl` pela URL da prévia ou pelo alias de produção:
+Substitua `$TargetUrl` pela URL da prévia ou pelo alias de produção. Como as previews
+podem estar protegidas pela Vercel, use `vercel curl`, que autentica a requisição pela
+sessão da CLI sem imprimir o conteúdo completo:
 
 ```powershell
 $TargetUrl = 'COLE_AQUI_A_URL_VALIDADA'
-$home = Invoke-WebRequest -UseBasicParsing "$TargetUrl/"
-if ($home.StatusCode -ne 200) { throw "Página retornou HTTP $($home.StatusCode)" }
+$pageResponse = (npx vercel curl "$TargetUrl/" --scope marcos-vinicius-f-santos-projects 2>$null | Out-String)
+if ($LASTEXITCODE -ne 0 -or $pageResponse -notmatch '<app-root') {
+  throw 'Página não retornou o HTML Angular esperado'
+}
 
-$runtime = Invoke-WebRequest -UseBasicParsing "$TargetUrl/runtime-config.js"
-if ($runtime.StatusCode -ne 200 -or $runtime.Content -notmatch '__PORTFOLIO_SUPABASE_CONFIG__') {
-  throw 'runtime-config.js ausente ou inválido'
+$runtimeResponse = (npx vercel curl "$TargetUrl/runtime-config.js" --scope marcos-vinicius-f-santos-projects 2>$null | Out-String)
+if ($LASTEXITCODE -ne 0 -or $runtimeResponse -notmatch '__PORTFOLIO_SUPABASE_CONFIG__' -or $runtimeResponse -notmatch 'jjndvtjhxutuerwvjocy.supabase.co' -or $runtimeResponse -notmatch 'sb_publishable_') {
+  throw 'runtime-config.js ausente ou configuração Supabase inválida'
 }
 
 Write-Host "Página e runtime-config.js responderam corretamente em $TargetUrl"
@@ -284,13 +288,21 @@ Supabase ausente ou regressão após a promoção.
 ## Histórico do deploy
 
 ```text
-Status: procedimento preparado; deploy desta feature ainda não executado
-Produção conhecida antes desta feature: dpl_E5djeir5AVhQmyzfG6Fqb2kFQw2h
-URL imutável conhecida: https://portfolio-6tzm90785-marcos-vinicius-f-santos-projects.vercel.app
-Alias atual conhecido: https://portfolio-eight-pied-855iwa1x0n.vercel.app
-Variáveis Supabase na Vercel: ainda não configuradas
+Status: publicado e validado
+Commit publicado: 47500e74295dc7354463355c7eead39bb93ded64
+Preview validada: https://portfolio-8l3qbu4s1-marcos-vinicius-f-santos-projects.vercel.app
+Preview deployment: dpl_2ppcCmWmpPX5igAnGu8BquddtCPr
+Produção promovida: https://portfolio-5xtmjtlch-marcos-vinicius-f-santos-projects.vercel.app
+Production deployment: dpl_BaAnS4V7AKad4vZLLKjiFWXV2MMu
+Alias de produção: https://portfolio-eight-pied-855iwa1x0n.vercel.app
+Deployment anterior: dpl_E5djeir5AVhQmyzfG6Fqb2kFQw2h
+Variáveis Supabase: configuradas em Production e Preview
 Migrations Supabase: aplicadas e verificadas
-Aprovação de Marcos: pendente
+Início: 2026-09-23 17:51 BRT
+Conclusão: 2026-09-23 17:56 BRT
+Validação: página Angular e runtime-config.js confirmados via vercel curl
+Rollback necessário: não
+Aprovação de Marcos: recebida
 ```
 
 **Aprovado pra deploy?**
