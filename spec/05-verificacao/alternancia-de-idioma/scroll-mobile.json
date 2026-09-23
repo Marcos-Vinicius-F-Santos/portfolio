@@ -1,0 +1,382 @@
+{
+  "width": 320,
+  "overflow": false,
+  "results": [
+    {
+      "section": "sobre-mim",
+      "language": "pt-BR",
+      "before": {
+        "y": 557,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 557,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "sobre-mim",
+      "language": "en",
+      "before": {
+        "y": 557,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 557,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "experiencias",
+      "language": "pt-BR",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "experiencias",
+      "language": "en",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "stack-tecnica",
+      "language": "pt-BR",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "stack-tecnica",
+      "language": "en",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "bottom",
+      "language": "pt-BR",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    },
+    {
+      "section": "bottom",
+      "language": "en",
+      "before": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "after": {
+        "y": 800,
+        "height": 1368,
+        "sections": [
+          {
+            "id": "sobre-mim",
+            "top": 556.59375,
+            "height": 261.515625
+          },
+          {
+            "id": "experiencias",
+            "top": 818.109375,
+            "height": 235.125
+          },
+          {
+            "id": "stack-tecnica",
+            "top": 1053.234375,
+            "height": 235.125
+          }
+        ]
+      },
+      "preserved": true
+    }
+  ]
+}

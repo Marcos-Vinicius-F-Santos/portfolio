@@ -1,44 +1,70 @@
-<main class="portfolio-page" data-testid="portfolio-page">
+<main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
   <header class="page-header">
-    <p class="eyebrow">Portfólio profissional</p>
+    <div class="header-top">
+      <p class="eyebrow">
+        <ng-container *ngTemplateOutlet="localized; context: { key: 'eyebrow' }" />
+      </p>
+      <label class="language-control">
+        <span
+          ><ng-container *ngTemplateOutlet="localized; context: { key: 'languageLabel' }"
+        /></span>
+        <select
+          #selector
+          [value]="language.language()"
+          (change)="choose(selector.value)"
+          data-testid="language-select"
+        >
+          <option value="pt-BR" lang="pt-BR">Português (Brasil)</option>
+          <option value="en" lang="en">English</option>
+        </select>
+      </label>
+    </div>
     <h1>Marcos Santos</h1>
-    <p class="intro">
-      Engenharia de software, arquitetura de soluções e transformação digital.
-    </p>
-
-    <nav aria-label="Navegação principal">
+    <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
+    <nav [attr.aria-label]="copy().navigation">
       <ul>
         @for (item of navigationItems; track item.targetId) {
           <li>
-            <a
-              [href]="'#' + item.targetId"
-              (click)="navigateToSection($event, item.targetId)"
-            >
-              {{ item.label }}
+            <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
+              <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
             </a>
           </li>
         }
       </ul>
     </nav>
   </header>
-
   <div class="sections">
-    <section id="sobre-mim" aria-labelledby="sobre-mim-title">
-      <p class="section-index">01</p>
-      <h2 id="sobre-mim-title">Sobre mim</h2>
-      <p>Conteúdo profissional da apresentação será conectado nas próximas features.</p>
-    </section>
-
-    <section id="experiencias" aria-labelledby="experiencias-title">
-      <p class="section-index">02</p>
-      <h2 id="experiencias-title">Experiências</h2>
-      <p>As experiências profissionais serão apresentadas nesta seção.</p>
-    </section>
-
-    <section id="stack-tecnica" aria-labelledby="stack-tecnica-title">
-      <p class="section-index">03</p>
-      <h2 id="stack-tecnica-title">Stack técnica</h2>
-      <p>As tecnologias e competências serão apresentadas nesta seção.</p>
-    </section>
+    @for (item of navigationItems; track item.targetId) {
+      <section [id]="item.targetId" [attr.aria-labelledby]="item.targetId + '-title'">
+        <p class="section-index">{{ item.index }}</p>
+        <h2 [id]="item.targetId + '-title'">
+          <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+        </h2>
+        <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
+      </section>
+    }
   </div>
 </main>
+
+<ng-template #localized let-key="key">
+  <span class="localized-copy">
+    <span class="translation-size" aria-hidden="true">{{ $any(original)[key] }}</span>
+    <span class="translation-size" aria-hidden="true">{{ $any(english)[key] }}</span>
+    <span class="translated-text">{{ $any(copy())[key] }}</span>
+  </span>
+</ng-template>
+
+<dialog
+  #suggestion
+  closedby="none"
+  class="language-suggestion"
+  aria-labelledby="language-suggestion-title"
+  lang="pt-BR"
+  (cancel)="$event.preventDefault()"
+>
+  <p id="language-suggestion-title">Idioma sugerido: Inglês</p>
+  <div class="suggestion-actions">
+    <button type="button" (click)="respond(false)">Recusar</button>
+    <button type="button" class="accept" (click)="respond(true)">Aceitar</button>
+  </div>
+</dialog>
