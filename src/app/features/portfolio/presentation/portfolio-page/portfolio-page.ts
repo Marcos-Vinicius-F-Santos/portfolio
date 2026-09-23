@@ -1,9 +1,21 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { afterNextRender, Component, computed, inject, viewChild, ElementRef } from '@angular/core';
-import { ORIGINAL_COPY, PortfolioCopy, selectPortfolioCopy } from '../../content/portfolio-content';
+import {
+  hasPortfolioSectionContent,
+  ORIGINAL_COPY,
+  PortfolioCopy,
+  selectPortfolioCopy,
+} from '../../content/portfolio-content';
 import { PortfolioLanguageService } from '../../content/portfolio-language.service';
 import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../content/portfolio-translations';
 import { PortfolioContentService } from '../../content/portfolio-content.service';
+
+type NavigationItem = {
+  title: keyof PortfolioCopy;
+  body: keyof PortfolioCopy;
+  targetId: string;
+  index: string;
+};
 
 @Component({
   selector: 'app-portfolio-page',
@@ -24,16 +36,34 @@ export class PortfolioPage {
   });
   protected readonly original = ORIGINAL_COPY;
   protected readonly english = ENGLISH_COPY;
-  protected readonly navigationItems = [
-    { title: 'aboutTitle', body: 'aboutBody', targetId: 'sobre-mim', index: '01' },
-    { title: 'experienceTitle', body: 'experienceBody', targetId: 'experiencias', index: '02' },
-    { title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' },
-  ] as const satisfies readonly {
-    title: keyof PortfolioCopy;
-    body: keyof PortfolioCopy;
-    targetId: string;
-    index: string;
-  }[];
+  protected readonly showPresentation = computed(() =>
+    hasPortfolioSectionContent(this.copy(), 'presentation'),
+  );
+  protected readonly showAbout = computed(() => hasPortfolioSectionContent(this.copy(), 'about'));
+  protected readonly navigationItems = computed(() => {
+    const items: NavigationItem[] = [];
+
+    if (this.showPresentation()) {
+      items.push({
+        title: 'presentationTitle',
+        body: 'intro',
+        targetId: 'apresentacao',
+        index: '00',
+      });
+    }
+    if (this.showAbout()) {
+      items.push({ title: 'aboutTitle', body: 'aboutBody', targetId: 'sobre-mim', index: '01' });
+    }
+
+    items.push(
+      { title: 'experienceTitle', body: 'experienceBody', targetId: 'experiencias', index: '02' },
+      { title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' },
+    );
+    return items;
+  });
+  protected readonly sectionItems = computed(() =>
+    this.navigationItems().filter((item) => item.targetId !== 'apresentacao'),
+  );
   private readonly document = inject(DOCUMENT);
   private readonly suggestion = viewChild<ElementRef<HTMLDialogElement>>('suggestion');
   private readonly selector = viewChild<ElementRef<HTMLSelectElement>>('selector');

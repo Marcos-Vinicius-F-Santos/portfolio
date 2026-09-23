@@ -1,5 +1,8 @@
 <main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
-  <header class="page-header">
+  <header
+    class="page-header"
+    [attr.id]="showPresentation() ? 'apresentacao' : null"
+  >
     <div class="header-top">
       <p class="eyebrow">
         <ng-container *ngTemplateOutlet="localized; context: { key: 'eyebrow' }" />
@@ -19,11 +22,13 @@
         </select>
       </label>
     </div>
-    <h1>Marcos Santos</h1>
-    <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
+    @if (showPresentation()) {
+      <h1>Marcos Santos</h1>
+      <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
+    }
     <nav [attr.aria-label]="copy().navigation">
       <ul>
-        @for (item of navigationItems; track item.targetId) {
+        @for (item of navigationItems(); track item.targetId) {
           <li>
             <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
               <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
@@ -34,7 +39,7 @@
     </nav>
   </header>
   <div class="sections">
-    @for (item of navigationItems; track item.targetId) {
+    @for (item of sectionItems(); track item.targetId) {
       <section [id]="item.targetId" [attr.aria-labelledby]="item.targetId + '-title'">
         <p class="section-index">{{ item.index }}</p>
         <h2 [id]="item.targetId + '-title'">

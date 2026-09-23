@@ -22,29 +22,34 @@ describe('PortfolioPage', () => {
     return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  it('renders the three sections and stable navigation targets in both languages', async () => {
+  it('renders the presentation, about, and existing sections with stable navigation targets', async () => {
     const { fixture, element } = await render();
     const sections = [...element.querySelectorAll('section')];
     for (const language of ['en', 'pt-BR'] as const) {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
+      expect(element.querySelector('#apresentacao')).toBeTruthy();
       for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica']) {
         expect(element.querySelector('#' + id)).toBeTruthy();
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
+      expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
       expect([...element.querySelectorAll('section')]).toEqual(sections);
-      expect(element.querySelectorAll('nav a')).toHaveLength(3);
+      expect(element.querySelectorAll('nav a')).toHaveLength(4);
     }
   });
 
-  it.each(['sobre-mim', 'experiencias', 'stack-tecnica'])('scrolls smoothly to %s', async (id) => {
-    const { element } = await render();
-    const target = element.querySelector('#' + id)!;
-    const scrollIntoView = vi.fn();
-    Object.defineProperty(target, 'scrollIntoView', { configurable: true, value: scrollIntoView });
-    (element.querySelector(`a[href="#${id}"]`) as HTMLAnchorElement).click();
-    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
-  });
+  it.each(['apresentacao', 'sobre-mim', 'experiencias', 'stack-tecnica'])(
+    'scrolls smoothly to %s',
+    async (id) => {
+      const { element } = await render();
+      const target = element.querySelector('#' + id)!;
+      const scrollIntoView = vi.fn();
+      Object.defineProperty(target, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+      (element.querySelector(`a[href="#${id}"]`) as HTMLAnchorElement).click();
+      expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+    },
+  );
 
   it('keeps the page usable when the actual navigation target is missing', async () => {
     const { element } = await render();
@@ -55,7 +60,24 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('[data-testid="portfolio-page"]')).toBeTruthy();
   });
 
-  it('switches manually and preserves section nodes (AC-004)', async () => {
+  it('hides a feature section when its original content is unavailable', async () => {
+    const originalTitle = ORIGINAL_COPY.aboutTitle;
+    const originalBody = ORIGINAL_COPY.aboutBody;
+    ORIGINAL_COPY.aboutTitle = '';
+    ORIGINAL_COPY.aboutBody = '';
+    try {
+      const { element } = await render();
+      expect(element.querySelector('#sobre-mim')).toBeNull();
+      expect(element.querySelector('a[href="#sobre-mim"]')).toBeNull();
+      expect(element.querySelector('#apresentacao')).toBeTruthy();
+      expect(element.querySelector('#experiencias')).toBeTruthy();
+    } finally {
+      ORIGINAL_COPY.aboutTitle = originalTitle;
+      ORIGINAL_COPY.aboutBody = originalBody;
+    }
+  });
+
+  it('switches manually and preserves section nodes (AC-003)', async () => {
     const { fixture, element } = await render();
     const select = element.querySelector('select')!;
     const section = element.querySelector('#sobre-mim');
