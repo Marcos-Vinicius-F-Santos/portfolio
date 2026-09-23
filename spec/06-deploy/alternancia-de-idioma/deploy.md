@@ -3,8 +3,8 @@
 **Ambiente:** produção na Vercel  
 **Projeto:** `portfolio`  
 **Escopo:** `marcos-vinicius-f-santos-projects`  
-**URL:** `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app`  
-**Data:** preencher após a aprovação
+**URL pública:** `https://portfolio-eight-pied-855iwa1x0n.vercel.app`  
+**Data:** 2026-09-23
 
 ## Pré-condições
 
@@ -12,10 +12,10 @@
 - [x] 54 testes automatizados passaram.
 - [x] Build de produção passou.
 - [x] Fluxo verificado no Chrome em desktop e viewport móvel.
-- [ ] Alterações registradas em um commit local.
-- [ ] Prévia publicada e validada.
-- [ ] Deployment anterior registrado.
-- [ ] Aprovação explícita de Marcos recebida.
+- [x] Alterações registradas no commit local `c53d7f4`.
+- [x] Prévia publicada; resposta autenticada e produção visualmente validadas.
+- [x] Deployment anterior `dpl_7M6Jq5zq7CfR5XzdgXHnje3syKA2` registrado.
+- [x] Aprovação explícita de Marcos recebida.
 
 ## Variáveis de ambiente e segredos
 
@@ -84,7 +84,7 @@ O repositório não possui remoto Git nem integração GitHub → Vercel. O flux
 
    ```powershell
    npx vercel ls portfolio --scope marcos-vinicius-f-santos-projects
-   npx vercel inspect 'https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app' --scope marcos-vinicius-f-santos-projects
+   npx vercel inspect 'https://portfolio-eight-pied-855iwa1x0n.vercel.app' --scope marcos-vinicius-f-santos-projects
    ```
 
    ```text
@@ -93,7 +93,7 @@ O repositório não possui remoto Git nem integração GitHub → Vercel. O flux
    Data/hora:
    ```
 
-   Referência anterior conhecida: `https://portfolio-eight-pied-855iwa1x0n.vercel.app`, ID `7M6Jq5zq7CfR5XzdgXHnje3syKA2`. Confirme-a com `vercel inspect` antes do deploy.
+   Referência anterior conhecida: `https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app`, ID `dpl_7M6Jq5zq7CfR5XzdgXHnje3syKA2`. Confirme-a com `vercel inspect` antes do deploy.
 
 6. Publique uma prévia:
 
@@ -160,7 +160,7 @@ Se algum item falhar em produção, execute o rollback imediatamente.
 
    ```powershell
    npx vercel rollback status --scope marcos-vinicius-f-santos-projects
-   npx vercel inspect 'https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app' --scope marcos-vinicius-f-santos-projects
+   npx vercel inspect 'https://portfolio-eight-pied-855iwa1x0n.vercel.app' --scope marcos-vinicius-f-santos-projects
    ```
 
 4. Abra a produção em janela anônima. Confirme que a página, seções, links e navegação carregam sem erro fatal.
@@ -168,13 +168,13 @@ Se algum item falhar em produção, execute o rollback imediatamente.
 5. Se o rollback automático restaurar a versão errada, promova a referência conhecida:
 
    ```powershell
-   $KnownGood = 'https://portfolio-eight-pied-855iwa1x0n.vercel.app'
+   $KnownGood = 'https://portfolio-m4cscu20o-marcos-vinicius-f-santos-projects.vercel.app'
    npx vercel inspect $KnownGood --scope marcos-vinicius-f-santos-projects
    npx vercel promote $KnownGood --yes --scope marcos-vinicius-f-santos-projects
    npx vercel promote status --scope marcos-vinicius-f-santos-projects
    ```
 
-   No `inspect`, confirme o ID `7M6Jq5zq7CfR5XzdgXHnje3syKA2`. Se ele não corresponder, use a URL registrada no passo 5 do deploy.
+   No `inspect`, confirme o ID `dpl_7M6Jq5zq7CfR5XzdgXHnje3syKA2`. Se ele não corresponder, use a URL registrada no passo 5 do deploy.
 
 6. Registre horário, sintoma, deployment defeituoso e deployment restaurado. Uma nova publicação exige correção, testes, build, nova prévia e nova aprovação.
 
@@ -185,14 +185,16 @@ Não há dado de servidor para recuperar. O rollback não apaga a preferência d
 ## Histórico do deploy
 
 ```text
-Status: aguardando aprovação
-Commit publicado:
-URL da prévia promovida:
-Deployment anterior:
-Início:
-Conclusão:
-Responsável:
-Resultado da validação:
-Rollback necessário: não executado
-Observações:
+Status: publicado e validado
+Commit publicado: c53d7f4
+URL da prévia promovida: https://portfolio-agpnb5zqf-marcos-vinicius-f-santos-projects.vercel.app
+Deployment de produção: dpl_E5djeir5AVhQmyzfG6Fqb2kFQw2h
+URL imutável da produção: https://portfolio-6tzm90785-marcos-vinicius-f-santos-projects.vercel.app
+Deployment anterior: dpl_7M6Jq5zq7CfR5XzdgXHnje3syKA2
+Início: 2026-09-23 12:26 BRT
+Conclusão: 2026-09-23 12:36 BRT
+Responsável: Codex, com aprovação de Marcos
+Resultado da validação: 54 testes, build, resposta autenticada da prévia e inspeção visual da produção aprovados
+Rollback necessário: não
+Observações: a prévia exigia autenticação Vercel; a validação visual final foi executada no alias público após a promoção.
 ```
