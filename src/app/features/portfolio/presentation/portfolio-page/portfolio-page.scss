@@ -124,6 +124,81 @@ section p:last-child {
   line-height: 1.65;
 }
 
+.experiences-list {
+  display: grid;
+  gap: 1.25rem;
+  grid-column: 1 / -1;
+  margin-top: 3rem;
+}
+
+.experience-card {
+  border: 1px solid var(--line);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--paper-strong);
+}
+
+.experience-card-header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1.25rem;
+}
+
+.experience-period {
+  margin: 0 0 0.75rem;
+  color: var(--green);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.experience-card h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.4rem, 3vw, 2.25rem);
+  letter-spacing: -0.04em;
+}
+
+.experience-card .experience-title {
+  max-width: none;
+  margin: 0.5rem 0 0;
+  color: #44463f;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.experience-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.experience-block h4 {
+  margin: 0 0 0.65rem;
+  color: var(--green);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.experience-block p,
+.experience-block ul {
+  max-width: none;
+  margin: 0;
+  color: #44463f;
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.experience-block ul {
+  padding-left: 1.2rem;
+}
+
+.experience-block li + li {
+  margin-top: 0.45rem;
+}
+
 .results-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -172,6 +247,10 @@ section p:last-child {
   .results-grid {
     grid-template-columns: 1fr;
     margin-top: 2rem;
+  }
+
+  .experience-details {
+    grid-template-columns: 1fr;
   }
 
   section,

@@ -1,5 +1,13 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
-import { afterNextRender, Component, computed, inject, viewChild, ElementRef } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  inject,
+  signal,
+  viewChild,
+  ElementRef,
+} from '@angular/core';
 import {
   hasPortfolioSectionContent,
   ORIGINAL_COPY,
@@ -9,6 +17,7 @@ import {
 import { PortfolioLanguageService } from '../../content/portfolio-language.service';
 import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../content/portfolio-translations';
 import { PortfolioContentService } from '../../content/portfolio-content.service';
+import type { PortfolioExperience } from '../../content/portfolio-content.models';
 
 type NavigationItem = {
   title: keyof PortfolioCopy;
@@ -72,6 +81,8 @@ export class PortfolioPage {
     return PROFESSIONAL_RESULTS.filter((result) => copy[result.value].trim().length > 0);
   });
   protected readonly showResults = computed(() => this.resultItems().length > 0);
+  protected readonly experiences = signal<PortfolioExperience[]>([]);
+  protected readonly showExperiences = computed(() => this.experiences().length > 0);
   protected readonly navigationItems = computed(() => {
     const items: NavigationItem[] = [];
 
@@ -87,10 +98,15 @@ export class PortfolioPage {
       items.push({ title: 'aboutTitle', body: 'aboutBody', targetId: 'sobre-mim', index: '01' });
     }
 
-    items.push(
-      { title: 'experienceTitle', body: 'experienceBody', targetId: 'experiencias', index: '02' },
-      { title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' },
-    );
+    if (this.showExperiences()) {
+      items.push({
+        title: 'experienceTitle',
+        body: 'experienceBody',
+        targetId: 'experiencias',
+        index: '02',
+      });
+    }
+    items.push({ title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' });
     if (this.showResults()) {
       items.push({
         title: 'resultsTitle',
@@ -113,8 +129,14 @@ export class PortfolioPage {
       this.language.initialize();
       this.document.documentElement.lang = this.language.language();
       void this.content.loadCopy(this.language.language());
+      void this.loadExperiences();
       if (this.language.showSuggestion()) this.suggestion()?.nativeElement.showModal?.();
     });
+  }
+
+  private async loadExperiences(): Promise<void> {
+    const experiences = await this.content.listExperiences(this.language.language());
+    this.experiences.set(experiences);
   }
 
   protected choose(language: string): void {
@@ -122,6 +144,7 @@ export class PortfolioPage {
     this.language.choose(language);
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
+    void this.loadExperiences();
   }
 
   protected respond(accept: boolean): void {
@@ -129,8 +152,19 @@ export class PortfolioPage {
     else this.language.declineSuggestion();
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
+    void this.loadExperiences();
     this.suggestion()?.nativeElement.close?.();
     this.selector()?.nativeElement.focus({ preventScroll: true });
+  }
+
+  protected formatExperiencePeriod(experience: PortfolioExperience): string {
+    return `${this.formatExperienceDate(experience.startDate)} – ${this.formatExperienceDate(experience.endDate)}`;
+  }
+
+  private formatExperienceDate(value: string | null): string {
+    if (!value) return '';
+    const [year, month] = value.slice(0, 10).split('-');
+    return year && month ? `${month}/${year}` : '';
   }
 
   protected navigateToSection(event: Event, targetId: string): void {

@@ -150,8 +150,9 @@ o deploy.
   de conteúdo; devem usar o Storage e referências persistidas no banco.
 - Alterações no schema, relacionamentos ou políticas devem ser feitas por migrations
   versionadas, com caminho de volta definido antes da aplicação.
-- O conteúdo de experiências relacionadas a empresas deve permanecer anonimizado e não
-  pode expor informações confidenciais.
+- O conteúdo de experiências relacionadas a empresas pode publicar o nome da empresa e
+  o cargo quando esses dados forem aprovados por Marcos, mas não pode expor informações
+  confidenciais.
 - O layout público deve continuar extensível para novos projetos sem exigir alteração na
   estrutura principal da página.
 - O fluxo público deve continuar sendo uma única página responsiva, mesmo que a aplicação

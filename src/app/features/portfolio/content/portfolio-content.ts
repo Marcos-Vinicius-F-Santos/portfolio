@@ -11,6 +11,11 @@ export interface PortfolioCopy {
   aboutBody: string;
   experienceTitle: string;
   experienceBody: string;
+  experiencePeriodLabel: string;
+  experienceContextLabel: string;
+  experienceResponsibilitiesLabel: string;
+  experienceTechnicalDecisionsLabel: string;
+  experienceResultsLabel: string;
   stackTitle: string;
   stackBody: string;
   languageLabel: string;
@@ -45,6 +50,11 @@ export const ORIGINAL_COPY: PortfolioCopy = {
     'Atuo em engenharia de software, arquitetura, integrações, automação e transformação digital, buscando soluções reutilizáveis, escaláveis e sustentáveis. Valorizo a análise de alternativas e trade-offs, a colaboração, a adaptabilidade e a empatia.',
   experienceTitle: 'Experiências',
   experienceBody: 'As experiências profissionais serão apresentadas nesta seção.',
+  experiencePeriodLabel: 'Período',
+  experienceContextLabel: 'Contexto',
+  experienceResponsibilitiesLabel: 'Responsabilidades',
+  experienceTechnicalDecisionsLabel: 'Decisões técnicas',
+  experienceResultsLabel: 'Resultados',
   stackTitle: 'Stack técnica',
   stackBody: 'As tecnologias e competências serão apresentadas nesta seção.',
   languageLabel: 'Idioma',

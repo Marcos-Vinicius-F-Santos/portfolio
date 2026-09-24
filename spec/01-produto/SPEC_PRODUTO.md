@@ -47,8 +47,8 @@ Não se aplica. Este é um projeto novo.
    - redução aproximada de 50% no esforço de mapeamento JSON;
    - redução de 25% nas solicitações de alteração em formulários;
    - redução de 30% no tempo de conclusão de tarefas.
-6. **Experiências profissionais** — exibir as experiências em ordem cronológica, sem
-   publicar os nomes das empresas. A primeira experiência será apresentada como atuação
+6. **Experiências profissionais** — exibir as experiências em ordem cronológica, incluindo
+   os nomes das empresas e os cargos aprovados para publicação. A primeira experiência será apresentada como atuação
    em uma empresa de grande porte do setor de laticínios, de maio de 2025 a março de
    2026, com decisões arquiteturais, modernização do cadastro de produtores, integrações,
    módulos compartilhados e componentes reutilizáveis. A segunda será apresentada como
@@ -93,7 +93,7 @@ Nesta fase, não fazem parte do produto:
 - múltiplos perfis administrativos, permissões avançadas ou gestão de equipe;
 - blog, notícias ou publicação de artigos;
 - formulário persistente de contato ou caixa de mensagens armazenada;
-- exposição dos nomes reais das empresas das experiências profissionais;
+
 - publicação de informações confidenciais de empresas, clientes ou sistemas internos;
 - alteração manual direta dos dados de produção sem migration quando houver mudança de
   schema;
@@ -177,7 +177,7 @@ O produto será considerado funcional quando:
 - o conteúdo público for responsivo e utilizável em dispositivos móveis e telas maiores;
 - os resultados profissionais forem apresentados com os valores e o contexto definidos
   nesta Spec;
-- as experiências aparecerem em ordem cronológica e sem os nomes das empresas;
+- as experiências aparecerem em ordem cronológica, com os nomes das empresas e os cargos aprovados para publicação;
 - novos projetos puderem ser adicionados pela área administrativa sem alteração no
   layout principal;
 - Marcos conseguir autenticar-se na área administrativa, adicionar e editar conteúdo e
@@ -204,6 +204,9 @@ O produto será considerado funcional quando:
 - As traduções serão mantidas em uma estrutura separada do conteúdo principal.
 - Alterações salvas na área administrativa ficarão imediatamente públicas; não haverá
   fluxo de rascunho e publicação nesta fase.
+- Os nomes das empresas e os cargos das experiências profissionais podem ser publicados
+  quando fizerem parte do conteúdo aprovado por Marcos. Informações confidenciais de
+  empresas, clientes ou sistemas internos continuam fora de escopo.
 - Será criado um novo projeto na conta Vercel de Marcos, conectado ao repositório GitHub
   do portfólio. O domínio final será definido durante essa configuração.
 - A identidade visual inicial será baseada em padrões comuns de portfólios técnicos de

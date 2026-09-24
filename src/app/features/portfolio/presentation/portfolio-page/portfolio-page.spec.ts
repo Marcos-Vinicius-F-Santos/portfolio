@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PortfolioPage } from './portfolio-page';
 import {
@@ -5,15 +6,30 @@ import {
   PortfolioLanguageService,
 } from '../../content/portfolio-language.service';
 import { TRANSLATION_SOURCE } from '../../content/portfolio-translations';
-import { ORIGINAL_COPY } from '../../content/portfolio-content';
+import { ORIGINAL_COPY, type PortfolioCopy } from '../../content/portfolio-content';
+import { PortfolioContentService } from '../../content/portfolio-content.service';
+import type { PortfolioExperience } from '../../content/portfolio-content.models';
 import { ENGLISH_COPY } from '../../content/portfolio-translations';
+
+let experienceRows: PortfolioExperience[] = [];
 
 describe('PortfolioPage', () => {
   beforeEach(async () => {
     localStorage.clear();
+    experienceRows = createExperiences('pt-BR');
+    const contentService = {
+      remoteCopy: signal<Partial<PortfolioCopy>>({}),
+      loadCopy: vi.fn(async () => ({})),
+      listExperiences: vi.fn(async (locale: 'pt-BR' | 'en') =>
+        experienceRows.length > 0 ? createExperiences(locale) : [],
+      ),
+    };
     await TestBed.configureTestingModule({
       imports: [PortfolioPage],
-      providers: [{ provide: BROWSER_LANGUAGE, useValue: () => 'pt-BR' }],
+      providers: [
+        { provide: BROWSER_LANGUAGE, useValue: () => 'pt-BR' },
+        { provide: PortfolioContentService, useValue: contentService },
+      ],
     }).compileComponents();
   });
 
@@ -53,6 +69,44 @@ describe('PortfolioPage', () => {
     Object.defineProperty(target, 'scrollIntoView', { configurable: true, value: scrollIntoView });
     (element.querySelector(`a[href="#${id}"]`) as HTMLAnchorElement).click();
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+  });
+
+  it('renders the structured experiences in chronological order', async () => {
+    const { element } = await render();
+    const experiences = [...element.querySelectorAll<HTMLElement>('.experience-card')];
+
+    expect(experiences.map((experience) => experience.dataset['testid'])).toEqual([
+      'professional-experience-newer',
+      'professional-experience-older',
+    ]);
+    expect(experiences[0]?.textContent).toContain('Dairy Corp');
+    expect(experiences[0]?.textContent).toContain('05/2025 – 03/2026');
+    expect(experiences[0]?.textContent).toContain('Engenheiro de software');
+    expect(experiences[0]?.textContent).toContain('Setor de laticínios');
+    expect(experiences[0]?.textContent).toContain('Responsabilidade nova');
+    expect(experiences[0]?.textContent).toContain('Decisão nova');
+    expect(experiences[0]?.textContent).toContain('Resultado novo');
+  });
+
+  it('hides the experience section and navigation when no experience is available', async () => {
+    experienceRows = [];
+    const { element } = await render();
+
+    expect(element.querySelector('#experiencias')).toBeNull();
+    expect(element.querySelector('a[href="#experiencias"]')).toBeNull();
+    expect(element.querySelector('#sobre-mim')).toBeTruthy();
+    expect(element.querySelector('#stack-tecnica')).toBeTruthy();
+  });
+
+  it('reloads translated experience fields when the language changes', async () => {
+    const { fixture, element } = await render();
+    const select = element.querySelector('select')!;
+    select.value = 'en';
+    select.dispatchEvent(new Event('change'));
+    await fixture.whenStable();
+
+    expect(element.querySelector('.experience-title')?.textContent).toContain('Software Engineer');
+    expect(element.querySelector('.experience-block p')?.textContent).toContain('Dairy industry');
   });
 
   it('keeps the page usable when the actual navigation target is missing', async () => {
@@ -233,4 +287,33 @@ describe('PortfolioPage', () => {
       )?.textContent,
     ).toContain(ENGLISH_COPY.resultsStepsReduction);
   });
+  function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
+    const english = locale === 'en';
+    return [
+      {
+        id: 'newer',
+        startDate: '2025-05-01',
+        endDate: '2026-03-01',
+        name: 'Dairy Corp',
+        displayOrder: 2,
+        title: english ? 'Software Engineer' : 'Engenheiro de software',
+        context: english ? 'Dairy industry' : 'Setor de laticínios',
+        responsibilities: [english ? 'New responsibility' : 'Responsabilidade nova'],
+        technicalDecisions: [english ? 'New decision' : 'Decisão nova'],
+        results: [english ? 'New result' : 'Resultado novo'],
+      },
+      {
+        id: 'older',
+        startDate: '2023-12-01',
+        endDate: '2025-05-01',
+        name: 'Digital Corp',
+        displayOrder: 1,
+        title: english ? 'Developer' : 'Desenvolvedor',
+        context: english ? 'Corporate digitization' : 'Digitalização corporativa',
+        responsibilities: [english ? 'Old responsibility' : 'Responsabilidade antiga'],
+        technicalDecisions: [english ? 'Old decision' : 'Decisão antiga'],
+        results: [english ? 'Old result' : 'Resultado antigo'],
+      },
+    ];
+  }
 });

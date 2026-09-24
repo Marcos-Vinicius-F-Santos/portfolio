@@ -87,6 +87,7 @@ export class PortfolioContentService {
       const { data: experiences, error } = await client
         .from('portfolio_experiences')
         .select('*')
+        .order('start_date', { ascending: false })
         .order('display_order', { ascending: true });
 
       if (error) {
@@ -103,21 +104,26 @@ export class PortfolioContentService {
         locale,
       );
 
-      return rows.map((row) => {
-        const translation = translations.get(String(row['id'])) ?? {};
-        return {
-          id: String(row['id']),
-          startDate: String(row['start_date']),
-          endDate: nullableString(row['end_date']),
-          companyContext: String(row['company_context']),
-          displayOrder: Number(row['display_order']),
-          title: String(translation['title'] ?? ''),
-          context: String(translation['context'] ?? ''),
-          responsibilities: stringArray(translation['responsibilities']),
-          technicalDecisions: stringArray(translation['technical_decisions']),
-          results: stringArray(translation['results']),
-        };
-      });
+      return rows
+        .map((row) => {
+          const translation = translations.get(String(row['id'])) ?? {};
+          return {
+            id: String(row['id']),
+            startDate: String(row['start_date']),
+            endDate: nullableString(row['end_date']),
+            name: String(row['name']),
+            displayOrder: Number(row['display_order']),
+            title: String(translation['title'] ?? ''),
+            context: String(translation['context'] ?? ''),
+            responsibilities: stringArray(translation['responsibilities']),
+            technicalDecisions: stringArray(translation['technical_decisions']),
+            results: stringArray(translation['results']),
+          };
+        })
+        .sort(
+          (left, right) =>
+            right.startDate.localeCompare(left.startDate) || left.displayOrder - right.displayOrder,
+        );
     } catch (error) {
       this.errorState.set(toError(error));
       return [];

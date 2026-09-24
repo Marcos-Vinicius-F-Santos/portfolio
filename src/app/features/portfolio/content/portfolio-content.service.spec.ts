@@ -66,6 +66,97 @@ describe('PortfolioContentService', () => {
     ]);
   });
 
+  it('maps experiences with the approved name and orders by start date then display order', async () => {
+    const client = fakeClient({
+      portfolio_experiences: [
+        {
+          id: 'older',
+          start_date: '2023-12-01',
+          end_date: '2025-05-01',
+          name: 'Digital Corp',
+          display_order: 1,
+        },
+        {
+          id: 'newer',
+          start_date: '2025-05-01',
+          end_date: '2026-03-01',
+          name: 'Dairy Corp',
+          display_order: 2,
+        },
+        {
+          id: 'tie-first',
+          start_date: '2024-01-01',
+          end_date: '2024-06-01',
+          name: 'Tie First',
+          display_order: 2,
+        },
+        {
+          id: 'tie-second',
+          start_date: '2024-01-01',
+          end_date: '2024-07-01',
+          name: 'Tie Second',
+          display_order: 1,
+        },
+      ],
+      portfolio_experience_translations: [
+        {
+          experience_id: 'older',
+          locale: 'pt-BR',
+          title: 'Desenvolvedor',
+          context: 'Digitalização corporativa',
+          responsibilities: ['Responsabilidade antiga'],
+          technical_decisions: ['Decisão antiga'],
+          results: ['Resultado antigo'],
+        },
+        {
+          experience_id: 'newer',
+          locale: 'pt-BR',
+          title: 'Engenheiro de software',
+          context: 'Setor de laticínios',
+          responsibilities: ['Responsabilidade nova'],
+          technical_decisions: ['Decisão nova'],
+          results: ['Resultado novo'],
+        },
+        {
+          experience_id: 'tie-first',
+          locale: 'pt-BR',
+          title: 'Cargo 1',
+          context: 'Contexto 1',
+          responsibilities: ['Responsabilidade 1'],
+          technical_decisions: ['Decisão 1'],
+          results: ['Resultado 1'],
+        },
+        {
+          experience_id: 'tie-second',
+          locale: 'pt-BR',
+          title: 'Cargo 2',
+          context: 'Contexto 2',
+          responsibilities: ['Responsabilidade 2'],
+          technical_decisions: ['Decisão 2'],
+          results: ['Resultado 2'],
+        },
+      ],
+    });
+    const service = configure(client);
+
+    const experiences = await service.listExperiences('pt-BR');
+
+    expect(experiences.map((experience) => experience.id)).toEqual([
+      'newer',
+      'tie-second',
+      'tie-first',
+      'older',
+    ]);
+    expect(experiences[0]).toMatchObject({
+      name: 'Dairy Corp',
+      title: 'Engenheiro de software',
+      context: 'Setor de laticínios',
+      responsibilities: ['Responsabilidade nova'],
+      technicalDecisions: ['Decisão nova'],
+      results: ['Resultado novo'],
+    });
+  });
+
   it('returns a safe fallback and exposes the error when a query fails', async () => {
     const service = configure(fakeClient({}, new Error('network unavailable')));
 

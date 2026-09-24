@@ -4,7 +4,7 @@ export interface PortfolioExperience {
   id: string;
   startDate: string;
   endDate: string | null;
-  companyContext: string;
+  name: string;
   displayOrder: number;
   title: string;
   context: string;

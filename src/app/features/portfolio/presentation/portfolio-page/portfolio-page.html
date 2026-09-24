@@ -58,6 +58,80 @@
               </article>
             }
           </div>
+        } @else if (item.targetId === 'experiencias') {
+          <div class="experiences-list" data-testid="professional-experiences">
+            @for (experience of experiences(); track experience.id) {
+              <article
+                class="experience-card"
+                [attr.data-testid]="'professional-experience-' + experience.id"
+              >
+                <header class="experience-card-header">
+                  <p class="experience-period">
+                    <span class="experience-period-label">
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experiencePeriodLabel' }"
+                      />:
+                    </span>
+                    {{ formatExperiencePeriod(experience) }}
+                  </p>
+                  <h3>{{ experience.name }}</h3>
+                  <p class="experience-title">{{ experience.title }}</p>
+                </header>
+                <div class="experience-details">
+                  <div class="experience-block">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experienceContextLabel' }"
+                      />
+                    </h4>
+                    <p>{{ experience.context }}</p>
+                  </div>
+                  <div class="experience-block">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="
+                          localized;
+                          context: { key: 'experienceResponsibilitiesLabel' }
+                        "
+                      />
+                    </h4>
+                    <ul>
+                      @for (responsibility of experience.responsibilities; track $index) {
+                        <li>{{ responsibility }}</li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="experience-block">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="
+                          localized;
+                          context: { key: 'experienceTechnicalDecisionsLabel' }
+                        "
+                      />
+                    </h4>
+                    <ul>
+                      @for (decision of experience.technicalDecisions; track $index) {
+                        <li>{{ decision }}</li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="experience-block">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experienceResultsLabel' }"
+                      />
+                    </h4>
+                    <ul>
+                      @for (result of experience.results; track $index) {
+                        <li>{{ result }}</li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
         } @else {
           <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
         }
