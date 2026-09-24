@@ -14,9 +14,25 @@ export interface PortfolioCopy {
   stackTitle: string;
   stackBody: string;
   languageLabel: string;
+  resultsTitle: string;
+  resultsTimeReductionLabel: string;
+  resultsTimeReduction: string;
+  resultsStepsReductionLabel: string;
+  resultsStepsReduction: string;
+  resultsUsersServedLabel: string;
+  resultsUsersServed: string;
+  resultsProductivityGainLabel: string;
+  resultsProductivityGain: string;
 }
 
-export type PortfolioSection = 'presentation' | 'about';
+export type PortfolioSection = 'presentation' | 'about' | 'results';
+
+export const PORTFOLIO_RESULT_KEYS = [
+  'resultsTimeReduction',
+  'resultsStepsReduction',
+  'resultsUsersServed',
+  'resultsProductivityGain',
+] as const satisfies readonly (keyof PortfolioCopy)[];
 
 export const ORIGINAL_COPY: PortfolioCopy = {
   eyebrow: 'Portfólio profissional',
@@ -32,12 +48,32 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   stackTitle: 'Stack técnica',
   stackBody: 'As tecnologias e competências serão apresentadas nesta seção.',
   languageLabel: 'Idioma',
+  resultsTitle: 'Resultados profissionais',
+  resultsTimeReductionLabel: 'Redução de tempo',
+  resultsTimeReduction:
+    'Onboarding reduzido de dias para horas; redução de 30% no tempo de conclusão de tarefas.',
+  resultsStepsReductionLabel: 'Redução de etapas',
+  resultsStepsReduction: 'Etapas manuais reduzidas de 8–10 para 3–5.',
+  resultsUsersServedLabel: 'Usuários atendidos',
+  resultsUsersServed: 'Plataforma utilizada por mais de 2.000 usuários mensais.',
+  resultsProductivityGainLabel: 'Ganhos de produtividade',
+  resultsProductivityGain:
+    'Redução aproximada de 50% no esforço de mapeamento JSON; redução de 25% nas solicitações de alteração em formulários.',
 };
 
-export function hasPortfolioSectionContent(copy: PortfolioCopy, section: PortfolioSection): boolean {
+export function hasPortfolioSectionContent(
+  copy: PortfolioCopy,
+  section: PortfolioSection,
+): boolean {
   const keys: (keyof PortfolioCopy)[] =
-    section === 'presentation' ? ['intro'] : ['aboutTitle', 'aboutBody'];
-  return keys.every((key) => copy[key].trim().length > 0);
+    section === 'presentation'
+      ? ['intro']
+      : section === 'about'
+        ? ['aboutTitle', 'aboutBody']
+        : [...PORTFOLIO_RESULT_KEYS];
+  return section === 'results'
+    ? keys.some((key) => copy[key].trim().length > 0)
+    : keys.every((key) => copy[key].trim().length > 0);
 }
 
 export function selectPortfolioCopy(

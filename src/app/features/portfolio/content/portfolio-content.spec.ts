@@ -1,4 +1,8 @@
-import { ORIGINAL_COPY, hasPortfolioSectionContent, selectPortfolioCopy } from './portfolio-content';
+import {
+  ORIGINAL_COPY,
+  hasPortfolioSectionContent,
+  selectPortfolioCopy,
+} from './portfolio-content';
 import { ENGLISH_COPY } from './portfolio-translations';
 
 describe('portfolio content fallback (FR-005/FR-006)', () => {
@@ -36,11 +40,32 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
   it('identifies available and unavailable feature sections', () => {
     expect(hasPortfolioSectionContent(ORIGINAL_COPY, 'presentation')).toBe(true);
     expect(hasPortfolioSectionContent(ORIGINAL_COPY, 'about')).toBe(true);
+    expect(hasPortfolioSectionContent(ORIGINAL_COPY, 'results')).toBe(true);
+    expect(hasPortfolioSectionContent({ ...ORIGINAL_COPY, intro: '' }, 'presentation')).toBe(false);
+    expect(hasPortfolioSectionContent({ ...ORIGINAL_COPY, aboutBody: '' }, 'about')).toBe(false);
+
+    const withoutResults = {
+      ...ORIGINAL_COPY,
+      resultsTimeReduction: '',
+      resultsStepsReduction: '',
+      resultsUsersServed: '',
+      resultsProductivityGain: '',
+    };
+    expect(hasPortfolioSectionContent(withoutResults, 'results')).toBe(false);
     expect(
-      hasPortfolioSectionContent({ ...ORIGINAL_COPY, intro: '' }, 'presentation'),
-    ).toBe(false);
-    expect(
-      hasPortfolioSectionContent({ ...ORIGINAL_COPY, aboutBody: '' }, 'about'),
-    ).toBe(false);
+      hasPortfolioSectionContent(
+        { ...withoutResults, resultsUsersServed: 'approved result' },
+        'results',
+      ),
+    ).toBe(true);
+  });
+
+  it('falls back independently when a professional result translation is missing', () => {
+    const copy = selectPortfolioCopy('en', () => ({
+      resultsTimeReduction: '',
+      resultsStepsReduction: ENGLISH_COPY.resultsStepsReduction,
+    }));
+    expect(copy.resultsTimeReduction).toBe(ORIGINAL_COPY.resultsTimeReduction);
+    expect(copy.resultsStepsReduction).toBe(ENGLISH_COPY.resultsStepsReduction);
   });
 });

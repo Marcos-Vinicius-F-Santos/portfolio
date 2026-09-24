@@ -17,6 +17,17 @@ export const ENGLISH_COPY: PortfolioCopy = {
   stackTitle: 'Tech stack',
   stackBody: 'Technologies and skills will be presented in this section.',
   languageLabel: 'Language',
+  resultsTitle: 'Professional results',
+  resultsTimeReductionLabel: 'Time reduction',
+  resultsTimeReduction:
+    'Onboarding reduced from days to hours; 30% reduction in task completion time.',
+  resultsStepsReductionLabel: 'Step reduction',
+  resultsStepsReduction: 'Manual steps reduced from 8–10 to 3–5.',
+  resultsUsersServedLabel: 'Users served',
+  resultsUsersServed: 'Platform used by more than 2,000 monthly users.',
+  resultsProductivityGainLabel: 'Productivity gains',
+  resultsProductivityGain:
+    'Approximately 50% reduction in JSON mapping effort; 25% reduction in form change requests.',
 };
 
 export const TRANSLATION_SOURCE = new InjectionToken<() => PortfolioTranslations>(

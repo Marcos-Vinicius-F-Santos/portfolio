@@ -124,6 +124,36 @@ section p:last-child {
   line-height: 1.65;
 }
 
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 54rem;
+  margin-top: 3rem;
+}
+
+.result-card {
+  border: 1px solid var(--line);
+  padding: 1.25rem;
+  background: var(--paper-strong);
+}
+
+.result-card h3 {
+  margin: 0 0 0.8rem;
+  color: var(--green);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.result-card p {
+  max-width: none;
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
 @media (max-width: 760px) {
   .page-header {
     min-height: auto;
@@ -137,6 +167,11 @@ section p:last-child {
   .sections {
     display: block;
     padding-top: 0;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
   }
 
   section,

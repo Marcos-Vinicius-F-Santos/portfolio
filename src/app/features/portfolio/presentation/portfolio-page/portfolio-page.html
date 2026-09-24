@@ -1,8 +1,5 @@
 <main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
-  <header
-    class="page-header"
-    [attr.id]="showPresentation() ? 'apresentacao' : null"
-  >
+  <header class="page-header" [attr.id]="showPresentation() ? 'apresentacao' : null">
     <div class="header-top">
       <p class="eyebrow">
         <ng-container *ngTemplateOutlet="localized; context: { key: 'eyebrow' }" />
@@ -45,7 +42,25 @@
         <h2 [id]="item.targetId + '-title'">
           <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
         </h2>
-        <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
+        @if (item.targetId === 'resultados-profissionais') {
+          <div class="results-grid" data-testid="professional-results">
+            @for (result of resultItems(); track result.testId) {
+              <article
+                class="result-card"
+                [attr.data-testid]="'professional-result-' + result.testId"
+              >
+                <h3>
+                  <ng-container *ngTemplateOutlet="localized; context: { key: result.label }" />
+                </h3>
+                <p>
+                  <ng-container *ngTemplateOutlet="localized; context: { key: result.value }" />
+                </p>
+              </article>
+            }
+          </div>
+        } @else {
+          <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
+        }
       </section>
     }
   </div>

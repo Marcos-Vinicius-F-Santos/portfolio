@@ -17,6 +17,35 @@ type NavigationItem = {
   index: string;
 };
 
+type ProfessionalResultItem = {
+  testId: string;
+  label: keyof PortfolioCopy;
+  value: keyof PortfolioCopy;
+};
+
+const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
+  {
+    testId: 'time-reduction',
+    label: 'resultsTimeReductionLabel',
+    value: 'resultsTimeReduction',
+  },
+  {
+    testId: 'steps-reduction',
+    label: 'resultsStepsReductionLabel',
+    value: 'resultsStepsReduction',
+  },
+  {
+    testId: 'users-served',
+    label: 'resultsUsersServedLabel',
+    value: 'resultsUsersServed',
+  },
+  {
+    testId: 'productivity-gain',
+    label: 'resultsProductivityGainLabel',
+    value: 'resultsProductivityGain',
+  },
+];
+
 @Component({
   selector: 'app-portfolio-page',
   imports: [NgTemplateOutlet],
@@ -30,9 +59,7 @@ export class PortfolioPage {
   protected readonly copy = computed(() => {
     const localCopy = selectPortfolioCopy(this.language.language(), this.translationSource);
     const remoteCopy = this.content.remoteCopy();
-    return Object.keys(remoteCopy).length === 0
-      ? localCopy
-      : { ...localCopy, ...remoteCopy };
+    return Object.keys(remoteCopy).length === 0 ? localCopy : { ...localCopy, ...remoteCopy };
   });
   protected readonly original = ORIGINAL_COPY;
   protected readonly english = ENGLISH_COPY;
@@ -40,6 +67,11 @@ export class PortfolioPage {
     hasPortfolioSectionContent(this.copy(), 'presentation'),
   );
   protected readonly showAbout = computed(() => hasPortfolioSectionContent(this.copy(), 'about'));
+  protected readonly resultItems = computed(() => {
+    const copy = this.copy();
+    return PROFESSIONAL_RESULTS.filter((result) => copy[result.value].trim().length > 0);
+  });
+  protected readonly showResults = computed(() => this.resultItems().length > 0);
   protected readonly navigationItems = computed(() => {
     const items: NavigationItem[] = [];
 
@@ -59,6 +91,14 @@ export class PortfolioPage {
       { title: 'experienceTitle', body: 'experienceBody', targetId: 'experiencias', index: '02' },
       { title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' },
     );
+    if (this.showResults()) {
+      items.push({
+        title: 'resultsTitle',
+        body: 'resultsTitle',
+        targetId: 'resultados-profissionais',
+        index: '04',
+      });
+    }
     return items;
   });
   protected readonly sectionItems = computed(() =>
