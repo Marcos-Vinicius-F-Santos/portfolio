@@ -8,6 +8,8 @@ import {
   type PortfolioLocale,
   type PortfolioProject,
   type PortfolioProjectImage,
+  type PortfolioProjectLink,
+  type PortfolioProjectType,
 } from './portfolio-content.models';
 
 type Row = Record<string, unknown>;
@@ -104,7 +106,7 @@ export class PortfolioContentService {
         locale,
       );
 
-      return rows
+      const result = rows
         .map((row) => {
           const translation = translations.get(String(row['id'])) ?? {};
           return {
@@ -124,6 +126,8 @@ export class PortfolioContentService {
           (left, right) =>
             right.startDate.localeCompare(left.startDate) || left.displayOrder - right.displayOrder,
         );
+      this.errorState.set(null);
+      return result;
     } catch (error) {
       this.errorState.set(toError(error));
       return [];
@@ -147,38 +151,44 @@ export class PortfolioContentService {
       const rows = (projects ?? []) as Row[];
       const ids = rows.map((row) => String(row['id']));
       const [translations, imageRows] = await Promise.all([
-        this.getTranslations(
-          client,
-          'portfolio_project_translations',
-          'project_id',
-          ids,
-          locale,
-        ),
+        this.getProjectTranslations(client, ids, locale),
         this.getProjectImages(client, ids),
       ]);
 
-      return rows.map((row) => {
-        const id = String(row['id']);
-        const translation = translations.get(id) ?? {};
-        const images = (imageRows.get(id) ?? []).map((image) => this.toProjectImage(client, image));
+      const result = rows
+        .map((row) => {
+          const type = portfolioProjectType(row['project_type']);
+          if (!type) return null;
 
-        return {
-          id,
-          displayOrder: Number(row['display_order']),
-          locale,
-          name: String(translation['name'] ?? ''),
-          description: String(translation['description'] ?? ''),
-          problemContext: String(translation['problem_context'] ?? ''),
-          solution: String(translation['solution'] ?? ''),
-          role: String(translation['role'] ?? ''),
-          technicalDecisions: stringArray(translation['technical_decisions']),
-          technologies: stringArray(translation['technologies']),
-          results: stringArray(translation['results']),
-          learnings: stringArray(translation['learnings']),
-          links: Array.isArray(translation['links']) ? translation['links'] : [],
-          images,
-        };
-      });
+          const id = String(row['id']);
+          const translation = translations.get(id) ?? {};
+          const images = (imageRows.get(id) ?? []).map((image) =>
+            this.toProjectImage(client, image),
+          );
+
+          return {
+            id,
+            displayOrder: Number(row['display_order']),
+            type,
+            locale,
+            name: String(translation['name'] ?? ''),
+            description: String(translation['description'] ?? ''),
+            problemContext: String(translation['problem_context'] ?? ''),
+            solution: String(translation['solution'] ?? ''),
+            role: String(translation['role'] ?? ''),
+            technicalDecisions: stringArray(translation['technical_decisions']),
+            technologies: stringArray(translation['technologies']),
+            results: stringArray(translation['results']),
+            learnings: stringArray(translation['learnings']),
+            links: projectLinks(translation['links']),
+            images,
+          } satisfies PortfolioProject;
+        })
+        .filter((project): project is PortfolioProject => project !== null)
+        .sort((left, right) => left.displayOrder - right.displayOrder);
+
+      this.errorState.set(null);
+      return result;
     } catch (error) {
       this.errorState.set(toError(error));
       return [];
@@ -214,12 +224,42 @@ export class PortfolioContentService {
         originalName: String(row['original_name']),
         mimeType: String(row['mime_type']),
         sizeBytes: Number(row['size_bytes']),
-        publicUrl: client.storage.from('curricula').getPublicUrl(String(row['storage_path'])).data.publicUrl,
+        publicUrl: client.storage
+          .from('curricula')
+          .getPublicUrl(String(row['storage_path'])).data.publicUrl,
       };
     } catch (error) {
       this.errorState.set(toError(error));
       return null;
     }
+  }
+
+  private async getProjectTranslations(
+    client: SupabaseClient,
+    ids: string[],
+    locale: PortfolioLocale,
+  ): Promise<Map<string, Row>> {
+    const selected = await this.getTranslations(
+      client,
+      'portfolio_project_translations',
+      'project_id',
+      ids,
+      locale,
+    );
+    if (locale === 'pt-BR') return selected;
+
+    const fallback = await this.getTranslations(
+      client,
+      'portfolio_project_translations',
+      'project_id',
+      ids,
+      'pt-BR',
+    );
+    const merged = new Map(fallback);
+    for (const [id, translation] of selected) {
+      merged.set(id, translation);
+    }
+    return merged;
   }
 
   private async getTranslations(
@@ -243,9 +283,7 @@ export class PortfolioContentService {
       throw error;
     }
 
-    return new Map(
-      ((data ?? []) as Row[]).map((row) => [String(row[foreignKey]), row]),
-    );
+    return new Map(((data ?? []) as Row[]).map((row) => [String(row[foreignKey]), row]));
   }
 
   private async getProjectImages(
@@ -294,6 +332,21 @@ export class PortfolioContentService {
 
 function stringArray(value: unknown): string[] {
   return Array.isArray(value) ? value.map(String) : [];
+}
+
+function projectLinks(value: unknown): PortfolioProjectLink[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return [];
+    const row = item as Record<string, unknown>;
+    if (typeof row['label'] !== 'string' || typeof row['url'] !== 'string') return [];
+    return [{ label: row['label'], url: row['url'] }];
+  });
+}
+
+function portfolioProjectType(value: unknown): PortfolioProjectType | null {
+  return value === 'professional' || value === 'personal' ? value : null;
 }
 
 function nullableString(value: unknown): string | null {

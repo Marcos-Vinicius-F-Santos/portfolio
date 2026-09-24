@@ -132,6 +132,229 @@
               </article>
             }
           </div>
+        } @else if (item.targetId === 'projetos') {
+          <div class="projects-sections" data-testid="projects-section">
+            @if (professionalProjects().length > 0) {
+              <div class="project-subsection" data-testid="professional-projects">
+                <h3 class="project-subsection-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'professionalProjectsTitle' }"
+                  />
+                </h3>
+                <div class="projects-list">
+                  @for (project of professionalProjects(); track project.id) {
+                    <article
+                      class="project-card"
+                      [attr.data-testid]="'professional-project-' + project.id"
+                    >
+                      <h4>{{ project.name }}</h4>
+                      <div class="project-details">
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectDescriptionLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.description }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectContextLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.problemContext }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectRoleLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.role }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="
+                                localized;
+                                context: { key: 'projectTechnicalDecisionsLabel' }
+                              "
+                            />
+                          </h5>
+                          <ul>
+                            @for (decision of project.technicalDecisions; track $index) {
+                              <li>{{ decision }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectTechnologiesLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (technology of project.technologies; track $index) {
+                              <li>{{ technology }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectResultsLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (result of project.results; track $index) {
+                              <li>{{ result }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectLearningsLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (learning of project.learnings; track $index) {
+                              <li>{{ learning }}</li>
+                            }
+                          </ul>
+                        </div>
+                        @if (project.links.length > 0) {
+                          <div class="project-block project-links">
+                            <h5>
+                              <ng-container
+                                *ngTemplateOutlet="localized; context: { key: 'projectLinksLabel' }"
+                              />
+                            </h5>
+                            <ul>
+                              @for (link of project.links; track link.url + link.label) {
+                                <li><a [href]="link.url">{{ link.label }}</a></li>
+                              }
+                            </ul>
+                          </div>
+                        }
+                      </div>
+                    </article>
+                  }
+                </div>
+              </div>
+            }
+            @if (personalProjects().length > 0) {
+              <div class="project-subsection" data-testid="personal-projects">
+                <h3 class="project-subsection-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'personalProjectsTitle' }"
+                  />
+                </h3>
+                <div class="projects-list">
+                  @for (project of personalProjects(); track project.id) {
+                    <article
+                      class="project-card"
+                      [attr.data-testid]="'personal-project-' + project.id"
+                    >
+                      <h4>{{ project.name }}</h4>
+                      <div class="project-details">
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectDescriptionLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.description }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectContextLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.problemContext }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectRoleLabel' }"
+                            />
+                          </h5>
+                          <p>{{ project.role }}</p>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="
+                                localized;
+                                context: { key: 'projectTechnicalDecisionsLabel' }
+                              "
+                            />
+                          </h5>
+                          <ul>
+                            @for (decision of project.technicalDecisions; track $index) {
+                              <li>{{ decision }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectTechnologiesLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (technology of project.technologies; track $index) {
+                              <li>{{ technology }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectResultsLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (result of project.results; track $index) {
+                              <li>{{ result }}</li>
+                            }
+                          </ul>
+                        </div>
+                        <div class="project-block">
+                          <h5>
+                            <ng-container
+                              *ngTemplateOutlet="localized; context: { key: 'projectLearningsLabel' }"
+                            />
+                          </h5>
+                          <ul>
+                            @for (learning of project.learnings; track $index) {
+                              <li>{{ learning }}</li>
+                            }
+                          </ul>
+                        </div>
+                        @if (project.links.length > 0) {
+                          <div class="project-block project-links">
+                            <h5>
+                              <ng-container
+                                *ngTemplateOutlet="localized; context: { key: 'projectLinksLabel' }"
+                              />
+                            </h5>
+                            <ul>
+                              @for (link of project.links; track link.url + link.label) {
+                                <li><a [href]="link.url">{{ link.label }}</a></li>
+                              }
+                            </ul>
+                          </div>
+                        }
+                      </div>
+                    </article>
+                  }
+                </div>
+              </div>
+            }
+          </div>
         } @else {
           <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
         }

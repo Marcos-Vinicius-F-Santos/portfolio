@@ -1,4 +1,10 @@
 export type PortfolioLocale = 'pt-BR' | 'en';
+export type PortfolioProjectType = 'professional' | 'personal';
+
+export interface PortfolioProjectLink {
+  label: string;
+  url: string;
+}
 
 export interface PortfolioExperience {
   id: string;
@@ -27,6 +33,7 @@ export interface PortfolioProjectImage {
 export interface PortfolioProject {
   id: string;
   displayOrder: number;
+  type: PortfolioProjectType;
   locale: PortfolioLocale;
   name: string;
   description: string;
@@ -37,8 +44,21 @@ export interface PortfolioProject {
   technologies: string[];
   results: string[];
   learnings: string[];
-  links: unknown[];
+  links: PortfolioProjectLink[];
   images: PortfolioProjectImage[];
+}
+
+export function hasPortfolioProjectContent(project: PortfolioProject): boolean {
+  return (
+    project.name.trim().length > 0 &&
+    project.description.trim().length > 0 &&
+    project.problemContext.trim().length > 0 &&
+    project.role.trim().length > 0 &&
+    project.technicalDecisions.some((item) => item.trim().length > 0) &&
+    project.technologies.some((item) => item.trim().length > 0) &&
+    project.results.some((item) => item.trim().length > 0) &&
+    project.learnings.some((item) => item.trim().length > 0)
+  );
 }
 
 export interface PortfolioFile {

@@ -28,6 +28,17 @@ export interface PortfolioCopy {
   resultsUsersServed: string;
   resultsProductivityGainLabel: string;
   resultsProductivityGain: string;
+  projectsTitle: string;
+  professionalProjectsTitle: string;
+  personalProjectsTitle: string;
+  projectDescriptionLabel: string;
+  projectContextLabel: string;
+  projectRoleLabel: string;
+  projectTechnicalDecisionsLabel: string;
+  projectTechnologiesLabel: string;
+  projectResultsLabel: string;
+  projectLearningsLabel: string;
+  projectLinksLabel: string;
 }
 
 export type PortfolioSection = 'presentation' | 'about' | 'results';
@@ -69,6 +80,17 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   resultsProductivityGainLabel: 'Ganhos de produtividade',
   resultsProductivityGain:
     'Redução aproximada de 50% no esforço de mapeamento JSON; redução de 25% nas solicitações de alteração em formulários.',
+  projectsTitle: 'Projetos',
+  professionalProjectsTitle: 'Projetos profissionais',
+  personalProjectsTitle: 'Projetos pessoais',
+  projectDescriptionLabel: 'Descrição',
+  projectContextLabel: 'Contexto',
+  projectRoleLabel: 'Papel desempenhado',
+  projectTechnicalDecisionsLabel: 'Decisões técnicas',
+  projectTechnologiesLabel: 'Tecnologias',
+  projectResultsLabel: 'Resultados',
+  projectLearningsLabel: 'Aprendizados',
+  projectLinksLabel: 'Links relacionados',
 };
 
 export function hasPortfolioSectionContent(

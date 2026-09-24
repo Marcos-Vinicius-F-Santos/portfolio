@@ -33,6 +33,17 @@ export const ENGLISH_COPY: PortfolioCopy = {
   resultsProductivityGainLabel: 'Productivity gains',
   resultsProductivityGain:
     'Approximately 50% reduction in JSON mapping effort; 25% reduction in form change requests.',
+  projectsTitle: 'Projects',
+  professionalProjectsTitle: 'Professional projects',
+  personalProjectsTitle: 'Personal projects',
+  projectDescriptionLabel: 'Description',
+  projectContextLabel: 'Context',
+  projectRoleLabel: 'Role',
+  projectTechnicalDecisionsLabel: 'Technical decisions',
+  projectTechnologiesLabel: 'Technologies',
+  projectResultsLabel: 'Results',
+  projectLearningsLabel: 'Learnings',
+  projectLinksLabel: 'Related links',
 };
 
 export const TRANSLATION_SOURCE = new InjectionToken<() => PortfolioTranslations>(

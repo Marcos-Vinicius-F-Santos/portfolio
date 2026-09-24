@@ -17,7 +17,11 @@ import {
 import { PortfolioLanguageService } from '../../content/portfolio-language.service';
 import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../content/portfolio-translations';
 import { PortfolioContentService } from '../../content/portfolio-content.service';
-import type { PortfolioExperience } from '../../content/portfolio-content.models';
+import {
+  hasPortfolioProjectContent,
+  type PortfolioExperience,
+  type PortfolioProject,
+} from '../../content/portfolio-content.models';
 
 type NavigationItem = {
   title: keyof PortfolioCopy;
@@ -83,6 +87,14 @@ export class PortfolioPage {
   protected readonly showResults = computed(() => this.resultItems().length > 0);
   protected readonly experiences = signal<PortfolioExperience[]>([]);
   protected readonly showExperiences = computed(() => this.experiences().length > 0);
+  protected readonly projects = signal<PortfolioProject[]>([]);
+  protected readonly professionalProjects = computed(() =>
+    this.projects().filter((project) => project.type === 'professional'),
+  );
+  protected readonly personalProjects = computed(() =>
+    this.projects().filter((project) => project.type === 'personal'),
+  );
+  protected readonly showProjects = computed(() => this.projects().length > 0);
   protected readonly navigationItems = computed(() => {
     const items: NavigationItem[] = [];
 
@@ -98,21 +110,29 @@ export class PortfolioPage {
       items.push({ title: 'aboutTitle', body: 'aboutBody', targetId: 'sobre-mim', index: '01' });
     }
 
+    items.push({ title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '02' });
     if (this.showExperiences()) {
       items.push({
         title: 'experienceTitle',
         body: 'experienceBody',
         targetId: 'experiencias',
-        index: '02',
+        index: '03',
       });
     }
-    items.push({ title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica', index: '03' });
     if (this.showResults()) {
       items.push({
         title: 'resultsTitle',
         body: 'resultsTitle',
         targetId: 'resultados-profissionais',
         index: '04',
+      });
+    }
+    if (this.showProjects()) {
+      items.push({
+        title: 'projectsTitle',
+        body: 'projectsTitle',
+        targetId: 'projetos',
+        index: '05',
       });
     }
     return items;
@@ -130,6 +150,7 @@ export class PortfolioPage {
       this.document.documentElement.lang = this.language.language();
       void this.content.loadCopy(this.language.language());
       void this.loadExperiences();
+      void this.loadProjects();
       if (this.language.showSuggestion()) this.suggestion()?.nativeElement.showModal?.();
     });
   }
@@ -139,12 +160,18 @@ export class PortfolioPage {
     this.experiences.set(experiences);
   }
 
+  private async loadProjects(): Promise<void> {
+    const projects = await this.content.listProjects(this.language.language());
+    this.projects.set(projects.filter(hasPortfolioProjectContent));
+  }
+
   protected choose(language: string): void {
     if (language !== 'pt-BR' && language !== 'en') return;
     this.language.choose(language);
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
     void this.loadExperiences();
+    void this.loadProjects();
   }
 
   protected respond(accept: boolean): void {
@@ -153,6 +180,7 @@ export class PortfolioPage {
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
     void this.loadExperiences();
+    void this.loadProjects();
     this.suggestion()?.nativeElement.close?.();
     this.selector()?.nativeElement.focus({ preventScroll: true });
   }

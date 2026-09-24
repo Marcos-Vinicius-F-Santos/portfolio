@@ -8,20 +8,37 @@ import {
 import { TRANSLATION_SOURCE } from '../../content/portfolio-translations';
 import { ORIGINAL_COPY, type PortfolioCopy } from '../../content/portfolio-content';
 import { PortfolioContentService } from '../../content/portfolio-content.service';
-import type { PortfolioExperience } from '../../content/portfolio-content.models';
+import type { PortfolioExperience, PortfolioProject } from '../../content/portfolio-content.models';
 import { ENGLISH_COPY } from '../../content/portfolio-translations';
 
 let experienceRows: PortfolioExperience[] = [];
+let projectRows: PortfolioProject[] = [];
 
 describe('PortfolioPage', () => {
   beforeEach(async () => {
     localStorage.clear();
     experienceRows = createExperiences('pt-BR');
+    projectRows = [];
     const contentService = {
       remoteCopy: signal<Partial<PortfolioCopy>>({}),
       loadCopy: vi.fn(async () => ({})),
       listExperiences: vi.fn(async (locale: 'pt-BR' | 'en') =>
         experienceRows.length > 0 ? createExperiences(locale) : [],
+      ),
+      listProjects: vi.fn(async (locale: 'pt-BR' | 'en') =>
+        projectRows.map((project) => ({
+          ...project,
+          locale,
+          name: locale === 'en' ? 'English ' + project.name : project.name,
+          description: locale === 'en' ? 'English description' : project.description,
+          problemContext: locale === 'en' ? 'English context' : project.problemContext,
+          role: locale === 'en' ? 'English role' : project.role,
+          technicalDecisions:
+            locale === 'en' ? ['English decision'] : project.technicalDecisions,
+          technologies: locale === 'en' ? ['English technology'] : project.technologies,
+          results: locale === 'en' ? ['English result'] : project.results,
+          learnings: locale === 'en' ? ['English learning'] : project.learnings,
+        })),
       ),
     };
     await TestBed.configureTestingModule({
@@ -52,6 +69,12 @@ describe('PortfolioPage', () => {
       }
       expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
       expect([...element.querySelectorAll('section')]).toEqual(sections);
+      expect([...element.querySelectorAll('section')].map((section) => section.id)).toEqual([
+        'sobre-mim',
+        'stack-tecnica',
+        'experiencias',
+        'resultados-profissionais',
+      ]);
       expect(element.querySelectorAll('nav a')).toHaveLength(5);
     }
   });
@@ -287,6 +310,83 @@ describe('PortfolioPage', () => {
       )?.textContent,
     ).toContain(ENGLISH_COPY.resultsStepsReduction);
   });
+
+  it('renders professional and personal projects with all required fields and links', async () => {
+    projectRows = [
+      createProject('professional-1', 'professional', 2),
+      createProject('personal-1', 'personal', 1),
+    ];
+    const { element } = await render();
+
+    expect(element.querySelector('#projetos')).toBeTruthy();
+    expect(element.querySelector('a[href="#projetos"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-projects"]')).toBeTruthy();
+
+    const professional = element.querySelector('[data-testid="professional-project-professional-1"]')!;
+    expect(professional.textContent).toContain('Projeto professional-1');
+    for (const value of [
+      'Descrição professional-1',
+      'Contexto professional-1',
+      'Papel professional-1',
+      'Decisão professional-1',
+      'Tecnologia professional-1',
+      'Resultado professional-1',
+      'Aprendizado professional-1',
+      'Site professional-1',
+    ]) {
+      expect(professional.textContent).toContain(value);
+    }
+    expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
+    expect((professional.querySelector('.project-links a') as HTMLAnchorElement).href).toBe(
+      'https://example.com/professional-1',
+    );
+  });
+
+  it('hides an empty project subsection and the entire section when no projects are complete', async () => {
+    projectRows = [createProject('professional-1', 'professional', 1)];
+    const { element } = await render();
+    expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-projects"]')).toBeNull();
+
+    projectRows = [];
+    const empty = await render();
+    expect(empty.element.querySelector('#projetos')).toBeNull();
+    expect(empty.element.querySelector('a[href="#projetos"]')).toBeNull();
+  });
+
+  it('filters incomplete projects and does not render an empty links block', async () => {
+    const incomplete = createProject('incomplete', 'personal', 1);
+    incomplete.description = '';
+    const withoutLinks = createProject('without-links', 'personal', 2);
+    withoutLinks.links = [];
+    projectRows = [incomplete, withoutLinks];
+
+    const { element } = await render();
+
+    expect(element.querySelector('[data-testid="personal-project-incomplete"]')).toBeNull();
+    expect(element.querySelector('[data-testid="personal-project-without-links"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-project-without-links"] .project-links')).toBeNull();
+  });
+
+  it('reloads project translations when the language changes', async () => {
+    projectRows = [createProject('personal-1', 'personal', 1)];
+    const { fixture, element } = await render();
+
+    const select = element.querySelector('select')!;
+    select.value = 'en';
+    select.dispatchEvent(new Event('change'));
+    await fixture.whenStable();
+
+    const project = element.querySelector('[data-testid="personal-project-personal-1"]');
+    expect(project?.textContent).toContain('English Projeto personal-1');
+    expect(project?.textContent).toContain('English description');
+    expect(project?.textContent).toContain('English context');
+    expect(element.querySelector('[data-testid="personal-projects"] .project-subsection-title')?.textContent).toContain(
+      'Personal projects',
+    );
+  });
+
   function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
     const english = locale === 'en';
     return [
@@ -315,5 +415,29 @@ describe('PortfolioPage', () => {
         results: [english ? 'Old result' : 'Resultado antigo'],
       },
     ];
+  }
+
+  function createProject(
+    id: string,
+    type: 'professional' | 'personal',
+    displayOrder: number,
+  ): PortfolioProject {
+    return {
+      id,
+      displayOrder,
+      type,
+      locale: 'pt-BR',
+      name: 'Projeto ' + id,
+      description: 'Descrição ' + id,
+      problemContext: 'Contexto ' + id,
+      solution: 'Solução ' + id,
+      role: 'Papel ' + id,
+      technicalDecisions: ['Decisão ' + id],
+      technologies: ['Tecnologia ' + id],
+      results: ['Resultado ' + id],
+      learnings: ['Aprendizado ' + id],
+      links: [{ label: 'Site ' + id, url: 'https://example.com/' + id }],
+      images: [],
+    };
   }
 });

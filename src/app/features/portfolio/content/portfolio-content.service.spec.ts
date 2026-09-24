@@ -15,9 +15,11 @@ describe('PortfolioContentService', () => {
     expect(service.lastError()).toBeNull();
   });
 
-  it('maps a project to its related ordered images', async () => {
+  it('maps projects with type, links and related ordered images', async () => {
     const client = fakeClient({
-      portfolio_projects: [{ id: 'project-1', display_order: 1 }],
+      portfolio_projects: [
+        { id: 'project-1', project_type: 'professional', display_order: 1 },
+      ],
       portfolio_project_translations: [
         {
           project_id: 'project-1',
@@ -59,11 +61,81 @@ describe('PortfolioContentService', () => {
 
     const [project] = await service.listProjects('pt-BR');
 
-    expect(project.name).toBe('Projeto');
+    expect(project).toMatchObject({
+      id: 'project-1',
+      type: 'professional',
+      displayOrder: 1,
+      name: 'Projeto',
+      description: 'Descrição',
+      problemContext: 'Problema',
+      role: 'Autor',
+      technicalDecisions: ['Decisão'],
+      technologies: ['Angular'],
+      results: ['Resultado'],
+      learnings: ['Aprendizado'],
+      links: [{ label: 'Site', url: 'https://example.com' }],
+    });
     expect(project.images.map((image) => image.publicUrl)).toEqual([
       'https://storage.test/project-1/01.png',
       'https://storage.test/project-1/02.jpg',
     ]);
+  });
+
+  it('orders projects by display_order and skips unknown types', async () => {
+    const client = fakeClient({
+      portfolio_projects: [
+        { id: 'personal', project_type: 'personal', display_order: 2 },
+        { id: 'unknown', project_type: 'other', display_order: 0 },
+        { id: 'professional', project_type: 'professional', display_order: 1 },
+      ],
+      portfolio_project_translations: [
+        { project_id: 'personal', locale: 'pt-BR', name: 'Pessoal' },
+        { project_id: 'professional', locale: 'pt-BR', name: 'Profissional' },
+      ],
+    });
+    const service = configure(client);
+
+    const projects = await service.listProjects('pt-BR');
+
+    expect(projects.map((project) => project.id)).toEqual(['professional', 'personal']);
+    expect(projects.map((project) => project.type)).toEqual(['professional', 'personal']);
+  });
+
+  it('uses pt-BR as fallback for a missing English project translation', async () => {
+    const client = fakeClient({
+      portfolio_projects: [{ id: 'project-1', project_type: 'personal', display_order: 1 }],
+      portfolio_project_translations: [
+        {
+          project_id: 'project-1',
+          locale: 'pt-BR',
+          name: 'Projeto',
+          description: 'Descrição',
+          problem_context: 'Contexto',
+          role: 'Papel',
+          technical_decisions: ['Decisão PT'],
+          technologies: ['Angular'],
+          results: ['Resultado PT'],
+          learnings: ['Aprendizado PT'],
+          links: [{ label: 'Site', url: 'https://example.com' }],
+        },
+      ],
+    });
+    const service = configure(client);
+
+    const [project] = await service.listProjects('en');
+
+    expect(project).toMatchObject({
+      locale: 'en',
+      name: 'Projeto',
+      description: 'Descrição',
+      problemContext: 'Contexto',
+      role: 'Papel',
+      technicalDecisions: ['Decisão PT'],
+      technologies: ['Angular'],
+      results: ['Resultado PT'],
+      learnings: ['Aprendizado PT'],
+      links: [{ label: 'Site', url: 'https://example.com' }],
+    });
   });
 
   it('maps experiences with the approved name and orders by start date then display order', async () => {
@@ -164,6 +236,13 @@ describe('PortfolioContentService', () => {
     expect(service.lastError()?.message).toBe('network unavailable');
   });
 
+  it('returns an empty project collection and exposes the error when project loading fails', async () => {
+    const service = configure(fakeClient({}, new Error('project query failed')));
+
+    await expect(service.listProjects('pt-BR')).resolves.toEqual([]);
+    expect(service.lastError()?.message).toBe('project query failed');
+  });
+
   it('returns empty content when public runtime configuration is absent', async () => {
     const service = configure(null);
 
@@ -206,13 +285,35 @@ function fakeClient(
 }
 
 function query(data: unknown[], error: Error | null) {
+  let current = [...data];
   const builder: Record<string, unknown> & { then: Promise<unknown>['then'] } = {
     select: () => builder,
-    in: () => builder,
-    eq: () => builder,
-    order: () => builder,
+    in: (key: string, values: unknown[]) => {
+      current = current.filter((row) => {
+        if (!row || typeof row !== 'object') return false;
+        return values.includes((row as Record<string, unknown>)[key]);
+      });
+      return builder;
+    },
+    eq: (key: string, value: unknown) => {
+      current = current.filter((row) => {
+        if (!row || typeof row !== 'object') return false;
+        return (row as Record<string, unknown>)[key] === value;
+      });
+      return builder;
+    },
+    order: (key: string, options: { ascending?: boolean }) => {
+      current.sort((left, right) => {
+        const leftValue = left && typeof left === 'object' ? (left as Record<string, unknown>)[key] : null;
+        const rightValue = right && typeof right === 'object' ? (right as Record<string, unknown>)[key] : null;
+        const comparison = String(leftValue ?? '').localeCompare(String(rightValue ?? ''));
+        return options.ascending === false ? -comparison : comparison;
+      });
+      return builder;
+    },
     maybeSingle: () => builder,
-    then: (resolve, reject) => Promise.resolve({ data, error }).then(resolve, reject),
+    then: (resolve, reject) =>
+      Promise.resolve({ data: current, error }).then(resolve, reject),
   };
   return builder;
 }
