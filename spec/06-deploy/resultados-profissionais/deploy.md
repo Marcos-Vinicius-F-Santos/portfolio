@@ -6,7 +6,7 @@ Escopo Vercel: `marcos-vinicius-f-santos-projects`
 Project ID: `prj_2Hvxo06nKqzUcJgYB0i0Gq7Kwnlj`  
 Diretório local: `E:\Projects\portfolio`  
 Data: 2026-09-24  
-Status: Aguardando aprovação para deploy
+Status: Deploy executado e validação pós-deploy concluída
 
 Este projeto não possui remote Git configurado. O fluxo real desta entrega usa a Vercel
 CLI, já vinculada ao projeto local por `.vercel/project.json`.
@@ -21,7 +21,7 @@ CLI, já vinculada ao projeto local por `.vercel/project.json`.
 - [x] Não há migration, alteração de schema, Storage, RLS ou dado de produção nesta
       feature.
 - [x] Não há remote Git; o deploy será feito pela Vercel CLI vinculada ao projeto local.
-- [ ] Marcos revisou o diff final e respondeu explicitamente **“Aprovado pra deploy?”**.
+- [x] Marcos revisou o diff final e aprovou explicitamente o deploy em 2026-09-24.
 
 ## Variáveis de ambiente e segredos
 
@@ -264,13 +264,15 @@ quebrada, regressão da navegação ou falha de configuração após a promoçã
 ## Histórico do deploy
 
 ```text
-Status: procedimento preenchido; deploy ainda não executado
+Status: deploy executado e validado
 Baseline documentado: dpl_BaAnS4V7AKad4vZLLKjiFWXV2MMu
-Commit da feature: registrar no passo 5 antes da Preview
-Preview: registrar após npx vercel deploy
-Production promovida: registrar somente após aprovação explícita
+Commit da feature: 5407a64b70220f57f286e21d96c8f63b6e75e2ca
+Preview: dpl_5JTPRyYcoGa6ASm5bByAYbnRXSUi — https://portfolio-bq1hka73i-marcos-vinicius-f-santos-projects.vercel.app
+Production promovida: dpl_5VfMnFYRQnGWa9giRVZFHjQuAACs — https://portfolio-eight-pied-855iwa1x0n.vercel.app
+Deployment URL: https://portfolio-4welaj421-marcos-vinicius-f-santos-projects.vercel.app
+Validações: Preview e Production responderam com <app-root>; runtime-config completo; ambos READY; sem logs recentes
 Rollback executado: não
-Aprovação de Marcos: pendente
+Aprovação de Marcos: concedida em 2026-09-24
 ```
 
-Aprovado pra deploy?
+
