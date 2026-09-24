@@ -7,7 +7,7 @@ Project ID: prj_2Hvxo06nKqzUcJgYB0i0Gq7Kwnlj
 Supabase: portfolio-profissional / jjndvtjhxutuerwvjocy
 Diretório local: E:\Projects\portfolio
 Data: 2026-09-24
-Status: procedimento preparado; deploy ainda não executado
+Status: deploy executado; validação HTTP/runtime concluída; validação visual pendente
 
 O repositório não possui remote Git configurado. O fluxo real desta entrega usa a Vercel
 CLI no projeto local vinculado por .vercel/project.json. A aplicação Angular é publicada
@@ -17,15 +17,12 @@ variáveis públicas do Supabase.
 ## Pré-condições
 
 - [x] Marcos informou que a revisão de convergência da feature passou.
-- [ ] A suíte automatizada e o build foram executados novamente no estado exato que será
-      publicado.
-- [ ] A migration de rename foi validada com --dry-run, aplicada e conferida no histórico
-      remoto do Supabase.
-- [ ] Os registros e traduções aprovados foram conferidos depois da migration.
-- [ ] As variáveis de ambiente existentes foram confirmadas em Preview e Production.
-- [ ] O diff final foi revisado e existe um estado versionado específico deste release.
-- [ ] Marcos aprovou explicitamente a promoção da Preview para Production.
-
+- [x] A suíte automatizada e o build foram executados novamente no estado publicado: 71 testes aprovados e build concluído.
+- [x] A migration de rename foi validada com --dry-run, aplicada e conferida no histórico remoto do Supabase.
+- [x] Os registros e traduções aprovados foram conferidos depois da migration: 2 experiências e 4 traduções.
+- [x] As variáveis de ambiente existentes foram confirmadas em Preview e Production.
+- [x] O diff final foi revisado e existe um estado versionado específico deste release: commit 2d8bdc2.
+- [x] Marcos aprovou explicitamente a promoção da Preview para Production.
 ## Variáveis de ambiente e segredos
 
 Esta feature não cria nem altera nomes de variáveis. Ela depende das variáveis públicas já
@@ -318,6 +315,7 @@ Depois:
 7. confira logs recentes da Vercel e o console do navegador para erros fatais;
 8. registre horário, deployment, URL, resultado e qualquer warning aceito.
 
+A validação visual automatizada não pôde ser executada: o CLI agent-browser não está instalado e o navegador integrado falhou ao iniciar. A validação funcional automatizada da aplicação, o build remoto, a resposta HTTP/runtime e a inspeção Vercel foram concluídos; desktop/mobile devem ser conferidos manualmente antes de considerar a validação visual completa.
 ## Procedimento de rollback
 
 Use este procedimento se a Production apresentar tela em branco, erro fatal, seção de
@@ -418,18 +416,19 @@ revertido pela migration compensatória para ficar alinhado ao frontend restaura
 ## Histórico do deploy
 
 ~~~text
-Status: procedimento preparado; deploy ainda não executado
-Commit/estado candidato:
-Preview:
-Deployment de Preview:
-Production promovida:
-Deployment de Production:
-Baseline conhecido como bom:
-Migration aplicada: 20260924090000_rename_company_context_to_name.sql (pendente de execução)
+Status: publicado; validação HTTP/runtime concluída
+Commit/estado candidato: 2d8bdc2 feat: implementa experiencias profissionais
+Preview: https://portfolio-jp2axvq37-marcos-vinicius-f-santos-projects.vercel.app
+Deployment de Preview: dpl_CTZrCb1XQceaUq6qcBLUXNeCkUF5
+Production promovida: https://portfolio-kyo71yxad-marcos-vinicius-f-santos-projects.vercel.app
+Aliases de Production: https://portfolio-eight-pied-855iwa1x0n-marcos-vinicius-f-santos-projects.vercel.app; https://portfolio-marcos-vinicius-f-santos-projects.vercel.app
+Deployment de Production: dpl_FwLHh9H7ZCLQgWJBY9yks2kYdAEZ
+Baseline conhecido como bom: https://portfolio-4welaj421-marcos-vinicius-f-santos-projects.vercel.app
+Migration aplicada: 20260924090000_rename_company_context_to_name.sql
 Migration compensatória: não criada
-Validação pós-deploy: pendente
+Validação pós-deploy: 71 testes, build, schema/dados Supabase, Preview e Production HTTP/runtime aprovados; visual pendente
 Rollback executado: não
-Aprovação de Marcos para promoção: pendente
+Aprovação de Marcos para promoção: concedida
 ~~~
 
 **Aprovado pra deploy?**
