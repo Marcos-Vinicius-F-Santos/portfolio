@@ -10,13 +10,13 @@ export interface PortfolioExperience {
   id: string;
   startDate: string;
   endDate: string | null;
-  name: string;
   displayOrder: number;
   title: string;
   context: string;
   responsibilities: string[];
   technicalDecisions: string[];
   results: string[];
+  editorialListIds?: Readonly<Record<string, readonly string[]>>;
 }
 
 export interface PortfolioProjectImage {
@@ -42,10 +42,12 @@ export interface PortfolioProject {
   role: string;
   technicalDecisions: string[];
   technologies: string[];
+  technologyIds?: string[];
   results: string[];
   learnings: string[];
   links: PortfolioProjectLink[];
   images: PortfolioProjectImage[];
+  editorialListIds?: Readonly<Record<string, readonly string[]>>;
 }
 
 export function hasPortfolioProjectContent(project: PortfolioProject): boolean {
@@ -67,7 +69,49 @@ export interface PortfolioFile {
   locale: PortfolioLocale;
   storagePath: string;
   originalName: string;
-  mimeType: string;
+  mimeType: 'application/pdf';
   sizeBytes: number;
   publicUrl: string;
+}
+
+export interface PortfolioSkillCategory {
+  id: string;
+  labelKey: string;
+  label?: string;
+  skills: readonly PortfolioSkill[];
+  displayOrder?: number;
+}
+
+export interface PortfolioSkill {
+  id: string;
+  name: string;
+  iconUrl?: string;
+  iconStoragePath?: string;
+  iconPublicUrl?: string;
+}
+
+export interface PortfolioAcademicEntry {
+  id: string;
+  nameKey: string;
+  name?: string;
+  institution: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  isCurrent?: boolean;
+  competencies?: string[];
+  studiedContent?: string[];
+  displayOrder?: number;
+  editorialListIds?: Readonly<Record<string, readonly string[]>>;
+}
+
+export type PortfolioContactSymbol = 'linkedin' | 'github' | 'email' | 'phone';
+
+export interface PortfolioContactLink {
+  id: string;
+  labelKey: string;
+  label?: string;
+  href: string;
+  symbol: PortfolioContactSymbol;
+  iconPath: string;
+  displayOrder?: number;
 }

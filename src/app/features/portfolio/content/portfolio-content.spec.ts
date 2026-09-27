@@ -1,5 +1,8 @@
 import {
   ORIGINAL_COPY,
+  PORTFOLIO_ACADEMIC_ENTRIES,
+  PORTFOLIO_CONTACT_LINKS,
+  PORTFOLIO_SKILL_CATEGORIES,
   hasPortfolioSectionContent,
   selectPortfolioCopy,
 } from './portfolio-content';
@@ -67,5 +70,97 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
     }));
     expect(copy.resultsTimeReduction).toBe(ORIGINAL_COPY.resultsTimeReduction);
     expect(copy.resultsStepsReduction).toBe(ENGLISH_COPY.resultsStepsReduction);
+  });
+
+  it('contains the approved skills catalogue and academic entries', () => {
+    expect(PORTFOLIO_SKILL_CATEGORIES).toHaveLength(6);
+    expect(
+      PORTFOLIO_SKILL_CATEGORIES.flatMap((category) => category.skills.map((skill) => skill.name)),
+    ).toEqual(
+      expect.arrayContaining([
+        'Java',
+        'JavaScript',
+        'TypeScript',
+        'Node.js',
+        'ABAP',
+        'SAP',
+        'RFC',
+        'BAPI',
+        'JCo',
+        'REST APIs',
+        'SMTP',
+        'Mendix',
+        'OutSystems',
+        'React',
+        'HTML',
+        'CSS',
+        'Docker',
+        'Gradle',
+        'Maven',
+        'Grafana',
+        'SQL Server',
+        'MySQL',
+        'PostgreSQL',
+        'MongoDB',
+        'Git',
+        'GitHub',
+        'GitLab',
+      ]),
+    );
+    expect(PORTFOLIO_ACADEMIC_ENTRIES.map((entry) => entry.nameKey)).toEqual([
+      'educationDataScience',
+      'educationAppliedStatistics',
+      'educationGraphicDesign',
+    ]);
+    expect(
+      PORTFOLIO_ACADEMIC_ENTRIES.every((entry) => entry.institution === 'Unopar Anhanguera'),
+    ).toBe(true);
+    expect(PORTFOLIO_ACADEMIC_ENTRIES[0]).toMatchObject({
+      startDate: '2023-07-12',
+      endDate: '2024-05-07',
+      competencies: expect.arrayContaining(['Python com Spark', 'Machine Learning']),
+    });
+    expect(PORTFOLIO_ACADEMIC_ENTRIES[1]).toMatchObject({
+      startDate: '2023-12-13',
+      endDate: '2024-06-12',
+      competencies: expect.arrayContaining(['Análise multivariada e modelos de regressão']),
+    });
+    expect(PORTFOLIO_ACADEMIC_ENTRIES[2]).toMatchObject({
+      startDate: '2022-02-01',
+      endDate: '2023-06-21',
+      competencies: expect.arrayContaining(['Comunicação']),
+    });
+  });
+
+  it('associates the provided manual icons with their matching skills', () => {
+    const skills = new Map(
+      PORTFOLIO_SKILL_CATEGORIES.flatMap((category) =>
+        category.skills.map((skill) => [skill.name, skill.iconUrl] as const),
+      ),
+    );
+
+    expect(skills.get('Java')).toBe('/assets/skills/java.png');
+    expect(skills.get('REST APIs')).toBe('/assets/skills/rest-apis.png');
+    expect(skills.get('GitHub')).toBe('/assets/skills/github.png');
+    expect(skills.get('ABAP')).toBeUndefined();
+    expect(skills.get('GitLab')).toBeUndefined();
+  });
+
+  it('contains the approved contact destinations and bilingual labels', () => {
+    expect(PORTFOLIO_CONTACT_LINKS.map((link) => link.href)).toEqual([
+      'https://www.linkedin.com/in/marcos-santos-b9b544214/',
+      'https://github.com/Marcos-Vinicius-F-Santos',
+      'mailto:marcossantosjdev@gmail.com',
+      'tel:+5537998292763',
+    ]);
+    expect(
+      PORTFOLIO_CONTACT_LINKS.every((link) => link.iconPath.startsWith('/assets/contact/')),
+    ).toBe(true);
+    expect(selectPortfolioCopy('en', () => ENGLISH_COPY)).toMatchObject({
+      stackTitle: 'Skills',
+      educationTitle: 'Academic background',
+      contactTitle: 'Contact',
+      contactCurriculumDownloadLabel: 'Download resume',
+    });
   });
 });

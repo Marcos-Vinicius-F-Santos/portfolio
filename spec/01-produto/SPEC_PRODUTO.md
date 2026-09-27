@@ -1,5 +1,7 @@
 # Spec do Produto — Portfólio Profissional — Marcos Santos
 
+> **Atualização de direção do produto — 2026-09-26.** Marcos aprovou edição visual com rascunho privado e publicação explícita, DT-001 a DT-008 e as regras de produto complementares. A [spec editorial](../03-features/edicao-visual-rascunho-publicacao/spec.md) prevalece, no escopo da evolução, sobre publicação imediata (itens 3.11/6/7/9), idiomas fixos e ordem obrigatoriamente cronológica. A home e as páginas completas de projetos já implementadas compõem a experiência pública; a proibição de múltiplas páginas não impede esses detalhes. A nova administração terá texto simples, ordem manual abaixo da apresentação, idiomas ltr com PT-BR obrigatório e PDF opcional, revisão do conjunto antes de publicar e histórico. As descrições anteriores abaixo registram a base histórica; o editor ainda não está implantado. A aprovação de direção não marca testes ou deploy como concluídos.
+
 Status: Rascunho  
 Tipo de projeto: Portfólio  
 Criado em: 2026-09-22  

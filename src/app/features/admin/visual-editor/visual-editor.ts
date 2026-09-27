@@ -1,0 +1,204 @@
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { AdminAuthService } from '../../../core/auth/admin-auth.service';
+import { PortfolioPage } from '../../portfolio/presentation/portfolio-page/portfolio-page';
+import { EditorialAutosaveQueue } from '../content-management/editorial-autosave-queue';
+import { EditorialCommandService } from '../content-management/editorial-command.service';
+import type { EditorialPublicationValidation } from '../content-management/editorial-draft.models';
+import { EditorialTextEditingDirective } from './editorial-text-editing.directive';
+import { EditorialDraftContentService } from './editorial-draft-content.service';
+import { PortfolioContentService } from '../../portfolio/content/portfolio-content.service';
+import { EditorialStructuredEditingDirective } from './editorial-structured-editing.directive';
+import { EditorialLanguageService } from './editorial-language.service';
+import { PortfolioLanguageService } from '../../portfolio/content/portfolio-language.service';
+import { EditorialSectionOrderingDirective } from './editorial-section-ordering.directive';
+import { EditorialItemOrderingDirective } from './editorial-item-ordering.directive';
+import { EditorialItemLifecycleDirective } from './editorial-item-lifecycle.directive';
+import { EditorialSessionHistory } from '../content-management/editorial-session-history';
+import type { EditorialHistoryItem } from '../content-management/editorial-draft.models';
+import { EditorialMediaService } from '../media-management/editorial-media.service';
+
+@Component({
+  selector: 'app-visual-editor',
+  imports: [
+    PortfolioPage,
+    EditorialTextEditingDirective,
+    EditorialStructuredEditingDirective,
+    EditorialSectionOrderingDirective,
+    EditorialItemOrderingDirective,
+    EditorialItemLifecycleDirective,
+  ],
+  providers: [
+    EditorialDraftContentService,
+    { provide: PortfolioContentService, useExisting: EditorialDraftContentService },
+    EditorialLanguageService,
+    { provide: PortfolioLanguageService, useExisting: EditorialLanguageService },
+  ],
+  templateUrl: './visual-editor.html',
+  styleUrl: './visual-editor.scss',
+})
+export class VisualEditor {
+  protected readonly autosave = inject(EditorialAutosaveQueue);
+  protected readonly sessionHistory = inject(EditorialSessionHistory);
+  private readonly commands = inject(EditorialCommandService);
+  private readonly auth = inject(AdminAuthService);
+  private readonly router = inject(Router);
+  protected readonly draftContent = inject(EditorialDraftContentService);
+  private readonly media = inject(EditorialMediaService);
+  protected readonly preview = signal(false);
+  protected readonly previewViewport = signal<'desktop' | 'mobile'>('desktop');
+  protected readonly history = signal<readonly EditorialHistoryItem[]>([]);
+  protected readonly validation = signal<EditorialPublicationValidation | null>(null);
+  protected readonly actionError = signal('');
+
+  constructor() {
+    void this.loadDraft();
+    void this.loadHistory();
+  }
+
+  protected async loadHistory(): Promise<void> {
+    try {
+      this.history.set(await this.commands.history());
+    } catch {
+      this.history.set([]);
+    }
+  }
+
+  private async loadDraft(): Promise<void> {
+    try {
+      const draft = await this.commands.loadDraft();
+      this.draftContent.setDraft(draft);
+      this.autosave.initialize(draft.revision);
+    } catch {
+      this.actionError.set('Não foi possível carregar o rascunho privado.');
+    }
+  }
+
+  protected async review(): Promise<void> {
+    this.actionError.set('');
+    try {
+      await this.autosave.flush();
+      this.validation.set(
+        await this.commands.validatePublication(this.autosave.confirmedRevision()),
+      );
+    } catch {
+      this.actionError.set('Não foi possível revisar enquanto há alterações pendentes.');
+    }
+  }
+  protected async publish(): Promise<void> {
+    const validation = this.validation();
+    if (!validation?.valid || validation.revision !== this.autosave.confirmedRevision()) return;
+    try {
+      await this.commands.publish(validation.revision, crypto.randomUUID(), validation.reviewHash);
+      this.validation.set(null);
+      await this.loadHistory();
+    } catch {
+      this.actionError.set('A publicação não foi confirmada. Revise novamente.');
+    }
+  }
+  protected async discard(): Promise<void> {
+    if (!confirm('Descartar todas as alterações privadas e restaurar a versão publicada?')) return;
+    try {
+      const receipt = await this.commands.discard(
+        this.autosave.confirmedRevision(),
+        crypto.randomUUID(),
+      );
+      this.autosave.initialize(receipt.revision);
+      this.sessionHistory.clear();
+      this.validation.set(null);
+      location.reload();
+    } catch {
+      this.actionError.set('Não foi possível descartar as alterações.');
+    }
+  }
+  protected async exit(): Promise<void> {
+    try {
+      await this.autosave.flush();
+    } catch {
+      return;
+    }
+    await this.auth.signOut();
+    await this.router.navigateByUrl('/admin');
+  }
+  protected async retryAutosave(): Promise<void> {
+    this.actionError.set('');
+    try {
+      await this.autosave.retry();
+    } catch {
+      this.actionError.set('A alteração continua apenas nesta sessão. Tente novamente.');
+    }
+  }
+  protected chooseLocale(locale: string): void {
+    this.draftContent.chooseLocale(locale);
+  }
+  protected async addLocale(): Promise<void> {
+    const code = prompt('Código do idioma (ex.: fr-FR):')?.trim();
+    const label = prompt('Nome do idioma:')?.trim();
+    if (!code || !label || !/^[a-z]{2,3}(?:-[A-Z]{2})?$/.test(code) || code === 'pt-BR') return;
+    try {
+      await this.autosave.enqueue({
+        operationId: crypto.randomUUID(),
+        target: `locale.${code}`,
+        command: {
+          type: 'set_locale',
+          code,
+          label,
+          status: 'preparation',
+          position: this.draftContent.draft()?.locales.length ?? 0,
+        },
+      });
+      const draft = await this.commands.loadDraft();
+      this.draftContent.setDraft(draft);
+    } catch {
+      this.actionError.set('Não foi possível adicionar o idioma.');
+    }
+  }
+  protected async uploadProjectImage(event: Event): Promise<void> {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const entityId = prompt('ID da entidade do projeto para associar a imagem:')?.trim();
+    if (!entityId) return;
+    try {
+      const revision = this.autosave.confirmedRevision();
+      const uploaded = await this.media.upload(revision, 'project_image', file);
+      await this.media.associate(revision, entityId, uploaded.mediaId, 'projectImage');
+      this.draftContent.setDraft(await this.commands.loadDraft());
+    } catch {
+      this.actionError.set('Não foi possível enviar e associar a imagem.');
+    } finally {
+      (event.target as HTMLInputElement).value = '';
+    }
+  }
+  protected async undo(): Promise<void> {
+    await this.runHistory(() => this.sessionHistory.undo(crypto.randomUUID()));
+  }
+  protected async redo(): Promise<void> {
+    await this.runHistory(() => this.sessionHistory.redo(crypto.randomUUID()));
+  }
+  protected async restoreVersion(publicationId: string): Promise<void> {
+    try {
+      const receipt = await this.commands.restore(
+        publicationId,
+        this.autosave.confirmedRevision(),
+        crypto.randomUUID(),
+      );
+      this.autosave.initialize(receipt.revision);
+      this.draftContent.setDraft(await this.commands.loadDraft());
+      this.validation.set(null);
+      await this.loadHistory();
+    } catch {
+      this.actionError.set('Não foi possível restaurar essa versão como rascunho.');
+    }
+  }
+  private async runHistory(action: () => Promise<unknown>): Promise<void> {
+    this.actionError.set('');
+    try {
+      await this.autosave.flush();
+      await action();
+      this.draftContent.setDraft(await this.commands.loadDraft());
+      this.validation.set(null);
+    } catch {
+      this.actionError.set('Não foi possível aplicar a operação ao histórico da sessão.');
+    }
+  }
+}

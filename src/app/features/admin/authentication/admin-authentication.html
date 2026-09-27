@@ -1,0 +1,41 @@
+<main class="admin-authentication" data-testid="admin-authentication">
+  <section class="admin-card" aria-labelledby="admin-title">
+    <p class="eyebrow">Área administrativa</p>
+    <h1 id="admin-title">Entrar</h1>
+    <p class="description">Acesso restrito.</p>
+
+    <form (ngSubmit)="submit()" novalidate>
+      <label>
+        <span>E-mail</span>
+        <input
+          name="email"
+          type="email"
+          autocomplete="username"
+          required
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+        />
+      </label>
+
+      <label>
+        <span>Senha</span>
+        <input
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          [ngModel]="password()"
+          (ngModelChange)="password.set($event)"
+        />
+      </label>
+
+      @if (errorMessage()) {
+        <p class="error" role="alert" data-testid="admin-auth-error">{{ errorMessage() }}</p>
+      }
+
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Entrando…' : 'Entrar' }}
+      </button>
+    </form>
+  </section>
+</main>

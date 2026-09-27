@@ -1,5 +1,22 @@
 <main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
-  <header class="page-header" [attr.id]="showPresentation() ? 'apresentacao' : null">
+  <header class="site-header">
+    <nav [attr.aria-label]="copy().navigation">
+      <ul>
+        @for (item of navigationItems(); track item.targetId) {
+          <li>
+            <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
+              <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+  </header>
+  <header
+    class="page-header"
+    [attr.id]="showPresentation() ? 'apresentacao' : null"
+    data-editorial-section-id="presentation-section"
+  >
     <div class="header-top">
       <p class="eyebrow">
         <ng-container *ngTemplateOutlet="localized; context: { key: 'eyebrow' }" />
@@ -22,27 +39,83 @@
     @if (showPresentation()) {
       <h1>Marcos Santos</h1>
       <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
-    }
-    <nav [attr.aria-label]="copy().navigation">
-      <ul>
-        @for (item of navigationItems(); track item.targetId) {
-          <li>
-            <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
-              <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
-            </a>
-          </li>
+      <div class="compact-contact-links" data-testid="compact-contact-links">
+        @for (link of contactLinks(); track link.id) {
+          <a
+            class="compact-contact-link"
+            [href]="link.href"
+            [attr.data-editorial-entity]="link.id"
+            data-editorial-control="url"
+            data-editorial-field="href"
+            [attr.data-editorial-value]="link.href"
+          >
+            <span
+              [attr.data-editorial-entity]="link.id"
+              data-editorial-field="label"
+              [attr.data-editorial-locale]="language.language()"
+              >{{ contactLinkLabel(link) }}</span
+            >
+          </a>
         }
-      </ul>
-    </nav>
+      </div>
+    }
   </header>
   <div class="sections">
     @for (item of sectionItems(); track item.targetId) {
-      <section [id]="item.targetId" [attr.aria-labelledby]="item.targetId + '-title'">
-        <p class="section-index">{{ item.index }}</p>
+      <section
+        [id]="item.targetId"
+        [attr.aria-labelledby]="item.targetId + '-title'"
+        [attr.data-editorial-section-id]="sectionIdByTarget[item.targetId]"
+      >
         <h2 [id]="item.targetId + '-title'">
           <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
         </h2>
-        @if (item.targetId === 'resultados-profissionais') {
+        @if (item.targetId === 'stack-tecnica') {
+          <div
+            class="skills-grid"
+            data-testid="skills-section"
+            data-editorial-collection-kind="skillCategory"
+          >
+            @for (category of skillCategories(); track category.id) {
+              <article
+                class="skill-category"
+                [attr.data-testid]="'skills-' + category.id"
+                [attr.data-editorial-item-id]="category.id"
+              >
+                <h3>
+                  <span
+                    [attr.data-editorial-entity]="category.id"
+                    data-editorial-field="label"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ skillCategoryLabel(category) }}</span
+                  >
+                </h3>
+                <ul
+                  data-editorial-collection-kind="skill"
+                  [attr.data-editorial-parent-id]="category.id"
+                >
+                  @for (skill of category.skills; track skill.id) {
+                    <li class="skill-item" [attr.data-editorial-item-id]="'skill-' + skill.id">
+                      @if (skillIcon(skill); as icon) {
+                        <img
+                          [src]="icon"
+                          [alt]="skill.name"
+                          (error)="onSkillIconError($event, skill)"
+                        />
+                      }
+                      <span
+                        [attr.data-editorial-entity]="'skill-' + skill.id"
+                        data-editorial-field="name"
+                        [attr.data-editorial-locale]="language.language()"
+                        >{{ skill.name }}</span
+                      >
+                    </li>
+                  }
+                </ul>
+              </article>
+            }
+          </div>
+        } @else if (item.targetId === 'resultados-profissionais') {
           <div class="results-grid" data-testid="professional-results">
             @for (result of resultItems(); track result.testId) {
               <article
@@ -59,14 +132,25 @@
             }
           </div>
         } @else if (item.targetId === 'experiencias') {
-          <div class="experiences-list" data-testid="professional-experiences">
+          <div
+            class="experiences-list"
+            data-testid="professional-experiences"
+            data-editorial-collection-kind="experience"
+          >
             @for (experience of experiences(); track experience.id) {
               <article
                 class="experience-card"
                 [attr.data-testid]="'professional-experience-' + experience.id"
+                [attr.data-editorial-item-id]="experience.id"
               >
                 <header class="experience-card-header">
-                  <p class="experience-period">
+                  <p
+                    class="experience-period"
+                    [attr.data-editorial-entity]="experience.id"
+                    data-editorial-control="date-range"
+                    [attr.data-editorial-start-date]="experience.startDate"
+                    [attr.data-editorial-end-date]="experience.endDate"
+                  >
                     <span class="experience-period-label">
                       <ng-container
                         *ngTemplateOutlet="localized; context: { key: 'experiencePeriodLabel' }"
@@ -74,8 +158,14 @@
                     </span>
                     {{ formatExperiencePeriod(experience) }}
                   </p>
-                  <h3>{{ experience.name }}</h3>
-                  <p class="experience-title">{{ experience.title }}</p>
+                  <p
+                    class="experience-title"
+                    [attr.data-editorial-entity]="experience.id"
+                    data-editorial-field="title"
+                    [attr.data-editorial-locale]="language.language()"
+                  >
+                    {{ experience.title }}
+                  </p>
                 </header>
                 <div class="experience-details">
                   <div class="experience-block">
@@ -84,7 +174,13 @@
                         *ngTemplateOutlet="localized; context: { key: 'experienceContextLabel' }"
                       />
                     </h4>
-                    <p>{{ experience.context }}</p>
+                    <p
+                      [attr.data-editorial-entity]="experience.id"
+                      data-editorial-field="context"
+                      [attr.data-editorial-locale]="language.language()"
+                    >
+                      {{ experience.context }}
+                    </p>
                   </div>
                   <div class="experience-block">
                     <h4>
@@ -95,9 +191,25 @@
                         "
                       />
                     </h4>
-                    <ul>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="responsibilities"
+                    >
                       @for (responsibility of experience.responsibilities; track $index) {
-                        <li>{{ responsibility }}</li>
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['responsibilities']?.[$index] ??
+                            experience.id + '-responsibilities-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['responsibilities']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ responsibility }}
+                        </li>
                       }
                     </ul>
                   </div>
@@ -110,9 +222,25 @@
                         "
                       />
                     </h4>
-                    <ul>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="technicalDecisions"
+                    >
                       @for (decision of experience.technicalDecisions; track $index) {
-                        <li>{{ decision }}</li>
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['technicalDecisions']?.[$index] ??
+                            experience.id + '-technicalDecisions-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['technicalDecisions']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ decision }}
+                        </li>
                       }
                     </ul>
                   </div>
@@ -122,9 +250,25 @@
                         *ngTemplateOutlet="localized; context: { key: 'experienceResultsLabel' }"
                       />
                     </h4>
-                    <ul>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="results"
+                    >
                       @for (result of experience.results; track $index) {
-                        <li>{{ result }}</li>
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['results']?.[$index] ??
+                            experience.id + '-results-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['results']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ result }}
+                        </li>
                       }
                     </ul>
                   </div>
@@ -134,225 +278,214 @@
           </div>
         } @else if (item.targetId === 'projetos') {
           <div class="projects-sections" data-testid="projects-section">
-            @if (professionalProjects().length > 0) {
-              <div class="project-subsection" data-testid="professional-projects">
-                <h3 class="project-subsection-title">
-                  <ng-container
-                    *ngTemplateOutlet="localized; context: { key: 'professionalProjectsTitle' }"
-                  />
-                </h3>
-                <div class="projects-list">
-                  @for (project of professionalProjects(); track project.id) {
-                    <article
-                      class="project-card"
-                      [attr.data-testid]="'professional-project-' + project.id"
-                    >
-                      <h4>{{ project.name }}</h4>
-                      <div class="project-details">
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectDescriptionLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.description }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectContextLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.problemContext }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectRoleLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.role }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="
-                                localized;
-                                context: { key: 'projectTechnicalDecisionsLabel' }
-                              "
-                            />
-                          </h5>
-                          <ul>
-                            @for (decision of project.technicalDecisions; track $index) {
-                              <li>{{ decision }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectTechnologiesLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (technology of project.technologies; track $index) {
-                              <li>{{ technology }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectResultsLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (result of project.results; track $index) {
-                              <li>{{ result }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectLearningsLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (learning of project.learnings; track $index) {
-                              <li>{{ learning }}</li>
-                            }
-                          </ul>
-                        </div>
-                        @if (project.links.length > 0) {
-                          <div class="project-block project-links">
-                            <h5>
-                              <ng-container
-                                *ngTemplateOutlet="localized; context: { key: 'projectLinksLabel' }"
-                              />
-                            </h5>
-                            <ul>
-                              @for (link of project.links; track link.url + link.label) {
-                                <li><a [href]="link.url">{{ link.label }}</a></li>
-                              }
-                            </ul>
+            @for (
+              group of [
+                {
+                  type: 'professional',
+                  title: copy().professionalProjectsTitle,
+                  projects: professionalProjects(),
+                },
+                {
+                  type: 'personal',
+                  title: copy().personalProjectsTitle,
+                  projects: personalProjects(),
+                },
+              ];
+              track group.type
+            ) {
+              @if (group.projects.length || editorialMode) {
+                <div class="project-subsection" [attr.data-testid]="group.type + '-projects'">
+                  <h3
+                    class="project-subsection-title"
+                    [attr.data-editorial-entity]="
+                      'copy-' +
+                      (group.type === 'professional'
+                        ? 'professionalProjectsTitle'
+                        : 'personalProjectsTitle')
+                    "
+                    data-editorial-field="text"
+                    [attr.data-editorial-locale]="language.language()"
+                  >
+                    {{ group.title }}
+                  </h3>
+                  <div
+                    class="projects-list"
+                    data-editorial-collection-kind="project"
+                    [attr.data-editorial-new-type]="group.type"
+                  >
+                    @for (project of group.projects; track project.id) {
+                      <article
+                        class="project-card"
+                        [attr.data-testid]="group.type + '-project-' + project.id"
+                        [attr.data-editorial-entity]="project.id"
+                        data-editorial-control="project-type"
+                        [attr.data-editorial-value]="project.type"
+                        [attr.data-editorial-item-id]="project.id"
+                      >
+                        <h4
+                          [attr.data-editorial-entity]="project.id"
+                          data-editorial-field="name"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ project.name }}
+                        </h4>
+                        <div class="project-details">
+                          <div class="project-block">
+                            <h5>{{ copy().projectDescriptionLabel }}</h5>
+                            <p
+                              [attr.data-editorial-entity]="project.id"
+                              data-editorial-field="description"
+                              [attr.data-editorial-locale]="language.language()"
+                            >
+                              {{ project.description }}
+                            </p>
                           </div>
-                        }
-                      </div>
-                    </article>
-                  }
+                          <div class="project-block">
+                            <h5>{{ copy().projectContextLabel }}</h5>
+                            <p
+                              [attr.data-editorial-entity]="project.id"
+                              data-editorial-field="problemContext"
+                              [attr.data-editorial-locale]="language.language()"
+                            >
+                              {{ project.problemContext }}
+                            </p>
+                          </div>
+                          <div class="project-block">
+                            <h5>{{ copy().projectTechnologiesLabel }}</h5>
+                            <app-project-technologies
+                              [technologies]="project.technologies"
+                              [attr.data-editorial-entity]="project.id"
+                              data-editorial-control="technologies"
+                              [attr.data-editorial-value]="project.technologyIds?.join(',')"
+                            />
+                          </div>
+                        </div>
+                        <a class="project-full-link" [href]="(editorialMode ? '/admin/editor/projetos/' : '/projetos/') + project.id"
+                          >{{
+                            language.language() === 'en'
+                              ? 'View full project'
+                              : 'Ver projeto completo'
+                          }}
+                          →</a
+                        >
+                      </article>
+                    }
+                  </div>
                 </div>
-              </div>
+              }
             }
-            @if (personalProjects().length > 0) {
-              <div class="project-subsection" data-testid="personal-projects">
-                <h3 class="project-subsection-title">
-                  <ng-container
-                    *ngTemplateOutlet="localized; context: { key: 'personalProjectsTitle' }"
-                  />
+          </div>
+        } @else if (item.targetId === 'formacao-academica') {
+          <div
+            class="academic-list"
+            data-testid="academic-background"
+            data-editorial-collection-kind="academic"
+          >
+            @for (entry of academicEntries(); track entry.id) {
+              <article
+                class="academic-card"
+                [attr.data-testid]="'academic-' + entry.id"
+                [attr.data-editorial-item-id]="entry.id"
+              >
+                <h3>
+                  <span
+                    [attr.data-editorial-entity]="entry.id"
+                    data-editorial-field="name"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ academicEntryName(entry) }}</span
+                  >
                 </h3>
-                <div class="projects-list">
-                  @for (project of personalProjects(); track project.id) {
-                    <article
-                      class="project-card"
-                      [attr.data-testid]="'personal-project-' + project.id"
-                    >
-                      <h4>{{ project.name }}</h4>
-                      <div class="project-details">
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectDescriptionLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.description }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectContextLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.problemContext }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectRoleLabel' }"
-                            />
-                          </h5>
-                          <p>{{ project.role }}</p>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="
-                                localized;
-                                context: { key: 'projectTechnicalDecisionsLabel' }
-                              "
-                            />
-                          </h5>
-                          <ul>
-                            @for (decision of project.technicalDecisions; track $index) {
-                              <li>{{ decision }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectTechnologiesLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (technology of project.technologies; track $index) {
-                              <li>{{ technology }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectResultsLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (result of project.results; track $index) {
-                              <li>{{ result }}</li>
-                            }
-                          </ul>
-                        </div>
-                        <div class="project-block">
-                          <h5>
-                            <ng-container
-                              *ngTemplateOutlet="localized; context: { key: 'projectLearningsLabel' }"
-                            />
-                          </h5>
-                          <ul>
-                            @for (learning of project.learnings; track $index) {
-                              <li>{{ learning }}</li>
-                            }
-                          </ul>
-                        </div>
-                        @if (project.links.length > 0) {
-                          <div class="project-block project-links">
-                            <h5>
-                              <ng-container
-                                *ngTemplateOutlet="localized; context: { key: 'projectLinksLabel' }"
-                              />
-                            </h5>
-                            <ul>
-                              @for (link of project.links; track link.url + link.label) {
-                                <li><a [href]="link.url">{{ link.label }}</a></li>
-                              }
-                            </ul>
-                          </div>
-                        }
-                      </div>
-                    </article>
-                  }
-                </div>
-              </div>
+                <p>
+                  <strong>
+                    <ng-container
+                      *ngTemplateOutlet="localized; context: { key: 'educationInstitutionLabel' }"
+                    />:
+                  </strong>
+                  <span
+                    [attr.data-editorial-entity]="entry.id"
+                    data-editorial-field="institution"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ entry.institution || 'Unopar Anhanguera' }}</span
+                  >
+                </p>
+                @if (academicPeriod(entry); as period) {
+                  <p>
+                    <strong>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'educationPeriodLabel' }"
+                      />:
+                    </strong>
+                    {{ period }}
+                  </p>
+                }
+                @if (entry.competencies?.length) {
+                  <p>
+                    <strong>
+                      <ng-container
+                        *ngTemplateOutlet="
+                          localized;
+                          context: { key: 'educationCompetenciesLabel' }
+                        "
+                      />:
+                    </strong>
+                    {{ listText(entry.competencies) }}
+                  </p>
+                }
+                @if (entry.studiedContent?.length) {
+                  <p>
+                    <strong>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'educationContentLabel' }"
+                      />:
+                    </strong>
+                    {{ listText(entry.studiedContent) }}
+                  </p>
+                }
+              </article>
+            }
+          </div>
+        } @else if (item.targetId === 'contato') {
+          <div
+            class="contact-grid"
+            data-testid="contact-links"
+            data-editorial-collection-kind="contact"
+          >
+            @for (link of contactLinks(); track link.id) {
+              <a
+                class="contact-link"
+                [href]="link.href"
+                [attr.data-testid]="'contact-' + link.id"
+                [attr.data-editorial-entity]="link.id"
+                data-editorial-control="url"
+                data-editorial-field="href"
+                [attr.data-editorial-value]="link.href"
+                [attr.data-editorial-item-id]="link.id"
+              >
+                <img [src]="link.iconPath" alt="" aria-hidden="true" />
+                <span class="contact-label">
+                  <span
+                    [attr.data-editorial-entity]="link.id"
+                    data-editorial-field="label"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ contactLinkLabel(link) }}</span
+                  >
+                </span>
+              </a>
+            }
+            @if (curriculum(); as currentCurriculum) {
+              <a
+                class="contact-link"
+                [href]="currentCurriculum.publicUrl"
+                [attr.download]="currentCurriculum.originalName"
+                data-testid="contact-curriculum"
+              >
+                <img src="/assets/contact/curriculum.svg" alt="" aria-hidden="true" />
+                <span class="contact-label">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: curriculumLabelKey() }"
+                  />
+                </span>
+              </a>
             }
           </div>
         } @else {
@@ -367,7 +500,13 @@
   <span class="localized-copy">
     <span class="translation-size" aria-hidden="true">{{ $any(original)[key] }}</span>
     <span class="translation-size" aria-hidden="true">{{ $any(english)[key] }}</span>
-    <span class="translated-text">{{ $any(copy())[key] }}</span>
+    <span
+      class="translated-text"
+      [attr.data-editorial-entity]="'copy-' + key"
+      data-editorial-field="text"
+      [attr.data-editorial-locale]="language.language()"
+      >{{ $any(copy())[key] }}</span
+    >
   </span>
 </ng-template>
 

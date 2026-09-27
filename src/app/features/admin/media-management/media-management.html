@@ -1,0 +1,183 @@
+<main class="media-management" data-testid="media-management">
+  <header class="media-header">
+    <div>
+      <p class="eyebrow">Área administrativa</p>
+      <h1>Gerenciador de mídias</h1>
+      <p>Gerencie imagens, currículos e o catálogo compartilhado de habilidades.</p>
+    </div>
+    <button type="button" (click)="reload()" [disabled]="loading() || saving()">Recarregar</button>
+  </header>
+
+  @if (loading()) {
+    <p class="status">Carregando mídias…</p>
+  }
+  @if (errorMessage()) {
+    <p class="message error" role="alert" data-testid="media-error">{{ errorMessage() }}</p>
+  }
+  @if (statusMessage()) {
+    <p class="message success" role="status" data-testid="media-success">{{ statusMessage() }}</p>
+  }
+
+  @if (!loading()) {
+    <section class="media-section" aria-labelledby="project-media-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="project-media-title">Imagens dos projetos</h2>
+          <p>As imagens são compartilhadas entre português e inglês.</p>
+        </div>
+      </div>
+
+      @if (snapshot().projects.length === 0) {
+        <p class="status">Nenhum projeto disponível para receber imagens.</p>
+      } @else {
+        <article class="media-card">
+          <label>
+            <span>Projeto</span>
+            <select [ngModel]="selectedProjectId" (change)="setProject($event)">
+              @for (project of snapshot().projects; track project.id) {
+                <option [value]="project.id">{{ project.label }}</option>
+              }
+            </select>
+          </label>
+          <label>
+            <span>Nova imagem (PNG/JPG/JPEG até 1 MB)</span>
+            <input type="file" accept="image/png,image/jpeg" (change)="setImageFile($event)" />
+          </label>
+          <button type="button" (click)="uploadImage()" [disabled]="saving()">
+            Adicionar imagem
+          </button>
+        </article>
+
+        @if (selectedProject(); as project) {
+          <div class="media-list">
+            @for (image of project.images; track image.id) {
+              <article class="media-card image-card">
+                <div>
+                  <h3>{{ image.originalName }}</h3>
+                  <p>Ordem {{ image.displayOrder }} · {{ image.sizeBytes }} bytes</p>
+                </div>
+                <label>
+                  <span>Substituir esta imagem</span>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg"
+                    (change)="replaceImage(image, $event)"
+                  />
+                </label>
+              </article>
+            }
+          </div>
+        }
+      }
+    </section>
+
+    <section class="media-section" aria-labelledby="skill-media-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="skill-media-title">Catálogo de habilidades</h2>
+          <p>Crie e edite habilidades aqui. Projetos e Habilidades apenas selecionam este catálogo.</p>
+        </div>
+      </div>
+      @if (snapshot().skills.length === 0) {
+        <p class="status">Nenhuma habilidade cadastrada no catálogo editorial.</p>
+      } @else {
+        <div class="skill-catalog-list" aria-label="Habilidades cadastradas">
+          @for (skill of snapshot().skills; track skill.id) {
+            <button type="button" class="skill-catalog-item" (click)="selectedSkillId = skill.id; selectedSkillLabel = skill.label">
+              @if (skill.iconPublicUrl) {
+                <img [src]="skill.iconPublicUrl" [alt]="'Ícone de ' + skill.label" />
+              } @else {
+                <span class="skill-icon-placeholder" aria-hidden="true">◇</span>
+              }
+              <span>{{ skill.label }}</span>
+            </button>
+          }
+        </div>
+        <article class="media-card">
+          <label>
+            <span>Habilidade</span>
+            <select [ngModel]="selectedSkillId" (change)="setSkill($event)">
+              @for (skill of snapshot().skills; track skill.id) {
+                <option [value]="skill.id">{{ skill.label }}</option>
+              }
+            </select>
+          </label>
+          @if (selectedSkill(); as skill) {
+            <div class="skill-preview">
+              @if (skill.iconPublicUrl) {
+                <img [src]="skill.iconPublicUrl" [alt]="'Ícone de ' + skill.label" />
+              } @else {
+                <span class="status">Sem ícone</span>
+              }
+              <strong>{{ skill.label }}</strong>
+            </div>
+          }
+          <label>
+            <span>Nome da habilidade</span>
+            <input [(ngModel)]="selectedSkillLabel" />
+          </label>
+          <button type="button" (click)="saveSkillLabel()" [disabled]="saving()">
+            Salvar nome
+          </button>
+          <label>
+            <span>{{
+              selectedSkill()?.iconStoragePath ? 'Substituir ícone' : 'Enviar ícone'
+            }}</span>
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/svg+xml"
+              (change)="setSkillFile($event)"
+            />
+          </label>
+          <button type="button" (click)="uploadSkillIcon()" [disabled]="saving()">
+            Salvar ícone
+          </button>
+        </article>
+      }
+      <article class="media-card create-skill-card">
+        <h3>Criar habilidade</h3>
+        <p>A habilidade criada ficará disponível nos seletores de projetos e Habilidades.</p>
+        <label>
+          <span>Nome</span>
+          <input [(ngModel)]="newSkillLabel" placeholder="Ex.: Spring Boot" />
+        </label>
+        <label>
+          <span>Ícone (PNG/JPG/JPEG ou SVG até 1 MB)</span>
+          <input type="file" accept="image/png,image/jpeg,image/svg+xml" (change)="setNewSkillFile($event)" />
+        </label>
+        <button type="button" (click)="createSkill()" [disabled]="saving()">
+          Criar habilidade
+        </button>
+      </article>
+    </section>
+
+    <section class="media-section" aria-labelledby="curricula-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="curricula-title">Currículos</h2>
+          <p>Um currículo PDF corrente por idioma.</p>
+        </div>
+      </div>
+      <div class="media-list">
+        @for (locale of locales; track locale) {
+          <article class="media-card">
+            <h3>{{ locale }}</h3>
+            @if (snapshot().curricula[locale]; as curriculum) {
+              <p class="current-file">Atual: {{ curriculum.originalName }}</p>
+            } @else {
+              <p class="status">Nenhum currículo enviado para este idioma.</p>
+            }
+            <label>
+              <span>{{ snapshot().curricula[locale] ? 'Substituir PDF' : 'Enviar PDF' }}</span>
+              <input
+                type="file"
+                accept="application/pdf"
+                (change)="uploadOrReplaceCurriculum(locale, $event)"
+              />
+            </label>
+          </article>
+        }
+      </div>
+    </section>
+  }
+</main>

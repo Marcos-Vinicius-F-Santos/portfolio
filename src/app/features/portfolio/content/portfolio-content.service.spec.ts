@@ -17,9 +17,7 @@ describe('PortfolioContentService', () => {
 
   it('maps projects with type, links and related ordered images', async () => {
     const client = fakeClient({
-      portfolio_projects: [
-        { id: 'project-1', project_type: 'professional', display_order: 1 },
-      ],
+      portfolio_projects: [{ id: 'project-1', project_type: 'professional', display_order: 1 }],
       portfolio_project_translations: [
         {
           project_id: 'project-1',
@@ -138,7 +136,7 @@ describe('PortfolioContentService', () => {
     });
   });
 
-  it('maps experiences with the approved name and orders by start date then display order', async () => {
+  it('orders experiences by start date then display order without exposing company names', async () => {
     const client = fakeClient({
       portfolio_experiences: [
         {
@@ -220,7 +218,6 @@ describe('PortfolioContentService', () => {
       'older',
     ]);
     expect(experiences[0]).toMatchObject({
-      name: 'Dairy Corp',
       title: 'Engenheiro de software',
       context: 'Setor de laticínios',
       responsibilities: ['Responsabilidade nova'],
@@ -243,6 +240,54 @@ describe('PortfolioContentService', () => {
     expect(service.lastError()?.message).toBe('project query failed');
   });
 
+  it('maps the curriculum for the selected locale and creates its public URL', async () => {
+    const service = configure(
+      fakeClient({
+        portfolio_files: [
+          {
+            id: 'curriculum-en',
+            file_type: 'curriculum',
+            locale: 'en',
+            storage_path: 'curricula/curriculum-en.pdf',
+            original_name: 'resume-en.pdf',
+            mime_type: 'application/pdf',
+            size_bytes: 1200,
+          },
+        ],
+      }),
+    );
+
+    await expect(service.getCurriculum('en')).resolves.toMatchObject({
+      id: 'curriculum-en',
+      locale: 'en',
+      originalName: 'resume-en.pdf',
+      mimeType: 'application/pdf',
+      publicUrl: 'https://storage.test/curricula/curriculum-en.pdf',
+    });
+    expect(service.lastError()).toBeNull();
+  });
+
+  it('rejects missing or non-PDF curriculum metadata safely', async () => {
+    const service = configure(
+      fakeClient({
+        portfolio_files: [
+          {
+            id: 'curriculum-invalid',
+            file_type: 'curriculum',
+            locale: 'pt-BR',
+            storage_path: 'curricula/curriculum-invalid.docx',
+            original_name: 'curriculum-invalid.docx',
+            mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            size_bytes: 1200,
+          },
+        ],
+      }),
+    );
+
+    await expect(service.getCurriculum('pt-BR')).resolves.toBeNull();
+    expect(service.lastError()?.message).toBe('Invalid curriculum metadata');
+  });
+
   it('returns empty content when public runtime configuration is absent', async () => {
     const service = configure(null);
 
@@ -250,23 +295,92 @@ describe('PortfolioContentService', () => {
     await expect(service.listProjects('pt-BR')).resolves.toEqual([]);
     await expect(service.getCurriculum('pt-BR')).resolves.toBeNull();
   });
+
+  it('loads editable skills, academic entries and contacts from the persisted catalogues', async () => {
+    const service = configure(
+      fakeClient({
+        portfolio_skill_categories: [
+          { id: 'category-1', category_key: 'frontend', display_order: 1 },
+        ],
+        portfolio_skill_category_translations: [
+          { category_id: 'category-1', locale: 'en', label: 'Frontend' },
+        ],
+        portfolio_skills: [
+          {
+            id: 'skill-1',
+            category_id: 'category-1',
+            display_order: 1,
+            icon_url: 'https://example.com/angular.svg',
+            icon_storage_path: null,
+          },
+        ],
+        portfolio_skill_translations: [{ skill_id: 'skill-1', locale: 'en', name: 'Angular' }],
+        portfolio_academic_entries: [
+          {
+            id: 'academic-1',
+            display_order: 1,
+            start_date: '2024-01-01',
+            end_date: null,
+            is_current: true,
+          },
+        ],
+        portfolio_academic_entry_translations: [
+          {
+            entry_id: 'academic-1',
+            locale: 'en',
+            name: 'Data Science',
+            institution: 'University',
+            competencies: ['Modeling'],
+            studied_content: ['Statistics'],
+          },
+        ],
+        portfolio_contact_links: [
+          {
+            id: 'contact-1',
+            symbol: 'github',
+            href: 'https://github.com/example',
+            display_order: 1,
+          },
+        ],
+        portfolio_contact_link_translations: [
+          { contact_id: 'contact-1', locale: 'en', label: 'GitHub' },
+        ],
+      }),
+    );
+
+    await expect(service.listSkillCategories('en')).resolves.toMatchObject([
+      {
+        id: 'category-1',
+        label: 'Frontend',
+        skills: [{ name: 'Angular', iconUrl: 'https://example.com/angular.svg' }],
+      },
+    ]);
+    await expect(service.listAcademicEntries('en')).resolves.toMatchObject([
+      {
+        id: 'academic-1',
+        name: 'Data Science',
+        institution: 'University',
+        startDate: '2024-01-01',
+        isCurrent: true,
+        competencies: ['Modeling'],
+        studiedContent: ['Statistics'],
+      },
+    ]);
+    await expect(service.listContactLinks('en')).resolves.toMatchObject([
+      { id: 'contact-1', label: 'GitHub', href: 'https://github.com/example', symbol: 'github' },
+    ]);
+  });
 });
 
 function configure(client: SupabaseClient | null): PortfolioContentService {
   TestBed.resetTestingModule();
   TestBed.configureTestingModule({
-    providers: [
-      PortfolioContentService,
-      { provide: SUPABASE_CLIENT, useValue: client },
-    ],
+    providers: [PortfolioContentService, { provide: SUPABASE_CLIENT, useValue: client }],
   });
   return TestBed.inject(PortfolioContentService);
 }
 
-function fakeClient(
-  rows: Record<string, unknown[]>,
-  failure: Error | null = null,
-): SupabaseClient {
+function fakeClient(rows: Record<string, unknown[]>, failure: Error | null = null): SupabaseClient {
   const client = {
     from(table: string) {
       return query(rows[table] ?? [], failure);
@@ -304,16 +418,17 @@ function query(data: unknown[], error: Error | null) {
     },
     order: (key: string, options: { ascending?: boolean }) => {
       current.sort((left, right) => {
-        const leftValue = left && typeof left === 'object' ? (left as Record<string, unknown>)[key] : null;
-        const rightValue = right && typeof right === 'object' ? (right as Record<string, unknown>)[key] : null;
+        const leftValue =
+          left && typeof left === 'object' ? (left as Record<string, unknown>)[key] : null;
+        const rightValue =
+          right && typeof right === 'object' ? (right as Record<string, unknown>)[key] : null;
         const comparison = String(leftValue ?? '').localeCompare(String(rightValue ?? ''));
         return options.ascending === false ? -comparison : comparison;
       });
       return builder;
     },
-    maybeSingle: () => builder,
-    then: (resolve, reject) =>
-      Promise.resolve({ data: current, error }).then(resolve, reject),
+    maybeSingle: () => Promise.resolve({ data: current[0] ?? null, error }),
+    then: (resolve, reject) => Promise.resolve({ data: current, error }).then(resolve, reject),
   };
   return builder;
 }

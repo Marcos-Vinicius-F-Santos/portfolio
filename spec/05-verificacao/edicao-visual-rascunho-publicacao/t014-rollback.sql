@@ -1,0 +1,11 @@
+drop function if exists public.restore_editor_publication(uuid,bigint,uuid);
+drop function if exists public.get_editor_history();
+drop function if exists portfolio_editorial.restore_publication(uuid,bigint,uuid,uuid);
+drop function if exists portfolio_editorial.list_history(uuid);
+drop trigger if exists enforce_publication_retention on portfolio_editorial.site_state;
+drop function if exists portfolio_editorial.enforce_publication_retention();
+drop policy if exists publications_executor_retention_update on portfolio_editorial.publications;
+revoke update on portfolio_editorial.publications from portfolio_editorial_executor;
+delete from portfolio_editorial.operations where type='restore';
+alter table portfolio_editorial.operations drop constraint operations_type_check;
+alter table portfolio_editorial.operations add constraint operations_type_check check(type in('draft_command','publication','discard'));

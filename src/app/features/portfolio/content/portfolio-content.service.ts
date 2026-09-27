@@ -1,8 +1,15 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
-import type { PortfolioCopy } from './portfolio-content';
 import {
+  PORTFOLIO_ACADEMIC_ENTRIES,
+  PORTFOLIO_CONTACT_LINKS,
+  PORTFOLIO_SKILL_CATEGORIES,
+  type PortfolioCopy,
+} from './portfolio-content';
+import {
+  type PortfolioAcademicEntry,
+  type PortfolioContactLink,
   type PortfolioExperience,
   type PortfolioFile,
   type PortfolioLocale,
@@ -10,6 +17,8 @@ import {
   type PortfolioProjectImage,
   type PortfolioProjectLink,
   type PortfolioProjectType,
+  type PortfolioSkill,
+  type PortfolioSkillCategory,
 } from './portfolio-content.models';
 
 type Row = Record<string, unknown>;
@@ -113,7 +122,6 @@ export class PortfolioContentService {
             id: String(row['id']),
             startDate: String(row['start_date']),
             endDate: nullableString(row['end_date']),
-            name: String(row['name']),
             displayOrder: Number(row['display_order']),
             title: String(translation['title'] ?? ''),
             context: String(translation['context'] ?? ''),
@@ -216,21 +224,208 @@ export class PortfolioContentService {
       }
 
       const row = data as Row;
+      const storagePath = String(row['storage_path'] ?? '');
+      const mimeType = String(row['mime_type'] ?? '');
+      if (
+        row['file_type'] !== 'curriculum' ||
+        row['locale'] !== locale ||
+        mimeType !== 'application/pdf' ||
+        storagePath.length === 0
+      ) {
+        this.errorState.set(new Error('Invalid curriculum metadata'));
+        return null;
+      }
+
+      const publicUrl = client.storage.from('curricula').getPublicUrl(storagePath).data.publicUrl;
+      if (!publicUrl) {
+        this.errorState.set(new Error('Curriculum public URL unavailable'));
+        return null;
+      }
+
       return {
         id: String(row['id']),
         fileType: 'curriculum',
         locale,
-        storagePath: String(row['storage_path']),
+        storagePath,
         originalName: String(row['original_name']),
-        mimeType: String(row['mime_type']),
+        mimeType: 'application/pdf',
         sizeBytes: Number(row['size_bytes']),
-        publicUrl: client.storage
-          .from('curricula')
-          .getPublicUrl(String(row['storage_path'])).data.publicUrl,
+        publicUrl,
       };
     } catch (error) {
       this.errorState.set(toError(error));
       return null;
+    }
+  }
+
+  async listSkillCategories(locale: PortfolioLocale): Promise<PortfolioSkillCategory[]> {
+    if (!this.client) return fallbackSkillCategories();
+    const client = this.client;
+
+    try {
+      const { data: categories, error: categoriesError } = await client
+        .from('portfolio_skill_categories')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (categoriesError) throw categoriesError;
+
+      const categoryRows = (categories ?? []) as Row[];
+      if (categoryRows.length === 0) return fallbackSkillCategories();
+
+      const categoryIds = categoryRows.map((row) => String(row['id']));
+      const [categoryTranslations, skillsResult] = await Promise.all([
+        this.getLocalizedTranslations(
+          client,
+          'portfolio_skill_category_translations',
+          'category_id',
+          categoryIds,
+          locale,
+        ),
+        client
+          .from('portfolio_skills')
+          .select('*')
+          .in('category_id', categoryIds)
+          .order('display_order', { ascending: true }),
+      ]);
+      if (skillsResult.error) throw skillsResult.error;
+
+      const skillRows = (skillsResult.data ?? []) as Row[];
+      const skillIds = skillRows.map((row) => String(row['id']));
+      const skillTranslations = await this.getLocalizedTranslations(
+        client,
+        'portfolio_skill_translations',
+        'skill_id',
+        skillIds,
+        locale,
+      );
+      const skillsByCategory = new Map<string, PortfolioSkill[]>();
+
+      for (const row of skillRows) {
+        const categoryId = String(row['category_id']);
+        const translation = skillTranslations.get(String(row['id']));
+        if (!translation) continue;
+        const skills = skillsByCategory.get(categoryId) ?? [];
+        const iconStoragePath = nullableString(row['icon_storage_path']);
+        const iconUrl = nullableString(row['icon_url']);
+        const iconPublicUrl = iconStoragePath
+          ? client.storage.from('skill-icons').getPublicUrl(iconStoragePath).data.publicUrl
+          : undefined;
+        skills.push({
+          id: String(row['id']),
+          name: String(translation['name'] ?? ''),
+          iconUrl: iconUrl ?? undefined,
+          iconStoragePath: iconStoragePath ?? undefined,
+          iconPublicUrl: iconPublicUrl || undefined,
+        });
+        skillsByCategory.set(categoryId, skills);
+      }
+
+      this.errorState.set(null);
+      return categoryRows.map((row) => {
+        const id = String(row['id']);
+        const translation = categoryTranslations.get(id);
+        return {
+          id,
+          labelKey: String(row['category_key']),
+          label: translation ? String(translation['label'] ?? '') : undefined,
+          skills: skillsByCategory.get(id) ?? [],
+          displayOrder: Number(row['display_order']),
+        };
+      });
+    } catch (error) {
+      this.errorState.set(toError(error));
+      return fallbackSkillCategories();
+    }
+  }
+
+  async listAcademicEntries(locale: PortfolioLocale): Promise<PortfolioAcademicEntry[]> {
+    if (!this.client) return fallbackAcademicEntries();
+    const client = this.client;
+
+    try {
+      const { data: entries, error } = await client
+        .from('portfolio_academic_entries')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (error) throw error;
+
+      const rows = (entries ?? []) as Row[];
+      if (rows.length === 0) return fallbackAcademicEntries();
+      const ids = rows.map((row) => String(row['id']));
+      const translations = await this.getLocalizedTranslations(
+        client,
+        'portfolio_academic_entry_translations',
+        'entry_id',
+        ids,
+        locale,
+      );
+
+      this.errorState.set(null);
+      return rows.map((row) => {
+        const id = String(row['id']);
+        const translation = translations.get(id);
+        return {
+          id,
+          nameKey: id,
+          name: translation ? String(translation['name'] ?? '') : undefined,
+          institution: translation ? String(translation['institution'] ?? '') : '',
+          startDate: nullableString(row['start_date']),
+          endDate: nullableString(row['end_date']),
+          isCurrent: Boolean(row['is_current']),
+          competencies: translation ? stringArray(translation['competencies']) : [],
+          studiedContent: translation ? stringArray(translation['studied_content']) : [],
+          displayOrder: Number(row['display_order']),
+        };
+      });
+    } catch (error) {
+      this.errorState.set(toError(error));
+      return fallbackAcademicEntries();
+    }
+  }
+
+  async listContactLinks(locale: PortfolioLocale): Promise<PortfolioContactLink[]> {
+    if (!this.client) return fallbackContactLinks();
+    const client = this.client;
+
+    try {
+      const { data: links, error } = await client
+        .from('portfolio_contact_links')
+        .select('*')
+        .order('display_order', { ascending: true });
+      if (error) throw error;
+
+      const rows = (links ?? []) as Row[];
+      if (rows.length === 0) return fallbackContactLinks();
+      const ids = rows.map((row) => String(row['id']));
+      const translations = await this.getLocalizedTranslations(
+        client,
+        'portfolio_contact_link_translations',
+        'contact_id',
+        ids,
+        locale,
+      );
+
+      this.errorState.set(null);
+      return rows.flatMap((row) => {
+        const symbol = contactSymbol(row['symbol']);
+        if (!symbol) return [];
+        const id = String(row['id']);
+        const translation = translations.get(id);
+        return [
+          {
+            id,
+            labelKey: id,
+            label: translation ? String(translation['label'] ?? '') : undefined,
+            href: String(row['href'] ?? ''),
+            symbol,
+            iconPath: `/assets/contact/${symbol}.svg`,
+            displayOrder: Number(row['display_order']),
+          },
+        ];
+      });
+    } catch (error) {
+      this.errorState.set(toError(error));
+      return fallbackContactLinks();
     }
   }
 
@@ -239,22 +434,26 @@ export class PortfolioContentService {
     ids: string[],
     locale: PortfolioLocale,
   ): Promise<Map<string, Row>> {
-    const selected = await this.getTranslations(
+    return this.getLocalizedTranslations(
       client,
       'portfolio_project_translations',
       'project_id',
       ids,
       locale,
     );
+  }
+
+  private async getLocalizedTranslations(
+    client: SupabaseClient,
+    table: string,
+    foreignKey: string,
+    ids: string[],
+    locale: PortfolioLocale,
+  ): Promise<Map<string, Row>> {
+    const selected = await this.getTranslations(client, table, foreignKey, ids, locale);
     if (locale === 'pt-BR') return selected;
 
-    const fallback = await this.getTranslations(
-      client,
-      'portfolio_project_translations',
-      'project_id',
-      ids,
-      'pt-BR',
-    );
+    const fallback = await this.getTranslations(client, table, foreignKey, ids, 'pt-BR');
     const merged = new Map(fallback);
     for (const [id, translation] of selected) {
       merged.set(id, translation);
@@ -355,4 +554,25 @@ function nullableString(value: unknown): string | null {
 
 function toError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
+}
+
+function fallbackSkillCategories(): PortfolioSkillCategory[] {
+  return PORTFOLIO_SKILL_CATEGORIES.map((category) => ({
+    ...category,
+    skills: category.skills.map((skill: PortfolioSkill) => ({ ...skill })),
+  }));
+}
+
+function fallbackAcademicEntries(): PortfolioAcademicEntry[] {
+  return PORTFOLIO_ACADEMIC_ENTRIES.map((entry) => ({ ...entry }));
+}
+
+function fallbackContactLinks(): PortfolioContactLink[] {
+  return PORTFOLIO_CONTACT_LINKS.map((link) => ({ ...link }));
+}
+
+function contactSymbol(value: unknown): PortfolioContactLink['symbol'] | null {
+  return value === 'linkedin' || value === 'github' || value === 'email' || value === 'phone'
+    ? value
+    : null;
 }

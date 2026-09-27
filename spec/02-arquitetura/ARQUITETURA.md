@@ -1,7 +1,9 @@
 # Arquitetura — Portfólio Profissional — Marcos Santos
 
+> **Evolução editorial — 2026-09-26.** Para a nova feature, a direção aprovada substitui publicação imediata e ausência de histórico por rascunho privado, snapshots imutáveis e promoção transacional; permite idiomas adicionais e preserva páginas completas de projetos. O [ADR-008](DECISAO-008-versionamento-publicacao-editorial.md) e o [schema proposto](../04-plano/edicao-visual-rascunho-publicacao/schema-proposto.md) detalham essa evolução para revisão. Organização por domínio, um administrador e Supabase permanecem. As seções 1, 3.1, 3.3–3.5, 4 e 5 abaixo descrevem a base anterior nos pontos conflitantes. Nenhum schema ou fluxo de produção foi alterado nesta reconciliação.
+
 Status: Rascunho  
-Última atualização: 2026-09-22
+Última atualização: 2026-09-27
 
 ## 1. Visão geral do sistema
 
@@ -74,7 +76,7 @@ src/
       admin/                 # área administrativa protegida
         authentication/      # entrada e encerramento de sessão
         content-management/  # inclusão e edição do conteúdo do portfólio
-        media-management/    # imagens de projetos e arquivos de currículo
+        media-management/    # imagens, currículos e catálogo compartilhado de Skills
     shared/                  # elementos realmente compartilhados entre features
   assets/                    # recursos fixos do frontend
 
@@ -90,6 +92,10 @@ conteúdo e ser separados em features próprias apenas quando a complexidade exi
 A estrutura de traduções será separada do conteúdo principal. O modelo de dados deve
 permitir relacionar uma entidade de conteúdo à sua tradução em português e à sua
 tradução em inglês, sem duplicar a regra de seleção de idioma em cada seção da interface.
+
+O catálogo editorial de tecnologias é mantido pelo Gerenciador de mídias, conforme a
+ADR-012. Projetos e Habilidades referenciam seus IDs existentes por seletores; não criam
+ou editam cópias locais da Skill.
 
 ## 3. Decisões grandes já tomadas
 
@@ -175,4 +181,3 @@ o deploy.
   profissionais;
 - definição do domínio público final da Vercel;
 - refinamento definitivo da identidade visual além da primeira versão funcional.
-

@@ -1,0 +1,133 @@
+<main [attr.lang]="language.language()">
+  <nav>
+    <a href="/#projetos">← {{ en() ? 'Back to projects' : 'Voltar aos projetos' }}</a>
+    <label
+      >{{ copy().languageLabel
+      }}<select #locale [value]="language.language()" (change)="choose(locale.value)">
+        <option value="pt-BR">Português (Brasil)</option>
+        <option value="en">English</option>
+      </select></label
+    >
+  </nav>
+  @if (loading()) {
+    <p role="status">{{ en() ? 'Loading project…' : 'Carregando projeto…' }}</p>
+  } @else if (error()) {
+    <h1>{{ en() ? 'Unable to load project' : 'Não foi possível carregar o projeto' }}</h1>
+    <p>
+      {{
+        en() ? 'Please refresh the page to try again.' : 'Atualize a página para tentar novamente.'
+      }}
+    </p>
+  } @else if (project(); as p) {
+    <header>
+      <p class="eyebrow">
+        {{
+          p.type === 'personal' ? copy().personalProjectsTitle : copy().professionalProjectsTitle
+        }}
+      </p>
+      <h1
+        [attr.data-editorial-entity]="p.id"
+        data-editorial-field="name"
+        [attr.data-editorial-locale]="language.language()"
+      >
+        {{ p.name }}
+      </h1>
+      <p
+        class="intro"
+        [attr.data-editorial-entity]="p.id"
+        data-editorial-field="description"
+        [attr.data-editorial-locale]="language.language()"
+      >
+        {{ p.description }}
+      </p>
+    </header>
+    <section>
+      <h2>{{ copy().projectContextLabel }}</h2>
+      <p
+        [attr.data-editorial-entity]="p.id"
+        data-editorial-field="problemContext"
+        [attr.data-editorial-locale]="language.language()"
+      >
+        {{ p.problemContext }}
+      </p>
+    </section>
+    @if (p.solution) {
+      <section>
+        <h2>{{ en() ? 'Solution' : 'Solução' }}</h2>
+        <p
+          [attr.data-editorial-entity]="p.id"
+          data-editorial-field="solution"
+          [attr.data-editorial-locale]="language.language()"
+        >
+          {{ p.solution }}
+        </p>
+      </section>
+    }
+    <section>
+      <h2>{{ copy().projectRoleLabel }}</h2>
+      <p
+        [attr.data-editorial-entity]="p.id"
+        data-editorial-field="role"
+        [attr.data-editorial-locale]="language.language()"
+      >
+        {{ p.role }}
+      </p>
+    </section>
+    <section>
+      <h2>{{ copy().projectTechnologiesLabel }}</h2>
+      <app-project-technologies [technologies]="p.technologies" />
+    </section>
+    @for (list of lists(); track list.title) {
+      <section>
+        <h2>{{ list.title }}</h2>
+        <ul>
+          @for (value of list.values; track $index) {
+            <li
+              [attr.data-editorial-entity]="p.id + '-' + list.field + '-' + ($index + 1)"
+              data-editorial-field="text"
+              [attr.data-editorial-locale]="language.language()"
+            >
+              {{ value }}
+            </li>
+          }
+        </ul>
+      </section>
+    }
+    @if (p.images.length) {
+      <section>
+        <h2>{{ en() ? 'Project images' : 'Imagens do projeto' }}</h2>
+        <div class="gallery">
+          @for (image of p.images; track image.id) {
+            <figure>
+              @if (!failedImages().includes(image.id)) {
+                <a [href]="image.publicUrl" target="_blank" rel="noopener noreferrer">
+                  <img
+                    [src]="image.publicUrl"
+                    [alt]="p.name + ' — ' + image.originalName"
+                    loading="lazy"
+                    (error)="imageFailed(image.id)"
+                /></a>
+              } @else {
+                <p>{{ en() ? 'Image unavailable' : 'Imagem indisponível' }}</p>
+              }
+            </figure>
+          }
+        </div>
+      </section>
+    }
+    @if (p.links.length) {
+      <section>
+        <h2>{{ copy().projectLinksLabel }}</h2>
+        <ul>
+          @for (link of p.links; track $index) {
+            <li>
+              <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }} ↗</a>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <h1>{{ en() ? 'Project not found' : 'Projeto não encontrado' }}</h1>
+  }
+</main>

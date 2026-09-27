@@ -1,0 +1,376 @@
+<main class="content-management" data-testid="content-management">
+  <header class="content-header">
+    <div>
+      <p class="eyebrow">Área administrativa</p>
+      <h1>Conteúdo do portfólio</h1>
+      <p>Edite as versões em português e inglês. O salvamento publica imediatamente.</p>
+    </div>
+    <button type="button" (click)="reload()" [disabled]="loading() || saving()">Recarregar</button>
+  </header>
+
+  @if (loading()) {
+    <p class="status">Carregando conteúdo…</p>
+  }
+  @if (errorMessage()) {
+    <p class="message error" role="alert" data-testid="content-error">{{ errorMessage() }}</p>
+  }
+  @if (validationMessage()) {
+    <p class="message error" role="alert" data-testid="validation-error">
+      {{ validationMessage() }}
+    </p>
+  }
+  @if (statusMessage()) {
+    <p class="message success" role="status" data-testid="content-success">{{ statusMessage() }}</p>
+  }
+
+  @if (!loading()) {
+    <section class="editor-section" aria-labelledby="texts-title">
+      <div class="section-heading">
+        <h2 id="texts-title">Textos e resultados</h2>
+        <p>Itens das seções e chaves públicas já existentes.</p>
+      </div>
+      <div class="copy-list">
+        @for (entry of draft().copy; track entry.key) {
+          <article class="editor-card" [attr.data-testid]="'copy-' + entry.key">
+            <h3>{{ entry.label }}</h3>
+            <div class="locale-grid">
+              @for (locale of locales; track locale) {
+                <label>
+                  <span>{{ locale }}</span>
+                  <textarea
+                    rows="3"
+                    [ngModel]="copyValue(entry, locale)"
+                    (ngModelChange)="setCopy(entry, locale, $event)"
+                  ></textarea>
+                </label>
+              }
+            </div>
+            <button type="button" (click)="saveCopy(entry)" [disabled]="saving()">
+              Salvar texto
+            </button>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section class="editor-section" aria-labelledby="experiences-title">
+      <div class="section-heading">
+        <h2 id="experiences-title">Experiências</h2>
+        <button type="button" (click)="addExperience()">Adicionar experiência</button>
+      </div>
+      @for (experience of draft().experiences; track $index) {
+        <article class="editor-card" [attr.data-testid]="'experience-editor-' + $index">
+          <div class="base-grid">
+            <label><span>Empresa</span><input [(ngModel)]="experience.name" /></label>
+            <label
+              ><span>Início</span><input type="date" [(ngModel)]="experience.startDate"
+            /></label>
+            <label><span>Fim</span><input type="date" [(ngModel)]="experience.endDate" /></label>
+            <label
+              ><span>Ordem</span><input type="number" [(ngModel)]="experience.displayOrder"
+            /></label>
+          </div>
+          <div class="locale-grid">
+            @for (locale of locales; track locale) {
+              <fieldset>
+                <legend>{{ locale }}</legend>
+                <label
+                  ><span>Cargo</span
+                  ><input
+                    [ngModel]="experienceValue(experience, locale, 'title')"
+                    (ngModelChange)="setExperienceField(experience, locale, 'title', $event)"
+                /></label>
+                <label
+                  ><span>Contexto</span
+                  ><textarea
+                    [ngModel]="experienceValue(experience, locale, 'context')"
+                    (ngModelChange)="setExperienceField(experience, locale, 'context', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Responsabilidades (uma por linha)</span
+                  ><textarea
+                    [ngModel]="experienceValue(experience, locale, 'responsibilities')"
+                    (ngModelChange)="
+                      setExperienceField(experience, locale, 'responsibilities', $event)
+                    "
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Decisões técnicas (uma por linha)</span
+                  ><textarea
+                    [ngModel]="experienceValue(experience, locale, 'technicalDecisions')"
+                    (ngModelChange)="
+                      setExperienceField(experience, locale, 'technicalDecisions', $event)
+                    "
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Resultados (um por linha)</span
+                  ><textarea
+                    [ngModel]="experienceValue(experience, locale, 'results')"
+                    (ngModelChange)="setExperienceField(experience, locale, 'results', $event)"
+                  ></textarea>
+                </label>
+              </fieldset>
+            }
+          </div>
+          <button type="button" (click)="saveExperience(experience)" [disabled]="saving()">
+            Salvar experiência
+          </button>
+        </article>
+      }
+    </section>
+
+    <section class="editor-section" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <h2 id="projects-title">Projetos</h2>
+        <button type="button" (click)="addProject()">Adicionar projeto</button>
+      </div>
+      @for (project of draft().projects; track $index) {
+        <article class="editor-card" [attr.data-testid]="'project-editor-' + $index">
+          <div class="base-grid">
+            <label
+              ><span>Tipo</span
+              ><select [(ngModel)]="project.type">
+                <option value="professional">Profissional</option>
+                <option value="personal">Pessoal</option>
+              </select></label
+            >
+            <label
+              ><span>Ordem</span><input type="number" [(ngModel)]="project.displayOrder"
+            /></label>
+          </div>
+          <div class="locale-grid">
+            @for (locale of locales; track locale) {
+              <fieldset>
+                <legend>{{ locale }}</legend>
+                <label
+                  ><span>Nome</span
+                  ><input
+                    [ngModel]="projectValue(project, locale, 'name')"
+                    (ngModelChange)="setProjectField(project, locale, 'name', $event)"
+                /></label>
+                <label
+                  ><span>Descrição</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'description')"
+                    (ngModelChange)="setProjectField(project, locale, 'description', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Contexto</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'problemContext')"
+                    (ngModelChange)="setProjectField(project, locale, 'problemContext', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Solução</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'solution')"
+                    (ngModelChange)="setProjectField(project, locale, 'solution', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Papel</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'role')"
+                    (ngModelChange)="setProjectField(project, locale, 'role', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Decisões técnicas (uma por linha)</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'technicalDecisions')"
+                    (ngModelChange)="setProjectField(project, locale, 'technicalDecisions', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Tecnologias (uma por linha)</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'technologies')"
+                    (ngModelChange)="setProjectField(project, locale, 'technologies', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Resultados (um por linha)</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'results')"
+                    (ngModelChange)="setProjectField(project, locale, 'results', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Aprendizados (um por linha)</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'learnings')"
+                    (ngModelChange)="setProjectField(project, locale, 'learnings', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Links (um por linha: label | URL)</span
+                  ><textarea
+                    [ngModel]="projectValue(project, locale, 'links')"
+                    (ngModelChange)="setProjectField(project, locale, 'links', $event)"
+                  ></textarea>
+                </label>
+              </fieldset>
+            }
+          </div>
+          <button type="button" (click)="saveProject(project)" [disabled]="saving()">
+            Salvar projeto
+          </button>
+        </article>
+      }
+    </section>
+
+    <section class="editor-section" aria-labelledby="skills-title">
+      <div class="section-heading">
+        <h2 id="skills-title">Habilidades</h2>
+        <button type="button" (click)="addSkillCategory()">Adicionar categoria</button>
+      </div>
+      @for (category of draft().skillCategories; track $index) {
+        <article class="editor-card">
+          <div class="base-grid">
+            <label
+              ><span>Chave da categoria</span><input [(ngModel)]="category.categoryKey"
+            /></label>
+            <label
+              ><span>Ordem</span><input type="number" [(ngModel)]="category.displayOrder"
+            /></label>
+          </div>
+          <div class="locale-grid">
+            @for (locale of locales; track locale) {
+              <label
+                ><span>Nome da categoria — {{ locale }}</span
+                ><input [(ngModel)]="category.label[locale]"
+              /></label>
+            }
+          </div>
+          <div class="nested-list">
+            @for (skill of category.skills; track $index) {
+              <div class="skill-row">
+                @for (locale of locales; track locale) {
+                  <label
+                    ><span>Habilidade — {{ locale }}</span
+                    ><input
+                      [ngModel]="skill.name[locale]"
+                      (ngModelChange)="setSkillName(skill, locale, $event)"
+                  /></label>
+                }
+                <label
+                  ><span>Ordem</span><input type="number" [(ngModel)]="skill.displayOrder"
+                /></label>
+                <label
+                  ><span>URL pública do ícone</span><input [(ngModel)]="skill.iconUrl"
+                /></label>
+              </div>
+            }
+          </div>
+          <div class="button-row">
+            <button type="button" (click)="addSkill(category)">Adicionar habilidade</button>
+            <button type="button" (click)="saveSkillCategory(category)" [disabled]="saving()">
+              Salvar habilidades
+            </button>
+          </div>
+        </article>
+      }
+    </section>
+
+    <section class="editor-section" aria-labelledby="academic-title">
+      <div class="section-heading">
+        <h2 id="academic-title">Formação</h2>
+        <button type="button" (click)="addAcademic()">Adicionar formação</button>
+      </div>
+      @for (entry of draft().academicEntries; track $index) {
+        <article class="editor-card">
+          <div class="base-grid">
+            <label
+              ><span>Ordem</span><input type="number" [(ngModel)]="entry.displayOrder"
+            /></label>
+            <label><span>Início</span><input type="date" [(ngModel)]="entry.startDate" /></label>
+            <label
+              ><span>Fim</span
+              ><input type="date" [(ngModel)]="entry.endDate" [disabled]="entry.isCurrent"
+            /></label>
+            <label class="checkbox-label"
+              ><input type="checkbox" [(ngModel)]="entry.isCurrent" /><span
+                >Em andamento</span
+              ></label
+            >
+          </div>
+          <div class="locale-grid">
+            @for (locale of locales; track locale) {
+              <fieldset>
+                <legend>{{ locale }}</legend>
+                <label
+                  ><span>Curso</span><input [(ngModel)]="entry.translation[locale].name"
+                /></label>
+                <label
+                  ><span>Instituição</span
+                  ><input [(ngModel)]="entry.translation[locale].institution"
+                /></label>
+                <label
+                  ><span>Competências desenvolvidas (uma por linha)</span
+                  ><textarea
+                    [ngModel]="academicValue(entry, locale, 'competencies')"
+                    (ngModelChange)="setAcademicField(entry, locale, 'competencies', $event)"
+                  ></textarea>
+                </label>
+                <label
+                  ><span>Conteúdos estudados (um por linha)</span
+                  ><textarea
+                    [ngModel]="academicValue(entry, locale, 'studiedContent')"
+                    (ngModelChange)="setAcademicField(entry, locale, 'studiedContent', $event)"
+                  ></textarea>
+                </label>
+              </fieldset>
+            }
+          </div>
+          <button type="button" (click)="saveAcademic(entry)" [disabled]="saving()">
+            Salvar formação
+          </button>
+        </article>
+      }
+    </section>
+
+    <section class="editor-section" aria-labelledby="contacts-title">
+      <div class="section-heading">
+        <h2 id="contacts-title">Contatos</h2>
+        <button type="button" (click)="addContact()">Adicionar contato</button>
+      </div>
+      @for (contact of draft().contacts; track $index) {
+        <article class="editor-card">
+          <div class="base-grid">
+            <label
+              ><span>Canal</span
+              ><select [(ngModel)]="contact.symbol">
+                <option value="linkedin">LinkedIn</option>
+                <option value="github">GitHub</option>
+                <option value="email">E-mail</option>
+                <option value="phone">Telefone</option>
+              </select></label
+            >
+            <label><span>Destino</span><input [(ngModel)]="contact.href" /></label>
+            <label
+              ><span>Ordem</span><input type="number" [(ngModel)]="contact.displayOrder"
+            /></label>
+          </div>
+          <div class="locale-grid">
+            @for (locale of locales; track locale) {
+              <label
+                ><span>Label — {{ locale }}</span
+                ><input
+                  [ngModel]="contact.label[locale]"
+                  (ngModelChange)="setContactField(contact, locale, $event)"
+              /></label>
+            }
+          </div>
+          <button type="button" (click)="saveContact(contact)" [disabled]="saving()">
+            Salvar contato
+          </button>
+        </article>
+      }
+    </section>
+  }
+</main>

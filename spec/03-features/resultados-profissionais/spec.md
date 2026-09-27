@@ -1,5 +1,7 @@
 # Spec da Feature — Resultados profissionais
 
+> **Reconciliação editorial — 2026-09-26:** Textos/valores e ordem dos blocos serão editáveis no rascunho, sem gerar alegações automaticamente. Publicação depende de confirmação do conjunto. A [spec de edição visual](../edicao-visual-rascunho-publicacao/spec.md) prevalece nesses pontos quando implantada. Os requisitos anteriores continuam referência para o comportamento não alterado e a regressão; esta nota não comprova implementação ou testes.
+
 Status: Aprovada  
 Projeto: Portfólio Profissional — Marcos Santos  
 Onde vive no código: `src/app/features/portfolio/presentation/` (seção da página pública)

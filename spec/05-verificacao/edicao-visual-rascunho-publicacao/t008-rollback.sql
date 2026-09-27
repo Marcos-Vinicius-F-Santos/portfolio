@@ -1,0 +1,14 @@
+drop function if exists public.save_editor_command(bigint,uuid,jsonb);
+drop function if exists portfolio_editorial.apply_draft_command(bigint,uuid,jsonb,uuid);
+drop function if exists portfolio_editorial.allowed_entity_fields(text,boolean);
+drop policy if exists draft_executor_update on portfolio_editorial.draft;
+drop policy if exists draft_entities_executor_all on portfolio_editorial.draft_entities;
+drop policy if exists draft_translations_executor_all on portfolio_editorial.draft_translations;
+drop policy if exists draft_locales_executor_select on portfolio_editorial.draft_locales;
+drop policy if exists technologies_executor_select on portfolio_editorial.technologies;
+revoke update on portfolio_editorial.draft from portfolio_editorial_executor;
+revoke insert, update, delete on portfolio_editorial.draft_entities from portfolio_editorial_executor;
+revoke insert, update, delete on portfolio_editorial.draft_translations from portfolio_editorial_executor;
+revoke execute on function extensions.digest(text,text) from portfolio_editorial_executor;
+revoke usage on schema extensions from portfolio_editorial_executor;
+drop table if exists portfolio_editorial.operations;

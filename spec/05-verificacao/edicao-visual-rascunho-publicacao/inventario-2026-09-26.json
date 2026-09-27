@@ -1,0 +1,3019 @@
+{
+  "capturedAt": "2026-09-26",
+  "projectRef": "jjndvtjhxutuerwvjocy",
+  "scope": "Read-only SQL catalog and public content; no auth user export, credentials or writes",
+  "counts": [
+    {
+      "entity": "portfolio_texts",
+      "count": 1
+    },
+    {
+      "entity": "portfolio_text_translations",
+      "count": 2
+    },
+    {
+      "entity": "portfolio_experiences",
+      "count": 2
+    },
+    {
+      "entity": "portfolio_projects",
+      "count": 2
+    },
+    {
+      "entity": "portfolio_project_images",
+      "count": 0
+    },
+    {
+      "entity": "portfolio_files",
+      "count": 0
+    },
+    {
+      "entity": "portfolio_skills",
+      "count": 0
+    },
+    {
+      "entity": "portfolio_skill_categories",
+      "count": 0
+    },
+    {
+      "entity": "portfolio_academic_entries",
+      "count": 0
+    },
+    {
+      "entity": "portfolio_contact_links",
+      "count": 0
+    }
+  ],
+  "catalog": {
+    "grants": [
+      {
+        "role": "authenticated",
+        "table": "portfolio_text_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_text_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_text_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_text_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experiences",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experiences",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experiences",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_experiences",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experience_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experience_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_experience_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_experience_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_project_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_projects",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_projects",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_projects",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_projects",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_categories",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_category_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skills",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_skill_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entries",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_academic_entry_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_links",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_contact_link_translations",
+        "schema": "public",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "TRUNCATE"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "REFERENCES"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "TRIGGER"
+      },
+      {
+        "role": "anon",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "authenticated",
+        "table": "objects",
+        "schema": "storage",
+        "privilege": "DELETE"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_texts",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_texts",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_texts",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_texts",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_images",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_images",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_project_images",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_project_images",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_files",
+        "schema": "public",
+        "privilege": "INSERT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_files",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_files",
+        "schema": "public",
+        "privilege": "UPDATE"
+      },
+      {
+        "role": "anon",
+        "table": "portfolio_files",
+        "schema": "public",
+        "privilege": "SELECT"
+      },
+      {
+        "role": "authenticated",
+        "table": "portfolio_admins",
+        "schema": "public",
+        "privilege": "SELECT"
+      }
+    ],
+    "tables": [
+      {
+        "rls": true,
+        "name": "portfolio_text_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_experiences",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_experience_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_project_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_projects",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_skill_categories",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_skill_category_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_skills",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_skill_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_academic_entries",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_academic_entry_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_contact_links",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_contact_link_translations",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_texts",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_project_images",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_files",
+        "estimated_rows": -1
+      },
+      {
+        "rls": true,
+        "name": "portfolio_admins",
+        "estimated_rows": -1
+      }
+    ],
+    "buckets": [
+      {
+        "id": "project-images",
+        "public": true,
+        "file_size_limit": 1048576,
+        "allowed_mime_types": [
+          "image/png",
+          "image/jpeg"
+        ]
+      },
+      {
+        "id": "curricula",
+        "public": true,
+        "file_size_limit": null,
+        "allowed_mime_types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "id": "skill-icons",
+        "public": true,
+        "file_size_limit": 1048576,
+        "allowed_mime_types": [
+          "image/png",
+          "image/jpeg",
+          "image/svg+xml"
+        ]
+      }
+    ],
+    "objects": null,
+    "policies": [
+      {
+        "name": "portfolio_texts_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_texts",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_texts_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_texts",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_texts_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_texts",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_text_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_text_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_text_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_text_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_text_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_text_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_experiences_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_experiences",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_experiences_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_experiences",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_experiences_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_experiences",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_experience_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_experience_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_experience_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_experience_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_experience_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_experience_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_projects_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_projects",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_projects_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_projects",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_projects_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_projects",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_project_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_project_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_project_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_project_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_project_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_project_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_project_images_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_project_images",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_project_images_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_project_images",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_project_images_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_project_images",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_files_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_files",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_files_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_files",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_files_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_files",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_admins_select_self",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_admins",
+        "using": "(( SELECT auth.uid() AS uid) = user_id)",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "storage_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "(bucket_id = ANY (ARRAY['project-images'::text, 'curricula'::text]))",
+        "schema": "storage",
+        "command": "SELECT"
+      },
+      {
+        "name": "storage_admin_insert",
+        "check": "((bucket_id = ANY (ARRAY['project-images'::text, 'curricula'::text])) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": null,
+        "schema": "storage",
+        "command": "INSERT"
+      },
+      {
+        "name": "storage_admin_update",
+        "check": "((bucket_id = ANY (ARRAY['project-images'::text, 'curricula'::text])) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "((bucket_id = ANY (ARRAY['project-images'::text, 'curricula'::text])) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "schema": "storage",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_skill_categories_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_skill_categories",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_skill_categories_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_categories",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_skill_categories_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_categories",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_skill_category_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_skill_category_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_skill_category_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_category_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_skill_category_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_category_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_skills_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_skills",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_skills_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skills",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_skills_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skills",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_skill_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_skill_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_skill_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_skill_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_skill_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_academic_entries_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entries",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_academic_entries_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entries",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_academic_entries_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entries",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entry_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entry_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_academic_entry_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_contact_links_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_contact_links",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_contact_links_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_contact_links",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_contact_links_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_contact_links",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "portfolio_contact_link_translations_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "portfolio_contact_link_translations",
+        "using": "true",
+        "schema": "public",
+        "command": "SELECT"
+      },
+      {
+        "name": "portfolio_contact_link_translations_admin_insert",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_contact_link_translations",
+        "using": null,
+        "schema": "public",
+        "command": "INSERT"
+      },
+      {
+        "name": "portfolio_contact_link_translations_admin_update",
+        "check": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "portfolio_contact_link_translations",
+        "using": "(EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid))))",
+        "schema": "public",
+        "command": "UPDATE"
+      },
+      {
+        "name": "storage_admin_delete",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "((bucket_id = ANY (ARRAY['project-images'::text, 'curricula'::text])) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "schema": "storage",
+        "command": "DELETE"
+      },
+      {
+        "name": "storage_skill_icons_public_read",
+        "check": null,
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "(bucket_id = 'skill-icons'::text)",
+        "schema": "storage",
+        "command": "SELECT"
+      },
+      {
+        "name": "storage_skill_icons_admin_insert",
+        "check": "((bucket_id = 'skill-icons'::text) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": null,
+        "schema": "storage",
+        "command": "INSERT"
+      },
+      {
+        "name": "storage_skill_icons_admin_update",
+        "check": "((bucket_id = 'skill-icons'::text) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "((bucket_id = 'skill-icons'::text) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "schema": "storage",
+        "command": "UPDATE"
+      },
+      {
+        "name": "storage_skill_icons_admin_delete",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "objects",
+        "using": "((bucket_id = 'skill-icons'::text) AND (EXISTS ( SELECT 1\n   FROM portfolio_admins\n  WHERE (portfolio_admins.user_id = ( SELECT auth.uid() AS uid)))))",
+        "schema": "storage",
+        "command": "DELETE"
+      }
+    ],
+    "functions": [
+      {
+        "acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "name": "replace_portfolio_project_image",
+        "definer": false
+      },
+      {
+        "acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "name": "replace_portfolio_curriculum",
+        "definer": false
+      },
+      {
+        "acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+        "name": "replace_portfolio_skill_icon",
+        "definer": false
+      }
+    ]
+  },
+  "publicContent": {
+    "texts": [
+      {
+        "id": "323add6a-f0e4-446d-8b14-0cb223ccd3f1",
+        "created_at": "2026-09-25T17:43:36.696017+00:00",
+        "content_key": "eyebrow",
+        "content_type": "text"
+      }
+    ],
+    "projects": [
+      {
+        "id": "3c67f7d3-57a6-4ece-af10-496b8ca33727",
+        "created_at": "2026-09-26T00:07:06.029482+00:00",
+        "project_type": "personal",
+        "display_order": 0
+      },
+      {
+        "id": "d9580705-9f05-407a-a367-1c729da2e63a",
+        "created_at": "2026-09-26T00:08:41.911572+00:00",
+        "project_type": "personal",
+        "display_order": 1
+      }
+    ],
+    "privileges": [
+      {
+        "table": "portfolio_text_translations",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_experiences",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_experience_translations",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_project_translations",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_projects",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_skill_categories",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_skill_category_translations",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_skills",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_skill_translations",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_academic_entries",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_academic_entry_translations",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_contact_links",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_contact_link_translations",
+        "anon_truncate": true,
+        "auth_truncate": true
+      },
+      {
+        "table": "portfolio_texts",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_project_images",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_files",
+        "anon_truncate": false,
+        "auth_truncate": false
+      },
+      {
+        "table": "portfolio_admins",
+        "anon_truncate": false,
+        "auth_truncate": false
+      }
+    ],
+    "constraints": [
+      {
+        "name": "portfolio_skill_category_translations_category_id_fkey",
+        "table": "portfolio_skill_category_translations",
+        "definition": "FOREIGN KEY (category_id) REFERENCES portfolio_skill_categories(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_skills_pkey",
+        "table": "portfolio_skills",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_skills_category_id_fkey",
+        "table": "portfolio_skills",
+        "definition": "FOREIGN KEY (category_id) REFERENCES portfolio_skill_categories(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_skill_translations_locale_check",
+        "table": "portfolio_skill_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_skill_translations_pkey",
+        "table": "portfolio_skill_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_skill_translations_skill_id_locale_key",
+        "table": "portfolio_skill_translations",
+        "definition": "UNIQUE (skill_id, locale)"
+      },
+      {
+        "name": "portfolio_skill_translations_skill_id_fkey",
+        "table": "portfolio_skill_translations",
+        "definition": "FOREIGN KEY (skill_id) REFERENCES portfolio_skills(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_academic_entries_pkey",
+        "table": "portfolio_academic_entries",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_locale_check",
+        "table": "portfolio_academic_entry_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_pkey",
+        "table": "portfolio_academic_entry_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_texts_pkey",
+        "table": "portfolio_texts",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_texts_content_key_key",
+        "table": "portfolio_texts",
+        "definition": "UNIQUE (content_key)"
+      },
+      {
+        "name": "portfolio_text_translations_locale_check",
+        "table": "portfolio_text_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_text_translations_pkey",
+        "table": "portfolio_text_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_text_translations_text_id_locale_key",
+        "table": "portfolio_text_translations",
+        "definition": "UNIQUE (text_id, locale)"
+      },
+      {
+        "name": "portfolio_text_translations_text_id_fkey",
+        "table": "portfolio_text_translations",
+        "definition": "FOREIGN KEY (text_id) REFERENCES portfolio_texts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_experiences_check",
+        "table": "portfolio_experiences",
+        "definition": "CHECK (((end_date IS NULL) OR (end_date >= start_date)))"
+      },
+      {
+        "name": "portfolio_experiences_pkey",
+        "table": "portfolio_experiences",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_experience_translations_locale_check",
+        "table": "portfolio_experience_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_experience_translations_pkey",
+        "table": "portfolio_experience_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_experience_translations_experience_id_locale_key",
+        "table": "portfolio_experience_translations",
+        "definition": "UNIQUE (experience_id, locale)"
+      },
+      {
+        "name": "portfolio_experience_translations_experience_id_fkey",
+        "table": "portfolio_experience_translations",
+        "definition": "FOREIGN KEY (experience_id) REFERENCES portfolio_experiences(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_projects_pkey",
+        "table": "portfolio_projects",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_project_translations_locale_check",
+        "table": "portfolio_project_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_project_translations_pkey",
+        "table": "portfolio_project_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_project_translations_project_id_locale_key",
+        "table": "portfolio_project_translations",
+        "definition": "UNIQUE (project_id, locale)"
+      },
+      {
+        "name": "portfolio_project_translations_project_id_fkey",
+        "table": "portfolio_project_translations",
+        "definition": "FOREIGN KEY (project_id) REFERENCES portfolio_projects(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_project_images_mime_type_check",
+        "table": "portfolio_project_images",
+        "definition": "CHECK ((mime_type = ANY (ARRAY['image/png'::text, 'image/jpeg'::text])))"
+      },
+      {
+        "name": "portfolio_project_images_size_bytes_check",
+        "table": "portfolio_project_images",
+        "definition": "CHECK (((size_bytes > 0) AND (size_bytes <= 1048576)))"
+      },
+      {
+        "name": "portfolio_project_images_pkey",
+        "table": "portfolio_project_images",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_project_images_storage_path_key",
+        "table": "portfolio_project_images",
+        "definition": "UNIQUE (storage_path)"
+      },
+      {
+        "name": "portfolio_project_images_project_id_fkey",
+        "table": "portfolio_project_images",
+        "definition": "FOREIGN KEY (project_id) REFERENCES portfolio_projects(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_files_file_type_check",
+        "table": "portfolio_files",
+        "definition": "CHECK ((file_type = 'curriculum'::text))"
+      },
+      {
+        "name": "portfolio_files_locale_check",
+        "table": "portfolio_files",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_files_size_bytes_check",
+        "table": "portfolio_files",
+        "definition": "CHECK ((size_bytes > 0))"
+      },
+      {
+        "name": "portfolio_files_pkey",
+        "table": "portfolio_files",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_files_storage_path_key",
+        "table": "portfolio_files",
+        "definition": "UNIQUE (storage_path)"
+      },
+      {
+        "name": "portfolio_files_file_type_locale_key",
+        "table": "portfolio_files",
+        "definition": "UNIQUE (file_type, locale)"
+      },
+      {
+        "name": "portfolio_admins_pkey",
+        "table": "portfolio_admins",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "name": "portfolio_admins_user_id_fkey",
+        "table": "portfolio_admins",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_projects_project_type_check",
+        "table": "portfolio_projects",
+        "definition": "CHECK ((project_type = ANY (ARRAY['professional'::text, 'personal'::text])))"
+      },
+      {
+        "name": "portfolio_files_curriculum_pdf_mime_check",
+        "table": "portfolio_files",
+        "definition": "CHECK (((file_type <> 'curriculum'::text) OR (mime_type = 'application/pdf'::text)))"
+      },
+      {
+        "name": "portfolio_skill_categories_pkey",
+        "table": "portfolio_skill_categories",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_skill_categories_category_key_key",
+        "table": "portfolio_skill_categories",
+        "definition": "UNIQUE (category_key)"
+      },
+      {
+        "name": "portfolio_skill_category_translations_locale_check",
+        "table": "portfolio_skill_category_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_skill_category_translations_pkey",
+        "table": "portfolio_skill_category_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_skill_category_translations_category_id_locale_key",
+        "table": "portfolio_skill_category_translations",
+        "definition": "UNIQUE (category_id, locale)"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_entry_id_locale_key",
+        "table": "portfolio_academic_entry_translations",
+        "definition": "UNIQUE (entry_id, locale)"
+      },
+      {
+        "name": "portfolio_academic_entry_translations_entry_id_fkey",
+        "table": "portfolio_academic_entry_translations",
+        "definition": "FOREIGN KEY (entry_id) REFERENCES portfolio_academic_entries(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_contact_links_symbol_check",
+        "table": "portfolio_contact_links",
+        "definition": "CHECK ((symbol = ANY (ARRAY['linkedin'::text, 'github'::text, 'email'::text, 'phone'::text])))"
+      },
+      {
+        "name": "portfolio_contact_links_pkey",
+        "table": "portfolio_contact_links",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_contact_links_symbol_key",
+        "table": "portfolio_contact_links",
+        "definition": "UNIQUE (symbol)"
+      },
+      {
+        "name": "portfolio_contact_link_translations_locale_check",
+        "table": "portfolio_contact_link_translations",
+        "definition": "CHECK ((locale = ANY (ARRAY['pt-BR'::text, 'en'::text])))"
+      },
+      {
+        "name": "portfolio_contact_link_translations_pkey",
+        "table": "portfolio_contact_link_translations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "portfolio_contact_link_translations_contact_id_locale_key",
+        "table": "portfolio_contact_link_translations",
+        "definition": "UNIQUE (contact_id, locale)"
+      },
+      {
+        "name": "portfolio_contact_link_translations_contact_id_fkey",
+        "table": "portfolio_contact_link_translations",
+        "definition": "FOREIGN KEY (contact_id) REFERENCES portfolio_contact_links(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "portfolio_skills_icon_size_check",
+        "table": "portfolio_skills",
+        "definition": "CHECK (((icon_size_bytes IS NULL) OR ((icon_size_bytes > 0) AND (icon_size_bytes <= 1048576))))"
+      },
+      {
+        "name": "portfolio_academic_entries_period_check",
+        "table": "portfolio_academic_entries",
+        "definition": "CHECK (((end_date IS NULL) OR (start_date IS NULL) OR (end_date >= start_date)))"
+      },
+      {
+        "name": "portfolio_skills_icon_mime_check",
+        "table": "portfolio_skills",
+        "definition": "CHECK (((icon_mime_type IS NULL) OR (icon_mime_type = ANY (ARRAY['image/png'::text, 'image/jpeg'::text, 'image/svg+xml'::text]))))"
+      }
+    ],
+    "experiences": [
+      {
+        "id": "baa8ec1d-f72e-482b-9d59-b4482ada0d32",
+        "name": "Alvoar Lácteos",
+        "end_date": "2026-03-01",
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "start_date": "2025-05-01",
+        "display_order": 1
+      },
+      {
+        "id": "9d9b5731-d559-46d4-9341-bad674266a49",
+        "name": "Alvoar Lácteos",
+        "end_date": "2025-05-01",
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "start_date": "2023-12-01",
+        "display_order": 2
+      }
+    ],
+    "text_translations": [
+      {
+        "id": "ce16b6f6-4c9a-4f24-b9ba-1ff88a1cd6ac",
+        "value": "Portfólio profissional",
+        "locale": "pt-BR",
+        "text_id": "323add6a-f0e4-446d-8b14-0cb223ccd3f1",
+        "created_at": "2026-09-25T17:43:36.943793+00:00"
+      },
+      {
+        "id": "c4435fb5-7e77-467d-b117-b9b2d33c30bf",
+        "value": "Professional portfolio",
+        "locale": "en",
+        "text_id": "323add6a-f0e4-446d-8b14-0cb223ccd3f1",
+        "created_at": "2026-09-25T17:43:37.021111+00:00"
+      }
+    ],
+    "project_translations": [
+      {
+        "id": "c309b5f7-a002-4bbd-bfc3-ff3a02ba209e",
+        "name": "DocFlow",
+        "role": "Desenvolvimento do projeto pessoal, com foco no backend e na organização das decisões de arquitetura por specs e ADRs.",
+        "links": [
+          {
+            "url": "https://github.com/Marcos-Vinicius-F-Santos/docflow",
+            "label": "GitHub"
+          }
+        ],
+        "locale": "pt-BR",
+        "results": [
+          "Cadastro e consulta de documentos por API REST, conforme documentação do projeto.",
+          "Ciclo de vida e armazenamento binário implementados, com testes unitários e de integração documentados.",
+          "Infraestrutura local de PostgreSQL e MinIO organizada com Docker Compose."
+        ],
+        "solution": "API REST em Java e Spring Boot para registrar e consultar documentos, com estados explícitos de processamento e uma interface de armazenamento desacoplada do provedor.",
+        "learnings": [
+          "Modelagem de invariantes e transições de estado no domínio.",
+          "Tratamento de consistência e falhas entre PostgreSQL e armazenamento de objetos.",
+          "Aplicação de testes de integração com Testcontainers e desenvolvimento orientado por especificações."
+        ],
+        "created_at": "2026-09-26T00:07:06.029482+00:00",
+        "project_id": "3c67f7d3-57a6-4ece-af10-496b8ca33727",
+        "description": "Backend para cadastro e acompanhamento de documentos, com metadados no PostgreSQL e conteúdo binário em armazenamento de objetos MinIO. Projeto em evolução, com frontend ainda não implementado.",
+        "technologies": [
+          "Java 21",
+          "Spring Boot",
+          "Spring Data JPA",
+          "PostgreSQL",
+          "MinIO",
+          "Flyway",
+          "JUnit",
+          "Testcontainers",
+          "Docker Compose",
+          "Maven"
+        ],
+        "problem_context": "Separar o armazenamento dos arquivos de seus metadados e acompanhar o ciclo de vida dos documentos, tratando falhas entre banco de dados e object storage sem assumir uma transação distribuída.",
+        "technical_decisions": [
+          "Separação entre domínio, serviço, API REST e persistência.",
+          "Interface DocumentStorage com adaptador MinIO para isolar a integração de armazenamento.",
+          "Estados PENDING, PROCESSING, COMPLETED e FAILED com transições controladas pelo domínio.",
+          "Schema versionado por migrations Flyway e tratamento explícito de resultados inconclusivos no armazenamento."
+        ]
+      },
+      {
+        "id": "effd5270-928d-48b5-8e24-f0ebf0bfb5b5",
+        "name": "DocFlow",
+        "role": "Development of a personal project focused on the backend and on documenting architectural decisions through specs and ADRs.",
+        "links": [
+          {
+            "url": "https://github.com/Marcos-Vinicius-F-Santos/docflow",
+            "label": "GitHub"
+          }
+        ],
+        "locale": "en",
+        "results": [
+          "Document registration and retrieval through a REST API, as documented in the repository.",
+          "Document lifecycle and binary storage implemented, with documented unit and integration tests.",
+          "Local PostgreSQL and MinIO infrastructure configured with Docker Compose."
+        ],
+        "solution": "A Java and Spring Boot REST API for registering and retrieving documents, with explicit processing states and a provider-independent storage interface.",
+        "learnings": [
+          "Modeling domain invariants and state transitions.",
+          "Handling consistency and failures across PostgreSQL and object storage.",
+          "Applying integration tests with Testcontainers and spec-driven development."
+        ],
+        "created_at": "2026-09-26T00:07:06.029482+00:00",
+        "project_id": "3c67f7d3-57a6-4ece-af10-496b8ca33727",
+        "description": "Backend for registering and tracking documents, with metadata in PostgreSQL and binary content in MinIO object storage. An evolving project; the frontend has not yet been implemented.",
+        "technologies": [
+          "Java 21",
+          "Spring Boot",
+          "Spring Data JPA",
+          "PostgreSQL",
+          "MinIO",
+          "Flyway",
+          "JUnit",
+          "Testcontainers",
+          "Docker Compose",
+          "Maven"
+        ],
+        "problem_context": "Separate file storage from metadata and track document lifecycles while handling failures between the database and object storage without assuming a distributed transaction.",
+        "technical_decisions": [
+          "Separation of domain, service, REST API and persistence responsibilities.",
+          "A DocumentStorage interface with a MinIO adapter to isolate the storage integration.",
+          "PENDING, PROCESSING, COMPLETED and FAILED states with domain-controlled transitions.",
+          "Flyway database migrations and explicit handling of inconclusive storage results."
+        ]
+      },
+      {
+        "id": "ea63f089-9023-4d47-a131-4f2aaad00327",
+        "name": "Gestão Pro",
+        "role": "Desenvolvimento do projeto pessoal, integrando a interface web, os serviços Firebase e as regras de gestão financeira e operacional.",
+        "links": [
+          {
+            "url": "https://github.com/Marcos-Vinicius-F-Santos/gestaofinanceira",
+            "label": "GitHub"
+          }
+        ],
+        "locale": "pt-BR",
+        "results": [
+          "Centralização de cadastros, receitas, despesas e vencimentos em uma aplicação web, conforme documentação do projeto.",
+          "Fluxos documentados de gestão de clientes, liberação e bloqueio de acesso.",
+          "Histórico de movimentações e preços por produto, com exportação CSV."
+        ],
+        "solution": "Interface React integrada ao Firebase, com cadastro de produtos e fornecedores, plano de contas, lançamentos com geração de parcelas, contas a pagar e receber, históricos e exportação CSV.",
+        "learnings": [
+          "Modelagem de lançamentos financeiros, parcelamento e relacionamento entre cadastros.",
+          "Organização de acesso por cliente e perfil administrativo em uma aplicação com Firebase.",
+          "Integração entre autenticação, persistência e regras de negócio na interface React."
+        ],
+        "created_at": "2026-09-26T00:08:41.911572+00:00",
+        "project_id": "d9580705-9f05-407a-a367-1c729da2e63a",
+        "description": "Aplicação web de gestão financeira e operacional para centralizar produtos, fornecedores, receitas, despesas e parcelas, com áreas de administração e de cliente.",
+        "technologies": [
+          "React 18",
+          "JavaScript",
+          "Vite",
+          "Tailwind CSS",
+          "React Router",
+          "Firebase Authentication",
+          "Cloud Firestore",
+          "Firebase Functions",
+          "Vercel"
+        ],
+        "problem_context": "Pequenos negócios que controlam informações financeiras e operacionais em planilhas precisam relacionar cadastros, lançamentos, vencimentos e históricos em um fluxo organizado.",
+        "technical_decisions": [
+          "React com Vite, componentes reutilizáveis, contextos e hooks para organizar a interface.",
+          "Firebase Authentication para autenticação e Firestore para persistência dos dados.",
+          "Modelo de dados com userId e regras de acesso para separar clientes e permitir a visão administrativa.",
+          "Parcelas vinculadas aos lançamentos como base das contas a pagar e receber, com status calculado por vencimento.",
+          "Recuperação de senha pelo link nativo do Firebase Auth e Functions para administração de clientes."
+        ]
+      },
+      {
+        "id": "b0a566d5-15fe-4b05-9fa3-7858c7774fd8",
+        "name": "Gestão Pro",
+        "role": "Development of a personal project integrating the web interface, Firebase services and financial and operational business rules.",
+        "links": [
+          {
+            "url": "https://github.com/Marcos-Vinicius-F-Santos/gestaofinanceira",
+            "label": "GitHub"
+          }
+        ],
+        "locale": "en",
+        "results": [
+          "Product records, income, expenses and due dates consolidated in a web application, as documented in the repository.",
+          "Documented client administration flows, including access activation and blocking.",
+          "Transaction and product price histories, with CSV export."
+        ],
+        "solution": "A React interface integrated with Firebase, providing product and supplier management, a chart of accounts, installment generation, accounts payable and receivable, historical records and CSV exports.",
+        "learnings": [
+          "Modeling financial transactions, installments and relationships between business records.",
+          "Organizing client access and administrator roles in a Firebase application.",
+          "Integrating authentication, persistence and business rules in a React interface."
+        ],
+        "created_at": "2026-09-26T00:08:41.911572+00:00",
+        "project_id": "d9580705-9f05-407a-a367-1c729da2e63a",
+        "description": "A financial and operational management web application that brings together products, suppliers, income, expenses and installments, with administrator and client workspaces.",
+        "technologies": [
+          "React 18",
+          "JavaScript",
+          "Vite",
+          "Tailwind CSS",
+          "React Router",
+          "Firebase Authentication",
+          "Cloud Firestore",
+          "Firebase Functions",
+          "Vercel"
+        ],
+        "problem_context": "Small businesses managing financial and operational information in spreadsheets need a structured way to connect records, transactions, due dates and historical data.",
+        "technical_decisions": [
+          "React with Vite, reusable components, contexts and hooks to organize the interface.",
+          "Firebase Authentication for sign-in and Firestore for data persistence.",
+          "A userId-based data model and access rules to separate clients and support an administrative view.",
+          "Installments linked to transactions as the foundation for accounts payable and receivable, with due-date-based statuses.",
+          "Native Firebase Auth password reset links and Functions for client administration."
+        ]
+      }
+    ],
+    "experience_translations": [
+      {
+        "id": "c149d56d-af30-4f83-9703-a02dd3e39237",
+        "title": "Junior Software Engineer",
+        "locale": "pt-BR",
+        "context": "Atuei no desenvolvimento de uma aplicação corporativa crítica para uma empresa de grande porte em processo de transformação digital do seu cadastro de produtores. O projeto substituiu um fluxo baseado em SAP por uma aplicação web moderna, focada em agilizar o onboarding, melhorar a eficiência operacional e suportar milhares de usuários por mês. O trabalho foi realizado dentro de um time multidisciplinar responsável por arquitetura, integrações e entrega ponta a ponta do produto.",
+        "results": [
+          "Redução dos passos de onboarding de 8–10 para 3–5.",
+          "Redução do tempo de onboarding de dias para horas.",
+          "Plataforma utilizada por mais de 2.000 usuários mensais.",
+          "Redução aproximada de 50% no esforço de mapeamento JSON.",
+          "Maior consistência e manutenibilidade para o time de desenvolvimento."
+        ],
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "experience_id": "baa8ec1d-f72e-482b-9d59-b4482ada0d32",
+        "responsibilities": [
+          "Desenvolvimento da aplicação corporativa de cadastro de produtores.",
+          "Definição da arquitetura e dos módulos compartilhados.",
+          "Desenvolvimento de integrações e componentes reutilizáveis em Java.",
+          "Colaboração com um time multidisciplinar de cinco desenvolvedores."
+        ],
+        "technical_decisions": [
+          "Migrar o fluxo legado baseado em SAP para uma nova aplicação corporativa.",
+          "Preferir integração via REST API em vez de acoplamento direto mais rígido.",
+          "Criar um componente reutilizável de desserialização JSON em Java."
+        ]
+      },
+      {
+        "id": "3d2a1236-3676-4756-9c59-552ca70a1a51",
+        "title": "Junior Software Engineer",
+        "locale": "en",
+        "context": "Worked on a critical corporate application for a large company undergoing the digital transformation of its producer registration process. The project replaced an SAP-based workflow with a modern web application focused on speeding up onboarding, improving operational efficiency, and supporting thousands of users per month. The work was carried out within a multidisciplinary team responsible for architecture, integrations, and end-to-end product delivery.",
+        "results": [
+          "Reduced onboarding steps from 8–10 to 3–5.",
+          "Reduced onboarding time from days to hours.",
+          "Platform used by more than 2,000 monthly users.",
+          "Reduced JSON mapping effort by approximately 50%.",
+          "Improved consistency and maintainability for the development team."
+        ],
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "experience_id": "baa8ec1d-f72e-482b-9d59-b4482ada0d32",
+        "responsibilities": [
+          "Developing the corporate producer registration application.",
+          "Defining the application architecture and shared modules.",
+          "Developing integrations and reusable Java components.",
+          "Collaborating with a multidisciplinary team of five developers."
+        ],
+        "technical_decisions": [
+          "Migrating the legacy SAP-based registration workflow to a new corporate application.",
+          "Choosing REST API integration instead of tighter direct coupling.",
+          "Building a reusable Java JSON deserialization component."
+        ]
+      },
+      {
+        "id": "b3b3959d-966a-4843-9319-bbe8690b8cb6",
+        "title": "Software Developer",
+        "locale": "pt-BR",
+        "context": "Atuei em uma empresa focada em digitalização corporativa, oferecendo suporte técnico em colaboração próxima com os times de engenharia de software. Participei da modernização de aplicações internas e de iniciativas de transformação digital, contribuindo para a melhoria da eficiência operacional e apoiando a transição do suporte técnico para a engenharia de software.",
+        "results": [
+          "Redução de 25% nos pedidos de alteração em formulários.",
+          "Atualizações de funcionalidades mais rápidas.",
+          "Redução de 30% no tempo de conclusão das tarefas."
+        ],
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "experience_id": "9d9b5731-d559-46d4-9341-bad674266a49",
+        "responsibilities": [
+          "Prestação de suporte técnico em colaboração próxima com times de engenharia.",
+          "Modernização de aplicações internas.",
+          "Implementação de formulários dinâmicos.",
+          "Modernização de páginas legadas para React."
+        ],
+        "technical_decisions": [
+          "Substituir correções pontuais em formulários estáticos por formulários dinâmicos.",
+          "Substituir páginas legadas em HTML/CSS/JavaScript por uma interface em React."
+        ]
+      },
+      {
+        "id": "d95f9ea1-2a4b-46f5-9707-104b4c6cd5d5",
+        "title": "Software Developer",
+        "locale": "en",
+        "context": "Worked at a company focused on corporate digitalization, providing technical support in close collaboration with software engineering teams. Participated in the modernization of internal applications and digital transformation initiatives, contributing to operational efficiency and supporting the transition from technical support to software engineering.",
+        "results": [
+          "Reduced form change requests by 25%.",
+          "Enabled faster feature updates.",
+          "Reduced task completion time by 30%."
+        ],
+        "created_at": "2026-09-24T18:01:37.288781+00:00",
+        "experience_id": "9d9b5731-d559-46d4-9341-bad674266a49",
+        "responsibilities": [
+          "Providing technical support in close collaboration with engineering teams.",
+          "Modernizing internal applications.",
+          "Implementing dynamic forms.",
+          "Modernizing legacy pages with React."
+        ],
+        "technical_decisions": [
+          "Replacing one-off fixes in static forms with dynamic forms.",
+          "Replacing legacy HTML/CSS/JavaScript pages with a React interface."
+        ]
+      }
+    ]
+  },
+  "localFallbacks": {
+    "original": {
+      "eyebrow": "Portfólio profissional",
+      "presentationTitle": "Apresentação",
+      "intro": "Marcos Santos é engenheiro de software com atuação em arquitetura de soluções, integrações corporativas, automação de processos e transformação digital. Seu trabalho envolve analisar alternativas técnicas e trade-offs, criar soluções reutilizáveis e contribuir para sistemas escaláveis e sustentáveis, com colaboração, adaptabilidade e empatia.",
+      "navigation": "Navegação principal",
+      "aboutTitle": "Sobre mim",
+      "aboutBody": "Atuo em engenharia de software, arquitetura, integrações, automação e transformação digital, buscando soluções reutilizáveis, escaláveis e sustentáveis. Valorizo a análise de alternativas e trade-offs, a colaboração, a adaptabilidade e a empatia.",
+      "experienceTitle": "Experiências",
+      "experienceBody": "As experiências profissionais serão apresentadas nesta seção.",
+      "experiencePeriodLabel": "Período",
+      "experienceContextLabel": "Contexto",
+      "experienceResponsibilitiesLabel": "Responsabilidades",
+      "experienceTechnicalDecisionsLabel": "Decisões técnicas",
+      "experienceResultsLabel": "Resultados",
+      "stackTitle": "Habilidades",
+      "stackBody": "As tecnologias e competências serão apresentadas nesta seção.",
+      "skillsLanguagesRuntimeLabel": "Linguagens e runtime",
+      "skillsCorporateIntegrationsLabel": "Sistemas corporativos e integrações",
+      "skillsFrontendLabel": "Frontend",
+      "skillsDevopsObservabilityLabel": "DevOps e observabilidade",
+      "skillsDatabasesLabel": "Bancos de dados",
+      "skillsVersionControlLabel": "Versionamento",
+      "educationTitle": "Formação acadêmica",
+      "educationBody": "Pós-graduações realizadas na Unopar Anhanguera.",
+      "educationDataScience": "Ciência de Dados",
+      "educationAppliedStatistics": "Estatística Aplicada",
+      "educationGraphicDesign": "Design Gráfico",
+      "educationInstitutionLabel": "Instituição",
+      "educationPeriodLabel": "Período",
+      "educationCompetenciesLabel": "Competências desenvolvidas",
+      "educationContentLabel": "Conteúdos estudados",
+      "educationCurrentLabel": "Em andamento",
+      "contactTitle": "Contato",
+      "contactBody": "Canais profissionais e currículos.",
+      "contactLinkedinLabel": "LinkedIn",
+      "contactGithubLabel": "GitHub",
+      "contactEmailLabel": "E-mail",
+      "contactPhoneLabel": "Telefone",
+      "contactCurriculumPtLabel": "Currículo em português",
+      "contactCurriculumEnLabel": "Currículo em inglês",
+      "contactCurriculumDownloadLabel": "Baixar currículo",
+      "languageLabel": "Idioma",
+      "resultsTitle": "Resultados profissionais",
+      "resultsTimeReductionLabel": "Redução de tempo",
+      "resultsTimeReduction": "Onboarding reduzido de dias para horas; redução de 30% no tempo de conclusão de tarefas.",
+      "resultsStepsReductionLabel": "Redução de etapas",
+      "resultsStepsReduction": "Etapas manuais reduzidas de 8–10 para 3–5.",
+      "resultsUsersServedLabel": "Usuários atendidos",
+      "resultsUsersServed": "Plataforma utilizada por mais de 2.000 usuários mensais.",
+      "resultsProductivityGainLabel": "Ganhos de produtividade",
+      "resultsProductivityGain": "Redução aproximada de 50% no esforço de mapeamento JSON; redução de 25% nas solicitações de alteração em formulários.",
+      "projectsTitle": "Projetos",
+      "professionalProjectsTitle": "Projetos profissionais",
+      "personalProjectsTitle": "Projetos pessoais",
+      "projectDescriptionLabel": "Descrição",
+      "projectContextLabel": "Contexto",
+      "projectRoleLabel": "Papel desempenhado",
+      "projectTechnicalDecisionsLabel": "Decisões técnicas",
+      "projectTechnologiesLabel": "Tecnologias",
+      "projectResultsLabel": "Resultados",
+      "projectLearningsLabel": "Aprendizados",
+      "projectLinksLabel": "Links relacionados"
+    },
+    "english": {
+      "eyebrow": "Professional portfolio",
+      "presentationTitle": "Presentation",
+      "intro": "Marcos Santos is a software engineer working across solution architecture, corporate integrations, process automation, and digital transformation. His work involves analyzing technical alternatives and trade-offs, creating reusable solutions, and contributing to scalable and sustainable systems through collaboration, adaptability, and empathy.",
+      "navigation": "Main navigation",
+      "aboutTitle": "About me",
+      "aboutBody": "I work across software engineering, architecture, integrations, automation, and digital transformation, pursuing reusable, scalable, and sustainable solutions. I value analyzing alternatives and trade-offs, collaboration, adaptability, and empathy.",
+      "experienceTitle": "Experience",
+      "experienceBody": "Professional experience will be presented in this section.",
+      "experiencePeriodLabel": "Period",
+      "experienceContextLabel": "Context",
+      "experienceResponsibilitiesLabel": "Responsibilities",
+      "experienceTechnicalDecisionsLabel": "Technical decisions",
+      "experienceResultsLabel": "Results",
+      "stackTitle": "Skills",
+      "stackBody": "Technologies and skills will be presented in this section.",
+      "skillsLanguagesRuntimeLabel": "Languages and runtime",
+      "skillsCorporateIntegrationsLabel": "Corporate systems and integrations",
+      "skillsFrontendLabel": "Frontend",
+      "skillsDevopsObservabilityLabel": "DevOps and observability",
+      "skillsDatabasesLabel": "Databases",
+      "skillsVersionControlLabel": "Version control",
+      "educationTitle": "Academic background",
+      "educationBody": "Postgraduate programs completed at Unopar Anhanguera.",
+      "educationDataScience": "Data Science",
+      "educationAppliedStatistics": "Applied Statistics",
+      "educationGraphicDesign": "Graphic Design",
+      "educationInstitutionLabel": "Institution",
+      "educationPeriodLabel": "Period",
+      "educationCompetenciesLabel": "Developed competencies",
+      "educationContentLabel": "Studied content",
+      "educationCurrentLabel": "In progress",
+      "contactTitle": "Contact",
+      "contactBody": "Professional channels and resumes.",
+      "contactLinkedinLabel": "LinkedIn",
+      "contactGithubLabel": "GitHub",
+      "contactEmailLabel": "Email",
+      "contactPhoneLabel": "Phone",
+      "contactCurriculumPtLabel": "Resume in Portuguese",
+      "contactCurriculumEnLabel": "Resume in English",
+      "contactCurriculumDownloadLabel": "Download resume",
+      "languageLabel": "Language",
+      "resultsTitle": "Professional results",
+      "resultsTimeReductionLabel": "Time reduction",
+      "resultsTimeReduction": "Onboarding reduced from days to hours; 30% reduction in task completion time.",
+      "resultsStepsReductionLabel": "Step reduction",
+      "resultsStepsReduction": "Manual steps reduced from 8–10 to 3–5.",
+      "resultsUsersServedLabel": "Users served",
+      "resultsUsersServed": "Platform used by more than 2,000 monthly users.",
+      "resultsProductivityGainLabel": "Productivity gains",
+      "resultsProductivityGain": "Approximately 50% reduction in JSON mapping effort; 25% reduction in form change requests.",
+      "projectsTitle": "Projects",
+      "professionalProjectsTitle": "Professional projects",
+      "personalProjectsTitle": "Personal projects",
+      "projectDescriptionLabel": "Description",
+      "projectContextLabel": "Context",
+      "projectRoleLabel": "Role",
+      "projectTechnicalDecisionsLabel": "Technical decisions",
+      "projectTechnologiesLabel": "Technologies",
+      "projectResultsLabel": "Results",
+      "projectLearningsLabel": "Learnings",
+      "projectLinksLabel": "Related links"
+    },
+    "skills": [
+      {
+        "id": "languages-runtime",
+        "labelKey": "skillsLanguagesRuntimeLabel",
+        "skills": [
+          {
+            "id": "java",
+            "name": "Java",
+            "iconUrl": "/assets/skills/java.png"
+          },
+          {
+            "id": "javascript",
+            "name": "JavaScript",
+            "iconUrl": "/assets/skills/javascript.png"
+          },
+          {
+            "id": "typescript",
+            "name": "TypeScript",
+            "iconUrl": "/assets/skills/typescript.png"
+          },
+          {
+            "id": "node-js",
+            "name": "Node.js",
+            "iconUrl": "/assets/skills/node-js.png"
+          },
+          {
+            "id": "abap",
+            "name": "ABAP"
+          }
+        ]
+      },
+      {
+        "id": "corporate-integrations",
+        "labelKey": "skillsCorporateIntegrationsLabel",
+        "skills": [
+          {
+            "id": "sap",
+            "name": "SAP",
+            "iconUrl": "/assets/skills/sap.png"
+          },
+          {
+            "id": "rfc",
+            "name": "RFC"
+          },
+          {
+            "id": "bapi",
+            "name": "BAPI"
+          },
+          {
+            "id": "jco",
+            "name": "JCo"
+          },
+          {
+            "id": "rest-apis",
+            "name": "REST APIs",
+            "iconUrl": "/assets/skills/rest-apis.png"
+          },
+          {
+            "id": "smtp",
+            "name": "SMTP"
+          },
+          {
+            "id": "mendix",
+            "name": "Mendix",
+            "iconUrl": "/assets/skills/mendix.png"
+          },
+          {
+            "id": "outsystems",
+            "name": "OutSystems"
+          }
+        ]
+      },
+      {
+        "id": "frontend",
+        "labelKey": "skillsFrontendLabel",
+        "skills": [
+          {
+            "id": "react",
+            "name": "React",
+            "iconUrl": "/assets/skills/react.png"
+          },
+          {
+            "id": "html",
+            "name": "HTML",
+            "iconUrl": "/assets/skills/html.png"
+          },
+          {
+            "id": "css",
+            "name": "CSS",
+            "iconUrl": "/assets/skills/css.png"
+          }
+        ]
+      },
+      {
+        "id": "devops-observability",
+        "labelKey": "skillsDevopsObservabilityLabel",
+        "skills": [
+          {
+            "id": "docker",
+            "name": "Docker",
+            "iconUrl": "/assets/skills/docker.png"
+          },
+          {
+            "id": "gradle",
+            "name": "Gradle"
+          },
+          {
+            "id": "maven",
+            "name": "Maven"
+          },
+          {
+            "id": "grafana",
+            "name": "Grafana",
+            "iconUrl": "/assets/skills/grafana.png"
+          }
+        ]
+      },
+      {
+        "id": "databases",
+        "labelKey": "skillsDatabasesLabel",
+        "skills": [
+          {
+            "id": "sql-server",
+            "name": "SQL Server",
+            "iconUrl": "/assets/skills/sql-server.png"
+          },
+          {
+            "id": "mysql",
+            "name": "MySQL",
+            "iconUrl": "/assets/skills/mysql.png"
+          },
+          {
+            "id": "postgresql",
+            "name": "PostgreSQL",
+            "iconUrl": "/assets/skills/postgresql.png"
+          },
+          {
+            "id": "mongodb",
+            "name": "MongoDB",
+            "iconUrl": "/assets/skills/mongodb.png"
+          }
+        ]
+      },
+      {
+        "id": "version-control",
+        "labelKey": "skillsVersionControlLabel",
+        "skills": [
+          {
+            "id": "git",
+            "name": "Git",
+            "iconUrl": "/assets/skills/git.png"
+          },
+          {
+            "id": "github",
+            "name": "GitHub",
+            "iconUrl": "/assets/skills/github.png"
+          },
+          {
+            "id": "gitlab",
+            "name": "GitLab"
+          }
+        ]
+      }
+    ],
+    "academic": [
+      {
+        "id": "data-science",
+        "nameKey": "educationDataScience",
+        "institution": "Unopar Anhanguera",
+        "startDate": "2023-07-12",
+        "endDate": "2024-05-07",
+        "isCurrent": false,
+        "competencies": [
+          "Python com Spark",
+          "R",
+          "ETL",
+          "Data Warehouse",
+          "Big Data",
+          "NoSQL",
+          "Processamento paralelo e distribuído",
+          "Machine Learning",
+          "OLAP e visualização de dados"
+        ],
+        "studiedContent": [
+          "Linguagens de programação para ciência de dados (Python com Spark)",
+          "Técnicas estatísticas: teoria e prática (R Programming)",
+          "Integração e fluxo de dados (ETL)",
+          "Modelagem e arquitetura do DW (Data Warehouse)",
+          "Banco de dados relacional e Big Data",
+          "Bancos de dados não relacionais (NoSQL)",
+          "Projeto em ciência de dados com soluções para processamento paralelo e distribuído de dados",
+          "Machine Learning",
+          "Data Discovery, OLAP e visualização de dados"
+        ],
+        "displayOrder": 0
+      },
+      {
+        "id": "applied-statistics",
+        "nameKey": "educationAppliedStatistics",
+        "institution": "Unopar Anhanguera",
+        "startDate": "2023-12-13",
+        "endDate": "2024-06-12",
+        "isCurrent": false,
+        "competencies": [
+          "Estatística experimental",
+          "Métodos quantitativos de apoio à decisão",
+          "Métodos estatísticos",
+          "Análise multivariada e modelos de regressão",
+          "Otimização numérica",
+          "R",
+          "Análise de dados",
+          "Análise exploratória e técnicas de amostragem"
+        ],
+        "studiedContent": [
+          "Estatística experimental",
+          "Métodos quantitativos de apoio à decisão",
+          "Métodos estatísticos",
+          "Gestão de carreira",
+          "Análise multivariada e modelos de regressão",
+          "Otimização numérica",
+          "Técnicas estatísticas: teoria e prática (R Programming)",
+          "Análise de dados",
+          "Análise exploratória e técnicas de amostragem"
+        ],
+        "displayOrder": 1
+      },
+      {
+        "id": "graphic-design",
+        "nameKey": "educationGraphicDesign",
+        "institution": "Unopar Anhanguera",
+        "startDate": "2022-02-01",
+        "endDate": "2023-06-21",
+        "isCurrent": false,
+        "competencies": [
+          "Comunicação",
+          "Publicidade",
+          "Propaganda",
+          "Marketing",
+          "Métodos e técnicas modernas de comunicação"
+        ],
+        "studiedContent": [
+          "Curso Superior de Tecnologia em Design Gráfico",
+          "Formação para atuação em comunicação, publicidade, propaganda e marketing"
+        ],
+        "displayOrder": 2
+      }
+    ],
+    "contacts": [
+      {
+        "id": "linkedin",
+        "labelKey": "contactLinkedinLabel",
+        "href": "https://www.linkedin.com/in/marcos-santos-b9b544214/",
+        "symbol": "linkedin",
+        "iconPath": "/assets/contact/linkedin.svg"
+      },
+      {
+        "id": "github",
+        "labelKey": "contactGithubLabel",
+        "href": "https://github.com/Marcos-Vinicius-F-Santos",
+        "symbol": "github",
+        "iconPath": "/assets/contact/github.svg"
+      },
+      {
+        "id": "email",
+        "labelKey": "contactEmailLabel",
+        "href": "mailto:marcossantosjdev@gmail.com",
+        "symbol": "email",
+        "iconPath": "/assets/contact/email.svg"
+      },
+      {
+        "id": "phone",
+        "labelKey": "contactPhoneLabel",
+        "href": "tel:+5537998292763",
+        "symbol": "phone",
+        "iconPath": "/assets/contact/phone.svg"
+      }
+    ],
+    "assets": [
+      {
+        "name": "css.png",
+        "bytes": 1118
+      },
+      {
+        "name": "docker.png",
+        "bytes": 678
+      },
+      {
+        "name": "git.png",
+        "bytes": 675
+      },
+      {
+        "name": "github.png",
+        "bytes": 1028
+      },
+      {
+        "name": "grafana.png",
+        "bytes": 2231
+      },
+      {
+        "name": "html.png",
+        "bytes": 1028
+      },
+      {
+        "name": "java.png",
+        "bytes": 1860
+      },
+      {
+        "name": "javascript.png",
+        "bytes": 618
+      },
+      {
+        "name": "mendix.png",
+        "bytes": 588
+      },
+      {
+        "name": "mongodb.png",
+        "bytes": 1060
+      },
+      {
+        "name": "mysql.png",
+        "bytes": 1188
+      },
+      {
+        "name": "node-js.png",
+        "bytes": 1310
+      },
+      {
+        "name": "postgresql.png",
+        "bytes": 1902
+      },
+      {
+        "name": "react.png",
+        "bytes": 2494
+      },
+      {
+        "name": "rest-apis.png",
+        "bytes": 771
+      },
+      {
+        "name": "sap.png",
+        "bytes": 877
+      },
+      {
+        "name": "sql-server.png",
+        "bytes": 1435
+      },
+      {
+        "name": "typescript.png",
+        "bytes": 619
+      }
+    ]
+  }
+}

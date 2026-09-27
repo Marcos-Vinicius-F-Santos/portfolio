@@ -8,19 +8,28 @@ import {
 import { TRANSLATION_SOURCE } from '../../content/portfolio-translations';
 import { ORIGINAL_COPY, type PortfolioCopy } from '../../content/portfolio-content';
 import { PortfolioContentService } from '../../content/portfolio-content.service';
-import type { PortfolioExperience, PortfolioProject } from '../../content/portfolio-content.models';
+import type {
+  PortfolioExperience,
+  PortfolioFile,
+  PortfolioProject,
+} from '../../content/portfolio-content.models';
 import { ENGLISH_COPY } from '../../content/portfolio-translations';
 
 let experienceRows: PortfolioExperience[] = [];
 let projectRows: PortfolioProject[] = [];
+let curriculumRows: Partial<Record<'pt-BR' | 'en', PortfolioFile | null>> = {};
+const editorialOrder = signal<string[]>([]);
 
 describe('PortfolioPage', () => {
   beforeEach(async () => {
     localStorage.clear();
     experienceRows = createExperiences('pt-BR');
     projectRows = [];
+    curriculumRows = {};
+    editorialOrder.set([]);
     const contentService = {
       remoteCopy: signal<Partial<PortfolioCopy>>({}),
+      editorialSectionOrder: editorialOrder,
       loadCopy: vi.fn(async () => ({})),
       listExperiences: vi.fn(async (locale: 'pt-BR' | 'en') =>
         experienceRows.length > 0 ? createExperiences(locale) : [],
@@ -33,13 +42,13 @@ describe('PortfolioPage', () => {
           description: locale === 'en' ? 'English description' : project.description,
           problemContext: locale === 'en' ? 'English context' : project.problemContext,
           role: locale === 'en' ? 'English role' : project.role,
-          technicalDecisions:
-            locale === 'en' ? ['English decision'] : project.technicalDecisions,
+          technicalDecisions: locale === 'en' ? ['English decision'] : project.technicalDecisions,
           technologies: locale === 'en' ? ['English technology'] : project.technologies,
           results: locale === 'en' ? ['English result'] : project.results,
           learnings: locale === 'en' ? ['English learning'] : project.learnings,
         })),
       ),
+      getCurriculum: vi.fn(async (locale: 'pt-BR' | 'en') => curriculumRows[locale] ?? null),
     };
     await TestBed.configureTestingModule({
       imports: [PortfolioPage],
@@ -74,9 +83,110 @@ describe('PortfolioPage', () => {
         'stack-tecnica',
         'experiencias',
         'resultados-profissionais',
+        'formacao-academica',
+        'contato',
       ]);
-      expect(element.querySelectorAll('nav a')).toHaveLength(5);
+      expect(element.querySelectorAll('nav a')).toHaveLength(7);
     }
+  });
+
+  it('renders the navigation in the site header instead of the presentation block', async () => {
+    const { element } = await render();
+
+    expect(element.querySelector('.site-header nav')).toBeTruthy();
+    expect(element.querySelector('.page-header nav')).toBeNull();
+    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(7);
+  });
+
+  it('aplica a mesma ordem editorial às seções e ao menu', async () => {
+    editorialOrder.set([
+      'presentation-section',
+      'skills-section',
+      'about-section',
+      'experiences-section',
+      'results-section',
+      'education-section',
+      'contact-section',
+    ]);
+    const { element } = await render();
+    expect(
+      [...element.querySelectorAll('.sections > section')].map((section) => section.id).slice(0, 2),
+    ).toEqual(['stack-tecnica', 'sobre-mim']);
+    expect(
+      [...element.querySelectorAll('.site-header nav a')]
+        .map((link) => link.getAttribute('href'))
+        .slice(0, 3),
+    ).toEqual(['#apresentacao', '#stack-tecnica', '#sobre-mim']);
+  });
+
+  it('renders the approved skills, academic background, contact links and curriculum', async () => {
+    curriculumRows = {
+      'pt-BR': createCurriculum('pt-BR'),
+      en: createCurriculum('en'),
+    };
+    const { element } = await render();
+
+    expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Habilidades');
+    expect(element.querySelectorAll('.skill-category')).toHaveLength(6);
+    expect(
+      element.querySelector('[data-testid="skills-languages-runtime"]')?.textContent,
+    ).toContain('JavaScript');
+    expect(element.querySelector('#formacao-academica')).toBeTruthy();
+    expect(element.querySelectorAll('.academic-card')).toHaveLength(3);
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Período');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Python com Spark');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Design Gráfico');
+    expect(element.querySelector('#contato')).toBeTruthy();
+    expect([...element.querySelectorAll('section')].at(-1)?.id).toBe('contato');
+    expect(
+      (element.querySelector('[data-testid="contact-linkedin"]') as HTMLAnchorElement).href,
+    ).toBe('https://www.linkedin.com/in/marcos-santos-b9b544214/');
+    expect(
+      (element.querySelector('[data-testid="contact-github"]') as HTMLAnchorElement).href,
+    ).toBe('https://github.com/Marcos-Vinicius-F-Santos');
+    expect((element.querySelector('[data-testid="contact-email"]') as HTMLAnchorElement).href).toBe(
+      'mailto:marcossantosjdev@gmail.com',
+    );
+    expect((element.querySelector('[data-testid="contact-phone"]') as HTMLAnchorElement).href).toBe(
+      'tel:+5537998292763',
+    );
+    expect(element.querySelector('[data-testid="contact-links"]')?.textContent).toContain(
+      'LinkedIn',
+    );
+    expect(
+      element.querySelectorAll('[data-testid="compact-contact-links"] .compact-contact-link'),
+    ).toHaveLength(4);
+    expect(element.querySelectorAll('.section-index')).toHaveLength(0);
+    expect(
+      (element.querySelector('[data-testid="contact-curriculum"]') as HTMLAnchorElement).href,
+    ).toBe('https://storage.test/curriculum-pt-BR.pdf');
+  });
+
+  it('switches the curriculum and translated labels with the selected language', async () => {
+    curriculumRows = {
+      'pt-BR': createCurriculum('pt-BR'),
+      en: createCurriculum('en'),
+    };
+    const { fixture, element } = await render();
+    const select = element.querySelector('select')!;
+    select.value = 'en';
+    select.dispatchEvent(new Event('change'));
+    await fixture.whenStable();
+
+    expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Skills');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Data Science');
+    expect(
+      (element.querySelector('[data-testid="contact-curriculum"]') as HTMLAnchorElement).href,
+    ).toBe('https://storage.test/curriculum-en.pdf');
+  });
+
+  it('keeps contact usable when the selected curriculum is unavailable', async () => {
+    curriculumRows = { 'pt-BR': null };
+    const { element } = await render();
+
+    expect(element.querySelector('#contato')).toBeTruthy();
+    expect(element.querySelector('[data-testid="contact-curriculum"]')).toBeNull();
+    expect(element.querySelector('[data-testid="contact-linkedin"]')).toBeTruthy();
   });
 
   it.each([
@@ -102,7 +212,8 @@ describe('PortfolioPage', () => {
       'professional-experience-newer',
       'professional-experience-older',
     ]);
-    expect(experiences[0]?.textContent).toContain('Dairy Corp');
+    expect(experiences[0]?.textContent).not.toContain('Dairy Corp');
+    expect(experiences[0]?.textContent).not.toContain('Digital Corp');
     expect(experiences[0]?.textContent).toContain('05/2025 – 03/2026');
     expect(experiences[0]?.textContent).toContain('Engenheiro de software');
     expect(experiences[0]?.textContent).toContain('Setor de laticínios');
@@ -311,7 +422,7 @@ describe('PortfolioPage', () => {
     ).toContain(ENGLISH_COPY.resultsStepsReduction);
   });
 
-  it('renders professional and personal projects with all required fields and links', async () => {
+  it('renders project summaries and links to complete project pages', async () => {
     projectRows = [
       createProject('professional-1', 'professional', 2),
       createProject('personal-1', 'personal', 1),
@@ -323,23 +434,22 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
     expect(element.querySelector('[data-testid="personal-projects"]')).toBeTruthy();
 
-    const professional = element.querySelector('[data-testid="professional-project-professional-1"]')!;
+    const professional = element.querySelector(
+      '[data-testid="professional-project-professional-1"]',
+    )!;
     expect(professional.textContent).toContain('Projeto professional-1');
+    expect(professional.textContent).not.toContain('Papel professional-1');
+    expect(professional.textContent).not.toContain('Resultado professional-1');
     for (const value of [
       'Descrição professional-1',
       'Contexto professional-1',
-      'Papel professional-1',
-      'Decisão professional-1',
       'Tecnologia professional-1',
-      'Resultado professional-1',
-      'Aprendizado professional-1',
-      'Site professional-1',
     ]) {
       expect(professional.textContent).toContain(value);
     }
     expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
-    expect((professional.querySelector('.project-links a') as HTMLAnchorElement).href).toBe(
-      'https://example.com/professional-1',
+    expect((professional.querySelector('.project-full-link') as HTMLAnchorElement).href).toBe(
+      new URL('/projetos/professional-1', document.baseURI).href,
     );
   });
 
@@ -366,7 +476,9 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('[data-testid="personal-project-incomplete"]')).toBeNull();
     expect(element.querySelector('[data-testid="personal-project-without-links"]')).toBeTruthy();
-    expect(element.querySelector('[data-testid="personal-project-without-links"] .project-links')).toBeNull();
+    expect(
+      element.querySelector('[data-testid="personal-project-without-links"] .project-links'),
+    ).toBeNull();
   });
 
   it('reloads project translations when the language changes', async () => {
@@ -382,9 +494,10 @@ describe('PortfolioPage', () => {
     expect(project?.textContent).toContain('English Projeto personal-1');
     expect(project?.textContent).toContain('English description');
     expect(project?.textContent).toContain('English context');
-    expect(element.querySelector('[data-testid="personal-projects"] .project-subsection-title')?.textContent).toContain(
-      'Personal projects',
-    );
+    expect(
+      element.querySelector('[data-testid="personal-projects"] .project-subsection-title')
+        ?.textContent,
+    ).toContain('Personal projects');
   });
 
   function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
@@ -394,7 +507,6 @@ describe('PortfolioPage', () => {
         id: 'newer',
         startDate: '2025-05-01',
         endDate: '2026-03-01',
-        name: 'Dairy Corp',
         displayOrder: 2,
         title: english ? 'Software Engineer' : 'Engenheiro de software',
         context: english ? 'Dairy industry' : 'Setor de laticínios',
@@ -406,7 +518,6 @@ describe('PortfolioPage', () => {
         id: 'older',
         startDate: '2023-12-01',
         endDate: '2025-05-01',
-        name: 'Digital Corp',
         displayOrder: 1,
         title: english ? 'Developer' : 'Desenvolvedor',
         context: english ? 'Corporate digitization' : 'Digitalização corporativa',
@@ -438,6 +549,19 @@ describe('PortfolioPage', () => {
       learnings: ['Aprendizado ' + id],
       links: [{ label: 'Site ' + id, url: 'https://example.com/' + id }],
       images: [],
+    };
+  }
+
+  function createCurriculum(locale: 'pt-BR' | 'en'): PortfolioFile {
+    return {
+      id: 'curriculum-' + locale,
+      fileType: 'curriculum',
+      locale,
+      storagePath: 'curriculum-' + locale + '.pdf',
+      originalName: 'curriculum-' + locale + '.pdf',
+      mimeType: 'application/pdf',
+      sizeBytes: 1000,
+      publicUrl: 'https://storage.test/curriculum-' + locale + '.pdf',
     };
   }
 });

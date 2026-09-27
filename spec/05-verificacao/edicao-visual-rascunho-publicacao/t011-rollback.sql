@@ -1,0 +1,14 @@
+drop function if exists public.publish_editor_draft(bigint,uuid,text);
+drop function if exists portfolio_editorial.publish_draft(bigint,uuid,text,uuid);
+drop function if exists portfolio_editorial.build_publication_content();
+drop policy if exists publications_executor_select on portfolio_editorial.publications;
+drop policy if exists publications_executor_insert on portfolio_editorial.publications;
+drop policy if exists site_state_executor_select on portfolio_editorial.site_state;
+drop policy if exists site_state_executor_update on portfolio_editorial.site_state;
+revoke insert on portfolio_editorial.publications from portfolio_editorial_executor;
+revoke select,update on portfolio_editorial.site_state from portfolio_editorial_executor;
+delete from portfolio_editorial.operations where type='publication';
+alter table portfolio_editorial.operations drop constraint operations_type_check;
+alter table portfolio_editorial.operations add constraint operations_type_check check(type='draft_command');
+alter table portfolio_editorial.operations drop constraint operations_revision_check;
+alter table portfolio_editorial.operations add constraint operations_revision_check check(revision>0);

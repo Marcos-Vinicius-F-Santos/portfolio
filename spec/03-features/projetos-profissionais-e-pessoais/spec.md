@@ -1,5 +1,7 @@
 # Spec da Feature — Projetos profissionais e pessoais
 
+> **Reconciliação editorial — 2026-09-26:** A home já usa resumo e rota /projetos/:id para detalhes/imagens. A evolução editorial administra a mesma entidade nas duas superfícies, com ordem manual dentro do tipo e publicação integral. A [spec de edição visual](../edicao-visual-rascunho-publicacao/spec.md) prevalece nesses pontos quando implantada. Os requisitos anteriores continuam referência para o comportamento não alterado e a regressão; esta nota não comprova implementação ou testes.
+
 Status: Aprovada  
 Projeto: Portfólio Profissional — Marcos Santos  
 Onde vive no código: `src/app/features/portfolio/presentation/` (apresentação pública) e `src/app/features/portfolio/content/` (estrutura do conteúdo)

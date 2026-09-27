@@ -1,5 +1,7 @@
 # Spec da Feature — Alternância de Idioma
 
+> **Reconciliação editorial — 2026-09-26:** PT-BR permanece padrão; idiomas deixam de ser fixos. Abas editoriais não alteram a preferência pública. Idiomas incompletos ficam em preparação; ativação e desativação só se tornam públicas após publicação. A [spec de edição visual](../edicao-visual-rascunho-publicacao/spec.md) prevalece nesses pontos quando implantada. Os requisitos anteriores continuam referência para o comportamento não alterado e a regressão; esta nota não comprova implementação ou testes.
+
 Status: Concluída — conclusão aprovada explicitamente por Marcos em 2026-09-23  
 Projeto: Portfólio Profissional — Marcos Santos  
 Onde vive no código: `src/app/features/portfolio/`, com apresentação em `presentation/` e seleção de conteúdo por idioma em `content/`, conforme a arquitetura.  

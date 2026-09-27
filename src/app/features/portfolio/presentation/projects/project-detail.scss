@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  background: #f4f1e9;
+  color: #11130f;
+  min-height: 100vh;
+}
+main {
+  max-width: 70rem;
+  margin: auto;
+  padding: 2rem clamp(1.25rem, 5vw, 4rem) 5rem;
+  overflow-wrap: anywhere;
+}
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 3rem;
+}
+a {
+  color: #176b4d;
+  text-underline-offset: 0.25rem;
+}
+label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+select {
+  padding: 0.7rem;
+  font: inherit;
+}
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  margin: 1rem 0;
+}
+.eyebrow {
+  color: #176b4d;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+.intro {
+  font-size: 1.25rem;
+}
+p,
+li {
+  line-height: 1.7;
+}
+section {
+  margin-top: 2rem;
+  border-top: 1px solid #c9c4b7;
+  padding-top: 1rem;
+}
+h2 {
+  font-size: 1.35rem;
+}
+li + li {
+  margin-top: 0.5rem;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+figure {
+  margin: 0;
+}
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #c9c4b7;
+}
+a:focus-visible,
+select:focus-visible {
+  outline: 2px solid #176b4d;
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+}

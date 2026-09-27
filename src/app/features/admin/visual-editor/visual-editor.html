@@ -1,0 +1,102 @@
+@if (!preview()) {
+  <header class="editor-bar" aria-label="Barra do editor visual">
+    <strong>Modo administrativo · Rascunho</strong
+    ><span class="save-state" role="status">{{ autosave.status() }}</span>
+    <nav aria-label="Ações editoriais">
+      <button type="button" (click)="undo()" [disabled]="!sessionHistory.canUndo()">Desfazer</button
+      ><button type="button" (click)="redo()" [disabled]="!sessionHistory.canRedo()">
+        Refazer
+      </button>
+      <button type="button" (click)="preview.set(true)">Pré-visualizar</button
+      ><label class="upload-control">Imagem do projeto<input type="file" accept="image/png,image/jpeg" (change)="uploadProjectImage($event)" /></label
+      ><a class="media-link" href="/admin/media">Gerenciar mídias</a
+      ><button type="button" (click)="loadHistory()" [disabled]="autosave.pendingCount() > 0">
+        Histórico</button
+      ><button type="button" (click)="discard()">Descartar</button>
+      <button
+        type="button"
+        (click)="review()"
+        [disabled]="autosave.pendingCount() > 0 || !!autosave.failure()"
+      >
+        Revisar alterações
+      </button>
+      <button type="button" (click)="publish()" [disabled]="!validation()?.valid">
+        Publicar alterações</button
+      ><button type="button" (click)="exit()">Sair</button>
+    </nav>
+    @if (draftContent.draft(); as draft) {
+      <div class="editorial-locales" aria-label="Idiomas editoriais">
+        @for (locale of draft.locales; track locale.code) {
+          <button type="button" (click)="chooseLocale(locale.code)" [attr.aria-pressed]="draftContent.selectedLocale() === locale.code">
+            {{ locale.label }}
+          </button>
+        }
+        <button type="button" (click)="addLocale()">Adicionar idioma</button>
+      </div>
+    }
+    @if (validation(); as result) {
+      <p class="review-state">
+        {{
+          result.valid
+            ? 'Revisão pronta para confirmação.'
+            : result.errors.length + ' bloqueio(s) encontrado(s).'
+        }}
+      </p>
+    }
+    @if (autosave.failure(); as failure) {
+      <p class="action-error" role="alert">
+        Falha ao salvar {{ failure.target }}. A alteração permanece nesta sessão.
+        <button type="button" (click)="retryAutosave()">Tentar novamente</button>
+      </p>
+    }
+    @if (actionError()) {
+      <p class="action-error" role="alert">{{ actionError() }}</p>
+    }
+    @if (history().length) {
+      <details class="editorial-history">
+        <summary>Versões publicadas ({{ history().length }})</summary>
+        <ul>
+          @for (version of history(); track version.publicationId) {
+            <li>
+              <span>{{ version.createdAt }} · {{ version.active ? 'ativa' : 'retida' }}</span>
+              <button type="button" (click)="restoreVersion(version.publicationId)">
+                Restaurar como rascunho
+              </button>
+            </li>
+          }
+        </ul>
+      </details>
+    }
+  </header>
+} @else {
+  <div class="preview-toolbar" aria-label="Controles de pré-visualização">
+    <button
+      type="button"
+      (click)="previewViewport.set('desktop')"
+      [attr.aria-pressed]="previewViewport() === 'desktop'"
+    >
+      Desktop
+    </button>
+    <button
+      type="button"
+      (click)="previewViewport.set('mobile')"
+      [attr.aria-pressed]="previewViewport() === 'mobile'"
+    >
+      Mobile
+    </button>
+    <button class="leave-preview" type="button" (click)="preview.set(false)">
+      Voltar à edição
+    </button>
+  </div>
+}
+<main
+  [class.preview]="preview()"
+  [class.preview-mobile]="preview() && previewViewport() === 'mobile'"
+  [appEditorialTextEditing]="!preview()"
+  [appEditorialStructuredEditing]="!preview()"
+  [appEditorialSectionOrdering]="!preview()"
+  [appEditorialItemOrdering]="!preview()"
+  [appEditorialItemLifecycle]="!preview()"
+>
+  <app-portfolio-page />
+</main>
