@@ -75,21 +75,21 @@ Deno.serve(async (request) => {
   if (!payload?.media_id || !Number.isSafeInteger(payload.expected_revision)) {
     return json({ error: 'invalid_request' }, 400);
   }
-  const supabase = createClient(
+  const adminClient = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    { global: { headers: { Authorization: `Bearer ${token}` } } },
+    { auth: { autoRefreshToken: false, persistSession: false } },
   );
-  const { data: userData } = await supabase.auth.getUser(token);
+  const { data: userData } = await adminClient.auth.getUser(token);
   const user = userData.user;
   if (!user) return json({ error: 'unauthorized' }, 401);
-  const { data: admin } = await supabase
+  const { data: admin } = await adminClient
     .from('portfolio_admins')
     .select('user_id')
     .eq('user_id', user.id)
     .maybeSingle();
   if (!admin) return json({ error: 'forbidden' }, 403);
-  const { data: media, error } = (await supabase
+  const { data: media, error } = (await adminClient
     .schema('portfolio_editorial')
     .from('media')
     .select('id,actor_id,revision,bucket,path,status,purpose')
@@ -105,7 +105,7 @@ Deno.serve(async (request) => {
   ) {
     return json({ error: 'media_reservation_unavailable' }, 409);
   }
-  const { data: source, error: downloadError } = await supabase.storage
+  const { data: source, error: downloadError } = await adminClient.storage
     .from(media.bucket)
     .download(media.path);
   if (downloadError || !source || source.size > MAX_BYTES)
@@ -115,7 +115,7 @@ Deno.serve(async (request) => {
   const sanitized = sanitizeSvg(xml);
   if (!sanitized) return json({ error: 'invalid_svg' }, 422);
   const sanitizedPath = `${media.path.replace(/\/([^/]+)$/, '/sanitized-$1')}`;
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await adminClient.storage
     .from(media.bucket)
     .upload(sanitizedPath, new Blob([sanitized], { type: 'image/svg+xml' }), {
       contentType: 'image/svg+xml',
@@ -123,7 +123,7 @@ Deno.serve(async (request) => {
     });
   if (uploadError) return json({ error: 'sanitization_failed' }, 500);
   const checksum = await sha256(new TextEncoder().encode(sanitized));
-  const { error: updateError } = await supabase
+  const { error: updateError } = await adminClient
     .schema('portfolio_editorial')
     .from('media')
     .update({
