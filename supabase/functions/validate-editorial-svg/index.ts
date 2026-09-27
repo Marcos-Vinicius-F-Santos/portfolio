@@ -44,6 +44,12 @@ const ALLOWED_ATTRIBUTES = new Set([
   'xmlns',
 ]);
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
 type Row = {
   id: string;
   actor_id: string;
@@ -55,6 +61,9 @@ type Row = {
 };
 
 Deno.serve(async (request) => {
+  if (request.method === 'OPTIONS') {
+    return new Response('ok', { headers: CORS_HEADERS });
+  }
   if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
   const token = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'unauthorized' }, 401);
@@ -137,6 +146,6 @@ async function sha256(bytes: Uint8Array): Promise<string> {
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'content-type': 'application/json' },
+    headers: { ...CORS_HEADERS, 'content-type': 'application/json' },
   });
 }
