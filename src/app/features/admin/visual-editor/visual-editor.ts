@@ -17,6 +17,11 @@ import { EditorialItemLifecycleDirective } from './editorial-item-lifecycle.dire
 import { EditorialSessionHistory } from '../content-management/editorial-session-history';
 import type { EditorialHistoryItem } from '../content-management/editorial-draft.models';
 import { EditorialMediaService } from '../media-management/editorial-media.service';
+import {
+  reviewErrorGuidance,
+  reviewErrorLocation,
+  reviewErrorTitle,
+} from './editorial-review-errors';
 
 @Component({
   selector: 'app-visual-editor',
@@ -50,6 +55,10 @@ export class VisualEditor {
   protected readonly history = signal<readonly EditorialHistoryItem[]>([]);
   protected readonly validation = signal<EditorialPublicationValidation | null>(null);
   protected readonly actionError = signal('');
+  protected readonly reviewErrorTitle = reviewErrorTitle;
+  protected readonly reviewErrorLocation = reviewErrorLocation;
+  protected readonly reviewErrorGuidance = reviewErrorGuidance;
+  protected readonly publishing = signal(false);
 
   constructor() {
     void this.loadDraft();
@@ -87,13 +96,36 @@ export class VisualEditor {
   }
   protected async publish(): Promise<void> {
     const validation = this.validation();
-    if (!validation?.valid || validation.revision !== this.autosave.confirmedRevision()) return;
+    if (!validation?.valid) {
+      this.actionError.set('Revise as alterações e corrija os bloqueios antes de publicar.');
+      return;
+    }
+    if (validation.revision !== this.autosave.confirmedRevision()) {
+      this.actionError.set('O rascunho mudou desde a revisão. Clique em Revisar alterações novamente.');
+      this.validation.set(null);
+      return;
+    }
+    const summary = validation.summary;
+    const confirmed = confirm(
+      `Publicar a revisão ${validation.revision}?\n\n` +
+        `Conteúdos alterados: ${summary.changed}\n` +
+        `Traduções: ${summary.translations}\n` +
+        `Itens adicionados: ${summary.added}\n` +
+        `Itens removidos: ${summary.removed}\n` +
+        `Itens reordenados: ${summary.reordered}\n` +
+        `Mídias: ${summary.media}`,
+    );
+    if (!confirmed) return;
+    this.actionError.set('');
+    this.publishing.set(true);
     try {
       await this.commands.publish(validation.revision, crypto.randomUUID(), validation.reviewHash);
       this.validation.set(null);
       await this.loadHistory();
-    } catch {
-      this.actionError.set('A publicação não foi confirmada. Revise novamente.');
+    } catch (error) {
+      this.actionError.set(publicationErrorMessage(error));
+    } finally {
+      this.publishing.set(false);
     }
   }
   protected async discard(): Promise<void> {
@@ -201,4 +233,14 @@ export class VisualEditor {
       this.actionError.set('Não foi possível aplicar a operação ao histórico da sessão.');
     }
   }
+}
+
+function publicationErrorMessage(error: unknown): string {
+  if (!error || typeof error !== 'object') return 'A publicação não foi confirmada. Revise novamente.';
+  const value = error as Record<string, unknown>;
+  if (value['code'] === '40001') return 'A revisão ficou desatualizada. Revise as alterações novamente.';
+  if (value['code'] === '42501' || value['status'] === 401 || value['status'] === 403)
+    return 'Sua sessão administrativa não está autorizada a publicar. Entre novamente.';
+  if (value['code'] === '22023') return 'O rascunho não passou na validação do servidor. Revise os bloqueios apresentados.';
+  return 'A publicação não foi confirmada. Revise novamente.';
 }
