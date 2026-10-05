@@ -239,6 +239,8 @@ function publicationErrorMessage(error: unknown): string {
   if (!error || typeof error !== 'object') return 'A publicação não foi confirmada. Revise novamente.';
   const value = error as Record<string, unknown>;
   if (value['code'] === '40001') return 'A revisão ficou desatualizada. Revise as alterações novamente.';
+  if (value['code'] === '21000')
+    return 'O servidor encontrou uma inconsistência na revisão. Atualize a página e revise novamente.';
   if (value['code'] === '42501' || value['status'] === 401 || value['status'] === 403)
     return 'Sua sessão administrativa não está autorizada a publicar. Entre novamente.';
   if (value['code'] === '22023') return 'O rascunho não passou na validação do servidor. Revise os bloqueios apresentados.';
