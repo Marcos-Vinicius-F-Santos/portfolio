@@ -47,6 +47,11 @@
             {{ result.summary.added }} adicionado(s), {{ result.summary.removed }} removido(s),
             {{ result.summary.reordered }} reordenado(s) e {{ result.summary.media }} mídia(s).
           </p>
+          @if (result.revision !== autosave.confirmedRevision()) {
+            <p class="action-error" role="alert">
+              O rascunho mudou depois desta revisão. Clique em Revisar alterações novamente antes de publicar.
+            </p>
+          }
         </div>
       } @else {
         <section class="review-blockers" role="alert" aria-labelledby="review-blockers-title" data-testid="review-blockers">
