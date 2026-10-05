@@ -95,6 +95,12 @@ export class VisualEditor {
     }
   }
   protected async publish(): Promise<void> {
+    try {
+      await this.autosave.flush();
+    } catch {
+      this.actionError.set('Aguarde a conclusão do salvamento ou tente novamente o autosave que falhou.');
+      return;
+    }
     const validation = this.validation();
     if (!validation?.valid) {
       this.actionError.set('Revise as alterações e corrija os bloqueios antes de publicar.');
@@ -123,6 +129,10 @@ export class VisualEditor {
       this.validation.set(null);
       await this.loadHistory();
     } catch (error) {
+      if (isPublicationConsistencyError(error)) {
+        this.validation.set(null);
+        await this.loadDraft();
+      }
       this.actionError.set(publicationErrorMessage(error));
     } finally {
       this.publishing.set(false);
@@ -233,6 +243,12 @@ export class VisualEditor {
       this.actionError.set('Não foi possível aplicar a operação ao histórico da sessão.');
     }
   }
+}
+
+function isPublicationConsistencyError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const value = error as Record<string, unknown>;
+  return value['code'] === '40001' || value['code'] === '21000';
 }
 
 function publicationErrorMessage(error: unknown): string {

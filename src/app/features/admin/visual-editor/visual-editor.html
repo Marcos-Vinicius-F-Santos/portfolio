@@ -23,7 +23,7 @@
       <button
         type="button"
         (click)="publish()"
-        [disabled]="!validation()?.valid || validation()?.revision !== autosave.confirmedRevision() || publishing()"
+        [disabled]="!validation()?.valid || validation()?.revision !== autosave.confirmedRevision() || autosave.pendingCount() > 0 || !!autosave.failure() || publishing()"
       >
         {{ publishing() ? 'Publicando…' : 'Confirmar e publicar alterações' }}</button
       ><button type="button" (click)="exit()">Sair</button>
