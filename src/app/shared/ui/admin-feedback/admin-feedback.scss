@@ -1,0 +1,17 @@
+@use '../admin-ui' as admin;
+
+.admin-feedback {
+  @include admin.feedback;
+}
+
+.admin-feedback--status {
+  color: admin.$admin-muted;
+}
+
+.admin-feedback--error {
+  @include admin.feedback-error;
+}
+
+.admin-feedback--success {
+  @include admin.feedback-success;
+}

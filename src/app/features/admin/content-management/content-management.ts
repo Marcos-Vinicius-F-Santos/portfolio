@@ -15,6 +15,10 @@ import {
   LOCALES,
 } from './admin-content.models';
 import type { PortfolioProjectLink } from '../../portfolio/content/portfolio-content.models';
+import { AdminCard } from '../../../shared/ui/admin-card/admin-card';
+import { AdminFeedback } from '../../../shared/ui/admin-feedback/admin-feedback';
+import { AdminPageHeader } from '../../../shared/ui/admin-page-header/admin-page-header';
+import { AdminSectionHeader } from '../../../shared/ui/admin-section-header/admin-section-header';
 import { AdminContentService } from './admin-content.service';
 
 const STANDARD_VALIDATION_MESSAGE = 'Campo obrigatório.';
@@ -22,7 +26,13 @@ const SAVE_SUCCESS_MESSAGE = 'Conteúdo salvo e publicado.';
 
 @Component({
   selector: 'app-content-management',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    AdminCard,
+    AdminFeedback,
+    AdminPageHeader,
+    AdminSectionHeader,
+  ],
   templateUrl: './content-management.html',
   styleUrl: './content-management.scss',
 })

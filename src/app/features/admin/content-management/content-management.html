@@ -1,37 +1,52 @@
 <main class="content-management" data-testid="content-management">
-  <header class="content-header">
-    <div>
-      <p class="eyebrow">Área administrativa</p>
-      <h1>Conteúdo do portfólio</h1>
-      <p>Edite as versões em português e inglês. O salvamento publica imediatamente.</p>
-    </div>
-    <button type="button" (click)="reload()" [disabled]="loading() || saving()">Recarregar</button>
-  </header>
+  <app-admin-page-header
+    title="Conteúdo do portfólio"
+    description="Edite as versões em português e inglês. O salvamento publica imediatamente."
+  >
+    <button
+      class="admin-button"
+      type="button"
+      (click)="reload()"
+      [disabled]="loading() || saving()"
+    >
+      Recarregar
+    </button>
+  </app-admin-page-header>
 
   @if (loading()) {
-    <p class="status">Carregando conteúdo…</p>
+    <app-admin-feedback variant="status" message="Carregando conteúdo…" />
   }
   @if (errorMessage()) {
-    <p class="message error" role="alert" data-testid="content-error">{{ errorMessage() }}</p>
+    <app-admin-feedback
+      variant="error"
+      [message]="errorMessage()"
+      testId="content-error"
+    />
   }
   @if (validationMessage()) {
-    <p class="message error" role="alert" data-testid="validation-error">
-      {{ validationMessage() }}
-    </p>
+    <app-admin-feedback
+      variant="error"
+      [message]="validationMessage()"
+      testId="validation-error"
+    />
   }
   @if (statusMessage()) {
-    <p class="message success" role="status" data-testid="content-success">{{ statusMessage() }}</p>
+    <app-admin-feedback
+      variant="success"
+      [message]="statusMessage()"
+      testId="content-success"
+    />
   }
 
   @if (!loading()) {
     <section class="editor-section" aria-labelledby="texts-title">
-      <div class="section-heading">
-        <h2 id="texts-title">Textos e resultados</h2>
-        <p>Itens das seções e chaves públicas já existentes.</p>
-      </div>
+      <app-admin-section-header
+        title="Textos e resultados"
+        description="Itens das seções e chaves públicas já existentes."
+      />
       <div class="copy-list">
         @for (entry of draft().copy; track entry.key) {
-          <article class="editor-card" [attr.data-testid]="'copy-' + entry.key">
+          <app-admin-card [attr.data-testid]="'copy-' + entry.key">
             <h3>{{ entry.label }}</h3>
             <div class="locale-grid">
               @for (locale of locales; track locale) {
@@ -45,21 +60,22 @@
                 </label>
               }
             </div>
-            <button type="button" (click)="saveCopy(entry)" [disabled]="saving()">
+            <button class="admin-button" type="button" (click)="saveCopy(entry)" [disabled]="saving()">
               Salvar texto
             </button>
-          </article>
+          </app-admin-card>
         }
       </div>
     </section>
 
     <section class="editor-section" aria-labelledby="experiences-title">
-      <div class="section-heading">
-        <h2 id="experiences-title">Experiências</h2>
-        <button type="button" (click)="addExperience()">Adicionar experiência</button>
-      </div>
+      <app-admin-section-header title="Experiências">
+        <button class="admin-button" type="button" (click)="addExperience()">
+          Adicionar experiência
+        </button>
+      </app-admin-section-header>
       @for (experience of draft().experiences; track $index) {
-        <article class="editor-card" [attr.data-testid]="'experience-editor-' + $index">
+        <app-admin-card [attr.data-testid]="'experience-editor-' + $index">
           <div class="base-grid">
             <label><span>Empresa</span><input [(ngModel)]="experience.name" /></label>
             <label
@@ -115,20 +131,19 @@
               </fieldset>
             }
           </div>
-          <button type="button" (click)="saveExperience(experience)" [disabled]="saving()">
+          <button class="admin-button" type="button" (click)="saveExperience(experience)" [disabled]="saving()">
             Salvar experiência
           </button>
-        </article>
+        </app-admin-card>
       }
     </section>
 
     <section class="editor-section" aria-labelledby="projects-title">
-      <div class="section-heading">
-        <h2 id="projects-title">Projetos</h2>
-        <button type="button" (click)="addProject()">Adicionar projeto</button>
-      </div>
+      <app-admin-section-header title="Projetos">
+        <button class="admin-button" type="button" (click)="addProject()">Adicionar projeto</button>
+      </app-admin-section-header>
       @for (project of draft().projects; track $index) {
-        <article class="editor-card" [attr.data-testid]="'project-editor-' + $index">
+        <app-admin-card [attr.data-testid]="'project-editor-' + $index">
           <div class="base-grid">
             <label
               ><span>Tipo</span
@@ -217,20 +232,21 @@
               </fieldset>
             }
           </div>
-          <button type="button" (click)="saveProject(project)" [disabled]="saving()">
+          <button class="admin-button" type="button" (click)="saveProject(project)" [disabled]="saving()">
             Salvar projeto
           </button>
-        </article>
+        </app-admin-card>
       }
     </section>
 
     <section class="editor-section" aria-labelledby="skills-title">
-      <div class="section-heading">
-        <h2 id="skills-title">Habilidades</h2>
-        <button type="button" (click)="addSkillCategory()">Adicionar categoria</button>
-      </div>
+      <app-admin-section-header title="Habilidades">
+        <button class="admin-button" type="button" (click)="addSkillCategory()">
+          Adicionar categoria
+        </button>
+      </app-admin-section-header>
       @for (category of draft().skillCategories; track $index) {
-        <article class="editor-card">
+        <app-admin-card>
           <div class="base-grid">
             <label
               ><span>Chave da categoria</span><input [(ngModel)]="category.categoryKey"
@@ -268,22 +284,30 @@
             }
           </div>
           <div class="button-row">
-            <button type="button" (click)="addSkill(category)">Adicionar habilidade</button>
-            <button type="button" (click)="saveSkillCategory(category)" [disabled]="saving()">
+            <button class="admin-button" type="button" (click)="addSkill(category)">
+              Adicionar habilidade
+            </button>
+            <button
+              class="admin-button"
+              type="button"
+              (click)="saveSkillCategory(category)"
+              [disabled]="saving()"
+            >
               Salvar habilidades
             </button>
           </div>
-        </article>
+        </app-admin-card>
       }
     </section>
 
     <section class="editor-section" aria-labelledby="academic-title">
-      <div class="section-heading">
-        <h2 id="academic-title">Formação</h2>
-        <button type="button" (click)="addAcademic()">Adicionar formação</button>
-      </div>
+      <app-admin-section-header title="Formação">
+        <button class="admin-button" type="button" (click)="addAcademic()">
+          Adicionar formação
+        </button>
+      </app-admin-section-header>
       @for (entry of draft().academicEntries; track $index) {
-        <article class="editor-card">
+        <app-admin-card>
           <div class="base-grid">
             <label
               ><span>Ordem</span><input type="number" [(ngModel)]="entry.displayOrder"
@@ -327,20 +351,21 @@
               </fieldset>
             }
           </div>
-          <button type="button" (click)="saveAcademic(entry)" [disabled]="saving()">
+          <button class="admin-button" type="button" (click)="saveAcademic(entry)" [disabled]="saving()">
             Salvar formação
           </button>
-        </article>
+        </app-admin-card>
       }
     </section>
 
     <section class="editor-section" aria-labelledby="contacts-title">
-      <div class="section-heading">
-        <h2 id="contacts-title">Contatos</h2>
-        <button type="button" (click)="addContact()">Adicionar contato</button>
-      </div>
+      <app-admin-section-header title="Contatos">
+        <button class="admin-button" type="button" (click)="addContact()">
+          Adicionar contato
+        </button>
+      </app-admin-section-header>
       @for (contact of draft().contacts; track $index) {
-        <article class="editor-card">
+        <app-admin-card>
           <div class="base-grid">
             <label
               ><span>Canal</span
@@ -366,10 +391,10 @@
               /></label>
             }
           </div>
-          <button type="button" (click)="saveContact(contact)" [disabled]="saving()">
+          <button class="admin-button" type="button" (click)="saveContact(contact)" [disabled]="saving()">
             Salvar contato
           </button>
-        </article>
+        </app-admin-card>
       }
     </section>
   }

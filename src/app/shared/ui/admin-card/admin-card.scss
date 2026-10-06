@@ -1,0 +1,26 @@
+@use '../admin-ui' as admin;
+
+.admin-card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid admin.$admin-border;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 0.5rem 1.5rem rgb(23 32 51 / 5%);
+}
+
+.admin-card--image {
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.7fr);
+  align-items: center;
+}
+
+.admin-card--dashed {
+  border-style: dashed;
+}
+
+@media (max-width: 760px) {
+  .admin-card--image {
+    grid-template-columns: 1fr;
+  }
+}

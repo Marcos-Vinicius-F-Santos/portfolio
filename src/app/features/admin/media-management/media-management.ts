@@ -6,13 +6,23 @@ import {
   type AdminMediaProject,
   type AdminMediaSnapshot,
 } from './media-management.models';
+import { AdminCard } from '../../../shared/ui/admin-card/admin-card';
+import { AdminFeedback } from '../../../shared/ui/admin-feedback/admin-feedback';
+import { AdminPageHeader } from '../../../shared/ui/admin-page-header/admin-page-header';
+import { AdminSectionHeader } from '../../../shared/ui/admin-section-header/admin-section-header';
 import { MediaManagementService } from './media-management.service';
 
 const LOCALES: PortfolioLocale[] = ['pt-BR', 'en'];
 
 @Component({
   selector: 'app-media-management',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    AdminCard,
+    AdminFeedback,
+    AdminPageHeader,
+    AdminSectionHeader,
+  ],
   templateUrl: './media-management.html',
   styleUrl: './media-management.scss',
 })

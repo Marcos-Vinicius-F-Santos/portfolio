@@ -1,0 +1,63 @@
+$admin-ink: #172033;
+$admin-muted: #667085;
+$admin-label: #475467;
+$admin-border: #dfe3ec;
+$admin-control-border: #cfd5df;
+$admin-success: #176b36;
+$admin-success-background: #edf9f1;
+$admin-error: #a02727;
+$admin-error-background: #fff0f0;
+
+@mixin field-label {
+  display: grid;
+  gap: 0.35rem;
+  color: $admin-label;
+  font-size: 0.875rem;
+}
+
+@mixin control {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid $admin-control-border;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  color: $admin-ink;
+  font: inherit;
+}
+
+@mixin button {
+  width: fit-content;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  background: $admin-ink;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+@mixin disabled-button {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+@mixin feedback {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+@mixin feedback-error {
+  background: $admin-error-background;
+  color: $admin-error;
+}
+
+@mixin feedback-success {
+  background: $admin-success-background;
+  color: $admin-success;
+}
+
+@mixin muted-copy {
+  margin: 0.5rem 0 0;
+  color: $admin-muted;
+}

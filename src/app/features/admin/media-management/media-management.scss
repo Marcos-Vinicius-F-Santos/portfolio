@@ -1,3 +1,5 @@
+@use '../../../shared/ui/admin-ui' as admin;
+
 :host {
   display: block;
 }
@@ -6,55 +8,21 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 1.25rem 4rem;
-  color: #172033;
+  color: admin.$admin-ink;
 }
 
-.media-header,
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.media-header {
-  margin-bottom: 2rem;
-}
-
-.media-header h1,
-.section-heading h2,
-.media-card h3 {
+.media-section h3 {
   margin: 0;
 }
 
-.media-header p,
-.section-heading p,
-.media-card p {
+.media-section p {
   margin: 0.5rem 0 0;
-  color: #667085;
-}
-
-.eyebrow {
-  color: #7257a3;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .media-section {
   display: grid;
   gap: 1rem;
   margin-top: 2.5rem;
-}
-
-.media-card {
-  display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
-  border: 1px solid #dfe3ec;
-  border-radius: 1rem;
-  background: #fff;
-  box-shadow: 0 0.5rem 1.5rem rgb(23 32 51 / 5%);
 }
 
 .media-list {
@@ -73,6 +41,10 @@
   width: 2.75rem;
   height: 2.75rem;
   object-fit: contain;
+}
+
+.muted-status {
+  color: admin.$admin-muted;
 }
 
 .skill-catalog-list {
@@ -102,78 +74,19 @@
   place-items: center;
 }
 
-.create-skill-card {
-  border-style: dashed;
-}
-
-.image-card {
-  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.7fr);
-  align-items: center;
-}
-
 label {
-  display: grid;
-  gap: 0.35rem;
-  color: #475467;
-  font-size: 0.875rem;
+  @include admin.field-label;
 }
 
 input,
 select {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #cfd5df;
-  border-radius: 0.5rem;
-  padding: 0.65rem 0.75rem;
-  color: #172033;
-  font: inherit;
+  @include admin.control;
 }
 
 button {
-  width: fit-content;
-  border: 0;
-  border-radius: 999px;
-  padding: 0.65rem 1rem;
-  background: #172033;
-  color: #fff;
-  cursor: pointer;
-  font: inherit;
+  @include admin.button;
 }
 
 button:disabled {
-  cursor: wait;
-  opacity: 0.55;
-}
-
-.message,
-.status {
-  margin: 1rem 0;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-}
-
-.message.error {
-  background: #fff0f0;
-  color: #a02727;
-}
-
-.message.success {
-  background: #edf9f1;
-  color: #176b36;
-}
-
-.status {
-  color: #667085;
-}
-
-@media (max-width: 760px) {
-  .media-header,
-  .section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .image-card {
-    grid-template-columns: 1fr;
-  }
+  @include admin.disabled-button;
 }

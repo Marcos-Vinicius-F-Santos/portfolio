@@ -1,0 +1,10 @@
+<p
+  class="admin-feedback"
+  [class.admin-feedback--status]="variant() === 'status'"
+  [class.admin-feedback--error]="variant() === 'error'"
+  [class.admin-feedback--success]="variant() === 'success'"
+  [attr.role]="variant() === 'error' ? 'alert' : 'status'"
+  [attr.data-testid]="testId() || null"
+>
+  {{ message() }}
+</p>
