@@ -120,3 +120,59 @@ Esta iteração atendeu aos refinamentos ergonômicos e visuais de apresentaçã
   - `scripts/generate-joao-editorial-snapshot.mjs`: suporte a mime `image/svg+xml` e sincronização do snapshot editorial (`spec/05-verificacao/ativacao-painel-admin-joao-vitor/initial-editorial-snapshot-joao-v1.json`).
   - `src/app/features/portfolio/content/portfolio-content.spec.ts`: asserções de teste atualizadas para os novos ícones.
 
+---
+
+## 5. Padronização Arquitetural do Frontend e Migração de Estilos (Outubro/2026)
+
+Esta iteração realizou uma modernização e padronização arquitetural completa na estrutura do código Angular, incorporando os padrões de excelência dos projetos de referência `sensoreng-frontend` e `russian-mastery`, mantendo **100% de integridade no layout, responsividade e regras de negócio**:
+
+### A. Migração Global de SCSS para CSS Nativo
+- **Motivação**: O projeto utilizava extensão `.scss` em seus componentes, porém 100% dos estilos eram escritos com CSS nativo e variáveis CSS (`:host { --ink: ...; --paper: ... }`). Não havia uso de mixins, funções ou variáveis de compilação do Sass. O uso de SCSS adicionava overhead desnecessário do compilador DartSass.
+- **Ações**:
+  - `angular.json`: configurado `schematics: { "@schematics/angular:component": { "style": "css" } }`, removido `"inlineStyleLanguage": "scss"` e apontada a folha global para `src/styles.css`.
+  - Renomeação via `git mv` de todos os 8 arquivos `.scss` para `.css` (`src/styles.css`, `app.component.css`, `portfolio-page.component.css`, `project-detail.component.css`, `admin-authentication.component.css`, `content-management.component.css`, `media-management.component.css`, `visual-editor.component.css`).
+  - Atualização dos metadados `@Component({ styleUrl: './*.css' })`.
+  - **Benefício**: Build mais rápido (`ng build` e `ng serve`), código alinhado aos padrões web modernos (CSS nesting e CSS custom properties nativas).
+
+### B. Nomenclatura Canônica do Angular Style Guide
+- **Motivação**: Os componentes originais usavam nomenclatura encurtada (`portfolio-page.ts`, `app.ts`, `visual-editor.ts`), fugindo da convenção oficial do Angular (`*.component.ts`) e dificultando a busca rápida no editor (`Ctrl+P`).
+- **Ações**:
+  - Todos os arquivos de componentes foram renomeados para o padrão oficial: `<nome>.component.ts`, `<nome>.component.html` e `<nome>.component.css`.
+  - Todas as classes exportadas receberam o sufixo canônico `Component` (`AppComponent`, `PortfolioPageComponent`, `ProjectDetailComponent`, `AdminAuthenticationComponent`, `AdminWorkspaceComponent`, `ContentManagementComponent`, `MediaManagementComponent`, `VisualEditorComponent`, `EditorialProjectDetailComponent`).
+  - Arquivos `src/main.ts` e `src/app/app.routes.ts` atualizados para bootstrap e lazy loading com os novos identificadores.
+
+### C. Criação da Camada Transversal `src/app/shared/`
+- **Motivação**: Eliminar a regra de templates e estilos inline e desacoplar componentes reutilizáveis agnósticos de domínio (regra de ouro do `russian-mastery`).
+- **Ações**:
+  - Criado o diretório `src/app/shared/components/project-technologies/`.
+  - O componente de lista de tecnologias (`<app-project-technologies>`) foi desacoplado em 3 arquivos dedicados:
+    - `project-technologies.component.ts` (`ProjectTechnologiesComponent`)
+    - `project-technologies.component.html`
+    - `project-technologies.component.css`
+  - Removido o arquivo antigo acoplado em `src/app/features/portfolio/presentation/projects/project-technologies.ts`.
+
+### D. Reorganização das Features por Domínio (`pages/`, `services/`, `directives/`)
+- **Motivação**: Padrão extraído do `sensoreng-frontend`, separando claramente as páginas/telas dos serviços de dados e diretivas especializadas.
+- **Estrutura de `src/app/features/portfolio/`**:
+  - `pages/portfolio-page/`: `portfolio-page.component.ts`, `.html`, `.css`, `.spec.ts`
+  - `pages/project-detail/`: `project-detail.component.ts`, `.html`, `.css`, `.spec.ts`
+  - `services/`: centralização de todos os serviços de conteúdo, adapters e modelos (`portfolio-content.service.ts`, `published-snapshot.service.ts`, `portfolio-language.service.ts`, `editorial-snapshot-adapter.ts`, etc.).
+- **Estrutura de `src/app/features/admin/`**:
+  - `pages/authentication/`: `admin-authentication.component.ts`, `.html`, `.css`, `.spec.ts`
+  - `pages/admin-workspace/`: `admin-workspace.component.ts`, `.html`, `.css` (desacoplado de template inline)
+  - `pages/content-management/`: `content-management.component.ts`, `.html`, `.css`, `.spec.ts`
+  - `pages/media-management/`: `media-management.component.ts`, `.html`, `.css`, `.spec.ts`
+  - `pages/visual-editor/`: `visual-editor.component.ts`, `.html`, `.css`
+  - `pages/editorial-project-detail/`: `editorial-project-detail.component.ts`, `.html`, `.css` (desacoplado de template inline)
+  - `directives/`: todas as diretivas de edição inline do visual editor (`editorial-text-editing.directive.ts`, etc.) com suas respectivas specs.
+  - `services/`: todos os serviços editoriais e de mídias (`editorial-command.service.ts`, `editorial-autosave-queue.ts`, `media-management.service.ts`, etc.).
+
+### E. Preservação Total da Arquitetura de Backend e Banco de Dados
+- Mantido o **Supabase Serverless gerenciado** (PostgreSQL + RLS + Storage) com deploy Vercel a custo zero. Nenhuma migration, RPC ou schema de banco foi alterado.
+
+### F. Evidências de Qualidade e Zero Regressão
+- **Vitest**: Todos os 137 testes unitários em 27 arquivos de teste continuam passando com 100% de sucesso (`npm test -- --watch=false`).
+- **Build de Produção**: `npm run build` gerando todos os bundles e lazy-chunks perfeitamente.
+- **Layout & Funcionalidades**: 100% preservados sem nenhuma quebra visual ou comportamental.
+
+

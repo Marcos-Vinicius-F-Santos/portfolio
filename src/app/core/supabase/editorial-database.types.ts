@@ -3,7 +3,7 @@ import type {
   EditorialSnapshotTechnology,
   EditorialSnapshotTranslations,
   EditorialSnapshotV1,
-} from '../../features/portfolio/content/editorial-snapshot.models';
+} from '../../features/portfolio/services/editorial-snapshot.models';
 
 export interface EditorialDatabase {
   portfolio_editorial: {

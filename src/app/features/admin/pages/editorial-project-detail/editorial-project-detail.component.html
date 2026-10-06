@@ -1,0 +1,39 @@
+<main class="editorial-project-detail">
+  <nav><a routerLink="/admin/editor">← Voltar ao editor visual</a></nav>
+  @if (draft(); as value) {
+    @if (project(); as item) {
+      <header>
+        <p>Projeto · rascunho privado</p>
+        <h1>{{ field(currentProjectId(), 'name') }}</h1>
+        <div class="locale-tabs">
+          @for (locale of value.locales; track locale.code) {
+            <button type="button" (click)="localeCode.set(locale.code)" [attr.aria-pressed]="localeCode() === locale.code">{{ locale.label }}</button>
+          }
+        </div>
+      </header>
+      <section class="fields">
+        @for (fieldName of mainFields; track fieldName) {
+          <label><span>{{ labels[fieldName] }}</span><textarea [ngModel]="field(currentProjectId(), fieldName)" (blur)="saveField(currentProjectId(), fieldName, $any($event.target).value)"></textarea></label>
+        }
+      </section>
+      <section>
+        <h2>Tecnologias</h2>
+        <p>O catálogo é compartilhado entre projetos e Habilidades.</p>
+        <div class="technology-picker">
+          @for (technology of technologies(); track technology.id) {
+            <label><input type="checkbox" [checked]="selectedTechnologies().has(technology.id)" (change)="toggleTechnology(currentProjectId(), technology.id, $any($event.target).checked)" />{{ technology.label }}</label>
+          }
+        </div>
+        <p>Para criar ou editar uma habilidade, use o catálogo compartilhado no Gerenciador de mídias.</p>
+        <a routerLink="/admin/media">Gerenciar catálogo de habilidades</a>
+      </section>
+      <section>
+        <h2>Listas do detalhe</h2>
+        @for (list of lists(); track list.key) {
+          <label><span>{{ list.label }}</span><textarea [ngModel]="list.values.join('\n')" (blur)="saveList(list.ids, $any($event.target).value)"></textarea></label>
+        }
+      </section>
+      <p role="status">{{ autosave.status() }}</p>
+    } @else { <p>Projeto não encontrado no rascunho.</p> }
+  } @else { <p>Carregando rascunho…</p> }
+</main>

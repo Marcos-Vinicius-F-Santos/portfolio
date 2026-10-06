@@ -13,8 +13,8 @@ sem misturar dados pessoais (curriculos, textos e projetos do Joao).
 Os seguintes arquivos contem informacoes pessoais do Joao Vitor e nao devem
 ser substituidos se voce quiser manter os seus proprios dados:
 - public/curriculum-pt.pdf e public/curriculum-en.pdf
-- src/app/features/portfolio/content/portfolio-content.ts
-- src/app/features/portfolio/content/portfolio-translations.ts
+- src/app/features/portfolio/services/portfolio-content.ts (anteriormente em .../content/portfolio-content.ts)
+- src/app/features/portfolio/services/portfolio-translations.ts (anteriormente em .../content/portfolio-translations.ts)
 - src/index.html (apenas titulo e tags autor)
 - spec/03-features/ e spec/04-plano/ com sufixo -joao-vitor
 
@@ -95,10 +95,72 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
   que existam na tabela public.portfolio_admins.
 - Criar a RPC replace_portfolio_curriculum para atualizacao atomica no banco e troca de arquivo.
 
+
+[MELHORIA 6] Padronizacao Arquitetural do Frontend, Nomenclatura Canonica Angular e Migracao SCSS -> CSS
+--------------------------------------------------------------------------------
+Problema/Objetivo:
+O projeto possuia algumas inconsistencias estruturais em relacao aos padroes
+empresariais e ao Angular Style Guide oficial:
+1. Arquivos de estilos estavam como .scss, porem o codigo utilizava 100% CSS nativo
+   (custom properties / variaveis CSS), gerando sobrecarga desnecessaria de build
+   no Angular CLI e confusao sobre uso de pre-processador.
+2. Nomenclatura dos arquivos e classes estava encurtada (ex: app.ts em vez de
+   app.component.ts; admin-workspace.ts em vez de admin-workspace.component.ts).
+3. Componentes como AdminWorkspace e EditorialProjectDetail possuiam templates e
+   estilos inline extensos misturados no proprio arquivo TypeScript.
+4. O componente ProjectTechnologies estava acoplado internamente na feature portfolio,
+   embora seja um componente de apresentacao puro reutilizavel.
+5. As pastas de features misturavam paginas e servicos sem divisao clara de camadas.
+
+Arquivos configurados e alterados:
+- angular.json: configurado "schematics": { "@schematics/angular:component": { "style": "css" } }
+  e "inlineStyleLanguage": "css" tanto em "build" quanto em "test".
+- src/styles.scss -> renomeado para src/styles.css (e atualizado no angular.json).
+- Todos os arquivos *.component.scss renomeados para *.component.css, com
+  styleUrls atualizados em todos os decoradores @Component.
+- Padronizacao canonica de sufixos Angular:
+  * src/app/app.ts -> src/app/app.component.ts (classe AppComponent)
+  * admin-authentication.ts -> admin-authentication.component.ts
+  * admin-workspace.ts -> admin-workspace.component.ts
+  * content-management.ts -> content-management.component.ts
+  * media-management.ts -> media-management.component.ts
+  * visual-editor.ts -> visual-editor.component.ts
+  * editorial-project-detail.ts -> editorial-project-detail.component.ts
+  * portfolio-page.ts -> portfolio-page.component.ts
+  * project-detail.ts -> project-detail.component.ts
+- Desacoplamento de templates e estilos:
+  * AdminWorkspace agora possui admin-workspace.component.html e admin-workspace.component.css
+  * EditorialProjectDetail agora possui editorial-project-detail.component.html e editorial-project-detail.component.css
+- Nova camada Compartilhada (Shared Layer):
+  * Criado src/app/shared/components/project-technologies/ com seu .ts, .html e .css.
+- Organizacao modular por feature (Inspirada no Angular Style Guide e projetos modulares):
+  * src/app/features/portfolio/pages/ (portfolio-page, project-detail)
+  * src/app/features/portfolio/services/ (portfolio-content, adapters, validadores)
+  * src/app/features/admin/pages/ (authentication, workspace, content, media, editor, detail)
+  * src/app/features/admin/services/ (servicos e models de rascunho, midia, etc.)
+  * src/app/features/admin/directives/ (diretivas editoriais estruturadas)
+
+Como aplicar no seu repositorio (Passo a Passo sem perder seus dados):
+1. Copie as alteracoes do angular.json (troca de "scss" para "css").
+2. Se voce mantiver os mesmos componentes, renomeie os estilos para .css e atualize os
+   decorators @Component({ styleUrls: ['./nome.component.css'] }).
+3. Para adotar a divisao de pastas:
+   - Mova os servicos para a subpasta services/ de cada feature.
+   - Mova as telas para pages/.
+   - Atualize os caminhos de importacao (imports no TypeScript).
+4. ATENCAO AOS SEUS DADOS:
+   - Se for fazer git merge ou git cherry-pick, garanta que o seu arquivo de
+     conteudo pessoal (portfolio-content.ts e portfolio-translations.ts) seja mantido
+     com os seus textos e projetos! Se os arquivos forem movidos para services/,
+     basta colocar o seu conteudo dentro de src/app/features/portfolio/services/portfolio-content.ts.
+5. Rodar validacao:
+   Execute `npm test -- --watch=false` para garantir que todos os testes passem
+   e `npm run build` para validar a compilacao.
+
 --------------------------------------------------------------------------------
 [DICA DE COMPILACAO] Modificador 'override' no PublishedSnapshotContentService
 --------------------------------------------------------------------------------
-No arquivo src/app/features/portfolio/content/published-snapshot-content.service.ts
+No arquivo src/app/features/portfolio/services/published-snapshot-content.service.ts
 linha 46, o metodo "async listSectionOrder()" sobrescreve o metodo da classe base.
 Para evitar o erro TS4114 quando a flag "noImplicitOverride" estiver ativada,
 adicione a palavra-chave "override":

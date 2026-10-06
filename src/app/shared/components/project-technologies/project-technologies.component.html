@@ -1,0 +1,16 @@
+<ul>
+  @for (technology of technologies(); track $index) {
+    <li>
+      @if (icon(technology); as url) {
+        @if (!failed().includes(url)) {
+          <img [src]="url" alt="" loading="lazy" (error)="hide(url)" />
+        } @else {
+          <span class="symbol" aria-hidden="true">&lt;/&gt;</span>
+        }
+      } @else {
+        <span class="symbol" aria-hidden="true">&lt;/&gt;</span>
+      }
+      <span>{{ technology }}</span>
+    </li>
+  }
+</ul>
