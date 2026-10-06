@@ -18,7 +18,9 @@ pular fases. Nenhuma tarefa está concluída antes da implementação e da verif
 
 - [x] T-002 [FR-001] Criar o novo projeto Supabase e registrar as configurações por ambiente.
   - Arquivos/módulos: `src/app/core/config/` e documentação sem valores reais.
-  - Verificação: `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` são lidas por ambiente; nenhum token, senha ou `service_role` aparece no código, diff ou frontend.
+  - Verificação: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`/`SUPABASE_ANON_KEY` e
+    `SUPABASE_ADMIN_USER_ID` são lidas por ambiente; nenhum token, senha ou `service_role`
+    aparece no código, diff ou frontend.
 
 - [x] T-003 [FR-001, FR-008] Confirmar versões compatíveis, adicionar o cliente Supabase com versão fixada e preparar a estrutura local.
   - Arquivos/módulos: `package.json`, `package-lock.json`, `src/app/core/supabase/` e `supabase/`.

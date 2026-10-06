@@ -429,6 +429,19 @@ export class PortfolioContentService {
     }
   }
 
+  async listSectionOrder(): Promise<string[]> {
+    return [
+      'presentation-section',
+      'about-section',
+      'results-section',
+      'experiences-section',
+      'projects-section',
+      'skills-section',
+      'education-section',
+      'contact-section',
+    ];
+  }
+
   private async getProjectTranslations(
     client: SupabaseClient,
     ids: string[],
