@@ -929,7 +929,8 @@
       "parentId": "languages-runtime",
       "position": 1,
       "data": {
-        "technologyId": "python"
+        "technologyId": "python",
+        "iconMediaId": "asset-python"
       }
     },
     "skill-java": {
@@ -946,7 +947,8 @@
       "parentId": "languages-runtime",
       "position": 3,
       "data": {
-        "technologyId": "php"
+        "technologyId": "php",
+        "iconMediaId": "asset-php"
       }
     },
     "skill-javascript": {
@@ -963,7 +965,8 @@
       "parentId": "languages-runtime",
       "position": 5,
       "data": {
-        "technologyId": "dart"
+        "technologyId": "dart",
+        "iconMediaId": "asset-dart"
       }
     },
     "corporate-integrations": {
@@ -976,7 +979,8 @@
       "parentId": "corporate-integrations",
       "position": 0,
       "data": {
-        "technologyId": "fastapi"
+        "technologyId": "fastapi",
+        "iconMediaId": "asset-fastapi"
       }
     },
     "skill-spring-boot": {
@@ -984,7 +988,8 @@
       "parentId": "corporate-integrations",
       "position": 1,
       "data": {
-        "technologyId": "spring-boot"
+        "technologyId": "spring-boot",
+        "iconMediaId": "asset-spring-boot"
       }
     },
     "skill-laravel": {
@@ -992,7 +997,8 @@
       "parentId": "corporate-integrations",
       "position": 2,
       "data": {
-        "technologyId": "laravel"
+        "technologyId": "laravel",
+        "iconMediaId": "asset-laravel"
       }
     },
     "skill-rest-apis": {
@@ -1009,7 +1015,8 @@
       "parentId": "corporate-integrations",
       "position": 4,
       "data": {
-        "technologyId": "jsf"
+        "technologyId": "jsf",
+        "iconMediaId": "asset-jsf"
       }
     },
     "frontend": {
@@ -1022,7 +1029,8 @@
       "parentId": "frontend",
       "position": 0,
       "data": {
-        "technologyId": "angular"
+        "technologyId": "angular",
+        "iconMediaId": "asset-angular"
       }
     },
     "skill-flutter": {
@@ -1030,7 +1038,8 @@
       "parentId": "frontend",
       "position": 1,
       "data": {
-        "technologyId": "flutter"
+        "technologyId": "flutter",
+        "iconMediaId": "asset-flutter"
       }
     },
     "skill-html": {
@@ -1079,7 +1088,8 @@
       "parentId": "devops-observability",
       "position": 1,
       "data": {
-        "technologyId": "gradle"
+        "technologyId": "gradle",
+        "iconMediaId": "asset-gradle"
       }
     },
     "skill-maven": {
@@ -1087,7 +1097,8 @@
       "parentId": "devops-observability",
       "position": 2,
       "data": {
-        "technologyId": "maven"
+        "technologyId": "maven",
+        "iconMediaId": "asset-maven"
       }
     },
     "skill-grafana": {
@@ -1118,7 +1129,8 @@
       "parentId": "databases",
       "position": 1,
       "data": {
-        "technologyId": "supabase"
+        "technologyId": "supabase",
+        "iconMediaId": "asset-supabase"
       }
     },
     "skill-mysql": {
@@ -1135,7 +1147,8 @@
       "parentId": "databases",
       "position": 3,
       "data": {
-        "technologyId": "oracle-database"
+        "technologyId": "oracle-database",
+        "iconMediaId": "asset-oracle-database"
       }
     },
     "version-control": {
@@ -1166,7 +1179,8 @@
       "parentId": "version-control",
       "position": 2,
       "data": {
-        "technologyId": "gitlab"
+        "technologyId": "gitlab",
+        "iconMediaId": "asset-gitlab"
       }
     },
     "skill-gitkraken": {
@@ -1174,7 +1188,8 @@
       "parentId": "version-control",
       "position": 3,
       "data": {
-        "technologyId": "gitkraken"
+        "technologyId": "gitkraken",
+        "iconMediaId": "asset-gitkraken"
       }
     },
     "skill-opencv": {
@@ -1182,7 +1197,8 @@
       "parentId": "version-control",
       "position": 4,
       "data": {
-        "technologyId": "opencv"
+        "technologyId": "opencv",
+        "iconMediaId": "asset-opencv"
       }
     },
     "skill-yolov8": {
@@ -1190,7 +1206,8 @@
       "parentId": "version-control",
       "position": 5,
       "data": {
-        "technologyId": "yolov8"
+        "technologyId": "yolov8",
+        "iconMediaId": "asset-yolov8"
       }
     },
     "computer-science": {
@@ -2290,40 +2307,40 @@
       },
       "computer-science": {
         "name": "Computer Science",
-        "institution": "Instituto Federal de Minas Gerais (IFMG)"
+        "institution": "Federal Institute of Minas Gerais (IFMG)"
       },
       "computer-science-competencies-1": {
-        "text": "Visão Computacional"
+        "text": "Computer Vision"
       },
       "computer-science-competencies-2": {
-        "text": "Inteligência Artificial"
+        "text": "Artificial Intelligence"
       },
       "computer-science-competencies-3": {
-        "text": "Engenharia de Software"
+        "text": "Software Engineering"
       },
       "computer-science-competencies-4": {
-        "text": "Algoritmos e Estruturas de Dados"
+        "text": "Algorithms and Data Structures"
       },
       "computer-science-competencies-5": {
-        "text": "Redes de Computadores"
+        "text": "Computer Networks"
       },
       "computer-science-competencies-6": {
-        "text": "Bancos de Dados Relacionais"
+        "text": "Relational Databases"
       },
       "computer-science-competencies-7": {
-        "text": "Sistemas Distribuídos"
+        "text": "Distributed Systems"
       },
       "computer-science-competencies-8": {
-        "text": "Programação Web e Mobile"
+        "text": "Web and Mobile Development"
       },
       "computer-science-studiedContent-1": {
-        "text": "Bacharelado em Ciência da Computação"
+        "text": "Bachelor's Degree in Computer Science"
       },
       "computer-science-studiedContent-2": {
-        "text": "Trabalho de Conclusão de Curso em Visão Computacional para Análise e Contagem de Golpes em Lutas de Boxe"
+        "text": "Bachelor's Thesis in Computer Vision for Boxing Matches Strike Detection and Counting"
       },
       "computer-science-studiedContent-3": {
-        "text": "Projetos de extensão e inovação tecnológica com automação, OCR e desenvolvimento web/mobile"
+        "text": "Extension and technological innovation projects in automation, OCR, and web/mobile development"
       },
       "linkedin": {
         "label": "LinkedIn"
@@ -2342,6 +2359,7 @@
   "technologies": {
     "angular": {
       "label": "Angular",
+      "iconMediaId": "asset-angular",
       "aliases": [
         "Angular"
       ]
@@ -2355,12 +2373,14 @@
     },
     "python": {
       "label": "Python",
+      "iconMediaId": "asset-python",
       "aliases": [
         "Python"
       ]
     },
     "fastapi": {
       "label": "FastAPI",
+      "iconMediaId": "asset-fastapi",
       "aliases": [
         "FastAPI"
       ]
@@ -2374,7 +2394,8 @@
     },
     "redis": {
       "label": "Redis",
-      "aliases": []
+      "aliases": [],
+      "iconMediaId": "asset-redis"
     },
     "docker": {
       "label": "Docker",
@@ -2385,22 +2406,26 @@
     },
     "opencv": {
       "label": "OpenCV",
+      "iconMediaId": "asset-opencv",
       "aliases": [
         "OpenCV"
       ]
     },
     "yolov8": {
       "label": "YOLOv8",
+      "iconMediaId": "asset-yolov8",
       "aliases": [
         "YOLOv8"
       ]
     },
     "mediapipe": {
       "label": "MediaPipe",
-      "aliases": []
+      "aliases": [],
+      "iconMediaId": "asset-mediapipe"
     },
     "flutter": {
       "label": "Flutter",
+      "iconMediaId": "asset-flutter",
       "aliases": [
         "Flutter"
       ]
@@ -2419,6 +2444,7 @@
     },
     "php": {
       "label": "PHP",
+      "iconMediaId": "asset-php",
       "aliases": []
     },
     "javascript": {
@@ -2428,18 +2454,22 @@
     },
     "dart": {
       "label": "Dart",
+      "iconMediaId": "asset-dart",
       "aliases": []
     },
     "spring-boot": {
       "label": "Spring Boot",
+      "iconMediaId": "asset-spring-boot",
       "aliases": []
     },
     "laravel": {
       "label": "Laravel",
+      "iconMediaId": "asset-laravel",
       "aliases": []
     },
     "jsf": {
       "label": "JSF",
+      "iconMediaId": "asset-jsf",
       "aliases": []
     },
     "html": {
@@ -2459,10 +2489,12 @@
     },
     "gradle": {
       "label": "Gradle",
+      "iconMediaId": "asset-gradle",
       "aliases": []
     },
     "maven": {
       "label": "Maven",
+      "iconMediaId": "asset-maven",
       "aliases": []
     },
     "grafana": {
@@ -2472,6 +2504,7 @@
     },
     "supabase": {
       "label": "Supabase",
+      "iconMediaId": "asset-supabase",
       "aliases": []
     },
     "mysql": {
@@ -2481,6 +2514,7 @@
     },
     "oracle-database": {
       "label": "Oracle Database",
+      "iconMediaId": "asset-oracle-database",
       "aliases": []
     },
     "git": {
@@ -2495,10 +2529,12 @@
     },
     "gitlab": {
       "label": "GitLab",
+      "iconMediaId": "asset-gitlab",
       "aliases": []
     },
     "gitkraken": {
       "label": "GitKraken",
+      "iconMediaId": "asset-gitkraken",
       "aliases": []
     }
   },
@@ -2509,11 +2545,23 @@
       "bytes": 619,
       "assetPath": "/assets/skills/typescript.png"
     },
+    "asset-python": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 2300,
+      "assetPath": "/assets/skills/python.svg"
+    },
     "asset-java": {
       "source": "bundled",
       "mime": "image/png",
       "bytes": 1860,
       "assetPath": "/assets/skills/java.png"
+    },
+    "asset-php": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 4624,
+      "assetPath": "/assets/skills/php.svg"
     },
     "asset-javascript": {
       "source": "bundled",
@@ -2521,11 +2569,53 @@
       "bytes": 618,
       "assetPath": "/assets/skills/javascript.png"
     },
+    "asset-dart": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 710,
+      "assetPath": "/assets/skills/dart.svg"
+    },
+    "asset-fastapi": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 3065,
+      "assetPath": "/assets/skills/fastapi.svg"
+    },
+    "asset-spring-boot": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 944,
+      "assetPath": "/assets/technologies/spring.svg"
+    },
+    "asset-laravel": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 2339,
+      "assetPath": "/assets/skills/laravel.svg"
+    },
     "asset-rest-apis": {
       "source": "bundled",
       "mime": "image/png",
       "bytes": 771,
       "assetPath": "/assets/skills/rest-apis.png"
+    },
+    "asset-jsf": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1080,
+      "assetPath": "/assets/skills/jsf.svg"
+    },
+    "asset-angular": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1115,
+      "assetPath": "/assets/skills/angular.svg"
+    },
+    "asset-flutter": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 646,
+      "assetPath": "/assets/skills/flutter.svg"
     },
     "asset-html": {
       "source": "bundled",
@@ -2551,6 +2641,18 @@
       "bytes": 678,
       "assetPath": "/assets/skills/docker.png"
     },
+    "asset-gradle": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1134,
+      "assetPath": "/assets/skills/gradle.svg"
+    },
+    "asset-maven": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 21634,
+      "assetPath": "/assets/skills/maven.svg"
+    },
     "asset-grafana": {
       "source": "bundled",
       "mime": "image/png",
@@ -2563,11 +2665,23 @@
       "bytes": 1902,
       "assetPath": "/assets/skills/postgresql.png"
     },
+    "asset-supabase": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1067,
+      "assetPath": "/assets/skills/supabase.svg"
+    },
     "asset-mysql": {
       "source": "bundled",
       "mime": "image/png",
       "bytes": 1188,
       "assetPath": "/assets/skills/mysql.png"
+    },
+    "asset-oracle-database": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1244,
+      "assetPath": "/assets/skills/oracle.svg"
     },
     "asset-git": {
       "source": "bundled",
@@ -2580,6 +2694,42 @@
       "mime": "image/png",
       "bytes": 1028,
       "assetPath": "/assets/skills/github.png"
+    },
+    "asset-gitlab": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1151,
+      "assetPath": "/assets/skills/gitlab.svg"
+    },
+    "asset-gitkraken": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1360,
+      "assetPath": "/assets/skills/gitkraken.svg"
+    },
+    "asset-opencv": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1238,
+      "assetPath": "/assets/skills/opencv.svg"
+    },
+    "asset-yolov8": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 530,
+      "assetPath": "/assets/skills/yolov8.svg"
+    },
+    "asset-redis": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1728,
+      "assetPath": "/assets/skills/redis.svg"
+    },
+    "asset-mediapipe": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 957,
+      "assetPath": "/assets/skills/mediapipe.svg"
     }
   }
 }

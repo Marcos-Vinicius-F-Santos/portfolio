@@ -28,6 +28,25 @@ const FALLBACK_SKILL_ICON_URLS = {
   MongoDB: '/assets/skills/mongodb.png',
   Git: '/assets/skills/git.png',
   GitHub: '/assets/skills/github.png',
+  Python: '/assets/skills/python.svg',
+  OpenCV: '/assets/skills/opencv.svg',
+  YOLOv8: '/assets/skills/yolov8.svg',
+  MediaPipe: '/assets/skills/mediapipe.svg',
+  Flutter: '/assets/skills/flutter.svg',
+  Angular: '/assets/skills/angular.svg',
+  FastAPI: '/assets/skills/fastapi.svg',
+  Laravel: '/assets/skills/laravel.svg',
+  Dart: '/assets/skills/dart.svg',
+  PHP: '/assets/skills/php.svg',
+  JSF: '/assets/skills/jsf.svg',
+  Supabase: '/assets/skills/supabase.svg',
+  'Oracle Database': '/assets/skills/oracle.svg',
+  Redis: '/assets/skills/redis.svg',
+  GitLab: '/assets/skills/gitlab.svg',
+  GitKraken: '/assets/skills/gitkraken.svg',
+  Gradle: '/assets/skills/gradle.svg',
+  Maven: '/assets/skills/maven.svg',
+  'Spring Boot': '/assets/technologies/spring.svg',
 };
 
 const root = resolve(import.meta.dirname, '..');
@@ -486,7 +505,7 @@ for (const [categoryPosition, category] of PORTFOLIO_SKILL_CATEGORIES.entries())
       }
       media[mediaId] = {
         source: 'bundled',
-        mime: 'image/png',
+        mime: iconUrl.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
         bytes,
         assetPath: iconUrl,
       };
@@ -494,7 +513,52 @@ for (const [categoryPosition, category] of PORTFOLIO_SKILL_CATEGORIES.entries())
   }
 }
 
+for (const [techId, tech] of Object.entries(technologies)) {
+  if (!tech.iconMediaId) {
+    const iconUrl = FALLBACK_SKILL_ICON_URLS[tech.label] || FALLBACK_SKILL_ICON_URLS[techId];
+    if (iconUrl) {
+      const mediaId = `asset-${techId}`;
+      tech.iconMediaId = mediaId;
+      if (!media[mediaId]) {
+        let bytes = 1000;
+        try {
+          const filePath = resolve(root, 'src', iconUrl.replace(/^\//, ''));
+          const s = await stat(filePath);
+          bytes = s.size;
+        } catch {
+          // use fallback bytes
+        }
+        media[mediaId] = {
+          source: 'bundled',
+          mime: iconUrl.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
+          bytes,
+          assetPath: iconUrl,
+        };
+      }
+    }
+  }
+}
+
 // 5. Formação Acadêmica
+const ENGLISH_ACADEMIC = {
+  institution: 'Federal Institute of Minas Gerais (IFMG)',
+  competencies: [
+    'Computer Vision',
+    'Artificial Intelligence',
+    'Software Engineering',
+    'Algorithms and Data Structures',
+    'Computer Networks',
+    'Relational Databases',
+    'Distributed Systems',
+    'Web and Mobile Development',
+  ],
+  studiedContent: [
+    "Bachelor's Degree in Computer Science",
+    "Bachelor's Thesis in Computer Vision for Boxing Matches Strike Detection and Counting",
+    'Extension and technological innovation projects in automation, OCR, and web/mobile development',
+  ],
+};
+
 PORTFOLIO_ACADEMIC_ENTRIES.forEach((item, position) => {
   add(
     item.id,
@@ -502,9 +566,13 @@ PORTFOLIO_ACADEMIC_ENTRIES.forEach((item, position) => {
     position,
     { startDate: item.startDate, endDate: item.endDate, isCurrent: item.isCurrent },
     { name: ORIGINAL_COPY[item.nameKey], institution: item.institution },
-    { name: ENGLISH_COPY[item.nameKey], institution: item.institution },
+    { name: ENGLISH_COPY[item.nameKey], institution: ENGLISH_ACADEMIC.institution },
   );
-  addLists(item.id, { competencies: item.competencies, studiedContent: item.studiedContent });
+  addLists(
+    item.id,
+    { competencies: item.competencies, studiedContent: item.studiedContent },
+    { competencies: ENGLISH_ACADEMIC.competencies, studiedContent: ENGLISH_ACADEMIC.studiedContent },
+  );
 });
 
 // 6. Contatos

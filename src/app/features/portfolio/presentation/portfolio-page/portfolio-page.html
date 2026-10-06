@@ -168,7 +168,7 @@
                   </p>
                 </header>
                 <div class="experience-details">
-                  <div class="experience-block">
+                  <div class="experience-block experience-block--context">
                     <h4>
                       <ng-container
                         *ngTemplateOutlet="localized; context: { key: 'experienceContextLabel' }"
@@ -182,7 +182,7 @@
                       {{ experience.context }}
                     </p>
                   </div>
-                  <div class="experience-block">
+                  <div class="experience-block experience-block--responsibilities">
                     <h4>
                       <ng-container
                         *ngTemplateOutlet="
@@ -213,7 +213,7 @@
                       }
                     </ul>
                   </div>
-                  <div class="experience-block">
+                  <div class="experience-block experience-block--decisions">
                     <h4>
                       <ng-container
                         *ngTemplateOutlet="
@@ -244,7 +244,7 @@
                       }
                     </ul>
                   </div>
-                  <div class="experience-block">
+                  <div class="experience-block experience-block--results">
                     <h4>
                       <ng-container
                         *ngTemplateOutlet="localized; context: { key: 'experienceResultsLabel' }"

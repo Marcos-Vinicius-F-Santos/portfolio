@@ -135,8 +135,8 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
     expect(skills.get('Java')).toBe('/assets/skills/java.png');
     expect(skills.get('REST APIs')).toBe('/assets/skills/rest-apis.png');
     expect(skills.get('GitHub')).toBe('/assets/skills/github.png');
-    expect(skills.get('Python')).toBeUndefined();
-    expect(skills.get('GitLab')).toBeUndefined();
+    expect(skills.get('Python')).toBe('/assets/skills/python.svg');
+    expect(skills.get('GitLab')).toBe('/assets/skills/gitlab.svg');
   });
 
   it('contains the approved contact destinations and bilingual labels', () => {

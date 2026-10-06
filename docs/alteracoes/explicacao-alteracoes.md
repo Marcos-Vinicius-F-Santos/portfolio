@@ -85,3 +85,38 @@ Estas melhorias são agnósticas de dados pessoais e corrigem problemas funciona
 
 - **Nenhum arquivo `.env` ou credencial privada foi versionado.** O `.gitignore` ignora `.env*` e `/public/runtime-config.js`.
 - Nenhum script SQL solto foi deixado poluindo a raiz do repositório.
+
+---
+
+## 4. Refinamento Visual de Experiências, Correção de Largura de Texto e Ícones Oficiais (Outubro/2026)
+
+Esta iteração atendeu aos refinamentos ergonômicos e visuais de apresentação pública e dados editoriais:
+
+### A. Limites Visuais e Quadrantes Contínuos nos Cards de Experiência
+- **Arquivo**: `src/app/features/portfolio/presentation/portfolio-page/portfolio-page.html` e `portfolio-page.scss`
+- **Problema**: Os blocos de experiência eram exibidos com divisórias tracejadas e quebradas no centro devido a gaps no grid, e sem linhas contínuas de ponta a ponta.
+- **Solução**:
+  - Reestruturação do grid em 4 quadrantes editoriais:
+    - **Superior Esquerdo**: Contexto
+    - **Inferior Esquerdo**: Responsabilidades
+    - **Superior Direito**: Decisões Técnicas
+    - **Inferior Direito**: Resultados
+  - Linha divisória horizontal contínua e sólida (`1px solid var(--line)`) de uma extremidade à outra do card, sem quebras ou traços.
+  - Linha divisória vertical contínua e sólida (`1px solid var(--line)`) da base do cabeçalho até o final do card, formando uma cruz perfeita (`+`) contínua com os quadrantes.
+  - No mobile (<= 760px), colapso fluido para 1 coluna vertical com bordas inferiores sólidas contínuas em cada quadrante.
+
+### B. Correção de Largura de Textos nos Containers (`max-width`)
+- **Arquivo**: `src/app/features/portfolio/presentation/portfolio-page/portfolio-page.scss`
+- **Problema**: Textos de parágrafos como "Conteúdos estudados" (Formação Acadêmica) e "Contexto" (Experiências) quebravam prematuramente na metade da coluna devido a um seletor genérico `section p:last-child { max-width: 24rem; }`.
+- **Solução**:
+  - Remoção da restrição de 24rem e escopo do seletor restrito a parágrafos diretos de seções (`section > p`), permitindo que todos os textos internos de cards e colunas fluam livremente até o limite dos seus respectivos containers.
+
+### C. Inclusão de Ícones SVG Vetoriais Oficiais para Tecnologias
+- **Arquivos criados**:
+  - `src/assets/skills/`: `python.svg`, `opencv.svg`, `yolo.svg`, `yolov8.svg`, `mediapipe.svg`, `flutter.svg`, `angular.svg`, `fastapi.svg`, `laravel.svg`, `dart.svg`, `php.svg`, `jsf.svg`, `supabase.svg`, `oracle.svg`, `redis.svg`, `gitlab.svg`, `gitkraken.svg`, `gradle.svg`, `maven.svg`.
+- **Arquivos atualizados**:
+  - `src/app/features/portfolio/content/portfolio-content.ts`: `FALLBACK_SKILL_ICON_URLS` populado com todas as tecnologias do catálogo.
+  - `src/app/features/portfolio/content/technology-icons.ts`: `DIRECT_ICON_URLS` atualizado e aliases redundantes limpos.
+  - `scripts/generate-joao-editorial-snapshot.mjs`: suporte a mime `image/svg+xml` e sincronização do snapshot editorial (`spec/05-verificacao/ativacao-painel-admin-joao-vitor/initial-editorial-snapshot-joao-v1.json`).
+  - `src/app/features/portfolio/content/portfolio-content.spec.ts`: asserções de teste atualizadas para os novos ícones.
+
