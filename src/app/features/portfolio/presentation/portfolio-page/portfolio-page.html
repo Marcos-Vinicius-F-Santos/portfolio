@@ -472,7 +472,10 @@
                 </span>
               </a>
             }
-            @if (curriculum(); as currentCurriculum) {
+          </div>
+          <app-contact-panel [copy]="copy()" />
+          @if (curriculum(); as currentCurriculum) {
+            <div class="contact-grid contact-curriculum-grid">
               <a
                 class="contact-link"
                 [href]="currentCurriculum.publicUrl"
@@ -486,8 +489,8 @@
                   />
                 </span>
               </a>
-            }
-          </div>
+            </div>
+          }
         } @else {
           <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
         }

@@ -1,5 +1,6 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { ProjectTechnologies } from '../projects/project-technologies';
+import { ContactPanel } from '../contact-panel/contact-panel';
 import { technologyIcon } from '../../content/technology-icons';
 import {
   afterNextRender,
@@ -81,7 +82,7 @@ const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [NgTemplateOutlet, ProjectTechnologies],
+  imports: [NgTemplateOutlet, ProjectTechnologies, ContactPanel],
   templateUrl: './portfolio-page.html',
   styleUrl: './portfolio-page.scss',
 })

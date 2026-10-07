@@ -67,7 +67,7 @@ describe('PortfolioPage', () => {
 
   it('renders the presentation, about, results, and existing sections with stable navigation targets', async () => {
     const { fixture, element } = await render();
-    const sections = [...element.querySelectorAll('section')];
+    const sections = [...element.querySelectorAll('.sections > section')];
     for (const language of ['en', 'pt-BR'] as const) {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
@@ -77,8 +77,8 @@ describe('PortfolioPage', () => {
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
       expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
-      expect([...element.querySelectorAll('section')]).toEqual(sections);
-      expect([...element.querySelectorAll('section')].map((section) => section.id)).toEqual([
+      expect([...element.querySelectorAll('.sections > section')]).toEqual(sections);
+      expect([...element.querySelectorAll('.sections > section')].map((section) => section.id)).toEqual([
         'sobre-mim',
         'stack-tecnica',
         'experiencias',
@@ -137,7 +137,7 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Python com Spark');
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Design Gráfico');
     expect(element.querySelector('#contato')).toBeTruthy();
-    expect([...element.querySelectorAll('section')].at(-1)?.id).toBe('contato');
+    expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
       (element.querySelector('[data-testid="contact-linkedin"]') as HTMLAnchorElement).href,
     ).toBe('https://www.linkedin.com/in/marcos-santos-b9b544214/');
@@ -153,10 +153,20 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('[data-testid="contact-links"]')?.textContent).toContain(
       'LinkedIn',
     );
+    expect(element.querySelector('[data-testid="contact-panel"]')).toBeTruthy();
+    expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
+      'Fale comigo',
+    );
     expect(
       element.querySelectorAll('[data-testid="compact-contact-links"] .compact-contact-link'),
     ).toHaveLength(4);
     expect(element.querySelectorAll('.section-index')).toHaveLength(0);
+    const contactContent = element.querySelector('#contato')!;
+    expect(
+      [...contactContent.querySelectorAll('[data-testid="contact-links"], [data-testid="contact-panel"], [data-testid="contact-curriculum"]')].map(
+        (node) => node.getAttribute('data-testid'),
+      ),
+    ).toEqual(['contact-links', 'contact-panel', 'contact-curriculum']);
     expect(
       (element.querySelector('[data-testid="contact-curriculum"]') as HTMLAnchorElement).href,
     ).toBe('https://storage.test/curriculum-pt-BR.pdf');
@@ -175,6 +185,12 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Skills');
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Data Science');
+    expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
+      'Get in touch',
+    );
+    expect(
+      (element.querySelector('#contact-panel-name') as HTMLInputElement).placeholder,
+    ).toBe('Your name');
     expect(
       (element.querySelector('[data-testid="contact-curriculum"]') as HTMLAnchorElement).href,
     ).toBe('https://storage.test/curriculum-en.pdf');

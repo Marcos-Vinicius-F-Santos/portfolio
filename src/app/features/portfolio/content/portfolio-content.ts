@@ -42,6 +42,21 @@ export interface PortfolioCopy {
   educationCurrentLabel: string;
   contactTitle: string;
   contactBody: string;
+  contactPanelTitle: string;
+  contactPanelBody: string;
+  contactNameLabel: string;
+  contactNamePlaceholder: string;
+  contactEmailFieldLabel: string;
+  contactEmailPlaceholder: string;
+  contactMessageLabel: string;
+  contactMessagePlaceholder: string;
+  contactWhatsAppActionLabel: string;
+  contactEmailActionLabel: string;
+  contactEmailSubject: string;
+  contactNameRequiredMessage: string;
+  contactEmailRequiredMessage: string;
+  contactEmailInvalidMessage: string;
+  contactMessageRequiredMessage: string;
   contactLinkedinLabel: string;
   contactGithubLabel: string;
   contactEmailLabel: string;
@@ -296,6 +311,21 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   educationCurrentLabel: 'Em andamento',
   contactTitle: 'Contato',
   contactBody: 'Canais profissionais e currículos.',
+  contactPanelTitle: 'Fale comigo',
+  contactPanelBody: 'Envie uma mensagem pelo canal que preferir.',
+  contactNameLabel: 'Nome',
+  contactNamePlaceholder: 'Seu nome',
+  contactEmailFieldLabel: 'E-mail',
+  contactEmailPlaceholder: 'seu@email.com',
+  contactMessageLabel: 'Mensagem',
+  contactMessagePlaceholder: 'Escreva sua mensagem...',
+  contactWhatsAppActionLabel: 'Enviar pelo WhatsApp',
+  contactEmailActionLabel: 'Enviar por e-mail',
+  contactEmailSubject: '',
+  contactNameRequiredMessage: 'Informe seu nome.',
+  contactEmailRequiredMessage: 'Informe seu e-mail.',
+  contactEmailInvalidMessage: 'Informe um e-mail válido.',
+  contactMessageRequiredMessage: 'Escreva uma mensagem.',
   contactLinkedinLabel: 'LinkedIn',
   contactGithubLabel: 'GitHub',
   contactEmailLabel: 'E-mail',

@@ -1,0 +1,84 @@
+:host {
+  display: block;
+}
+
+.contact-panel {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(17, 19, 15, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.contact-panel__header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+h3,
+p {
+  margin: 0;
+}
+
+.contact-panel__fields {
+  display: grid;
+  gap: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+label span {
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(17, 19, 15, 0.28);
+  border-radius: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.contact-panel__error {
+  color: #9a241f;
+  font-size: 0.9rem;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.contact-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: #11130f;
+  cursor: pointer;
+}
+
+@media (max-width: 540px) {
+  .contact-panel {
+    padding: 1rem;
+  }
+
+  .contact-panel__actions,
+  button {
+    width: 100%;
+  }
+}
