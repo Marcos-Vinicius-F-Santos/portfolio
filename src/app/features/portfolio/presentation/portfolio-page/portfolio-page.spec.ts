@@ -166,7 +166,8 @@ describe('PortfolioPage', () => {
       [...contactContent.querySelectorAll('[data-testid="contact-links"], [data-testid="contact-panel"], [data-testid="contact-curriculum"]')].map(
         (node) => node.getAttribute('data-testid'),
       ),
-    ).toEqual(['contact-links', 'contact-panel', 'contact-curriculum']);
+    ).toEqual(['contact-links', 'contact-curriculum', 'contact-panel']);
+    expect(element.querySelector('app-contact-panel.contact-panel-layout')).toBeTruthy();
     expect(
       (element.querySelector('[data-testid="contact-curriculum"]') as HTMLAnchorElement).href,
     ).toBe('https://storage.test/curriculum-pt-BR.pdf');

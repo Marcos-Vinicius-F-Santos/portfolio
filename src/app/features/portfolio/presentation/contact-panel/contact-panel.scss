@@ -2,6 +2,11 @@
   display: block;
 }
 
+:host(.contact-panel-layout) {
+  width: 50%;
+  margin-top: 3rem;
+}
+
 .contact-panel {
   display: grid;
   gap: 1.5rem;
@@ -80,5 +85,12 @@ button {
   .contact-panel__actions,
   button {
     width: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  :host(.contact-panel-layout) {
+    width: 100%;
+    margin-top: 2rem;
   }
 }
