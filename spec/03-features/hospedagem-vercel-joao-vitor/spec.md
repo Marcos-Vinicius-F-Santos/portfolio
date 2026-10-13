@@ -80,3 +80,4 @@ Configurar e disponibilizar a hospedagem oficial do portfólio profissional de *
 - **Dado** o site em produção
 - **Quando** o visitante solicitar o download do currículo em português ou inglês
 - **Então** os arquivos `curriculum-pt.pdf` e `curriculum-en.pdf` devem ser servidos integralmente com status HTTP 200.
+

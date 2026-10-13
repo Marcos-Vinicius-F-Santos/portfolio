@@ -29,3 +29,4 @@ Tarefas: [Lista de Tarefas](../../04-plano/hospedagem-vercel-joao-vitor/tarefas.
 - [x] **Compilação de Produção**: `npm run build` gera o pacote em `dist/portfolio/browser` sem falhas.
 - [x] **Zero Regressão**: Todas as features pré-existentes (traduções PT/EN, visualização de projetos, editor administrativo, autenticação) operam conforme o esperado.
 - [x] **Rastreabilidade**: Documentos do SDD (`spec.md`, `plano.md`, `tarefas.md`, `deploy.md`) alinhados.
+

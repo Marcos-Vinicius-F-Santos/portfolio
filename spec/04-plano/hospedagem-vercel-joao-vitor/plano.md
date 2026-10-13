@@ -43,3 +43,4 @@ Este plano define as etapas necessárias para configurar, validar e realizar o d
 - Publicar a branch `master` no repositório remoto `joaovitordf/portfolio` (`git push origin master`).
 - Vincular o projeto na Vercel configurando as variáveis de ambiente necessárias (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_ADMIN_USER_ID`).
 - Validar as URLs públicas (raiz `/`, rotas de detalhe de projeto `/projetos/:id`, painel de contato e área administrativa `/admin`).
+

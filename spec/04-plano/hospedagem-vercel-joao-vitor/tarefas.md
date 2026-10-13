@@ -39,3 +39,4 @@ Plano: [Plano de Implementação](./plano.md)
   - Validar carregamento da home `/`.
   - Validar recarregamento (F5) em `/admin` e `/projetos/:id`.
   - Validar funcionamento do painel de contato e download dos currículos.
+

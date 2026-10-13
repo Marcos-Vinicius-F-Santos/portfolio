@@ -147,3 +147,4 @@ Em caso de qualquer anomalia identificada pós-deploy:
 2. Localize a implantação anterior que estava estável.
 3. Clique nos três pontinhos (`...`) ao lado dela e selecione **"Instant Rollback"** (ou **"Promote to Production"**).
 4. Em menos de 2 segundos a versão anterior voltará a responder em produção.
+
