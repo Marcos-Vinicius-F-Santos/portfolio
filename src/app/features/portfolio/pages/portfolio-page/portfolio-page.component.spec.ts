@@ -6,9 +6,15 @@ import {
   PortfolioLanguageService,
 } from '../../services/portfolio-language.service';
 import { TRANSLATION_SOURCE } from '../../services/portfolio-translations';
-import { ORIGINAL_COPY, type PortfolioCopy } from '../../services/portfolio-content';
+import {
+  ORIGINAL_COPY,
+  PORTFOLIO_ACADEMIC_ENTRIES,
+  PORTFOLIO_CONTACT_LINKS,
+  type PortfolioCopy,
+} from '../../services/portfolio-content';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import type {
+  PortfolioContactLink,
   PortfolioExperience,
   PortfolioFile,
   PortfolioProject,
@@ -134,21 +140,25 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('#formacao-academica')).toBeTruthy();
     expect(element.querySelectorAll('.academic-card')).toHaveLength(1);
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Período');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Visão Computacional');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Ciência da Computação');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain(
+      PORTFOLIO_ACADEMIC_ENTRIES[0].competencies?.[0] ?? '',
+    );
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain(
+      ORIGINAL_COPY.educationDataScience,
+    );
     expect(element.querySelector('#contato')).toBeTruthy();
     expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
       (element.querySelector('[data-testid="contact-linkedin"]') as HTMLAnchorElement).href,
-    ).toBe('https://www.linkedin.com/in/xjoaovitordf/');
+    ).toBe(PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'linkedin')?.href);
     expect(
       (element.querySelector('[data-testid="contact-github"]') as HTMLAnchorElement).href,
-    ).toBe('https://github.com/joaovitordf');
+    ).toBe(PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'github')?.href);
     expect((element.querySelector('[data-testid="contact-email"]') as HTMLAnchorElement).href).toBe(
-      'mailto:profissional.joaovitordf@gmail.com',
+      PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'email')?.href,
     );
     expect((element.querySelector('[data-testid="contact-phone"]') as HTMLAnchorElement).href).toBe(
-      'tel:+553799429018',
+      PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'phone')?.href,
     );
     expect(element.querySelector('[data-testid="contact-links"]')?.textContent).toContain(
       'LinkedIn',
@@ -349,16 +359,16 @@ describe('PortfolioPage', () => {
     expect(element.querySelectorAll('.result-card')).toHaveLength(4);
     expect(
       element.querySelector('[data-testid="professional-result-time-reduction"]')?.textContent,
-    ).toContain('85%');
+    ).toContain(ORIGINAL_COPY.resultsTimeReduction);
     expect(
       element.querySelector('[data-testid="professional-result-steps-reduction"]')?.textContent,
-    ).toContain('83,6%');
+    ).toContain(ORIGINAL_COPY.resultsStepsReduction);
     expect(
       element.querySelector('[data-testid="professional-result-users-served"]')?.textContent,
-    ).toContain('50');
+    ).toContain(ORIGINAL_COPY.resultsUsersServed);
     expect(
       element.querySelector('[data-testid="professional-result-productivity-gain"]')?.textContent,
-    ).toContain('60%');
+    ).toContain(ORIGINAL_COPY.resultsProductivityGain);
   });
 
   it('renders only the approved professional results that are available', async () => {

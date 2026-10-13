@@ -2,13 +2,13 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-admin-page-header',
-  templateUrl: './admin-page-header.html',
-  styleUrl: './admin-page-header.css',
+  templateUrl: './admin-page-header.component.html',
+  styleUrl: './admin-page-header.component.css',
 })
-export class AdminPageHeader {
+export class AdminPageHeaderComponent {
   readonly eyebrow = input('Área administrativa');
   readonly title = input.required<string>();
   readonly description = input.required<string>();
 }
 
-export { AdminPageHeader as AdminPageHeaderComponent };
+export { AdminPageHeaderComponent as AdminPageHeader };

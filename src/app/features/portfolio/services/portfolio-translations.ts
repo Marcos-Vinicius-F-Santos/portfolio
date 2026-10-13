@@ -4,14 +4,15 @@ import type { PortfolioCopy } from './portfolio-content';
 export type PortfolioTranslations = Partial<PortfolioCopy>;
 
 export const ENGLISH_COPY: PortfolioCopy = {
+  name: 'Software Engineer',
   eyebrow: 'Professional portfolio',
   presentationTitle: 'Presentation',
   intro:
-    'João Vitor Dias Fernandes is a Computer Science graduate from IFMG with hands-on experience in software engineering and web application development. Experienced in building production systems, real-time industrial monitoring platforms, and solutions involving APIs, automated data processing, and computer vision.',
+    'Software Engineer focused on systems engineering, web application development, and modern architectures. Experienced in building scalable applications, RESTful APIs, automation, and technical collaboration.',
   navigation: 'Main navigation',
   aboutTitle: 'About me',
   aboutBody:
-    'Computer Science graduate from the Federal Institute of Minas Gerais (IFMG), with hands-on experience in software engineering and web application development. Experienced in building production systems, real-time industrial monitoring platforms, and solutions involving APIs, automated data processing, and computer vision.',
+    'Technology professional with solid engineering practices, clean code architecture, performance optimization, and experience building robust web systems.',
   experienceTitle: 'Experience',
   experienceBody: 'Professional experience in software engineering, frontend and full-stack development.',
   experiencePeriodLabel: 'Period',
@@ -26,10 +27,10 @@ export const ENGLISH_COPY: PortfolioCopy = {
   skillsFrontendLabel: 'Frontend and Mobile',
   skillsDevopsObservabilityLabel: 'DevOps and tools',
   skillsDatabasesLabel: 'Databases',
-  skillsVersionControlLabel: 'Computer Vision and Version Control',
+  skillsVersionControlLabel: 'Version control and tools',
   educationTitle: 'Academic background',
-  educationBody: 'Bachelor of Science completed at Federal Institute of Minas Gerais (IFMG).',
-  educationDataScience: 'Computer Science',
+  educationBody: 'Academic education and specializations.',
+  educationDataScience: 'Computer Science & Software Engineering',
   educationAppliedStatistics: 'Applied Statistics',
   educationGraphicDesign: 'Graphic Design',
   educationInstitutionLabel: 'Institution',
@@ -65,16 +66,16 @@ export const ENGLISH_COPY: PortfolioCopy = {
   resultsTitle: 'Professional results',
   resultsTimeReductionLabel: 'Bundle optimization',
   resultsTimeReduction:
-    '85% reduction in initial application bundle size through modular architectural refactoring and lazy loading.',
+    'Application bundle size optimization and faster load times through modular architecture and lazy loading.',
   resultsStepsReductionLabel: 'Processing efficiency',
   resultsStepsReduction:
-    '83.6% reduction in total processing time in a computer vision pipeline.',
+    'Efficiency gains and operational stability across data processing workflows.',
   resultsUsersServedLabel: 'Clients served',
   resultsUsersServed:
-    'Industrial automation and computer vision platform directly impacting 50+ enterprise clients.',
+    'Development of solutions directly impacting end users and enterprise clients.',
   resultsProductivityGainLabel: 'Delivery acceleration',
   resultsProductivityGain:
-    '60% reduction in development time for new screens by creating an internal reusable component library.',
+    'Accelerated development delivery through reusable, standardized component architectures.',
   projectsTitle: 'Projects',
   professionalProjectsTitle: 'Professional projects',
   personalProjectsTitle: 'Personal projects',

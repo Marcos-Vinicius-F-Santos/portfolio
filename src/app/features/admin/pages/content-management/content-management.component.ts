@@ -15,10 +15,10 @@ import {
   LOCALES,
 } from '../../services/admin-content.models';
 import type { PortfolioProjectLink } from '../../../portfolio/services/portfolio-content.models';
-import { AdminCard } from '../../../../shared/ui/admin-card/admin-card';
-import { AdminFeedback } from '../../../../shared/ui/admin-feedback/admin-feedback';
-import { AdminPageHeader } from '../../../../shared/ui/admin-page-header/admin-page-header';
-import { AdminSectionHeader } from '../../../../shared/ui/admin-section-header/admin-section-header';
+import { AdminCardComponent } from '../../../../shared/components/admin-card/admin-card.component';
+import { AdminFeedbackComponent } from '../../../../shared/components/admin-feedback/admin-feedback.component';
+import { AdminPageHeaderComponent } from '../../../../shared/components/admin-page-header/admin-page-header.component';
+import { AdminSectionHeaderComponent } from '../../../../shared/components/admin-section-header/admin-section-header.component';
 import { AdminContentService } from '../../services/admin-content.service';
 
 const STANDARD_VALIDATION_MESSAGE = 'Campo obrigatório.';
@@ -28,10 +28,10 @@ const SAVE_SUCCESS_MESSAGE = 'Conteúdo salvo e publicado.';
   selector: 'app-content-management',
   imports: [
     FormsModule,
-    AdminCard,
-    AdminFeedback,
-    AdminPageHeader,
-    AdminSectionHeader,
+    AdminCardComponent,
+    AdminFeedbackComponent,
+    AdminPageHeaderComponent,
+    AdminSectionHeaderComponent,
   ],
   templateUrl: './content-management.component.html',
   styleUrl: './content-management.component.css',

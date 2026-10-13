@@ -1,9 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
 import { MediaManagementService } from './media-management.service';
 
 describe('MediaManagementService', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('uploads a valid project image and persists its metadata', async () => {
     const client = fakeClient();
     const service = configure(client);

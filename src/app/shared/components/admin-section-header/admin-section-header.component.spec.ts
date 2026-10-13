@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import { AdminSectionHeader } from './admin-section-header';
+import { AdminSectionHeaderComponent } from './admin-section-header.component';
 
 @Component({
-  imports: [AdminSectionHeader],
+  imports: [AdminSectionHeaderComponent],
   template:
     '<app-admin-section-header title="Seção" description="Detalhe"><button>Ação</button></app-admin-section-header>',
 })
 class HostComponent {}
 
 @Component({
-  imports: [AdminSectionHeader],
+  imports: [AdminSectionHeaderComponent],
   template: '<app-admin-section-header title="Sem detalhe" />',
 })
 class WithoutDescriptionHostComponent {}
 
-describe('AdminSectionHeader', () => {
+describe('AdminSectionHeaderComponent', () => {
   it('renders the optional description and projected actions', async () => {
     await TestBed.configureTestingModule({ imports: [HostComponent] }).compileComponents();
     const fixture = TestBed.createComponent(HostComponent);

@@ -6,8 +6,8 @@ import {
   PORTFOLIO_SKILL_CATEGORIES,
   PORTFOLIO_ACADEMIC_ENTRIES,
   PORTFOLIO_CONTACT_LINKS,
-} from '../src/app/features/portfolio/content/portfolio-content.ts';
-import { ENGLISH_COPY } from '../src/app/features/portfolio/content/portfolio-translations.ts';
+} from '../src/app/features/portfolio/services/portfolio-content.ts';
+import { ENGLISH_COPY } from '../src/app/features/portfolio/services/portfolio-translations.ts';
 
 const FALLBACK_SKILL_ICON_URLS = {
   Java: '/assets/skills/java.png',

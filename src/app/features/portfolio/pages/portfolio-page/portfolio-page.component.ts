@@ -1,6 +1,7 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
-import { ContactPanel } from '../../presentation/contact-panel/contact-panel';
+import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
+import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
 import { technologyIcon } from '../../services/technology-icons';
 import {
   afterNextRender,
@@ -82,7 +83,7 @@ const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [NgTemplateOutlet, ProjectTechnologiesComponent, ContactPanel],
+  imports: [NgTemplateOutlet, ProjectTechnologiesComponent, ContactPanelComponent],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.css',
 })
@@ -112,10 +113,18 @@ export class PortfolioPageComponent {
     ...PORTFOLIO_ACADEMIC_ENTRIES,
   ]);
   protected readonly contactLinks = signal<PortfolioContactLink[]>([...PORTFOLIO_CONTACT_LINKS]);
-  protected readonly contactDestinations = {
-    whatsappNumber: '553799429018',
-    email: 'profissional.joaovitordf@gmail.com',
-  };
+  protected readonly contactDestinations = computed<ContactPanelDestinations>(() => {
+    const links = this.contactLinks();
+    const phone = links.find((l) => l.symbol === 'phone');
+    const email = links.find((l) => l.symbol === 'email');
+    const rawPhone = phone?.href ? phone.href.replace(/^tel:/i, '') : '';
+    const whatsappNumber = rawPhone.replace(/\D/g, '');
+    const emailAddress = email?.href ? email.href.replace(/^mailto:/i, '').trim() : '';
+    return {
+      whatsappNumber,
+      email: emailAddress,
+    };
+  });
   protected readonly showPresentation = computed(() =>
     hasPortfolioSectionContent(this.copy(), 'presentation'),
   );

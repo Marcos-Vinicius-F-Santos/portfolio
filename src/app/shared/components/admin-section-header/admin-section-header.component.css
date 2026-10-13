@@ -2,27 +2,19 @@
   display: block;
 }
 
-.admin-page-header {
+.admin-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
 
-h1 {
+h2 {
   margin: 0;
   color: #172033;
 }
 
-.eyebrow {
-  margin: 0;
-  color: #7257a3;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.description {
+p {
   margin: 0.5rem 0 0;
   color: #667085;
 }
@@ -34,9 +26,8 @@ h1 {
 }
 
 @media (max-width: 760px) {
-  .admin-page-header {
+  .admin-section-header {
     align-items: flex-start;
     flex-direction: column;
   }
 }
-

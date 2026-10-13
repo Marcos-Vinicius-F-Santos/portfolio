@@ -4,13 +4,13 @@ export type AdminFeedbackVariant = 'status' | 'error' | 'success';
 
 @Component({
   selector: 'app-admin-feedback',
-  templateUrl: './admin-feedback.html',
-  styleUrl: './admin-feedback.css',
+  templateUrl: './admin-feedback.component.html',
+  styleUrl: './admin-feedback.component.css',
 })
-export class AdminFeedback {
+export class AdminFeedbackComponent {
   readonly message = input.required<string>();
   readonly variant = input.required<AdminFeedbackVariant>();
   readonly testId = input('');
 }
 
-export { AdminFeedback as AdminFeedbackComponent };
+export { AdminFeedbackComponent as AdminFeedback };

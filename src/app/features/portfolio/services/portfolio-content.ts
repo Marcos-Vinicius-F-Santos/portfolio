@@ -9,6 +9,7 @@ import type {
 export type PortfolioTranslations = Partial<PortfolioCopy>;
 
 export interface PortfolioCopy {
+  name: string;
   eyebrow: string;
   presentationTitle: string;
   intro: string;
@@ -171,26 +172,20 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
 
 export const PORTFOLIO_ACADEMIC_ENTRIES: readonly PortfolioAcademicEntry[] = [
   {
-    id: 'computer-science',
+    id: 'academic-fallback',
     nameKey: 'educationDataScience',
-    institution: 'Instituto Federal de Minas Gerais (IFMG)',
-    startDate: '2020-01-20',
-    endDate: '2025-08-20',
+    institution: 'Instituição de Ensino Superior',
+    startDate: '2020-01-01',
+    endDate: '2024-12-31',
     isCurrent: false,
     competencies: [
-      'Visão Computacional',
-      'Inteligência Artificial',
       'Engenharia de Software',
-      'Algoritmos e Estruturas de Dados',
-      'Redes de Computadores',
-      'Bancos de Dados Relacionais',
+      'Estruturas de Dados e Algoritmos',
+      'Bancos de Dados',
       'Sistemas Distribuídos',
-      'Programação Web e Mobile',
     ],
     studiedContent: [
-      'Bacharelado em Ciência da Computação',
-      'Trabalho de Conclusão de Curso em Visão Computacional para Análise e Contagem de Golpes em Lutas de Boxe',
-      'Projetos de extensão e inovação tecnológica com automação, OCR e desenvolvimento web/mobile',
+      'Graduação em Computação e Engenharia de Software',
     ],
     displayOrder: 0,
   },
@@ -208,44 +203,45 @@ export const PORTFOLIO_CONTACT_LINKS: readonly PortfolioContactLink[] = [
   {
     id: 'linkedin',
     labelKey: 'contactLinkedinLabel',
-    href: 'https://www.linkedin.com/in/xjoaovitordf/',
+    href: 'https://www.linkedin.com/',
     symbol: 'linkedin',
     iconPath: '/assets/contact/linkedin.svg',
   },
   {
     id: 'github',
     labelKey: 'contactGithubLabel',
-    href: 'https://github.com/joaovitordf',
+    href: 'https://github.com/',
     symbol: 'github',
     iconPath: '/assets/contact/github.svg',
   },
   {
     id: 'email',
     labelKey: 'contactEmailLabel',
-    href: 'mailto:profissional.joaovitordf@gmail.com',
+    href: 'mailto:contato@exemplo.com',
     symbol: 'email',
     iconPath: '/assets/contact/email.svg',
   },
   {
     id: 'phone',
     labelKey: 'contactPhoneLabel',
-    href: 'tel:+553799429018',
+    href: 'tel:+5500000000000',
     symbol: 'phone',
     iconPath: '/assets/contact/phone.svg',
   },
 ];
 
 export const ORIGINAL_COPY: PortfolioCopy = {
+  name: 'Desenvolvedor de Software',
   eyebrow: 'Portfólio profissional',
   presentationTitle: 'Apresentação',
   intro:
-    'João Vitor Dias Fernandes é bacharel em Ciência da Computação (IFMG) com atuação em engenharia de software e desenvolvimento web. Possui experiência na construção de sistemas em produção, interfaces em tempo real com vídeo contínuo e telemetria IoT, APIs RESTful, automação e visão computacional.',
+    'Desenvolvedor de Software com atuação em engenharia de sistemas, desenvolvimento web e soluções modernas. Experiência na construção de aplicações escaláveis, APIs RESTful, automação e integrações corporativas.',
   navigation: 'Navegação principal',
   aboutTitle: 'Sobre mim',
   aboutBody:
-    'Bacharel em Ciência da Computação pelo Instituto Federal de Minas Gerais (IFMG), com experiência em desenvolvimento de software e aplicações web. Atuei no desenvolvimento de sistemas em produção, plataformas de monitoramento industrial e projetos envolvendo APIs, processamento de dados e visão computacional.',
+    'Profissional de tecnologia com sólida formação e experiência em desenvolvimento de software e soluções web. Atuação orientada a boas práticas de engenharia, arquitetura limpa, performance e colaboração técnica.',
   experienceTitle: 'Experiências',
-  experienceBody: 'Experiências profissionais em engenharia de software e desenvolvimento front-end e fullstack.',
+  experienceBody: 'Experiências profissionais em engenharia de software e desenvolvimento de soluções tecnológicas.',
   experiencePeriodLabel: 'Período',
   experienceContextLabel: 'Contexto',
   experienceResponsibilitiesLabel: 'Responsabilidades',
@@ -258,10 +254,10 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   skillsFrontendLabel: 'Frontend e Mobile',
   skillsDevopsObservabilityLabel: 'DevOps e ferramentas',
   skillsDatabasesLabel: 'Bancos de dados',
-  skillsVersionControlLabel: 'Visão computacional e Versionamento',
+  skillsVersionControlLabel: 'Versionamento e ferramentas',
   educationTitle: 'Formação acadêmica',
-  educationBody: 'Graduação realizada no Instituto Federal de Minas Gerais (IFMG).',
-  educationDataScience: 'Ciência da Computação',
+  educationBody: 'Formação acadêmica e especializações.',
+  educationDataScience: 'Computação e Engenharia de Software',
   educationAppliedStatistics: 'Estatística Aplicada',
   educationGraphicDesign: 'Design Gráfico',
   educationInstitutionLabel: 'Instituição',
@@ -297,16 +293,16 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   resultsTitle: 'Resultados profissionais',
   resultsTimeReductionLabel: 'Otimização de carregamento',
   resultsTimeReduction:
-    'Redução de 85% no tamanho do pacote inicial de carregamento da aplicação com refatoração modular e lazy loading.',
+    'Otimização expressiva no tempo de carregamento da aplicação com refatoração modular e lazy loading.',
   resultsStepsReductionLabel: 'Eficiência de processamento',
   resultsStepsReduction:
-    'Redução de 83,6% no tempo total de processamento em pipeline de visão computacional.',
+    'Ganhos de eficiência e estabilidade operacional em fluxos contínuos de processamento de dados.',
   resultsUsersServedLabel: 'Clientes atendidos',
   resultsUsersServed:
-    'Plataforma de automação industrial e visão computacional impactando diretamente mais de 50 clientes corporativos.',
+    'Desenvolvimento de soluções com impacto direto em usuários e clientes corporativos.',
   resultsProductivityGainLabel: 'Aceleração de entrega',
   resultsProductivityGain:
-    'Redução de 60% no tempo de entrega de novas telas com criação de biblioteca padronizada de componentes reutilizáveis.',
+    'Aumento de produtividade e padronização através de bibliotecas modulares de componentes reutilizáveis.',
   projectsTitle: 'Projetos',
   professionalProjectsTitle: 'Projetos profissionais',
   personalProjectsTitle: 'Projetos pessoais',

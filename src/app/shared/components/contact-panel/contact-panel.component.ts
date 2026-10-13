@@ -15,10 +15,10 @@ import {
 
 @Component({
   selector: 'app-contact-panel',
-  templateUrl: './contact-panel.html',
-  styleUrl: './contact-panel.css',
+  templateUrl: './contact-panel.component.html',
+  styleUrl: './contact-panel.component.css',
 })
-export class ContactPanel {
+export class ContactPanelComponent {
   readonly copy = input.required<ContactPanelCopy>();
   readonly destinations = input<ContactPanelDestinations>(DEFAULT_CONTACT_PANEL_DESTINATIONS);
   readonly value = signal<ContactPanelValue>({ name: '', email: '', message: '' });
@@ -49,3 +49,5 @@ export class ContactPanel {
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 }
+
+export { ContactPanelComponent as ContactPanel };

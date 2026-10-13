@@ -28,6 +28,12 @@ export function snapshotToCopy(
       }
     }
   }
+  if (!copy['name'] && typeof copy['intro'] === 'string') {
+    const match = copy['intro'].match(/^([^.—–,]+?)(?:\s+(?:é|atua|is|acts)\b|[.—–,])/i);
+    if (match?.[1]) {
+      copy['name'] = match[1].trim();
+    }
+  }
   return copy as Partial<PortfolioCopy>;
 }
 

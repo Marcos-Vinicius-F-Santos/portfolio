@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import { AdminFeedback } from './admin-feedback';
+import { AdminFeedbackComponent } from './admin-feedback.component';
 
 @Component({
-  imports: [AdminFeedback],
+  imports: [AdminFeedbackComponent],
   template: '<app-admin-feedback variant="error" message="Falha" testId="feedback" />',
 })
 class HostComponent {}
 
 @Component({
-  imports: [AdminFeedback],
+  imports: [AdminFeedbackComponent],
   template: '<app-admin-feedback variant="success" message="Salvo" />',
 })
 class SuccessHostComponent {}
 
-describe('AdminFeedback', () => {
+describe('AdminFeedbackComponent', () => {
   it('keeps the error accessibility semantics and test id', async () => {
     await TestBed.configureTestingModule({ imports: [HostComponent] }).compileComponents();
     const fixture = TestBed.createComponent(HostComponent);

@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import { AdminPageHeader } from './admin-page-header';
+import { AdminPageHeaderComponent } from './admin-page-header.component';
 
 @Component({
-  imports: [AdminPageHeader],
+  imports: [AdminPageHeaderComponent],
   template:
     '<app-admin-page-header title="Título" description="Descrição"><button>Ação</button></app-admin-page-header>',
 })
 class HostComponent {}
 
-describe('AdminPageHeader', () => {
+describe('AdminPageHeaderComponent', () => {
   it('renders the page content and projected actions', async () => {
     await TestBed.configureTestingModule({ imports: [HostComponent] }).compileComponents();
     const fixture = TestBed.createComponent(HostComponent);

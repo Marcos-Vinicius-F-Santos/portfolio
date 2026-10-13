@@ -4,11 +4,11 @@ export type AdminCardVariant = 'default' | 'image' | 'dashed';
 
 @Component({
   selector: 'app-admin-card',
-  templateUrl: './admin-card.html',
-  styleUrl: './admin-card.css',
+  templateUrl: './admin-card.component.html',
+  styleUrl: './admin-card.component.css',
 })
-export class AdminCard {
+export class AdminCardComponent {
   readonly variant = input<AdminCardVariant>('default');
 }
 
-export { AdminCard as AdminCardComponent };
+export { AdminCardComponent as AdminCard };

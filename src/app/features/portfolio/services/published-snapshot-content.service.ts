@@ -27,11 +27,18 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
     const snapshot = this.published.snapshot();
     const locale = this.localeState();
     const values = snapshot?.translations[locale] ?? snapshot?.translations['pt-BR'] ?? {};
-    return Object.fromEntries(
+    const copy = Object.fromEntries(
       Object.entries(values)
         .filter(([id]) => id.startsWith('copy-'))
         .map(([id, fields]) => [id.slice(5), fields['text'] ?? '']),
     ) as Partial<PortfolioCopy>;
+    if (!copy.name && copy.intro) {
+      const match = copy.intro.match(/^([^.—–,]+?)(?:\s+(?:é|atua|is|acts)\b|[.—–,])/i);
+      if (match?.[1]) {
+        copy.name = match[1].trim();
+      }
+    }
+    return copy;
   });
   override readonly lastError = this.snapshotErrorState.asReadonly();
   override readonly isAvailable = computed(() => this.snapshotClient !== null && this.published.snapshot() !== null);

@@ -6,10 +6,10 @@ import {
   type AdminMediaProject,
   type AdminMediaSnapshot,
 } from '../../services/media-management.models';
-import { AdminCard } from '../../../../shared/ui/admin-card/admin-card';
-import { AdminFeedback } from '../../../../shared/ui/admin-feedback/admin-feedback';
-import { AdminPageHeader } from '../../../../shared/ui/admin-page-header/admin-page-header';
-import { AdminSectionHeader } from '../../../../shared/ui/admin-section-header/admin-section-header';
+import { AdminCardComponent } from '../../../../shared/components/admin-card/admin-card.component';
+import { AdminFeedbackComponent } from '../../../../shared/components/admin-feedback/admin-feedback.component';
+import { AdminPageHeaderComponent } from '../../../../shared/components/admin-page-header/admin-page-header.component';
+import { AdminSectionHeaderComponent } from '../../../../shared/components/admin-section-header/admin-section-header.component';
 import { MediaManagementService } from '../../services/media-management.service';
 
 const LOCALES: PortfolioLocale[] = ['pt-BR', 'en'];
@@ -18,10 +18,10 @@ const LOCALES: PortfolioLocale[] = ['pt-BR', 'en'];
   selector: 'app-media-management',
   imports: [
     FormsModule,
-    AdminCard,
-    AdminFeedback,
-    AdminPageHeader,
-    AdminSectionHeader,
+    AdminCardComponent,
+    AdminFeedbackComponent,
+    AdminPageHeaderComponent,
+    AdminSectionHeaderComponent,
   ],
   templateUrl: './media-management.component.html',
   styleUrl: './media-management.component.css',

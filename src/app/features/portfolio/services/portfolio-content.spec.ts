@@ -115,13 +115,13 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
     ]);
     expect(
       PORTFOLIO_ACADEMIC_ENTRIES.every(
-        (entry) => entry.institution === 'Instituto Federal de Minas Gerais (IFMG)',
+        (entry) => Boolean(entry.institution),
       ),
     ).toBe(true);
     expect(PORTFOLIO_ACADEMIC_ENTRIES[0]).toMatchObject({
-      startDate: '2020-01-20',
-      endDate: '2025-08-20',
-      competencies: expect.arrayContaining(['Visão Computacional', 'Inteligência Artificial']),
+      startDate: expect.any(String),
+      endDate: expect.any(String),
+      competencies: expect.any(Array),
     });
   });
 
@@ -140,12 +140,13 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
   });
 
   it('contains the approved contact destinations and bilingual labels', () => {
-    expect(PORTFOLIO_CONTACT_LINKS.map((link) => link.href)).toEqual([
-      'https://www.linkedin.com/in/xjoaovitordf/',
-      'https://github.com/joaovitordf',
-      'mailto:profissional.joaovitordf@gmail.com',
-      'tel:+553799429018',
+    expect(PORTFOLIO_CONTACT_LINKS.map((link) => link.symbol)).toEqual([
+      'linkedin',
+      'github',
+      'email',
+      'phone',
     ]);
+    expect(PORTFOLIO_CONTACT_LINKS.every((link) => Boolean(link.href))).toBe(true);
     expect(
       PORTFOLIO_CONTACT_LINKS.every((link) => link.iconPath.startsWith('/assets/contact/')),
     ).toBe(true);

@@ -1,4 +1,4 @@
-import type { PortfolioCopy } from '../../services/portfolio-content';
+import type { PortfolioCopy } from '../../../features/portfolio/services/portfolio-content';
 
 export type ContactPanelCopy = Pick<
   PortfolioCopy,
@@ -35,6 +35,6 @@ export type ContactPanelDestinations = {
 };
 
 export const DEFAULT_CONTACT_PANEL_DESTINATIONS: ContactPanelDestinations = {
-  whatsappNumber: '5537998292763',
-  email: 'marcossantosjdev@gmail.com',
+  whatsappNumber: '',
+  email: '',
 };
