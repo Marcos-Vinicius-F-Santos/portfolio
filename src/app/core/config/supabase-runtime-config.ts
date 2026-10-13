@@ -1,6 +1,7 @@
 export interface SupabaseRuntimeConfig {
   url: string;
   publishableKey: string;
+  adminUserId: string;
 }
 
 declare global {
@@ -14,6 +15,7 @@ const runtimeConfig = globalThis.__PORTFOLIO_SUPABASE_CONFIG__ ?? {};
 export const supabaseRuntimeConfig: SupabaseRuntimeConfig = {
   url: runtimeConfig.url ?? '',
   publishableKey: runtimeConfig.publishableKey ?? '',
+  adminUserId: runtimeConfig.adminUserId ?? '',
 };
 
 export function assertSupabaseRuntimeConfig(

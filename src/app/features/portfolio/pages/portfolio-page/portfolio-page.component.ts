@@ -1,5 +1,6 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
+import { ContactPanel } from '../../presentation/contact-panel/contact-panel';
 import { technologyIcon } from '../../services/technology-icons';
 import {
   afterNextRender,
@@ -81,7 +82,7 @@ const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [NgTemplateOutlet, ProjectTechnologiesComponent],
+  imports: [NgTemplateOutlet, ProjectTechnologiesComponent, ContactPanel],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.css',
 })
@@ -111,6 +112,10 @@ export class PortfolioPageComponent {
     ...PORTFOLIO_ACADEMIC_ENTRIES,
   ]);
   protected readonly contactLinks = signal<PortfolioContactLink[]>([...PORTFOLIO_CONTACT_LINKS]);
+  protected readonly contactDestinations = {
+    whatsappNumber: '553799429018',
+    email: 'profissional.joaovitordf@gmail.com',
+  };
   protected readonly showPresentation = computed(() =>
     hasPortfolioSectionContent(this.copy(), 'presentation'),
   );

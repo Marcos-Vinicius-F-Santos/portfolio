@@ -19,6 +19,21 @@ describe('AdminContentService', () => {
     expect(client.from).toHaveBeenCalledWith('portfolio_text_translations');
   });
 
+  it('saves the contact panel copy independently for Portuguese and English', async () => {
+    const client = fakeClient();
+    const service = configure(client);
+
+    const result = await service.saveCopy({
+      key: 'contactMessagePlaceholder',
+      label: 'Contact message placeholder',
+      value: { 'pt-BR': 'Escreva sua mensagem...', en: 'Write your message...' },
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(client.from).toHaveBeenCalledWith('portfolio_texts');
+    expect(client.from).toHaveBeenCalledWith('portfolio_text_translations');
+  });
+
   it('reports a persistence failure without claiming success', async () => {
     const client = fakeClient(new Error('permission denied'));
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);

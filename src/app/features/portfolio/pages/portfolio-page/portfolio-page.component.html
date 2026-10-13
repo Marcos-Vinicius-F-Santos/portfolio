@@ -488,6 +488,11 @@
               </a>
             }
           </div>
+          <app-contact-panel
+            class="contact-panel-layout"
+            [copy]="copy()"
+            [destinations]="contactDestinations"
+          />
         } @else {
           <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
         }

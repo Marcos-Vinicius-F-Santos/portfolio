@@ -1,12 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it, vi } from 'vitest';
-import { AUTHORIZED_ADMIN_USER_ID } from './admin-auth.models';
 import { AdminAuthService } from './admin-auth.service';
 import { AdminAuthorizationService } from './admin-authorization.service';
 import { SUPABASE_CLIENT } from '../supabase/supabase-client';
 
-const adminUser = { id: AUTHORIZED_ADMIN_USER_ID, email: 'marcos@example.com' } as never;
+const adminUser = {
+  id: '00000000-0000-0000-0000-000000000001',
+  email: 'marcos@example.com',
+} as never;
 
 function authClient(overrides: Partial<SupabaseClient['auth']> = {}): SupabaseClient {
   return {

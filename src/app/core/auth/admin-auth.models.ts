@@ -1,4 +1,8 @@
-export const AUTHORIZED_ADMIN_USER_ID = 'c50fb5e1-4978-4d35-a08d-08d93abfe38a';
+import { supabaseRuntimeConfig } from '../config/supabase-runtime-config';
+
+export function getAuthorizedAdminUserId(): string {
+  return supabaseRuntimeConfig.adminUserId;
+}
 
 export type AdminAuthErrorCode = 'invalid-credentials' | 'unauthorized' | 'unavailable';
 

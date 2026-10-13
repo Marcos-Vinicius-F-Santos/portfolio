@@ -26,6 +26,11 @@ QUANDO a aplicação precisar armazenar ou consultar os conteúdos desta feature
 O SISTEMA DEVE utilizar uma integração configurada com o Supabase por meio da camada de
 serviços da aplicação e de configurações por ambiente.
 
+Cada ambiente deve fornecer `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` (ou o nome legado
+`SUPABASE_ANON_KEY`) e `SUPABASE_ADMIN_USER_ID` por arquivo `.env` local ignorado ou pelas
+variáveis do provedor de deploy. Nenhum desses valores deve ser gravado em código-fonte;
+o último identifica o único administrador daquele projeto Supabase.
+
 ### FR-002
 
 QUANDO um texto for enviado para persistência  
@@ -204,6 +209,9 @@ Então o arquivo deve ser rejeitado e não deve ser considerado persistido.
 - [x] **Decisão de escopo:** a consulta atual será somente por `GET`; operações `POST` e
   `UPDATE` serão criadas em features futuras.
 - [x] **Decisão:** será criado um novo projeto Supabase para a aplicação.
+- [x] **Decisão arquitetural:** a URL, a chave pública e o identificador do administrador
+  são configurações por ambiente; forks podem apontar para projetos Supabase diferentes
+  sem alterar o código versionado.
 - [x] **Decisão arquitetural:** a aplicação usará Angular; a integração ficará em
   `src/app/core/supabase/`, os serviços permanecerão junto às features e as migrations
   ficarão em `supabase/migrations/`.

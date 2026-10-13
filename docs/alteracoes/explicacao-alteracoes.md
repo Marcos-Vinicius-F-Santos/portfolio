@@ -175,4 +175,35 @@ Esta iteração realizou uma modernização e padronização arquitetural comple
 - **Build de Produção**: `npm run build` gerando todos os bundles e lazy-chunks perfeitamente.
 - **Layout & Funcionalidades**: 100% preservados sem nenhuma quebra visual ou comportamental.
 
+---
+
+## 6. Integração Upstream (Marcos) e Adaptação Arquitetural (Outubro/2026)
+
+Esta iteração realizou a sincronização e o merge dos novos commits da branch `upstream/master` (do Marcos), adaptando todas as novidades à arquitetura padronizada do repositório do João:
+
+### A. Funcionalidades Incorporadas do Upstream
+1. **Painel de Contato WhatsApp e E-mail (`painel-contato-whatsapp-email`)**:
+   - Criação de componente visual de contato com formulário não-persistente para envio rápido de mensagens via WhatsApp ou link `mailto:`.
+   - Validações em tempo real e internacionalização em PT/EN.
+2. **Componentes Administrativos Reutilizáveis (`reusable-components`)**:
+   - `AdminCard`, `AdminFeedback`, `AdminPageHeader` e `AdminSectionHeader` adicionados à camada `shared/ui`.
+   - Refatoração das telas `content-management` e `media-management` para uso dos novos componentes compartilhados.
+3. **Configuração Supabase por Ambiente (`integracao-supabase`)**:
+   - `adminUserId` extraído para configuração dinâmica em tempo de execução via `supabaseRuntimeConfig`.
+
+### B. Adaptações Arquiteturais Realizadas
+1. **Migração dos Estilos das Novas Features para CSS Nativo**:
+   - Todos os arquivos `.scss` introduzidos pelo upstream foram convertidos para CSS nativo (`admin-card.css`, `admin-feedback.css`, `admin-page-header.css`, `admin-section-header.css`, `contact-panel.css`).
+   - Removidas diretivas inválidas de Sass (`@use`, `@include`) em arquivos `.css` para garantir compilação nativa perfeita e rápida.
+2. **Nomenclatura Canônica e Aliases**:
+   - Exportação de aliases canônicos (`AdminCardComponent`, `AdminFeedbackComponent`, `ContactPanelComponent`, etc.) para total aderência ao Angular Style Guide sem quebrar referências existentes.
+3. **Resolução de Conflitos e Caminhos Relativos**:
+   - Ajuste dos caminhos relativos de importação considerando a subdivisão em `pages/` e `services/`.
+   - Configuração do `app-contact-panel` na página pública de João Vitor para envio direcionado aos seus próprios contatos (`553799429018` e `profissional.joaovitordf@gmail.com`).
+
+### C. Evidências de Qualidade
+- **Vitest**: A suíte agora conta com **154 testes unitários** (17 novos testes adicionados pelas novas features), todos passando com 100% de sucesso (`npm test`).
+- **Build**: `npm run build` executado e aprovado sem erros.
+
+
 

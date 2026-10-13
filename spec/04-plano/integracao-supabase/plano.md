@@ -45,8 +45,9 @@ Não criar repositories globais, backend próprio ou estrutura fora da arquitetu
 ## 3. Componentes novos
 
 - Cliente e configuração Supabase em `src/app/core/supabase/`.
-- Configuração por ambiente em `src/app/core/config/`, com `SUPABASE_URL` e
-  `SUPABASE_PUBLISHABLE_KEY`, sem valores reais versionados.
+- Configuração por ambiente em `src/app/core/config/`, com `SUPABASE_URL`,
+  `SUPABASE_PUBLISHABLE_KEY`/`SUPABASE_ANON_KEY` e `SUPABASE_ADMIN_USER_ID`, sem valores
+  reais versionados.
 - Modelos e serviços de leitura em `src/app/features/portfolio/content/`.
 - Serviço/adaptador para referências de imagens e arquivos do Storage.
 - Migrations em `supabase/migrations/`.
@@ -170,7 +171,9 @@ precisar mudar o modelo de domínio, o único administrador ou os limites da arq
 - Leitura e escrita: leitura pública; escrita futura somente para Marcos.
 - Consulta atual: somente `GET`; `POST`/`UPDATE` serão features futuras.
 - Projeto Supabase: será criado um novo projeto; configurações usam variáveis de ambiente
-  `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`.
+  `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` (ou `SUPABASE_ANON_KEY`) e
+  `SUPABASE_ADMIN_USER_ID`. Cada fork/deploy fornece seus próprios valores sem alterar o
+  código compartilhado.
 - Falha de leitura: preservar o conteúdo original local por conteúdo, conforme FR-009 da
   Alternância de Idioma.
 - Seed: não necessário nesta rodada; testes usam fixtures e conteúdo real será incluído

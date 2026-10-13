@@ -1,0 +1,77 @@
+<section class="contact-panel" data-testid="contact-panel" aria-labelledby="contact-panel-title">
+  <header class="contact-panel__header">
+    <h3 id="contact-panel-title">{{ copy().contactPanelTitle }}</h3>
+    <p>{{ copy().contactPanelBody }}</p>
+  </header>
+
+  <div class="contact-panel__fields">
+    <label for="contact-panel-name">
+      <span>{{ copy().contactNameLabel }}</span>
+      <input
+        id="contact-panel-name"
+        type="text"
+        autocomplete="name"
+        [value]="value().name"
+        [placeholder]="copy().contactNamePlaceholder"
+        [attr.aria-invalid]="errors().name ? 'true' : null"
+        [attr.aria-describedby]="errors().name ? 'contact-panel-name-error' : null"
+        (input)="setField('name', $any($event.target).value)"
+      />
+      @if (errors().name; as error) {
+        <span id="contact-panel-name-error" class="contact-panel__error" role="alert">
+          {{ error }}
+        </span>
+      }
+    </label>
+
+    <label for="contact-panel-email">
+      <span>{{ copy().contactEmailFieldLabel }}</span>
+      <input
+        id="contact-panel-email"
+        type="email"
+        autocomplete="email"
+        [value]="value().email"
+        [placeholder]="copy().contactEmailPlaceholder"
+        [attr.aria-invalid]="errors().email ? 'true' : null"
+        [attr.aria-describedby]="errors().email ? 'contact-panel-email-error' : null"
+        (input)="setField('email', $any($event.target).value)"
+      />
+      @if (errors().email; as error) {
+        <span id="contact-panel-email-error" class="contact-panel__error" role="alert">
+          {{ error }}
+        </span>
+      }
+    </label>
+
+    <label for="contact-panel-message">
+      <span>{{ copy().contactMessageLabel }}</span>
+      <textarea
+        id="contact-panel-message"
+        rows="6"
+        [value]="value().message"
+        [placeholder]="copy().contactMessagePlaceholder"
+        [attr.aria-invalid]="errors().message ? 'true' : null"
+        [attr.aria-describedby]="errors().message ? 'contact-panel-message-error' : null"
+        (input)="setField('message', $any($event.target).value)"
+      ></textarea>
+      @if (errors().message; as error) {
+        <span id="contact-panel-message-error" class="contact-panel__error" role="alert">
+          {{ error }}
+        </span>
+      }
+    </label>
+  </div>
+
+  <div class="contact-panel__actions">
+    <button
+      type="button"
+      data-testid="contact-panel-whatsapp"
+      (click)="openChannel('whatsapp')"
+    >
+      {{ copy().contactWhatsAppActionLabel }}
+    </button>
+    <button type="button" data-testid="contact-panel-email" (click)="openChannel('email')">
+      {{ copy().contactEmailActionLabel }}
+    </button>
+  </div>
+</section>
