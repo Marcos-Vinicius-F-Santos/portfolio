@@ -48,3 +48,4 @@ Ao realizar o merge do upstream, surgiram conflitos de mesclagem e divergências
 - Zero quebra na suíte de testes: **154 testes unitários passando com 100% de sucesso**.
 - Build de produção (`npm run build`) validado com sucesso.
 - O portfólio de João Vitor passa a dispor do painel moderno de contato e das melhorias administrativas do upstream, mantendo sua identidade profissional e sua arquitetura limpa e padronizada.
+
