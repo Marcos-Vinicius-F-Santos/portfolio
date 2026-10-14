@@ -10,9 +10,21 @@ import { EditorialItemLifecycleDirective } from './editorial-item-lifecycle.dire
 @Component({
   imports: [EditorialItemLifecycleDirective],
   template: `<main appEditorialItemLifecycle>
-    <div data-editorial-collection-kind="project" data-editorial-new-type="personal">
-      <article data-editorial-item-id="project-1">Projeto</article>
+    <div data-editorial-project-collection>
+      <div data-editorial-collection-kind="project" data-editorial-new-type="professional">
+        <article data-editorial-item-id="project-1">Projeto</article>
+      </div>
+      <div data-editorial-collection-kind="project" data-editorial-new-type="personal"></div>
     </div>
+    <ul data-editorial-collection-kind="listItem" data-editorial-parent-id="experience-1" data-editorial-list-name="responsibilities">
+      <li data-editorial-item-id="responsibility-1">Responsabilidade</li>
+    </ul>
+    <ul data-editorial-collection-kind="listItem" data-editorial-parent-id="experience-1" data-editorial-list-name="technicalDecisions">
+      <li data-editorial-item-id="decision-1">Decisão</li>
+    </ul>
+    <ul data-editorial-collection-kind="listItem" data-editorial-parent-id="experience-1" data-editorial-list-name="results">
+      <li data-editorial-item-id="result-1">Resultado</li>
+    </ul>
   </main>`,
 })
 class Host {}
@@ -48,14 +60,19 @@ describe('EditorialItemLifecycleDirective', () => {
     fixture.detectChanges();
   });
 
-  it('adiciona item com ID estável e associação explícita', () => {
-    (fixture.nativeElement.querySelector('.editorial-add-item') as HTMLButtonElement).click();
+  it('exibe um único adicionar projeto e permite escolher o tipo', () => {
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelectorAll('.editorial-add-project')).toHaveLength(1);
+    expect(root.querySelectorAll('.editorial-add-item')).toHaveLength(3);
+    const select = root.querySelector<HTMLSelectElement>('.editorial-project-picker select')!;
+    select.value = 'professional';
+    (root.querySelector('.editorial-add-project') as HTMLButtonElement).click();
     const command = addEntity.mock.calls[0][0];
     expect(command).toMatchObject({
       type: 'add_entity',
       kind: 'project',
       position: 3,
-      data: { type: 'personal' },
+      data: { type: 'professional' },
     });
     expect(command.entityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(record.mock.calls[0][0].inverse).toEqual({
@@ -75,5 +92,22 @@ describe('EditorialItemLifecycleDirective', () => {
       type: 'remove_entity',
       entityId: 'project-1',
     });
+  });
+
+  it('adiciona itens nas responsabilidades, decisões técnicas e resultados', () => {
+    const root = fixture.nativeElement as HTMLElement;
+    root.querySelectorAll<HTMLButtonElement>('[data-editorial-list-name] .editorial-add-item').forEach((button) => button.click());
+
+    expect(addEntity).toHaveBeenCalledTimes(3);
+    expect(addEntity.mock.calls.map(([command]) => command.data)).toEqual([
+      { collection: 'responsibilities' },
+      { collection: 'technicalDecisions' },
+      { collection: 'results' },
+    ]);
+    expect(addEntity.mock.calls.map(([command]) => command.parentId)).toEqual([
+      'experience-1',
+      'experience-1',
+      'experience-1',
+    ]);
   });
 });

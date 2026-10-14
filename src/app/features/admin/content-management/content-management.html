@@ -301,25 +301,21 @@
     </section>
 
     <section class="editor-section" aria-labelledby="academic-title">
-      <app-admin-section-header title="Formação">
+      <app-admin-section-header title="Cursos e formação">
         <button class="admin-button" type="button" (click)="addAcademic()">
-          Adicionar formação
+          Adicionar formação ou curso
         </button>
       </app-admin-section-header>
       @for (entry of draft().academicEntries; track $index) {
         <app-admin-card>
           <div class="base-grid">
-            <label
-              ><span>Ordem</span><input type="number" [(ngModel)]="entry.displayOrder"
-            /></label>
-            <label><span>Início</span><input type="date" [(ngModel)]="entry.startDate" /></label>
-            <label
-              ><span>Fim</span
-              ><input type="date" [(ngModel)]="entry.endDate" [disabled]="entry.isCurrent"
-            /></label>
             <label class="checkbox-label"
-              ><input type="checkbox" [(ngModel)]="entry.isCurrent" /><span
-                >Em andamento</span
+              ><input
+                type="checkbox"
+                [checked]="!entry.isCurrent"
+                (change)="setAcademicCompletion(entry, $event)"
+              /><span
+                >Concluído</span
               ></label
             >
           </div>
@@ -328,26 +324,16 @@
               <fieldset>
                 <legend>{{ locale }}</legend>
                 <label
-                  ><span>Curso</span><input [(ngModel)]="entry.translation[locale].name"
+                  ><span>Formação ou curso</span><input [(ngModel)]="entry.translation[locale].name"
                 /></label>
                 <label
                   ><span>Instituição</span
                   ><input [(ngModel)]="entry.translation[locale].institution"
                 /></label>
                 <label
-                  ><span>Competências desenvolvidas (uma por linha)</span
-                  ><textarea
-                    [ngModel]="academicValue(entry, locale, 'competencies')"
-                    (ngModelChange)="setAcademicField(entry, locale, 'competencies', $event)"
-                  ></textarea>
-                </label>
-                <label
-                  ><span>Conteúdos estudados (um por linha)</span
-                  ><textarea
-                    [ngModel]="academicValue(entry, locale, 'studiedContent')"
-                    (ngModelChange)="setAcademicField(entry, locale, 'studiedContent', $event)"
-                  ></textarea>
-                </label>
+                  ><span>Nível ou tipo</span
+                  ><input [(ngModel)]="entry.translation[locale].level"
+                /></label>
               </fieldset>
             }
           </div>

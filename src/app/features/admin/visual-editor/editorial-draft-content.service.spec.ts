@@ -106,4 +106,34 @@ describe('EditorialDraftContentService ordering', () => {
     ]);
     expect((removed.restore[2] as { parentId?: string }).parentId).toBe('project');
   });
+
+  it('projeta links e imagens do rascunho para a pré-visualização', async () => {
+    TestBed.configureTestingModule({ providers: [EditorialDraftContentService] });
+    const service = TestBed.inject(EditorialDraftContentService);
+    service.setDraft({
+      formatVersion: 1,
+      revision: 1,
+      basePublicationId: null,
+      defaultLocale: 'pt-BR',
+      locales: [{ code: 'pt-BR', label: 'Português', direction: 'ltr', status: 'active', position: 0 }],
+      sections: [],
+      entities: {
+        project: { kind: 'project', position: 0, data: { type: 'personal' } },
+        link: { kind: 'projectLink', parentId: 'project', position: 0, data: { href: 'https://example.com' } },
+        image: { kind: 'projectImage', parentId: 'project', position: 1, data: { mediaId: 'media-1' } },
+      },
+      translations: { 'pt-BR': { project: { name: 'Projeto' }, link: { label: 'Site' }, image: { alt: 'Tela inicial' } } },
+      technologies: {},
+      media: { 'media-1': { source: 'managed', mime: 'image/png', bytes: 100, assetPath: '/uploads/project.png' } },
+    } as unknown as EditorialDraftV1);
+
+    const project = (await service.listProjects('pt-BR'))[0];
+    expect(project.links).toEqual([{ label: 'Site', url: 'https://example.com' }]);
+    expect(project.images[0]).toMatchObject({
+      id: 'image',
+      originalName: 'Tela inicial',
+      displayOrder: 1,
+      publicUrl: '/uploads/project.png',
+    });
+  });
 });

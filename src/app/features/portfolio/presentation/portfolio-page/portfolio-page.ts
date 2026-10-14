@@ -31,6 +31,7 @@ import {
   type PortfolioAcademicEntry,
   type PortfolioContactLink,
   type PortfolioProject,
+  type PortfolioProjectImage,
   type PortfolioSkill,
   type PortfolioSkillCategory,
 } from '../../content/portfolio-content.models';
@@ -43,42 +44,12 @@ type NavigationItem = {
 const SECTION_ID_BY_TARGET: Readonly<Record<string, string>> = {
   apresentacao: 'presentation-section',
   'sobre-mim': 'about-section',
-  'resultados-profissionais': 'results-section',
   experiencias: 'experiences-section',
   'stack-tecnica': 'skills-section',
   'formacao-academica': 'education-section',
   projetos: 'projects-section',
   contato: 'contact-section',
 };
-
-type ProfessionalResultItem = {
-  testId: string;
-  label: keyof PortfolioCopy;
-  value: keyof PortfolioCopy;
-};
-
-const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
-  {
-    testId: 'time-reduction',
-    label: 'resultsTimeReductionLabel',
-    value: 'resultsTimeReduction',
-  },
-  {
-    testId: 'steps-reduction',
-    label: 'resultsStepsReductionLabel',
-    value: 'resultsStepsReduction',
-  },
-  {
-    testId: 'users-served',
-    label: 'resultsUsersServedLabel',
-    value: 'resultsUsersServed',
-  },
-  {
-    testId: 'productivity-gain',
-    label: 'resultsProductivityGainLabel',
-    value: 'resultsProductivityGain',
-  },
-];
 
 @Component({
   selector: 'app-portfolio-page',
@@ -116,14 +87,10 @@ export class PortfolioPage {
     hasPortfolioSectionContent(this.copy(), 'presentation'),
   );
   protected readonly showAbout = computed(() => hasPortfolioSectionContent(this.copy(), 'about'));
-  protected readonly resultItems = computed(() => {
-    const copy = this.copy();
-    return PROFESSIONAL_RESULTS.filter((result) => copy[result.value].trim().length > 0);
-  });
-  protected readonly showResults = computed(() => this.resultItems().length > 0);
   protected readonly experiences = signal<PortfolioExperience[]>([]);
   protected readonly showExperiences = computed(() => this.experiences().length > 0);
   protected readonly projects = signal<PortfolioProject[]>([]);
+  protected readonly failedProjectImageIds = signal<Record<string, string[]>>({});
   protected readonly curriculum = signal<PortfolioFile | null>(null);
   protected readonly professionalProjects = computed(() =>
     this.projects().filter((project) => project.type === 'professional'),
@@ -153,13 +120,6 @@ export class PortfolioPage {
         title: 'experienceTitle',
         body: 'experienceBody',
         targetId: 'experiencias',
-      });
-    }
-    if (this.showResults()) {
-      items.push({
-        title: 'resultsTitle',
-        body: 'resultsTitle',
-        targetId: 'resultados-profissionais',
       });
     }
     if (this.showProjects() || this.editorialMode) {
@@ -228,6 +188,7 @@ export class PortfolioPage {
 
   private async loadProjects(): Promise<void> {
     const projects = await this.content.listProjects(this.language.language());
+    this.failedProjectImageIds.set({});
     this.projects.set(this.editorialMode ? projects : projects.filter(hasPortfolioProjectContent));
   }
 
@@ -305,6 +266,24 @@ export class PortfolioPage {
     return entry.name?.trim() || this.copy()[entry.nameKey as keyof PortfolioCopy] || '';
   }
 
+  protected academicEntryLevel(entry: PortfolioAcademicEntry): string {
+    const level = entry.level?.trim();
+    if (level) return level;
+
+    const name = this.academicEntryName(entry).toLocaleLowerCase('pt-BR');
+    const isEnglish = this.language.language() === 'en';
+    if (name.includes('ciência de dados') || name.includes('data science')) {
+      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
+    }
+    if (name.includes('estatística aplicada') || name.includes('applied statistics')) {
+      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
+    }
+    if (name.includes('design gráfico') || name.includes('graphic design')) {
+      return isEnglish ? 'Technologist' : 'Tecnólogo';
+    }
+    return '';
+  }
+
   protected contactLinkLabel(link: PortfolioContactLink): string {
     return link.label?.trim() || this.copy()[link.labelKey as keyof PortfolioCopy] || '';
   }
@@ -331,6 +310,20 @@ export class PortfolioPage {
       return;
     }
     image.hidden = true;
+  }
+
+  protected projectGalleryImages(project: PortfolioProject): PortfolioProjectImage[] {
+    const failedIds = new Set(this.failedProjectImageIds()[project.id] ?? []);
+    return [...project.images]
+      .filter((image) => image.publicUrl.trim().length > 0 && !failedIds.has(image.id))
+      .sort((left, right) => left.displayOrder - right.displayOrder);
+  }
+
+  protected onProjectCoverImageError(projectId: string, imageId: string): void {
+    this.failedProjectImageIds.update((current) => ({
+      ...current,
+      [projectId]: [...new Set([...(current[projectId] ?? []), imageId])],
+    }));
   }
 
   private formatExperienceDate(value: string | null): string {

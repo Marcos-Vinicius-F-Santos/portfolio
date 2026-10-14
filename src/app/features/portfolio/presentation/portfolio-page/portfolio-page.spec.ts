@@ -11,9 +11,9 @@ import { PortfolioContentService } from '../../content/portfolio-content.service
 import type {
   PortfolioExperience,
   PortfolioFile,
+  PortfolioProjectImage,
   PortfolioProject,
 } from '../../content/portfolio-content.models';
-import { ENGLISH_COPY } from '../../content/portfolio-translations';
 
 let experienceRows: PortfolioExperience[] = [];
 let projectRows: PortfolioProject[] = [];
@@ -65,14 +65,14 @@ describe('PortfolioPage', () => {
     return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  it('renders the presentation, about, results, and existing sections with stable navigation targets', async () => {
+  it('renders the presentation, about, and existing sections with stable navigation targets', async () => {
     const { fixture, element } = await render();
     const sections = [...element.querySelectorAll('.sections > section')];
     for (const language of ['en', 'pt-BR'] as const) {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
       expect(element.querySelector('#apresentacao')).toBeTruthy();
-      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'resultados-profissionais']) {
+      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica']) {
         expect(element.querySelector('#' + id)).toBeTruthy();
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
@@ -82,20 +82,25 @@ describe('PortfolioPage', () => {
         'sobre-mim',
         'stack-tecnica',
         'experiencias',
-        'resultados-profissionais',
         'formacao-academica',
         'contato',
       ]);
-      expect(element.querySelectorAll('nav a')).toHaveLength(7);
+      expect(element.querySelectorAll('nav a')).toHaveLength(6);
     }
   });
 
   it('renders the navigation in the site header instead of the presentation block', async () => {
     const { element } = await render();
 
+    expect(element.querySelector('.site-brand')?.textContent).toContain('marcos.dev');
     expect(element.querySelector('.site-header nav')).toBeTruthy();
     expect(element.querySelector('.page-header nav')).toBeNull();
-    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(7);
+    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(6);
+    expect(element.querySelector('.site-header [data-testid="language-select"]')).toBeTruthy();
+    expect(element.querySelector('.page-header [data-testid="language-select"]')).toBeNull();
+    expect(element.querySelector('.hero-portrait img')?.getAttribute('src')).toBe(
+      '/assets/profile/marcos-santos.jpg',
+    );
   });
 
   it('aplica a mesma ordem editorial às seções e ao menu', async () => {
@@ -104,7 +109,6 @@ describe('PortfolioPage', () => {
       'skills-section',
       'about-section',
       'experiences-section',
-      'results-section',
       'education-section',
       'contact-section',
     ]);
@@ -133,9 +137,14 @@ describe('PortfolioPage', () => {
     ).toContain('JavaScript');
     expect(element.querySelector('#formacao-academica')).toBeTruthy();
     expect(element.querySelectorAll('.academic-card')).toHaveLength(3);
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Período');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Python com Spark');
+    expect(element.querySelector('#formacao-academica h2')?.textContent).toContain('Formação acadêmica');
+    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Instituição');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Unopar Anhanguera');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Pós-Graduação');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Concluído');
+    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Período');
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Design Gráfico');
+    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Conteúdos estudados');
     expect(element.querySelector('#contato')).toBeTruthy();
     expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
@@ -211,7 +220,6 @@ describe('PortfolioPage', () => {
     'sobre-mim',
     'experiencias',
     'stack-tecnica',
-    'resultados-profissionais',
   ])('scrolls smoothly to %s', async (id) => {
     const { element } = await render();
     const target = element.querySelector('#' + id)!;
@@ -235,8 +243,8 @@ describe('PortfolioPage', () => {
     expect(experiences[0]?.textContent).toContain('Engenheiro de software');
     expect(experiences[0]?.textContent).toContain('Setor de laticínios');
     expect(experiences[0]?.textContent).toContain('Responsabilidade nova');
-    expect(experiences[0]?.textContent).toContain('Decisão nova');
-    expect(experiences[0]?.textContent).toContain('Resultado novo');
+    expect(experiences[0]?.textContent).not.toContain('Decisão nova');
+    expect(experiences[0]?.textContent).not.toContain('Resultado novo');
   });
 
   it('hides the experience section and navigation when no experience is available', async () => {
@@ -342,101 +350,11 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('#sobre-mim')).toBe(section);
   });
 
-  it('renders the approved professional results in the happy path', async () => {
+  it('does not render the removed professional results section', async () => {
     const { element } = await render();
-    expect(element.querySelector('#resultados-profissionais')).toBeTruthy();
-    expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeTruthy();
-    expect(element.querySelectorAll('.result-card')).toHaveLength(4);
-    expect(
-      element.querySelector('[data-testid="professional-result-time-reduction"]')?.textContent,
-    ).toContain('dias para horas');
-    expect(
-      element.querySelector('[data-testid="professional-result-steps-reduction"]')?.textContent,
-    ).toContain('8–10 para 3–5');
-    expect(
-      element.querySelector('[data-testid="professional-result-users-served"]')?.textContent,
-    ).toContain('2.000');
-    expect(
-      element.querySelector('[data-testid="professional-result-productivity-gain"]')?.textContent,
-    ).toContain('50%');
-  });
-
-  it('renders only the approved professional results that are available', async () => {
-    const original = {
-      resultsTimeReduction: ORIGINAL_COPY.resultsTimeReduction,
-      resultsStepsReduction: ORIGINAL_COPY.resultsStepsReduction,
-      resultsUsersServed: ORIGINAL_COPY.resultsUsersServed,
-      resultsProductivityGain: ORIGINAL_COPY.resultsProductivityGain,
-    };
-    ORIGINAL_COPY.resultsTimeReduction = '';
-    ORIGINAL_COPY.resultsStepsReduction = '';
-    try {
-      const { element } = await render();
-      expect(element.querySelector('#resultados-profissionais')).toBeTruthy();
-      expect(element.querySelectorAll('.result-card')).toHaveLength(2);
-      expect(
-        element.querySelector('[data-testid="professional-result-users-served"]'),
-      ).toBeTruthy();
-      expect(
-        element.querySelector('[data-testid="professional-result-productivity-gain"]'),
-      ).toBeTruthy();
-      expect(
-        element.querySelector('[data-testid="professional-result-time-reduction"]'),
-      ).toBeNull();
-      expect(
-        element.querySelector('[data-testid="professional-result-steps-reduction"]'),
-      ).toBeNull();
-    } finally {
-      ORIGINAL_COPY.resultsTimeReduction = original.resultsTimeReduction;
-      ORIGINAL_COPY.resultsStepsReduction = original.resultsStepsReduction;
-      ORIGINAL_COPY.resultsUsersServed = original.resultsUsersServed;
-      ORIGINAL_COPY.resultsProductivityGain = original.resultsProductivityGain;
-    }
-  });
-
-  it('hides the professional results section when no approved result is available', async () => {
-    const original = {
-      resultsTimeReduction: ORIGINAL_COPY.resultsTimeReduction,
-      resultsStepsReduction: ORIGINAL_COPY.resultsStepsReduction,
-      resultsUsersServed: ORIGINAL_COPY.resultsUsersServed,
-      resultsProductivityGain: ORIGINAL_COPY.resultsProductivityGain,
-    };
-    ORIGINAL_COPY.resultsTimeReduction = '';
-    ORIGINAL_COPY.resultsStepsReduction = '';
-    ORIGINAL_COPY.resultsUsersServed = '';
-    ORIGINAL_COPY.resultsProductivityGain = '';
-    try {
-      const { element } = await render();
-      expect(element.querySelector('#resultados-profissionais')).toBeNull();
-      expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeNull();
-      expect(element.querySelector('#experiencias')).toBeTruthy();
-    } finally {
-      ORIGINAL_COPY.resultsTimeReduction = original.resultsTimeReduction;
-      ORIGINAL_COPY.resultsStepsReduction = original.resultsStepsReduction;
-      ORIGINAL_COPY.resultsUsersServed = original.resultsUsersServed;
-      ORIGINAL_COPY.resultsProductivityGain = original.resultsProductivityGain;
-    }
-  });
-
-  it('uses the original approved result when the selected translation is missing', async () => {
-    TestBed.overrideProvider(TRANSLATION_SOURCE, {
-      useValue: () => ({
-        ...ENGLISH_COPY,
-        resultsTimeReduction: '',
-      }),
-    });
-    const { fixture, element } = await render();
-    TestBed.inject(PortfolioLanguageService).choose('en');
-    await fixture.whenStable();
-    expect(
-      element.querySelector('[data-testid="professional-result-time-reduction"] p .translated-text')
-        ?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsTimeReduction);
-    expect(
-      element.querySelector(
-        '[data-testid="professional-result-steps-reduction"] p .translated-text',
-      )?.textContent,
-    ).toContain(ENGLISH_COPY.resultsStepsReduction);
+    expect(element.querySelector('#resultados-profissionais')).toBeNull();
+    expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeNull();
+    expect(element.querySelector('#experiencias')).toBeTruthy();
   });
 
   it('renders project summaries and links to complete project pages', async () => {
@@ -448,6 +366,10 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('#projetos')).toBeTruthy();
     expect(element.querySelector('a[href="#projetos"]')).toBeTruthy();
+    expect(element.querySelector('.hero-action--primary')?.getAttribute('href')).toBe('#projetos');
+    expect(element.querySelector('.hero-action:not(.hero-action--primary)')?.getAttribute('href')).toBe(
+      '#contato',
+    );
     expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
     expect(element.querySelector('[data-testid="personal-projects"]')).toBeTruthy();
 
@@ -468,6 +390,61 @@ describe('PortfolioPage', () => {
     expect((professional.querySelector('.project-full-link') as HTMLAnchorElement).href).toBe(
       new URL('/projetos/professional-1', document.baseURI).href,
     );
+  });
+
+  it('renders the first project image by display order with accessible fixed dimensions', async () => {
+    const projectWithImages = createProject('personal-images', 'personal', 1);
+    projectWithImages.images = [
+      createImage('later', 'personal-images', 2),
+      createImage('first', 'personal-images', 1),
+    ];
+    const projectWithoutImages = createProject('personal-without-images', 'personal', 2);
+    projectRows = [projectWithImages, projectWithoutImages];
+
+    const { element } = await render();
+    const card = element.querySelector('[data-testid="personal-project-personal-images"]')!;
+    const image = card.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
+
+    expect(image.src).toBe('https://storage.test/personal-images-first.png');
+    expect(image.alt).toBe('Projeto personal-images — first.png');
+    expect(image.getAttribute('loading')).toBe('lazy');
+    expect(image.getAttribute('width')).toBe('600');
+    expect(image.getAttribute('height')).toBe('320');
+    expect(card.querySelectorAll('[data-testid="project-gallery"] img')).toHaveLength(2);
+    expect(card.querySelector('[data-testid="project-gallery-image"]')?.getAttribute('src')).toBe(
+      'https://storage.test/personal-images-later.png',
+    );
+    expect(
+      element
+        .querySelector('[data-testid="personal-project-personal-without-images"]')
+        ?.querySelector('[data-testid="project-cover"]'),
+    ).toBeNull();
+  });
+
+  it('tries the next project image after a cover failure and isolates the fallback per project', async () => {
+    const firstProject = createProject('personal-first', 'personal', 1);
+    firstProject.images = [
+      createImage('first-broken', 'personal-first', 1),
+      createImage('second', 'personal-first', 2),
+    ];
+    const secondProject = createProject('personal-second', 'personal', 2);
+    secondProject.images = [createImage('other-first', 'personal-second', 1)];
+    projectRows = [firstProject, secondProject];
+
+    const { fixture, element } = await render();
+    const firstCard = element.querySelector('[data-testid="personal-project-personal-first"]')!;
+    const firstImage = firstCard.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
+    firstImage.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+
+    expect(firstCard.querySelector<HTMLImageElement>('[data-testid="project-cover"]')?.src).toBe(
+      'https://storage.test/personal-first-second.png',
+    );
+    expect(
+      element
+        .querySelector('[data-testid="personal-project-personal-second"] [data-testid="project-cover"]')
+        ?.getAttribute('src'),
+    ).toBe('https://storage.test/personal-second-other-first.png');
   });
 
   it('hides an empty project subsection and the entire section when no projects are complete', async () => {
@@ -566,6 +543,19 @@ describe('PortfolioPage', () => {
       learnings: ['Aprendizado ' + id],
       links: [{ label: 'Site ' + id, url: 'https://example.com/' + id }],
       images: [],
+    };
+  }
+
+  function createImage(id: string, projectId: string, displayOrder: number): PortfolioProjectImage {
+    return {
+      id,
+      projectId,
+      storagePath: projectId + '/' + id + '.png',
+      originalName: id + '.png',
+      mimeType: 'image/png',
+      sizeBytes: 100,
+      displayOrder,
+      publicUrl: 'https://storage.test/' + projectId + '-' + id + '.png',
     };
   }
 

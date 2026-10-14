@@ -42,9 +42,9 @@ describe('EditorialItemOrderingDirective', () => {
     const first = fixture.nativeElement.querySelector(
       '[data-editorial-item-id="professional-1"]',
     ) as HTMLElement;
-    const down = [...first.querySelectorAll('button')].find(
-      (button) => button.textContent === 'Mover abaixo',
-    ) as HTMLButtonElement;
+    const controls = first.querySelector('.editorial-item-controls') as HTMLElement;
+    expect(controls.querySelectorAll('button[aria-label^="Mover "]')).toHaveLength(2);
+    const down = controls.querySelector<HTMLButtonElement>('[aria-label="Mover abaixo"]') as HTMLButtonElement;
     down.click();
 
     expect(reorderCollection).toHaveBeenCalledWith('project', undefined, [

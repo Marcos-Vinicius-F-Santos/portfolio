@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 
 import { EditorialAutosaveQueue } from '../content-management/editorial-autosave-queue';
+import { createUuid } from '../../../core/create-uuid';
 import type { EditorialSnapshotEntity } from '../../portfolio/content/editorial-snapshot.models';
 import { EditorialDraftContentService } from './editorial-draft-content.service';
 
@@ -56,8 +57,8 @@ export class EditorialItemOrderingDirective implements AfterViewInit, OnDestroy 
         controls.className = 'editorial-item-controls';
         controls.setAttribute('aria-label', 'Ordenar item');
         controls.append(
-          this.button('Mover acima', () => this.move(collection, id, -1)),
-          this.button('Mover abaixo', () => this.move(collection, id, 1)),
+          this.button('Mover acima', () => this.move(collection, id, -1), '↑'),
+          this.button('Mover abaixo', () => this.move(collection, id, 1), '↓'),
         );
         item.prepend(controls);
       }),
@@ -71,10 +72,20 @@ export class EditorialItemOrderingDirective implements AfterViewInit, OnDestroy 
       (item) => item.closest('[data-editorial-collection-kind]') === collection,
     );
   }
-  private button(label: string, action: () => void): HTMLButtonElement {
+  private button(label: string, action: () => void, icon: string): HTMLButtonElement {
     const button = this.host.ownerDocument.createElement('button');
     button.type = 'button';
-    button.textContent = label;
+    button.title = label;
+    button.setAttribute('aria-label', label);
+    const visual = this.host.ownerDocument.createElement('span');
+    visual.className = 'editorial-button-icon';
+    visual.setAttribute('aria-hidden', 'true');
+    visual.textContent = icon;
+    button.append(visual);
+    const text = this.host.ownerDocument.createElement('span');
+    text.className = 'editorial-button-label editorial-visually-hidden';
+    text.textContent = label;
+    button.append(text);
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -105,7 +116,7 @@ export class EditorialItemOrderingDirective implements AfterViewInit, OnDestroy 
     const entityIds = this.content.reorderCollection(kind, parentId, visibleIds);
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: `${kind}.${parentId ?? 'root'}.order`,
         command: { type: 'reorder_collection', kind, parentId, entityIds },
       })

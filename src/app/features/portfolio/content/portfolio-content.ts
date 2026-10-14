@@ -35,7 +35,11 @@ export interface PortfolioCopy {
   educationDataScience: string;
   educationAppliedStatistics: string;
   educationGraphicDesign: string;
+  educationNameLabel: string;
   educationInstitutionLabel: string;
+  educationLevelLabel: string;
+  educationStatusLabel: string;
+  educationCompletedLabel: string;
   educationPeriodLabel: string;
   educationCompetenciesLabel: string;
   educationContentLabel: string;
@@ -157,6 +161,7 @@ export const PORTFOLIO_ACADEMIC_ENTRIES: readonly PortfolioAcademicEntry[] = [
     id: 'data-science',
     nameKey: 'educationDataScience',
     institution: 'Unopar Anhanguera',
+    level: 'Pós-Graduação',
     startDate: '2023-07-12',
     endDate: '2024-05-07',
     isCurrent: false,
@@ -188,6 +193,7 @@ export const PORTFOLIO_ACADEMIC_ENTRIES: readonly PortfolioAcademicEntry[] = [
     id: 'applied-statistics',
     nameKey: 'educationAppliedStatistics',
     institution: 'Unopar Anhanguera',
+    level: 'Pós-Graduação',
     startDate: '2023-12-13',
     endDate: '2024-06-12',
     isCurrent: false,
@@ -218,6 +224,7 @@ export const PORTFOLIO_ACADEMIC_ENTRIES: readonly PortfolioAcademicEntry[] = [
     id: 'graphic-design',
     nameKey: 'educationGraphicDesign',
     institution: 'Unopar Anhanguera',
+    level: 'Tecnólogo',
     startDate: '2022-02-01',
     endDate: '2023-06-21',
     isCurrent: false,
@@ -304,7 +311,11 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   educationDataScience: 'Ciência de Dados',
   educationAppliedStatistics: 'Estatística Aplicada',
   educationGraphicDesign: 'Design Gráfico',
+  educationNameLabel: 'Formação',
   educationInstitutionLabel: 'Instituição',
+  educationLevelLabel: 'Nível',
+  educationStatusLabel: 'Status',
+  educationCompletedLabel: 'Concluído',
   educationPeriodLabel: 'Período',
   educationCompetenciesLabel: 'Competências desenvolvidas',
   educationContentLabel: 'Conteúdos estudados',

@@ -27,6 +27,8 @@ describe('ProjectDetail routes',()=>{
  ]});
  });
  it('loads a direct project route, full details, images and language changes',async()=>{
+ const secondImage={...project.images[0]!,id:'image-2',originalName:'second.png',displayOrder:1,publicUrl:'https://example.com/second.png'};
+ service.listProjects.mockImplementation(async(locale:string)=>[{...project,images:[project.images[0]!,secondImage],name:locale==='en'?'English Demo':'Demo'}]);
  const harness=await RouterTestingHarness.create('/projetos/demo');
  await TestBed.inject(PortfolioLanguageService);
  await harness.fixture.whenStable();harness.detectChanges();
@@ -34,13 +36,32 @@ describe('ProjectDetail routes',()=>{
  expect(element.textContent).toContain('Solution');
  expect(element.textContent).toContain('Developer');
  expect(element.textContent).toContain('Working API');
- expect(element.querySelector('.gallery img')?.getAttribute('src')).toBe('https://example.com/demo.png');
+ expect([...element.querySelectorAll('.gallery img')].map((image) => image.getAttribute('src'))).toEqual([
+   'https://example.com/demo.png',
+   'https://example.com/second.png',
+ ]);
+ expect(element.querySelector('.gallery img')?.getAttribute('alt')).toBe('Demo — demo.png');
+ expect(element.querySelector('.gallery img')?.getAttribute('loading')).toBe('lazy');
+ expect([...element.querySelectorAll('.gallery a')].map((link) => link.getAttribute('href'))).toEqual([
+   'https://example.com/demo.png',
+   'https://example.com/second.png',
+ ]);
  expect(element.querySelector('nav a')?.getAttribute('href')).toBe('/#projetos');
  const select=element.querySelector('select')!;
  select.value='en';select.dispatchEvent(new Event('change'));
  await harness.fixture.whenStable();harness.detectChanges();
  expect(element.textContent).toContain('English Demo');
  expect(element.textContent).toContain('Back to projects');
+ });
+ it('keeps the detail gallery accessible when an image fails',async()=>{
+ service.listProjects.mockResolvedValue([{...project,images:[project.images[0]!]}]);
+ const harness=await RouterTestingHarness.create('/projetos/demo');
+ await harness.fixture.whenStable();harness.detectChanges();
+ const image=harness.routeNativeElement!.querySelector('.gallery img')!;
+ image.dispatchEvent(new Event('error'));
+ harness.detectChanges();
+ expect(harness.routeNativeElement!.querySelector('.gallery img')).toBeNull();
+ expect(harness.routeNativeElement!.querySelector('.gallery')?.textContent).toContain('Imagem indisponível');
  });
  it('handles unknown IDs and hides galleries when there are no images',async()=>{
  service.listProjects.mockResolvedValue([{...project,images:[]}]);

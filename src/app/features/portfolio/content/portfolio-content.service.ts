@@ -369,6 +369,7 @@ export class PortfolioContentService {
           nameKey: id,
           name: translation ? String(translation['name'] ?? '') : undefined,
           institution: translation ? String(translation['institution'] ?? '') : '',
+          level: translation ? String(translation['level'] ?? '') : '',
           startDate: nullableString(row['start_date']),
           endDate: nullableString(row['end_date']),
           isCurrent: Boolean(row['is_current']),

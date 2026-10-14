@@ -79,6 +79,7 @@ export interface AdminAcademicDraft {
   translation: LocalizedValue<{
     name: string;
     institution: string;
+    level: string;
     competencies: string[];
     studiedContent: string[];
   }>;
