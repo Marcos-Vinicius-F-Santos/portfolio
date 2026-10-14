@@ -173,12 +173,17 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
        (LinkedIn, GitHub, Email, Telefone) modernizados com icones SVG circulares.
      * Coluna direita: Card estilizado com degrade marrom e moldura de avatar com silhueta
        cinza neutra (placeholder pronto para receber foto de perfil real).
-3. Trava de Rolagem Suave no ScrollSpy (Zero Flickering):
-   - Corrigido o bug onde clicar em um link da barra de navegacao fazia o indicador
-     ficar piscando/pulando pelas secoes intermediarias durante a rolagem suave.
-   - Implementado o mecanismo startNavigatingLock(): ao clicar, o menu ativa o item
-     imediatamente e suspende a deteccao do IntersectionObserver ate o fim da rolagem
-     (evento scrollend ou timeout), reativando instantaneamente caso o usuario interaja.
+3. ScrollSpy Baseado em Posicoes Especificas (Fim do Foco Pulando):
+   - Corrigido o bug onde arrastar a pagina ou clicar nos links fazia o foco/hover da
+     barra de navegacao ficar pulando e piscando errativamente pelas secoes.
+   - Substituicao do IntersectionObserver por calculo geometrico direto baseado nas
+     posicoes fisicas (getBoundingClientRect) de cada secao em relacao a linha focal
+     de leitura confortável da tela (~120px a 220px do topo).
+   - Como a verificacao segue a ordem exata das secoes na pagina, a transicao e
+     estritamente estavel e monotona, sem oscilacoes entre itens vizinhos.
+   - Inclui o mecanismo startNavigatingLock(): ao clicar, o menu ativa o item
+     imediatamente e suspende a deteccao ate o fim da rolagem suave (evento scrollend
+     ou timeout), reativando instantaneamente caso o usuario interaja.
 4. Ordem e Ergonomia dos Botoes da Barra Superior:
    - Na barra superior, o botao de download de curriculo [ Curriculo v ] vem primeiro,
      seguido pelo seletor de idioma [ PT v ].
@@ -195,6 +200,6 @@ npm run build
 ```
 Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
 exibindo perfeitamente todos os seus dados reais!
-Todos os 163 testes unitarios estao passando com 100% de sucesso e o build de producao
+Todos os 166 testes unitarios estao passando com 100% de sucesso e o build de producao
 permanece enxuto em 469.41 kB (bem abaixo do limite de 500 kB).
 ================================================================================

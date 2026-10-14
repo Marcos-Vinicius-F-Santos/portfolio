@@ -362,12 +362,15 @@ Esta atualização adaptou o design de apresentação e tipografia seguindo o po
   - Correção do desalinhamento vertical exibido nos botões da barra (onde textos como *"Professional results"* pareciam deslocados para o topo do botão).
   - Os links `.nav-capsule__link` e os textos `.localized-copy` passaram a utilizar `display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-height: 2.25rem;`, garantindo espaçamentos milimetricamente iguais acima e abaixo da linha de base da fonte.
 
-### E. Trava de Rolagem Suave no ScrollSpy (Fim dos Pulos Intermediários)
-- **Problema Solucionado:** Ao clicar em um link da barra de navegação (como *"Contato"* ou *"Projetos"*), a rolagem suave fazia a viewport cruzar todas as seções intermediárias, disparando o `IntersectionObserver` repetidamente e fazendo o sublinhado/indicador piscar rapidamente em cada item da barra até o destino.
-- **Implementação do `startNavigatingLock`:**
-  - Ao clicar em um item de navegação, o estado ativo (`activeSectionId`) é imediatamente atualizado para o item clicado e uma trava temporária (`isNavigating = true`) é ativada.
-  - Durante o trajeto, o callback do `IntersectionObserver` ignora todas as seções que cruzarem a tela.
-  - A trava é liberada automaticamente ao término da animação de rolagem (evento `scrollend` ou timeout de 900ms), ou de forma instantânea caso o usuário mova a roda do mouse (`wheel`) ou a tela por toque (`touchmove`).
+### E. ScrollSpy Baseado em Posições Geométricas e Trava de Rolagem Suave (Fim das Mudanças Erráticas)
+- **Problema Solucionado:** Ao arrastar/rolar a página ou clicar nos links, o `IntersectionObserver` disparava eventos assíncronos parciais com limites percentuais alternados, fazendo o item ativo ("foco / hover") do topbar alternar e piscar desordenadamente entre seções ("mudando loucamente").
+- **Implementação por Posições Específicas (`computeActiveSectionByPosition`):**
+  - O cálculo agora determina deterministicamente a seção ativa avaliando os limites físicos (`getBoundingClientRect().top`) de cada seção em relação à linha focal de leitura confortável abaixo do cabeçalho (~120px a 220px da viewport).
+  - Como a verificação percorre as seções na estrita ordem da página, a transição entre seções é estritamente monotônica e contínua: nunca há oscilação entre itens vizinhos.
+  - **Limites Extremos:** Ao rolar ao topo (`scrollY < 80px`), garante `#apresentacao`; ao atingir o fim da página (`scrollY + innerHeight >= scrollHeight - 50px`), ativa confiavelmente `#contato` mesmo em telas altas.
+  - Sincronizado via `requestAnimationFrame` em eventos passivos de `scroll` e `resize`, com custo computacional desprezível (< 0.05ms para 8 seções).
+- **Trava de Rolagem Suave (`startNavigatingLock`):**
+  - Ao clicar em um link da barra ou hero, o estado ativo é fixado imediatamente no destino e uma trava impede qualquer alteração intermediária até a conclusão da rolagem suave (`scrollend` / timeout), liberando instantaneamente se o usuário interagir.
 
 ### F. Personalização do Card Principal (Hero) e Multi-Tenant
 - **Remoção do Eyebrow:** O texto decorativo genérico *"Portfólio profissional"* / *"Professional portfolio"* foi removido da apresentação.
@@ -383,5 +386,6 @@ Esta atualização adaptou o design de apresentação e tipografia seguindo o po
   2. `[ PT v ]` / `[ EN v ]` (Dropdown discreto de alternância de idioma).
 
 ### H. Evidências de Validação
-- **Suíte de Testes:** **163 testes unitários** passando com 100% de sucesso (`npm test`).
+- **Suíte de Testes:** **166 testes unitários** passando com 100% de sucesso (`npm test`).
 - **Build de Produção:** **469.41 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
+

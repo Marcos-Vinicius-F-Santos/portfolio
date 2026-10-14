@@ -666,6 +666,62 @@ describe('PortfolioPage', () => {
     expect(suffix?.textContent?.trim()).toBe('.dev');
   });
 
+  describe('position-based scroll spy (computeActiveSectionByPosition)', () => {
+    it('sets active section to apresentacao when scrollY is near the top', async () => {
+      const fixture = TestBed.createComponent(PortfolioPageComponent);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const component = fixture.componentInstance as any;
+      Object.defineProperty(window, 'scrollY', { value: 0, writable: true, configurable: true });
+      component.computeActiveSectionByPosition();
+      expect(component.activeSectionId()).toBe('apresentacao');
+    });
+
+    it('sets active section to the last item when scrolled to bottom of page', async () => {
+      const fixture = TestBed.createComponent(PortfolioPageComponent);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const component = fixture.componentInstance as any;
+      Object.defineProperty(window, 'scrollY', { value: 3000, writable: true, configurable: true });
+      Object.defineProperty(window, 'innerHeight', { value: 800, writable: true, configurable: true });
+      Object.defineProperty(document.documentElement, 'scrollHeight', { value: 3800, writable: true, configurable: true });
+
+      component.computeActiveSectionByPosition();
+      expect(component.activeSectionId()).toBe('contato');
+    });
+
+    it('updates active section based on section element bounding rects', async () => {
+      const fixture = TestBed.createComponent(PortfolioPageComponent);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const component = fixture.componentInstance as any;
+      Object.defineProperty(window, 'scrollY', { value: 500, writable: true, configurable: true });
+      Object.defineProperty(window, 'innerHeight', { value: 800, writable: true, configurable: true });
+      Object.defineProperty(document.documentElement, 'scrollHeight', { value: 4000, writable: true, configurable: true });
+
+      const sobreMimEl = document.getElementById('sobre-mim');
+      if (sobreMimEl) {
+        vi.spyOn(sobreMimEl, 'getBoundingClientRect').mockReturnValue({
+          top: 150,
+          bottom: 600,
+          left: 0,
+          right: 800,
+          width: 800,
+          height: 450,
+          x: 0,
+          y: 150,
+          toJSON: () => {},
+        });
+      }
+
+      component.computeActiveSectionByPosition();
+      expect(component.activeSectionId()).toBe('sobre-mim');
+    });
+  });
+
   function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
     const english = locale === 'en';
     return [

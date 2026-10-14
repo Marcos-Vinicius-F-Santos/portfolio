@@ -271,7 +271,8 @@ export class PortfolioPageComponent {
   protected readonly languageMenuOpen = signal(false);
   protected readonly mobileMenuOpen = signal(false);
   protected readonly activeSectionId = signal<string>('apresentacao');
-  private observer: IntersectionObserver | null = null;
+  private scrollRafId: number | null = null;
+  private scrollCleanups: Array<() => void> = [];
 
   constructor() {
     effect(() => {
@@ -491,6 +492,7 @@ export class PortfolioPageComponent {
         win.removeEventListener('scrollend', unlock);
         win.removeEventListener('wheel', unlock);
         win.removeEventListener('touchmove', unlock);
+        this.computeActiveSectionByPosition();
       };
 
       win.addEventListener('scrollend', unlock, { once: true });
@@ -501,31 +503,92 @@ export class PortfolioPageComponent {
     }
   }
 
-  private initScrollSpy(): void {
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
-    const targets = Object.keys(SECTION_ID_BY_TARGET);
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        if (this.isNavigating) return;
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.target.id) {
-            this.activeSectionId.set(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: '-10% 0px -60% 0px', threshold: [0, 0.2] },
-    );
-    for (const targetId of targets) {
-      const el = this.document.getElementById(targetId);
-      if (el) this.observer.observe(el);
+  protected computeActiveSectionByPosition(): void {
+    const win = this.document.defaultView;
+    if (!win) return;
+
+    const items = this.navigationItems();
+    if (items.length === 0) return;
+
+    const scrollY = win.scrollY ?? win.pageYOffset ?? 0;
+    const innerHeight = win.innerHeight || 800;
+    const scrollHeight = this.document.documentElement.scrollHeight || 1000;
+
+    // 1. Boundary: User is near the top of the page
+    if (scrollY < 80) {
+      const firstTarget = items[0]?.targetId;
+      if (firstTarget && this.activeSectionId() !== firstTarget) {
+        this.activeSectionId.set(firstTarget);
+      }
+      return;
     }
-    this.destroyRef.onDestroy(() => {
-      this.observer?.disconnect();
-      if (this.navigatingTimeout) {
-        clearTimeout(this.navigatingTimeout);
+
+    // 2. Boundary: User is near the bottom of the page
+    if (scrollY + innerHeight >= scrollHeight - 50) {
+      const lastTarget = items[items.length - 1]?.targetId;
+      if (lastTarget && this.activeSectionId() !== lastTarget) {
+        this.activeSectionId.set(lastTarget);
+      }
+      return;
+    }
+
+    // 3. Focal zone: calculate section by its vertical bounding rect relative to the comfortable reading line
+    const focalLine = Math.max(120, Math.min(220, Math.floor(innerHeight * 0.25)));
+    let activeTargetId = items[0].targetId;
+
+    for (const item of items) {
+      const el = this.document.getElementById(item.targetId);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.height === 0 && rect.width === 0) continue;
+
+      if (rect.top <= focalLine) {
+        activeTargetId = item.targetId;
+      } else {
+        break;
+      }
+    }
+
+    if (this.activeSectionId() !== activeTargetId) {
+      this.activeSectionId.set(activeTargetId);
+    }
+  }
+
+  private initScrollSpy(): void {
+    const win = this.document.defaultView;
+    if (!win) return;
+
+    const onScrollOrResize = () => {
+      if (this.isNavigating) return;
+      if (this.scrollRafId !== null) return;
+      this.scrollRafId = win.requestAnimationFrame(() => {
+        this.scrollRafId = null;
+        this.computeActiveSectionByPosition();
+      });
+    };
+
+    win.addEventListener('scroll', onScrollOrResize, { passive: true });
+    win.addEventListener('resize', onScrollOrResize, { passive: true });
+
+    this.scrollCleanups.push(() => {
+      win.removeEventListener('scroll', onScrollOrResize);
+      win.removeEventListener('resize', onScrollOrResize);
+      if (this.scrollRafId !== null) {
+        win.cancelAnimationFrame(this.scrollRafId);
+        this.scrollRafId = null;
       }
     });
+
+    this.destroyRef.onDestroy(() => {
+      this.scrollCleanups.forEach((cleanup) => cleanup());
+      this.scrollCleanups = [];
+      if (this.navigatingTimeout) {
+        clearTimeout(this.navigatingTimeout);
+        this.navigatingTimeout = null;
+      }
+    });
+
+    this.computeActiveSectionByPosition();
   }
 
   protected async downloadCurriculum(locale: 'pt-BR' | 'en'): Promise<void> {
