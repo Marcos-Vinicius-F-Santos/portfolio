@@ -15,7 +15,15 @@ export interface PortfolioCopy {
   intro: string;
   navigation: string;
   aboutTitle: string;
+  aboutHeadline: string;
   aboutBody: string;
+  aboutFocus: string;
+  aboutPillar1Title: string;
+  aboutPillar1Description: string;
+  aboutPillar2Title: string;
+  aboutPillar2Description: string;
+  aboutPillar3Title: string;
+  aboutPillar3Description: string;
   experienceTitle: string;
   experienceBody: string;
   experiencePeriodLabel: string;
@@ -46,6 +54,10 @@ export interface PortfolioCopy {
   educationContentLabel: string;
   educationCurrentLabel: string;
   contactTitle: string;
+  contactHeadline: string;
+  contactSubtitle: string;
+  contactExplanation: string;
+  contactRedirectNote: string;
   contactBody: string;
   contactPanelTitle: string;
   contactPanelBody: string;
@@ -150,7 +162,7 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'corporate-integrations',
     labelKey: 'skillsCorporateIntegrationsLabel',
-    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'REST APIs', 'JSF'].map(fallbackSkill),
+    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'Node.js', 'REST APIs', 'JSF'].map(fallbackSkill),
   },
   {
     id: 'frontend',
@@ -165,12 +177,12 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'databases',
     labelKey: 'skillsDatabasesLabel',
-    skills: ['PostgreSQL', 'Supabase', 'MySQL', 'Oracle Database'].map(fallbackSkill),
+    skills: ['PostgreSQL', 'Supabase', 'MySQL', 'Redis', 'Oracle Database'].map(fallbackSkill),
   },
   {
     id: 'version-control',
     labelKey: 'skillsVersionControlLabel',
-    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken', 'OpenCV', 'YOLOv8'].map(fallbackSkill),
+    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken', 'OpenCV', 'YOLOv8', 'MediaPipe'].map(fallbackSkill),
   },
 ];
 
@@ -243,8 +255,21 @@ export const ORIGINAL_COPY: PortfolioCopy = {
     'Desenvolvedor de Software com atuação em engenharia de sistemas, desenvolvimento web e soluções modernas. Experiência na construção de aplicações escaláveis, APIs RESTful, automação e integrações corporativas.',
   navigation: 'Navegação principal',
   aboutTitle: 'Sobre mim',
+  aboutHeadline:
+    'Construindo soluções robustas com engenharia de software, arquitetura limpa e visão técnica',
   aboutBody:
-    'Profissional de tecnologia com sólida formação e experiência em desenvolvimento de software e soluções web. Atuação orientada a boas práticas de engenharia, arquitetura limpa, performance e colaboração técnica.',
+    'Sou Engenheiro de Software e Bacharel em Ciência da Computação pelo IFMG, com sólida atuação no desenvolvimento de sistemas web em produção, plataformas de monitoramento industrial em tempo real e arquiteturas modulares. Minha postura profissional vai além da escrita de código: busco compreender a fundo as regras de negócio, projetar soluções escaláveis, otimizar performance e garantir entregas confiáveis para clientes corporativos.',
+  aboutFocus:
+    'Foco principal: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Visão Computacional (OpenCV, YOLOv8), PostgreSQL, Supabase e Docker.',
+  aboutPillar1Title: 'Engenharia Front-end & Performance',
+  aboutPillar1Description:
+    'Desenvolvimento de SPAs escaláveis com Angular e TypeScript, arquitetura modular com lazy loading (redução de 85% de pacote), bibliotecas de componentes reutilizáveis e telemetria de sensores em tempo real.',
+  aboutPillar2Title: 'Backend & Integrações Corporativas',
+  aboutPillar2Description:
+    'Criação de APIs RESTful de alta performance com Python (FastAPI), Java (Spring Boot) e Laravel, persistência eficiente com PostgreSQL e Supabase, cache com Redis e containerização Docker.',
+  aboutPillar3Title: 'Visão Computacional & Automação',
+  aboutPillar3Description:
+    'Pipelines de inteligência artificial em tempo real com OpenCV e YOLOv8, OCR automatizado para leitura e extração de documentos e inferência integrada a transmissões de vídeo ao vivo.',
   experienceTitle: 'Experiências',
   experienceBody: 'Experiências profissionais em engenharia de software e desenvolvimento de soluções tecnológicas.',
   experiencePeriodLabel: 'Período',
@@ -275,6 +300,11 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   educationContentLabel: 'Conteúdos estudados',
   educationCurrentLabel: 'Em andamento',
   contactTitle: 'Contato',
+  contactHeadline: 'Vamos Trabalhar Juntos!',
+  contactSubtitle: 'Tem um projeto, oportunidade ou desafio interessante? Vamos conversar.',
+  contactExplanation:
+    'Procurando alguém para desenvolver soluções modernas, escaláveis e de alta performance? Seja um projeto, oportunidade ou desafio técnico, sinta-se à vontade para entrar em contato.',
+  contactRedirectNote: 'Você será redirecionado para o WhatsApp ou cliente de e-mail para enviar a mensagem.',
   contactBody: 'Canais profissionais e currículos.',
   contactPanelTitle: 'Fale comigo',
   contactPanelBody: 'Envie uma mensagem pelo canal que preferir.',

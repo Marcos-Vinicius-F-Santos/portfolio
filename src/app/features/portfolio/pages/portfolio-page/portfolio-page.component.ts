@@ -413,6 +413,24 @@ export class PortfolioPageComponent {
     return link.label?.trim() || this.copy()[link.labelKey as keyof PortfolioCopy] || '';
   }
 
+  protected platformDisplayValue(link: PortfolioContactLink): string {
+    if (!link.href) return '';
+    if (link.symbol === 'email') return link.href.replace(/^mailto:/i, '');
+    if (link.symbol === 'phone') {
+      const num = link.href.replace(/^tel:/i, '');
+      return num.startsWith('+55') && num.length >= 13
+        ? `${num.slice(0, 3)} (${num.slice(3, 5)}) ${num.slice(5, 10)}-${num.slice(10)}`
+        : num;
+    }
+    if (link.symbol === 'linkedin') {
+      return link.href.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '');
+    }
+    if (link.symbol === 'github') {
+      return link.href.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '');
+    }
+    return link.href;
+  }
+
   protected academicPeriod(entry: PortfolioAcademicEntry): string {
     const start = this.formatAcademicDate(entry.startDate);
     if (entry.isCurrent) return `${start} – ${this.copy().educationCurrentLabel}`;

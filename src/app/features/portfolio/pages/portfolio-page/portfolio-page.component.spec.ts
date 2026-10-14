@@ -326,6 +326,44 @@ describe('PortfolioPage', () => {
     );
   });
 
+  it('renders the enhanced about section with headline, bio, focus box and 3 pillars (AC-001, AC-002)', async () => {
+    const { fixture, element } = await render();
+    const section = element.querySelector('#sobre-mim')!;
+    expect(section).toBeTruthy();
+    expect(section.querySelector('.about-headline')?.textContent).toContain(
+      ORIGINAL_COPY.aboutHeadline,
+    );
+    expect(section.querySelector('.about-bio')?.textContent).toContain('Engenheiro de Software');
+    expect(section.querySelector('.about-focus-badge')?.textContent).toBe('FOCO');
+    expect(section.querySelector('.about-focus-text')?.textContent).toContain('TypeScript');
+
+    const pillarCards = section.querySelectorAll('.about-pillar-card');
+    expect(pillarCards).toHaveLength(3);
+    expect(pillarCards[0].querySelector('.about-pillar-title')?.textContent).toContain(
+      ORIGINAL_COPY.aboutPillar1Title,
+    );
+    expect(pillarCards[1].querySelector('.about-pillar-title')?.textContent).toContain(
+      ORIGINAL_COPY.aboutPillar2Title,
+    );
+    expect(pillarCards[2].querySelector('.about-pillar-title')?.textContent).toContain(
+      ORIGINAL_COPY.aboutPillar3Title,
+    );
+
+    // Switch to English
+    const select = element.querySelector('select')!;
+    select.value = 'en';
+    select.dispatchEvent(new Event('change'));
+    await fixture.whenStable();
+
+    expect(section.querySelector('.about-headline')?.textContent).toContain(
+      ENGLISH_COPY.aboutHeadline,
+    );
+    expect(section.querySelector('.about-focus-badge')?.textContent).toBe('FOCUS');
+    expect(pillarCards[0].querySelector('.about-pillar-title')?.textContent).toContain(
+      ENGLISH_COPY.aboutPillar1Title,
+    );
+  });
+
   it.each([true, false])('responds to the popup; accept=%s', async (accept) => {
     TestBed.overrideProvider(BROWSER_LANGUAGE, { useValue: () => 'es' });
     const { fixture, element } = await render();

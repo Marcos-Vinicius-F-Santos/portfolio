@@ -11,8 +11,21 @@ export const ENGLISH_COPY: PortfolioCopy = {
     'Software Engineer focused on systems engineering, web application development, and modern architectures. Experienced in building scalable applications, RESTful APIs, automation, and technical collaboration.',
   navigation: 'Main navigation',
   aboutTitle: 'About me',
+  aboutHeadline:
+    'Engineering scalable solutions with clean architecture, performance, and precision',
   aboutBody:
-    'Technology professional with solid engineering practices, clean code architecture, performance optimization, and experience building robust web systems.',
+    "I'm a Software Engineer and Computer Science graduate from IFMG, with solid hands-on experience developing production web applications, real-time industrial monitoring platforms, and modular architectures. My approach goes beyond writing code: I seek to deeply understand business rules, design scalable systems, optimize performance, and deliver reliable solutions for enterprise clients.",
+  aboutFocus:
+    'Main focus: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Computer Vision (OpenCV, YOLOv8), PostgreSQL, Supabase, and Docker.',
+  aboutPillar1Title: 'Frontend Engineering & Performance',
+  aboutPillar1Description:
+    'Scalable SPAs with Angular and TypeScript, modular architecture with lazy loading (85% bundle reduction), reusable component systems, and real-time telemetry.',
+  aboutPillar2Title: 'Backend & Enterprise Integrations',
+  aboutPillar2Description:
+    'High-performance RESTful APIs with Python (FastAPI), Java (Spring Boot), and Laravel, PostgreSQL and Supabase persistence, Redis caching, and Docker containerization.',
+  aboutPillar3Title: 'Computer Vision & Automation',
+  aboutPillar3Description:
+    'Real-time AI pipelines using OpenCV and YOLOv8, automated document OCR extraction, and live video stream inference overlays.',
   experienceTitle: 'Experience',
   experienceBody: 'Professional experience in software engineering, frontend and full-stack development.',
   experiencePeriodLabel: 'Period',
@@ -43,6 +56,11 @@ export const ENGLISH_COPY: PortfolioCopy = {
   educationContentLabel: 'Studied content',
   educationCurrentLabel: 'In progress',
   contactTitle: 'Contact',
+  contactHeadline: "Let's Work Together!",
+  contactSubtitle: "Have a project, opportunity or interesting challenge? Let's talk.",
+  contactExplanation:
+    "Looking for someone to build modern, scalable digital experiences? Whether it's a project, opportunity or technical challenge, feel free to get in touch.",
+  contactRedirectNote: "You'll be redirected to WhatsApp or your email client to send the message.",
   contactBody: 'Professional channels and resumes.',
   contactPanelTitle: 'Get in touch',
   contactPanelBody: 'Send a message through the channel you prefer.',

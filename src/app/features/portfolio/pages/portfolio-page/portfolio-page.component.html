@@ -393,7 +393,124 @@
         <h2 [id]="item.targetId + '-title'">
           <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
         </h2>
-        @if (item.targetId === 'stack-tecnica') {
+        @if (item.targetId === 'sobre-mim') {
+          <div class="about-container">
+            <h3 class="about-headline">
+              <ng-container *ngTemplateOutlet="localized; context: { key: 'aboutHeadline' }" />
+            </h3>
+            <div class="about-text-content">
+              <p class="about-bio">
+                <ng-container *ngTemplateOutlet="localized; context: { key: item.body }" />
+              </p>
+              <div class="about-focus-box">
+                <span class="about-focus-badge">{{ language.language() === 'en' ? 'FOCUS' : 'FOCO' }}</span>
+                <p class="about-focus-text">
+                  <ng-container *ngTemplateOutlet="localized; context: { key: 'aboutFocus' }" />
+                </p>
+              </div>
+            </div>
+
+            <div class="about-pillars-grid">
+              <!-- Pillar 1: Front-end Engineering & Performance -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m18 16 4-4-4-4" />
+                    <path d="m6 8-4 4 4 4" />
+                    <path d="m14.5 4-5 16" />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar1Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar1Description' }"
+                  />
+                </p>
+              </article>
+
+              <!-- Pillar 2: Backend & Enterprise Integrations -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"
+                    />
+                    <path
+                      d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"
+                    />
+                    <path
+                      d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"
+                    />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar2Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar2Description' }"
+                  />
+                </p>
+              </article>
+
+              <!-- Pillar 3: Computer Vision & AI -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar3Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar3Description' }"
+                  />
+                </p>
+              </article>
+            </div>
+          </div>
+        } @else if (item.targetId === 'stack-tecnica') {
           <div
             class="skills-grid"
             data-testid="skills-section"
@@ -764,54 +881,101 @@
             </div>
           </div>
         } @else if (item.targetId === 'contato') {
-          <div
-            class="contact-grid"
-            data-testid="contact-links"
-            data-editorial-collection-kind="contact"
-          >
-            @for (link of contactLinks(); track link.id) {
-              <a
-                class="contact-link"
-                [href]="link.href"
-                [attr.data-testid]="'contact-' + link.id"
-                [attr.data-editorial-entity]="link.id"
-                data-editorial-control="url"
-                data-editorial-field="href"
-                [attr.data-editorial-value]="link.href"
-                [attr.data-editorial-item-id]="link.id"
-              >
-                <img [src]="link.iconPath" alt="" aria-hidden="true" />
-                <span class="contact-label">
-                  <span
-                    [attr.data-editorial-entity]="link.id"
-                    data-editorial-field="label"
-                    [attr.data-editorial-locale]="language.language()"
-                    >{{ contactLinkLabel(link) }}</span
-                  >
-                </span>
-              </a>
-            }
-            @if (curriculum(); as currentCurriculum) {
-              <a
-                class="contact-link"
-                [href]="currentCurriculum.publicUrl"
-                [attr.download]="currentCurriculum.originalName"
-                data-testid="contact-curriculum"
-              >
-                <img src="/assets/contact/curriculum.svg" alt="" aria-hidden="true" />
-                <span class="contact-label">
+          <div class="contact-section-container">
+            <div class="contact-intro-header">
+              <h3 class="contact-headline">
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'contactHeadline' }" />
+              </h3>
+              <p class="contact-subtitle">
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'contactSubtitle' }" />
+              </p>
+            </div>
+
+            <div class="contact-layout-split">
+              <!-- Left Column: Platforms & Explanatory text -->
+              <div class="contact-left-col">
+                <p class="contact-explanation">
                   <ng-container
-                    *ngTemplateOutlet="localized; context: { key: curriculumLabelKey() }"
+                    *ngTemplateOutlet="localized; context: { key: 'contactExplanation' }"
                   />
-                </span>
-              </a>
-            }
+                </p>
+
+                <div
+                  class="contact-grid contact-platforms-stack"
+                  data-testid="contact-links"
+                  data-editorial-collection-kind="contact"
+                >
+                  @for (link of contactLinks(); track link.id) {
+                    <a
+                      class="contact-link contact-platform-pill"
+                      [href]="link.href"
+                      [attr.data-testid]="'contact-' + link.id"
+                      [attr.data-editorial-entity]="link.id"
+                      data-editorial-control="url"
+                      data-editorial-field="href"
+                      [attr.data-editorial-value]="link.href"
+                      [attr.data-editorial-item-id]="link.id"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="contact-platform-icon" aria-hidden="true">
+                        <img [src]="link.iconPath" alt="" aria-hidden="true" />
+                      </div>
+                      <div class="contact-platform-content">
+                        <span class="contact-label">
+                          <span
+                            [attr.data-editorial-entity]="link.id"
+                            data-editorial-field="label"
+                            [attr.data-editorial-locale]="language.language()"
+                            >{{ contactLinkLabel(link) }}</span
+                          >
+                        </span>
+                        <span class="contact-platform-value">
+                          {{ platformDisplayValue(link) }}
+                        </span>
+                      </div>
+                    </a>
+                  }
+                </div>
+
+                @if (curriculum(); as currentCurriculum) {
+                  <a
+                    class="contact-link contact-platform-pill contact-curriculum-pill"
+                    [href]="currentCurriculum.publicUrl"
+                    [attr.download]="currentCurriculum.originalName"
+                    data-testid="contact-curriculum"
+                  >
+                    <div class="contact-platform-icon" aria-hidden="true">
+                      <img src="/assets/contact/curriculum.svg" alt="" aria-hidden="true" />
+                    </div>
+                    <div class="contact-platform-content">
+                      <span class="contact-label">
+                        <ng-container
+                          *ngTemplateOutlet="localized; context: { key: curriculumLabelKey() }"
+                        />
+                      </span>
+                      <span class="contact-platform-value">
+                        {{
+                          language.language() === 'en'
+                            ? 'Download full resume (PDF)'
+                            : 'Baixar currículo completo (PDF)'
+                        }}
+                      </span>
+                    </div>
+                  </a>
+                }
+              </div>
+
+              <!-- Right Column: Direct Message Form -->
+              <div class="contact-right-col">
+                <app-contact-panel
+                  class="contact-panel-layout"
+                  [copy]="copy()"
+                  [destinations]="contactDestinations()"
+                />
+              </div>
+            </div>
           </div>
-          <app-contact-panel
-            class="contact-panel-layout"
-            [copy]="copy()"
-            [destinations]="contactDestinations()"
-          />
         } @else {
           <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
         }
