@@ -265,3 +265,32 @@ Esta iteração transformou o código-fonte em uma arquitetura **100% Multi-Tena
 - **Tarefas de Execução:** `spec/04-plano/isolamento-de-dados-e-padronizacao-arquitetural/tarefas.md`
 - **Checklist de Convergência:** `spec/05-verificacao/isolamento-de-dados-e-padronizacao-arquitetural/checklist-convergencia.md`
 - **Procedimento de Deploy:** `spec/06-deploy/isolamento-de-dados-e-padronizacao-arquitetural/deploy.md`
+
+---
+
+## 8. Barra de Navegação Moderna e Header Flutuante (DECISAO-016)
+
+Inspirado na referência de excelência visual `josiasbroch-dev.vercel.app`, a barra superior foi totalmente reprojetada com padrão Glassmorphism, navegação em pílulas e ações contextuais rápidas.
+
+### A. Elementos Implementados
+1. **Monograma Dinâmico (Esquerda):**
+   - Iniciais do autor em destaque com sufixo `.dev` (ex: `JV.dev`, `MS.dev`, fallback `DEV`), derivadas dinamicamente de `copy().name`.
+   - Clicar na marca aciona scroll suave para o topo da página (`#apresentacao`).
+2. **Navegação Central em Pílulas com ScrollSpy:**
+   - Container flutuante com efeito vidro (*glassmorphism*, `backdrop-filter: blur(14px)`).
+   - Links com indicador animado sublinhado ativado em tempo real conforme a seção entra na viewport via `IntersectionObserver`.
+3. **Download CV Dropdown (Opção A):**
+   - Botão pílula na barra superior com ícone de download e chevron.
+   - Menu flutuante permitindo baixar o currículo em **Português (PT-BR)** ou **Inglês (EN)** com um clique.
+4. **Seletor de Idioma em Menu Discreto:**
+   - Botão discreto com ícone de globo exibindo `PT` ou `EN`, com menu suspenso para alternância imediata de idiomas.
+   - O `<select>` cru anterior foi removido da área de apresentação, deixando o cabeçalho principal mais limpo e elegante.
+5. **Responsividade Mobile:**
+   - Em telas móveis (`< 960px`), os links horizontais compactam em um botão de menu hambúrguer com painel deslizante que reúne as seções, o download do currículo e a escolha de idioma.
+6. **Fechamento Acessível:**
+   - Menus dropdowns fecham automaticamente ao clicar fora (`document:click`) ou pressionar a tecla `Escape`.
+
+### B. Evidências de Qualidade e Budgets
+- **Suíte de Testes:** 158 testes unitários em 33 arquivos, todos passando com 100% de sucesso (`npm test`).
+- **Build de Produção:** `npm run build` gerando pacote inicial de **469.30 kB** (< 500 kB budget) e zero avisos de estilos de componente.
+

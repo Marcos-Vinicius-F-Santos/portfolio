@@ -527,6 +527,86 @@ describe('PortfolioPage', () => {
     ).toContain('Personal projects');
   });
 
+  it('renders the modern header with dynamic brand monogram, capsule nav, and action pills', async () => {
+    const fixture = TestBed.createComponent(PortfolioPageComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const monogram = element.querySelector('.brand-logo');
+    expect(monogram).toBeTruthy();
+    expect(element.querySelector('.nav-capsule')).toBeTruthy();
+    expect(element.querySelector('[data-testid="header-cv-trigger"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="header-lang-trigger"]')).toBeTruthy();
+  });
+
+  it('toggles CV download dropdown and triggers download on selection', async () => {
+    const fixture = TestBed.createComponent(PortfolioPageComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const cvTrigger = element.querySelector<HTMLButtonElement>('[data-testid="header-cv-trigger"]')!;
+    expect(element.querySelector('.dropdown-menu--cv')).toBeNull();
+
+    cvTrigger.click();
+    fixture.detectChanges();
+
+    const cvMenu = element.querySelector('.dropdown-menu--cv');
+    expect(cvMenu).toBeTruthy();
+
+    const ptOption = element.querySelector<HTMLButtonElement>('[data-testid="download-cv-pt"]')!;
+    expect(ptOption).toBeTruthy();
+    ptOption.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('.dropdown-menu--cv')).toBeNull();
+  });
+
+  it('toggles language dropdown and switches language', async () => {
+    const fixture = TestBed.createComponent(PortfolioPageComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const langTrigger = element.querySelector<HTMLButtonElement>('[data-testid="header-lang-trigger"]')!;
+    expect(element.querySelector('.dropdown-menu--lang')).toBeNull();
+
+    langTrigger.click();
+    fixture.detectChanges();
+
+    const langMenu = element.querySelector('.dropdown-menu--lang');
+    expect(langMenu).toBeTruthy();
+
+    const enOption = element.querySelector<HTMLButtonElement>('[data-testid="lang-option-en"]')!;
+    expect(enOption).toBeTruthy();
+    enOption.click();
+    fixture.detectChanges();
+
+    expect(TestBed.inject(PortfolioLanguageService).language()).toBe('en');
+    expect(element.querySelector('.dropdown-menu--lang')).toBeNull();
+  });
+
+  it('toggles mobile drawer on hamburger button click', async () => {
+    const fixture = TestBed.createComponent(PortfolioPageComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const toggle = element.querySelector<HTMLButtonElement>('.mobile-menu-toggle')!;
+    expect(element.querySelector('.mobile-drawer')).toBeNull();
+
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('.mobile-drawer')).toBeTruthy();
+
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('.mobile-drawer')).toBeNull();
+  });
+
   function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
     const english = locale === 'en';
     return [

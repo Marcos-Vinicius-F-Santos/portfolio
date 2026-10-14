@@ -1,16 +1,281 @@
 <main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
-  <header class="site-header">
-    <nav [attr.aria-label]="copy().navigation">
-      <ul>
-        @for (item of navigationItems(); track item.targetId) {
-          <li>
-            <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
-              <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
-            </a>
-          </li>
-        }
-      </ul>
-    </nav>
+  <header class="site-header" [class.site-header--open]="mobileMenuOpen()">
+    <div class="site-header__container">
+      <!-- 1. Left: Dynamic Brand Monogram -->
+      <a
+        href="#apresentacao"
+        class="brand-logo"
+        (click)="scrollToTop($event)"
+        [attr.aria-label]="copy().name || 'Início'"
+      >
+        <span class="brand-logo__initials">{{ brandMonogram() }}</span>
+        <span class="brand-logo__suffix">.dev</span>
+      </a>
+
+      <!-- 2. Center: Capsule Navigation with ScrollSpy -->
+      <nav class="nav-capsule" [attr.aria-label]="copy().navigation">
+        <ul class="nav-capsule__list">
+          @for (item of navigationItems(); track item.targetId) {
+            <li class="nav-capsule__item">
+              <a
+                [href]="'#' + item.targetId"
+                class="nav-capsule__link"
+                [class.nav-capsule__link--active]="activeSectionId() === item.targetId"
+                (click)="navigateToSection($event, item.targetId)"
+              >
+                <span class="nav-capsule__text">
+                  <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+                </span>
+                @if (activeSectionId() === item.targetId) {
+                  <span class="nav-capsule__indicator" aria-hidden="true"></span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <!-- 3. Right: Action Buttons -->
+      <div class="site-header__actions">
+        <!-- Download CV Dropdown (Opção A) -->
+        <div class="header-dropdown" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="action-pill action-pill--cv"
+            [attr.aria-expanded]="cvMenuOpen()"
+            aria-haspopup="true"
+            (click)="toggleCvMenu($event)"
+            data-testid="header-cv-trigger"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 15V3" />
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <path d="m7 10 5 5 5-5" />
+            </svg>
+            <span>{{ language.language() === 'en' ? 'Download CV' : 'Baixar CV' }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="chevron-icon"
+              [class.chevron-icon--open]="cvMenuOpen()"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          @if (cvMenuOpen()) {
+            <div class="dropdown-menu dropdown-menu--cv" role="menu">
+              <button
+                type="button"
+                class="dropdown-item"
+                role="menuitem"
+                (click)="downloadCurriculum('pt-BR')"
+                data-testid="download-cv-pt"
+              >
+                <span class="dropdown-item__flag">🇧🇷</span>
+                <span class="dropdown-item__label">Português (PT-BR)</span>
+              </button>
+              <button
+                type="button"
+                class="dropdown-item"
+                role="menuitem"
+                (click)="downloadCurriculum('en')"
+                data-testid="download-cv-en"
+              >
+                <span class="dropdown-item__flag">🇺🇸</span>
+                <span class="dropdown-item__label">English (EN)</span>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Language Discreet Dropdown -->
+        <div class="header-dropdown" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="action-pill action-pill--lang"
+            [attr.aria-expanded]="languageMenuOpen()"
+            aria-haspopup="true"
+            (click)="toggleLanguageMenu($event)"
+            data-testid="header-lang-trigger"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+              <path d="M2 12h20" />
+            </svg>
+            <span>{{ language.language() === 'en' ? 'EN' : 'PT' }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="chevron-icon"
+              [class.chevron-icon--open]="languageMenuOpen()"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          @if (languageMenuOpen()) {
+            <div class="dropdown-menu dropdown-menu--lang" role="menu">
+              <button
+                type="button"
+                class="dropdown-item"
+                [class.dropdown-item--active]="language.language() === 'pt-BR'"
+                role="menuitem"
+                (click)="choose('pt-BR')"
+                data-testid="lang-option-pt"
+              >
+                <span class="dropdown-item__label">Português (Brasil)</span>
+                @if (language.language() === 'pt-BR') {
+                  <span class="check-icon" aria-hidden="true">✓</span>
+                }
+              </button>
+              <button
+                type="button"
+                class="dropdown-item"
+                [class.dropdown-item--active]="language.language() === 'en'"
+                role="menuitem"
+                (click)="choose('en')"
+                data-testid="lang-option-en"
+              >
+                <span class="dropdown-item__label">English</span>
+                @if (language.language() === 'en') {
+                  <span class="check-icon" aria-hidden="true">✓</span>
+                }
+              </button>
+            </div>
+          }
+
+          <!-- Preserved accessible select for automated tests / assistive tech -->
+          <select
+            #selector
+            class="sr-only-select"
+            [value]="language.language()"
+            (change)="choose(selector.value)"
+            data-testid="language-select"
+            aria-label="Selecionar idioma / Select language"
+          >
+            <option value="pt-BR">Português (Brasil)</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          type="button"
+          class="mobile-menu-toggle"
+          [attr.aria-expanded]="mobileMenuOpen()"
+          aria-label="Menu"
+          (click)="toggleMobileMenu($event)"
+        >
+          <span class="hamburger-bar" [class.hamburger-bar--top]="mobileMenuOpen()"></span>
+          <span class="hamburger-bar" [class.hamburger-bar--mid]="mobileMenuOpen()"></span>
+          <span class="hamburger-bar" [class.hamburger-bar--bot]="mobileMenuOpen()"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Panel -->
+    @if (mobileMenuOpen()) {
+      <div class="mobile-drawer" (click)="$event.stopPropagation()">
+        <nav class="mobile-nav" [attr.aria-label]="copy().navigation">
+          <ul class="mobile-nav__list">
+            @for (item of navigationItems(); track item.targetId) {
+              <li class="mobile-nav__item">
+                <a
+                  [href]="'#' + item.targetId"
+                  class="mobile-nav__link"
+                  [class.mobile-nav__link--active]="activeSectionId() === item.targetId"
+                  (click)="navigateToSection($event, item.targetId)"
+                >
+                  <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+                </a>
+              </li>
+            }
+          </ul>
+        </nav>
+        <div class="mobile-drawer__actions">
+          <div class="mobile-cv-actions">
+            <span class="mobile-actions-label">{{ language.language() === 'en' ? 'Download CV:' : 'Baixar Currículo:' }}</span>
+            <div class="mobile-cv-buttons">
+              <button
+                type="button"
+                class="mobile-action-btn"
+                (click)="downloadCurriculum('pt-BR')"
+              >
+                🇧🇷 Português
+              </button>
+              <button
+                type="button"
+                class="mobile-action-btn"
+                (click)="downloadCurriculum('en')"
+              >
+                🇺🇸 English
+              </button>
+            </div>
+          </div>
+          <div class="mobile-lang-actions">
+            <span class="mobile-actions-label">{{ language.language() === 'en' ? 'Language:' : 'Idioma:' }}</span>
+            <div class="mobile-lang-buttons">
+              <button
+                type="button"
+                class="mobile-action-btn"
+                [class.mobile-action-btn--active]="language.language() === 'pt-BR'"
+                (click)="choose('pt-BR')"
+              >
+                Português
+              </button>
+              <button
+                type="button"
+                class="mobile-action-btn"
+                [class.mobile-action-btn--active]="language.language() === 'en'"
+                (click)="choose('en')"
+              >
+                English
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
   </header>
   <header
     class="page-header"
@@ -21,20 +286,6 @@
       <p class="eyebrow">
         <ng-container *ngTemplateOutlet="localized; context: { key: 'eyebrow' }" />
       </p>
-      <label class="language-control">
-        <span
-          ><ng-container *ngTemplateOutlet="localized; context: { key: 'languageLabel' }"
-        /></span>
-        <select
-          #selector
-          [value]="language.language()"
-          (change)="choose(selector.value)"
-          data-testid="language-select"
-        >
-          <option value="pt-BR" lang="pt-BR">Português (Brasil)</option>
-          <option value="en" lang="en">English</option>
-        </select>
-      </label>
     </div>
     @if (showPresentation()) {
       <h1>{{ copy().name || copy().presentationTitle }}</h1>

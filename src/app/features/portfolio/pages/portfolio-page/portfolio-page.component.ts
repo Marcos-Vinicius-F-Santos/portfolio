@@ -7,7 +7,9 @@ import {
   afterNextRender,
   Component,
   computed,
+  DestroyRef,
   effect,
+  HostListener,
   inject,
   signal,
   viewChild,
@@ -203,8 +205,22 @@ export class PortfolioPageComponent {
     this.navigationItems().filter((item) => item.targetId !== 'apresentacao'),
   );
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly suggestion = viewChild<ElementRef<HTMLDialogElement>>('suggestion');
   private readonly selector = viewChild<ElementRef<HTMLSelectElement>>('selector');
+
+  protected readonly brandMonogram = computed(() => {
+    const name = this.copy().name?.trim() || '';
+    if (!name) return 'DEV';
+    const words = name.split(/\s+/).filter(Boolean);
+    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+    return (words[0][0] + (words[1]?.[0] || words[words.length - 1][0] || '')).toUpperCase();
+  });
+  protected readonly cvMenuOpen = signal(false);
+  protected readonly languageMenuOpen = signal(false);
+  protected readonly mobileMenuOpen = signal(false);
+  protected readonly activeSectionId = signal<string>('apresentacao');
+  private observer: IntersectionObserver | null = null;
 
   constructor() {
     effect(() => {
@@ -221,6 +237,7 @@ export class PortfolioPageComponent {
       void this.loadEditableCatalogs();
       void this.loadSectionOrder();
       if (this.language.showSuggestion()) this.suggestion()?.nativeElement.showModal?.();
+      this.initScrollSpy();
     });
   }
   private async reloadEditableContent(): Promise<void> {
@@ -285,6 +302,7 @@ export class PortfolioPageComponent {
     void this.loadProjects();
     void this.loadCurriculum();
     void this.loadEditableCatalogs();
+    this.closeAllMenus();
   }
 
   protected respond(accept: boolean): void {
@@ -358,8 +376,103 @@ export class PortfolioPageComponent {
     return year && month ? `${month}/${year}` : '';
   }
 
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.closeAllMenus();
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeAllMenus();
+  }
+
+  protected toggleCvMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.cvMenuOpen.update((open) => !open);
+    if (this.cvMenuOpen()) {
+      this.languageMenuOpen.set(false);
+    }
+  }
+
+  protected toggleLanguageMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.languageMenuOpen.update((open) => !open);
+    if (this.languageMenuOpen()) {
+      this.cvMenuOpen.set(false);
+    }
+  }
+
+  protected toggleMobileMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.mobileMenuOpen.update((open) => !open);
+    if (this.mobileMenuOpen()) {
+      this.cvMenuOpen.set(false);
+      this.languageMenuOpen.set(false);
+    }
+  }
+
+  protected closeAllMenus(): void {
+    this.cvMenuOpen.set(false);
+    this.languageMenuOpen.set(false);
+    this.mobileMenuOpen.set(false);
+  }
+
+  private initScrollSpy(): void {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+    const targets = Object.keys(SECTION_ID_BY_TARGET);
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.target.id) {
+            this.activeSectionId.set(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-10% 0px -60% 0px', threshold: [0, 0.2] },
+    );
+    for (const targetId of targets) {
+      const el = this.document.getElementById(targetId);
+      if (el) this.observer.observe(el);
+    }
+    this.destroyRef.onDestroy(() => {
+      this.observer?.disconnect();
+    });
+  }
+
+  protected async downloadCurriculum(locale: 'pt-BR' | 'en'): Promise<void> {
+    this.closeAllMenus();
+    const file = await this.content.getCurriculum(locale);
+    const fallbackUrl = locale === 'pt-BR' ? '/curriculum-pt.pdf' : '/curriculum-en.pdf';
+    const url = file?.publicUrl || fallbackUrl;
+    const filename =
+      file?.originalName || (locale === 'pt-BR' ? 'Curriculo.pdf' : 'Curriculum.pdf');
+    const a = this.document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    this.document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  protected scrollToTop(event: Event): void {
+    event.preventDefault();
+    this.activeSectionId.set('apresentacao');
+    this.closeAllMenus();
+    const target = this.document.getElementById('apresentacao');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      this.document.defaultView?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   protected navigateToSection(event: Event, targetId: string): void {
     event.preventDefault();
+    this.activeSectionId.set(targetId);
+    this.closeAllMenus();
     const target = this.document.getElementById(targetId);
     target?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   }
