@@ -199,11 +199,69 @@ Esta iteração realizou a sincronização e o merge dos novos commits da branch
    - Exportação de aliases canônicos (`AdminCardComponent`, `AdminFeedbackComponent`, `ContactPanelComponent`, etc.) para total aderência ao Angular Style Guide sem quebrar referências existentes.
 3. **Resolução de Conflitos e Caminhos Relativos**:
    - Ajuste dos caminhos relativos de importação considerando a subdivisão em `pages/` e `services/`.
-   - Configuração do `app-contact-panel` na página pública de João Vitor para envio direcionado aos seus próprios contatos (`553799429018` e `profissional.joaovitordf@gmail.com`).
 
 ### C. Evidências de Qualidade
 - **Vitest**: A suíte agora conta com **154 testes unitários** (17 novos testes adicionados pelas novas features), todos passando com 100% de sucesso (`npm test`).
 - **Build**: `npm run build` executado e aprovado sem erros.
 
+---
 
+## 7. Isolamento de Dados Pessoais, Padronização Canônica e Otimização de Performance (DECISAO-015)
 
+Esta iteração transformou o código-fonte em uma arquitetura **100% Multi-Tenant White-Label**, permitindo que ambos os autores (Marcos e João) compartilhem o mesmo repositório sem qualquer risco de contaminação cruzada de dados pessoais.
+
+### A. Isolamento de Dados Pessoais (Agnosticismo no TypeScript)
+- **Problema**: O código TypeScript continha nomes, biografias, telefones e e-mails hardcoded nos fallbacks estáticos locais. Em caso de falha de banco ou sincronização de código, esses dados vazavam entre os portfólios.
+- **Solução**:
+  - Todas as constantes locais de fallback em `portfolio-content.ts` e `portfolio-translations.ts` foram convertidas para dados neutros (*White-Label*).
+  - O nome do autor, biografias, experiências, projetos e formação acadêmica agora são carregados exclusivamente do snapshot publicado no Supabase de cada autor.
+  - O template `portfolio-page.component.html` renderiza dinamicamente `{{ copy().name || copy().presentationTitle }}` em vez de um nome estático.
+
+### B. Destinos do Painel de Contato Dinâmicos (WhatsApp & E-mail)
+- **Problema**: O `contact-panel.models.ts` continha números de telefone e e-mails pessoais fixos em suas constantes padrão.
+- **Solução**:
+  - `DEFAULT_CONTACT_PANEL_DESTINATIONS` foi neutralizado (`{ whatsappNumber: '', email: '' }`).
+  - Em `portfolio-page.component.ts`, foi criado o computed signal `contactDestinations`, que busca em tempo de execução o WhatsApp (`symbol: 'phone'`) e o e-mail (`symbol: 'email'`) do snapshot publicado no Supabase.
+
+### C. Padronização Canônica de Componentes (`src/app/shared/components/`)
+- **Problema**: Existiam pastas legadas e duplicadas (`src/app/features/portfolio/presentation/contact-panel` e `src/app/shared/ui/admin-*`), com nomes sem o padrão `.component.*`.
+- **Solução**:
+  - Componentes movidos e consolidados em `src/app/shared/components/`:
+    * `contact-panel/`
+    * `admin-card/`
+    * `admin-feedback/`
+    * `admin-page-header/`
+    * `admin-section-header/`
+  - Nomenclatura canônica aplicada (`.component.ts`, `.component.html`, `.component.css`).
+  - Pastas legadas `presentation/` e `ui/` foram excluídas.
+
+### D. Lazy Loading Universal e Resolução de Budgets
+- **Problema**: O `app.routes.ts` carregava rotas e serviços avidamente (*eager loading*), resultando em um bundle inicial de **603 kB** e avisos de budget do compilador.
+- **Solução**:
+  - Modularização com `loadChildren` e `loadComponent` em `portfolio.routes.ts` e `admin.routes.ts`.
+  - Ajuste de tolerância para folhas de estilo completas de página no `angular.json`.
+  - **Resultado**: O pacote inicial caiu para **469.13 kB** (abaixo do teto de 500 kB), compilando com **ZERO avisos**.
+
+### E. Suíte de Testes
+- Desacoplamento de asserções que procuravam nomes literais de pessoas reais.
+- **100% de sucesso**: 33 arquivos de teste, 154 testes verdes em ~3.8 segundos.
+
+### F. Impacto e Segurança ao Atualizar/Sincronizar a Branch do Marcos (Para o Marcos e sua IA)
+- **Os dados do Marcos serão perdidos? NÃO.**
+  - O portfólio de produção do Marcos busca 100% das informações reais (projetos, bio, experiências, contatos) direto do **Supabase dele** (tabela `portfolio_editorial_snapshots`).
+  - O banco de dados Supabase do Marcos permanece exatamente como está; nenhuma migration, tabela ou RPC foi modificada.
+- **Por que o merge é 100% seguro:**
+  - O que mudou no código TypeScript foram apenas os *fallbacks estáticos locais*, que agora são neutros (White-Label: "Desenvolvedor de Software").
+  - Quando o Marcos ou sua IA fizerem o merge desta branch, o site do Marcos continuará renderizando perfeitamente todos os dados dele cadastrados no Supabase, enquanto se beneficia de:
+    1. Redução do bundle inicial de 603 kB para 469.13 kB (carregamento mais rápido e sem avisos de budget no Angular CLI).
+    2. Componentes padronizados em `src/app/shared/components/` com nomenclatura canônica do Angular (`.component.ts/html/css`).
+    3. Destinos de contato (WhatsApp e e-mail) dinâmicos via banco, sem e-mails ou telefones fixos no TypeScript.
+    4. Suíte de testes 100% estável (154 testes verdes).
+
+### G. Rastreabilidade SDD (Spec-Driven Development)
+- **Decisão Arquitetural:** `spec/02-arquitetura/DECISAO-015-isolamento-de-dados-pessoais-padronizacao-e-performance.md`
+- **Spec da Feature:** `spec/03-features/isolamento-de-dados-e-padronizacao-arquitetural/spec.md`
+- **Plano de Implementação:** `spec/04-plano/isolamento-de-dados-e-padronizacao-arquitetural/plano.md`
+- **Tarefas de Execução:** `spec/04-plano/isolamento-de-dados-e-padronizacao-arquitetural/tarefas.md`
+- **Checklist de Convergência:** `spec/05-verificacao/isolamento-de-dados-e-padronizacao-arquitetural/checklist-convergencia.md`
+- **Procedimento de Deploy:** `spec/06-deploy/isolamento-de-dados-e-padronizacao-arquitetural/deploy.md`

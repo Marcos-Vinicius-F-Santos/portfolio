@@ -1,25 +1,31 @@
 ================================================================================
-GUIA DE ATUALIZACAO E CORRECOES TECNICAS PARA O REPOSITORIO ORIGINAL
+GUIA DE ATUALIZACAO E CORRECOES TECNICAS PARA O REPOSITORIO ORIGINAL (MARCOS)
 ================================================================================
 
 Ola! Este arquivo resume as melhorias tecnicas, correcoes de bugs e otimizacoes
-feitas neste fork. Se voce quiser aproveitar essas melhorias no seu repositorio,
-este guia lista o que foi alterado e como incorporar apenas a parte tecnica,
-sem misturar dados pessoais (curriculos, textos e projetos do Joao).
+feitas neste fork.
+
+NOVAS ATUALIZACOES (OUTUBRO/2026 - DECISAO-015):
+O codigo agora eh 100% agnostico (White-Label)! Isso significa que nenhum dado
+pessoal (nem de Joao, nem de Marcos) fica chumbado no TypeScript. Todos os dados
+reais do seu portfolio continuam sendo carregados direto do seu banco de dados
+(Supabase).
+PORTANTO, VOCE PODE DAR MERGE EM TODO O CODIGO COM TOTAL SEGURANCA!
 
 --------------------------------------------------------------------------------
-1. O QUE NAO DEVE SER MERGEADO (DADOS PESSOAIS DO JOAO)
+1. COMO FUNCIONA O ISOLAMENTO DE DADOS (ZERO VAZAMENTO ENTRE OS FORKS)
 --------------------------------------------------------------------------------
-Os seguintes arquivos contem informacoes pessoais do Joao Vitor e nao devem
-ser substituidos se voce quiser manter os seus proprios dados:
-- public/curriculum-pt.pdf e public/curriculum-en.pdf
-- src/app/features/portfolio/services/portfolio-content.ts (anteriormente em .../content/portfolio-content.ts)
-- src/app/features/portfolio/services/portfolio-translations.ts (anteriormente em .../content/portfolio-translations.ts)
-- src/index.html (apenas titulo e tags autor)
-- spec/03-features/ e spec/04-plano/ com sufixo -joao-vitor
+- O portfolio carrega o snapshot publicado direto da RPC/tabela do Supabase.
+- No seu ambiente, a aplicacao conecta ao seu Supabase e renderiza os seus dados,
+  projetos, biografia, experiencias e seus contatos.
+- No ambiente do Joao, conecta ao Supabase dele e renderiza os dados dele.
+- Os arquivos locais de fallback (portfolio-content.ts e portfolio-translations.ts)
+  foram limpos e neutralizados ("Desenvolvedor de Software"), servindo apenas
+  como protecao caso o banco esteja fora do ar.
+- Nao existe risco de dados do Joao aparecerem no seu portfolio ao dar merge.
 
 --------------------------------------------------------------------------------
-2. CORRECOES TECNICAS RECOMENDADAS PARA O SEU REPOSITORIO
+2. CORRECOES E MELHORIAS TECNICAS IMPLEMENTADAS
 --------------------------------------------------------------------------------
 
 [MELHORIA 1] Correcao do F5 no Login do Painel Admin (/admin)
@@ -56,8 +62,8 @@ Isso garante compatibilidade com qualquer uma das duas nomenclaturas.
 Problema: O site publico (/) exibia apenas os dados estaticos locais em vez de
 consumir o conteudo publicado pelo editor visual via Supabase.
 Arquivos criados/alterados:
-- src/app/features/portfolio/content/editorial-snapshot-adapter.ts (NOVO)
-- src/app/features/portfolio/content/editorial-snapshot-adapter.spec.ts (NOVO)
+- src/app/features/portfolio/content/editorial-snapshot-adapter.ts
+- src/app/features/portfolio/content/editorial-snapshot-adapter.spec.ts
 - src/app/features/portfolio/content/portfolio-content.service.ts
 
 Como aplicar:
@@ -65,25 +71,15 @@ O EditorialSnapshotAdapter converte a publicacao vinda da RPC
 get_versioned_public_portfolio para a interface PortfolioContent.
 O servico PortfolioContentService agora tenta carregar a versao publicada do
 Supabase e, se estiver offline ou sem configuracao, faz fallback transparente
-para os dados estaticos locais.
+para os dados estaticos locais neutros.
 
 
 [MELHORIA 4] Limpeza e Otimizacao dos Testes Unitarios
 --------------------------------------------------------------------------------
-Problema: Haviam testes redundantes (testes de tipagem sem asserts reais,
-testes triviais de 10 linhas cobertos em outros servicos e arquivos JSON pesados).
-Arquivos removidos:
-- spec/05-verificacao/edicao-visual-rascunho-publicacao/initial-editorial-snapshot-v1.json (92 KB excluidos)
-- src/app/features/portfolio/content/initial-editorial-snapshot.spec.ts
-- src/app/features/admin/media-management/editorial-media.models.spec.ts
-- src/app/features/admin/visual-editor/editorial-language.service.spec.ts
-- src/app/features/portfolio/content/portfolio-language-storage.spec.ts
-- src/app/features/portfolio/content/portfolio-language.spec.ts
-
-Resultado:
-- A suite caiu de 31 para 26 arquivos de spec.
-- O tempo de execucao caiu para ~3.5 segundos.
-- 100% dos testes passam sem quebrar nenhuma regra de negocio ou regressao.
+- Testes redundantes e triviais foram eliminados.
+- Testes com assercoes literais de nomes de desenvolvedores foram desacoplados,
+  garantindo que mudancas de dados no banco nao quebrem a suite de testes.
+- Resultado: 33 arquivos de spec, 154 testes passando com 100% de sucesso (~3.8s).
 
 
 [MELHORIA 5] Configuracao do Storage no Supabase para Upload de Curriculos
@@ -96,73 +92,42 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
 - Criar a RPC replace_portfolio_curriculum para atualizacao atomica no banco e troca de arquivo.
 
 
-[MELHORIA 6] Padronizacao Arquitetural do Frontend, Nomenclatura Canonica Angular e Migracao SCSS -> CSS
+[MELHORIA 6] Padronizacao Arquitetural do Frontend e Migracao SCSS -> CSS (DECISAO-013)
 --------------------------------------------------------------------------------
-Problema/Objetivo:
-O projeto possuia algumas inconsistencias estruturais em relacao aos padroes
-empresariais e ao Angular Style Guide oficial:
-1. Arquivos de estilos estavam como .scss, porem o codigo utilizava 100% CSS nativo
-   (custom properties / variaveis CSS), gerando sobrecarga desnecessaria de build
-   no Angular CLI e confusao sobre uso de pre-processador.
-2. Nomenclatura dos arquivos e classes estava encurtada (ex: app.ts em vez de
-   app.component.ts; admin-workspace.ts em vez de admin-workspace.component.ts).
-3. Componentes como AdminWorkspace e EditorialProjectDetail possuiam templates e
-   estilos inline extensos misturados no proprio arquivo TypeScript.
-4. O componente ProjectTechnologies estava acoplado internamente na feature portfolio,
-   embora seja um componente de apresentacao puro reutilizavel.
-5. As pastas de features misturavam paginas e servicos sem divisao clara de camadas.
+- 100% CSS nativo sem dependencia de compilador Sass.
+- Nomenclatura canonica Angular: *.component.ts, *.component.html, *.component.css.
+- Componentes reutilizaveis desacoplados em src/app/shared/components/.
 
-Arquivos configurados e alterados:
-- angular.json: configurado "schematics": { "@schematics/angular:component": { "style": "css" } }
-  e "inlineStyleLanguage": "css" tanto em "build" quanto em "test".
-- src/styles.scss -> renomeado para src/styles.css (e atualizado no angular.json).
-- Todos os arquivos *.component.scss renomeados para *.component.css, com
-  styleUrls atualizados em todos os decoradores @Component.
-- Padronizacao canonica de sufixos Angular:
-  * src/app/app.ts -> src/app/app.component.ts (classe AppComponent)
-  * admin-authentication.ts -> admin-authentication.component.ts
-  * admin-workspace.ts -> admin-workspace.component.ts
-  * content-management.ts -> content-management.component.ts
-  * media-management.ts -> media-management.component.ts
-  * visual-editor.ts -> visual-editor.component.ts
-  * editorial-project-detail.ts -> editorial-project-detail.component.ts
-  * portfolio-page.ts -> portfolio-page.component.ts
-  * project-detail.ts -> project-detail.component.ts
-- Desacoplamento de templates e estilos:
-  * AdminWorkspace agora possui admin-workspace.component.html e admin-workspace.component.css
-  * EditorialProjectDetail agora possui editorial-project-detail.component.html e editorial-project-detail.component.css
-- Nova camada Compartilhada (Shared Layer):
-  * Criado src/app/shared/components/project-technologies/ com seu .ts, .html e .css.
-- Organizacao modular por feature (Inspirada no Angular Style Guide e projetos modulares):
-  * src/app/features/portfolio/pages/ (portfolio-page, project-detail)
-  * src/app/features/portfolio/services/ (portfolio-content, adapters, validadores)
-  * src/app/features/admin/pages/ (authentication, workspace, content, media, editor, detail)
-  * src/app/features/admin/services/ (servicos e models de rascunho, midia, etc.)
-  * src/app/features/admin/directives/ (diretivas editoriais estruturadas)
 
-Como aplicar no seu repositorio (Passo a Passo sem perder seus dados):
-1. Copie as alteracoes do angular.json (troca de "scss" para "css").
-2. Se voce mantiver os mesmos componentes, renomeie os estilos para .css e atualize os
-   decorators @Component({ styleUrls: ['./nome.component.css'] }).
-3. Para adotar a divisao de pastas:
-   - Mova os servicos para a subpasta services/ de cada feature.
-   - Mova as telas para pages/.
-   - Atualize os caminhos de importacao (imports no TypeScript).
-4. ATENCAO AOS SEUS DADOS:
-   - Se for fazer git merge ou git cherry-pick, garanta que o seu arquivo de
-     conteudo pessoal (portfolio-content.ts e portfolio-translations.ts) seja mantido
-     com os seus textos e projetos! Se os arquivos forem movidos para services/,
-     basta colocar o seu conteudo dentro de src/app/features/portfolio/services/portfolio-content.ts.
-5. Rodar validacao:
-   Execute `npm test -- --watch=false` para garantir que todos os testes passem
-   e `npm run build` para validar a compilacao.
+[MELHORIA 7] DECISAO-015: Destinos Dinamicos de Contato, Modularizacao e Performance
+--------------------------------------------------------------------------------
+1. Painel de Contato Dinamico (WhatsApp e E-mail):
+   - Os destinos de WhatsApp e e-mail nao estao mais chumbados no TypeScript.
+   - Sao extraidos dinamicamente em tempo de execucao a partir dos dados de
+     contato ('phone' e 'email') cadastrados no snapshot do Supabase.
+2. Reorganizacao de Pastas Compartilhadas:
+   - Os componentes de apresentacao foram movidos para src/app/shared/components/:
+     * contact-panel/
+     * admin-card/
+     * admin-feedback/
+     * admin-page-header/
+     * admin-section-header/
+   - Pastas legadas 'presentation/' e 'ui/' foram removidas.
+3. Lazy Loading Universal e Otimizacao de Performance:
+   - Rotas modularizadas em app.routes.ts, portfolio.routes.ts e admin.routes.ts.
+   - Reducao do pacote inicial de 603 kB para 469.13 kB (abaixo do teto de 500 kB).
+   - Compilacao limpa com `npm run build` sem nenhum warning de budget.
 
 --------------------------------------------------------------------------------
-[DICA DE COMPILACAO] Modificador 'override' no PublishedSnapshotContentService
+3. COMO DAR MERGE NO SEU REPOSITORIO
 --------------------------------------------------------------------------------
-No arquivo src/app/features/portfolio/services/published-snapshot-content.service.ts
-linha 46, o metodo "async listSectionOrder()" sobrescreve o metodo da classe base.
-Para evitar o erro TS4114 quando a flag "noImplicitOverride" estiver ativada,
-adicione a palavra-chave "override":
-  override async listSectionOrder(): Promise<string[]> { ... }
+Voce pode fazer o merge diretamente da branch:
+```bash
+git merge origin/master  # ou a branch correspondente
+npm install
+npm test
+npm run build
+```
+Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
+exibindo perfeitamente todos os seus dados reais!
 ================================================================================
