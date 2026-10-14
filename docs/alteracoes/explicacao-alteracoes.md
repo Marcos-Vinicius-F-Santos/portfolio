@@ -325,4 +325,38 @@ Esta atualização atendeu aos dois requisitos de refinamento estético e de mar
 - **Suíte de Testes:** **163 testes unitários** passando (5 novos testes específicos para extração de iniciais e monograma da marca).
 - **Build de Produção:** **469.34 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
 
+---
+
+## 10. Tipografia Moderna (Inter, Space Grotesk) e Hero Card com Avatar Placeholder (DECISAO-018)
+
+Esta atualização adaptou o design de apresentação e tipografia seguindo o portfólio de referência [josiasbroch-dev.vercel.app](https://josiasbroch-dev.vercel.app/):
+
+### A. Tipografia Moderna e Legível
+- **Problema Anterior:** A barra superior e os botões utilizavam fontes monospace rígidas (Courier New/Consolas), que no Windows renderizavam com traços finos e aparência serrilhada.
+- **Solução Implementada:**
+  - Importação de Google Fonts via CDN em `src/index.html`: `Inter` (UI, navegação, corpo), `Space Grotesk` (headings e monograma) e `JetBrains Mono` (badges técnicos).
+  - Configuração global em `src/styles.css` e variáveis `:host` em `portfolio-page.component.css`.
+  - Navegação da barra superior (`.nav-capsule__link`), botões de ação e itens de menu dropdown agora utilizam `Inter` (500/600), com renderização nítida e suave.
+  - Títulos (`h1`, `h2`, `brand-logo`) utilizam `Space Grotesk`, com espaçamentos modernos e proporções equilibradas.
+
+### B. Hero Card em Duas Colunas com Ações Rápidas
+- **Grid Responsivo:** Layout de duas colunas (`1.3fr 1fr`) centralizado no desktop, com empilhamento vertical fluido em dispositivos móveis.
+- **Botões de Ação na Apresentação (`.hero-actions`):**
+  - **Botão Primário:** "Ver projetos" / "View Projects" (link para `#projetos`), com ícone de seta `→`.
+  - **Botão Secundário:** "Fale comigo" / "Contact Me" (link suave para `#contato`), com ícone SVG de avião de papel (*send*).
+- **Canais de Contato em Ícones SVG (`.compact-contact-links`):**
+  - Substituição de links textuais por botões circulares modernos com ícones vetoriais SVG para LinkedIn, GitHub, Email e Telefone/WhatsApp.
+  - Preservação integral do `data-testid="compact-contact-links"` e de todos os atributos do editor visual (`data-editorial-entity`, `data-editorial-control="url"`, `data-editorial-field="href"` e rótulos acessíveis via `sr-only`).
+- **Badge de Disponibilidade Ativa:**
+  - Indicador pulsante em verde esmeralda: `● Disponível para novos projetos · Remoto` / `● Open to new opportunities · Remote`.
+
+### C. Placeholder de Foto de Perfil na Direita
+- Na coluna da direita, inclusão de um card estilizado (`.profile-card`) com degradê quente marrom, borda dourada suave e moldura de avatar com silhueta cinza neutra SVG e badge indicativo ("Foto de perfil" / "Profile photo").
+- O container está preparado com proporções e estilos ideais para quando o desenvolvedor for substituir pela sua foto real.
+
+### D. Evidências de Validação
+- **Suíte de Testes:** **163 testes unitários** passando (`npm test`).
+- **Build de Produção:** **469.41 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
+
+
 

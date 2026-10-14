@@ -170,6 +170,10 @@ describe('PortfolioPage', () => {
     expect(
       element.querySelectorAll('[data-testid="compact-contact-links"] .compact-contact-link'),
     ).toHaveLength(4);
+    const heroContactBtn = element.querySelector('[data-testid="hero-contact-button"]') as HTMLAnchorElement;
+    expect(heroContactBtn).toBeTruthy();
+    expect(heroContactBtn.getAttribute('href')).toBe('#contato');
+    expect(element.querySelector('.profile-card')).toBeTruthy();
     expect(element.querySelectorAll('.section-index')).toHaveLength(0);
     const contactContent = element.querySelector('#contato')!;
     expect(

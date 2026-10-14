@@ -12,8 +12,9 @@ body {
   min-width: 320px;
   background: #f5f0e6;
   color: #261a14;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
