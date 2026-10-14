@@ -26,8 +26,9 @@ Após a implementação da barra de navegação moderna no topo, duas necessidad
 - **Fundo Base (`--paper`):** `#f5f0e6` (bege quente).
 - **Fundo Secundário/Cards (`--paper-strong`):** `#e8dfd1` (bege pergaminho).
 - **Linhas divisórias (`--line`):** `#c8baa8` (bege-areia suave).
-- **Texto Principal & Hero Header (`--ink`):** `#261a14` (marrom escuro espresso, contraste acessível WCAG AAA de ~14:1 contra o fundo bege).
-- **Topbar (`.site-header`):** `rgba(42, 28, 20, 0.92)` com `backdrop-filter: blur(14px)` e borda `rgba(200, 186, 168, 0.16)`.
+- **Texto Principal (`--ink`):** `#261a14` (marrom escuro espresso, contraste acessível WCAG AAA de ~14:1 contra o fundo bege).
+- **Hero Header (`.page-header`):** `#362319` (marrom tostado acolhedor, contrastando suavemente abaixo da barra).
+- **Topbar (`.site-header`):** `rgba(18, 11, 7, 0.96)` com `backdrop-filter: blur(14px)` e borda `rgba(200, 186, 168, 0.12)`, garantindo que a barra superior seja estritamente o elemento mais escuro de toda a composição visual.
 - **Monograma (`.brand-logo__initials`):** Cápsula em tom marrom translúcido `rgba(85, 55, 38, 0.75)` com texto champagne dourado `#f7e7ce`.
 - **Botões e Ações:** Botão de envio do painel de contato e ações administrativas harmonizados no tom marrom `#261a14` com hover `#3b281f`.
 

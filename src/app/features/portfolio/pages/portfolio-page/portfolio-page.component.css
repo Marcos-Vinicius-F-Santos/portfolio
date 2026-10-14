@@ -20,10 +20,10 @@
   position: fixed;
   z-index: 50;
   inset: 0 0 auto;
-  background: rgba(42, 28, 20, 0.92);
+  background: rgba(18, 11, 7, 0.96);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(200, 186, 168, 0.16);
+  border-bottom: 1px solid rgba(200, 186, 168, 0.12);
   transition: background-color 200ms ease, border-color 200ms ease;
 }
 
@@ -45,7 +45,7 @@
   margin-top: 4.5rem;
   padding: clamp(2rem, 6vw, 5.5rem) clamp(1.25rem, 8vw, 8rem);
   align-content: space-between;
-  background: var(--ink);
+  background: #362319;
   color: var(--paper);
 }
 
@@ -247,8 +247,8 @@
   top: calc(100% + 0.5rem);
   right: 0;
   min-width: 13rem;
-  background: #2a1c14;
-  border: 1px solid rgba(200, 186, 168, 0.22);
+  background: #180f0a;
+  border: 1px solid rgba(200, 186, 168, 0.18);
   border-radius: 0.75rem;
   padding: 0.35rem;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
@@ -362,8 +362,8 @@
 
 .mobile-drawer {
   display: none;
-  background: rgba(42, 28, 20, 0.98);
-  border-top: 1px solid rgba(200, 186, 168, 0.16);
+  background: rgba(18, 11, 7, 0.98);
+  border-top: 1px solid rgba(200, 186, 168, 0.12);
   padding: 1rem 1.25rem 1.5rem;
   max-height: calc(100vh - 4.25rem);
   overflow-y: auto;
