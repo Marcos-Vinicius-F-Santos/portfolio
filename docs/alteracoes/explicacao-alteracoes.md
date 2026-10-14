@@ -354,9 +354,34 @@ Esta atualização adaptou o design de apresentação e tipografia seguindo o po
 - Na coluna da direita, inclusão de um card estilizado (`.profile-card`) com degradê quente marrom, borda dourada suave e moldura de avatar com silhueta cinza neutra SVG e badge indicativo ("Foto de perfil" / "Profile photo").
 - O container está preparado com proporções e estilos ideais para quando o desenvolvedor for substituir pela sua foto real.
 
-### D. Evidências de Validação
-- **Suíte de Testes:** **163 testes unitários** passando (`npm test`).
+### D. Centralização da Barra Superior e Alinhamento Preciso dos Itens
+- **Centralização Horizontal (Grid 3 Colunas):**
+  - O container `.site-header__container` foi reestruturado de um flex `space-between` simples para um grid simétrico de 3 colunas: `grid-template-columns: 1fr auto 1fr;`.
+  - A coluna esquerda (`.brand-logo`) alinha à esquerda (`justify-self: start`), a coluna direita (`.site-header__actions`) alinha à direita (`justify-self: end`), e a cápsula de navegação central (`.nav-capsule`) é posicionada no centro geométrico perfeito da tela (`justify-self: center`), sem sofrer desvios causados por larguras desiguais dos elementos das pontas.
+- **Alinhamento Vertical dos Itens de Navegação:**
+  - Correção do desalinhamento vertical exibido nos botões da barra (onde textos como *"Professional results"* pareciam deslocados para o topo do botão).
+  - Os links `.nav-capsule__link` e os textos `.localized-copy` passaram a utilizar `display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-height: 2.25rem;`, garantindo espaçamentos milimetricamente iguais acima e abaixo da linha de base da fonte.
+
+### E. Trava de Rolagem Suave no ScrollSpy (Fim dos Pulos Intermediários)
+- **Problema Solucionado:** Ao clicar em um link da barra de navegação (como *"Contato"* ou *"Projetos"*), a rolagem suave fazia a viewport cruzar todas as seções intermediárias, disparando o `IntersectionObserver` repetidamente e fazendo o sublinhado/indicador piscar rapidamente em cada item da barra até o destino.
+- **Implementação do `startNavigatingLock`:**
+  - Ao clicar em um item de navegação, o estado ativo (`activeSectionId`) é imediatamente atualizado para o item clicado e uma trava temporária (`isNavigating = true`) é ativada.
+  - Durante o trajeto, o callback do `IntersectionObserver` ignora todas as seções que cruzarem a tela.
+  - A trava é liberada automaticamente ao término da animação de rolagem (evento `scrollend` ou timeout de 900ms), ou de forma instantânea caso o usuário mova a roda do mouse (`wheel`) ou a tela por toque (`touchmove`).
+
+### F. Personalização do Card Principal (Hero) e Multi-Tenant
+- **Remoção do Eyebrow:** O texto decorativo genérico *"Portfólio profissional"* / *"Professional portfolio"* foi removido da apresentação.
+- **Título com Nome Completo:** O título principal (`h1.hero-name`) exibe o nome do desenvolvedor (**`João Vitor Dias Fernandes`**).
+- **Subtítulo Profissional:** Adicionado o cargo em destaque caramelo/dourado (`.hero-subtitle`): **`Engenheiro de Software`** (PT) e **`Software Engineer`** (EN).
+- **Compatibilidade Multi-Tenant:**
+  - O nome é gerenciado via signal computado `authorName`, que prioriza `runtimeConfig.authorName` e `copy().name` do Supabase. Para Marcos Santos, o sistema renderiza seu nome dinamicamente a partir do banco; para João Vitor, renderiza o nome completo cadastrado.
+  - Interface `SupabaseRuntimeConfig` estendida com a propriedade opcional `authorName?: string;`.
+
+### G. Inversão dos Botões de Ação na Barra Superior
+- Ordem de leitura atualizada no topo:
+  1. `[ Currículo v ]` / `[ Resume v ]` (Dropdown com opções de download em PDF).
+  2. `[ PT v ]` / `[ EN v ]` (Dropdown discreto de alternância de idioma).
+
+### H. Evidências de Validação
+- **Suíte de Testes:** **163 testes unitários** passando com 100% de sucesso (`npm test`).
 - **Build de Produção:** **469.41 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
-
-
-

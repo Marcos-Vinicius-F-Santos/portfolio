@@ -79,7 +79,7 @@ para os dados estaticos locais neutros.
 - Testes redundantes e triviais foram eliminados.
 - Testes com assercoes literais de nomes de desenvolvedores foram desacoplados,
   garantindo que mudancas de dados no banco nao quebrem a suite de testes.
-- Resultado: 33 arquivos de spec, 154 testes passando com 100% de sucesso (~3.8s).
+- Resultado: 33 arquivos de spec, 163 testes passando com 100% de sucesso (~4s).
 
 
 [MELHORIA 5] Configuracao do Storage no Supabase para Upload de Curriculos
@@ -118,6 +118,71 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
    - Reducao do pacote inicial de 603 kB para 469.13 kB (abaixo do teto de 500 kB).
    - Compilacao limpa com `npm run build` sem nenhum warning de budget.
 
+
+[MELHORIA 8] Floating Header com Glassmorphism, Monograma Dinamico e Dropdown de Curriculo (DECISAO-016 / DECISAO-017)
+--------------------------------------------------------------------------------
+1. Floating Header Flutuante & Glassmorphism:
+   - A barra superior agora flutua elegantemente no topo com cantos arredondados,
+     efeito de vidro esfumado (backdrop-filter: blur(14px)) e contraste marrom escuro
+     (rgba(42, 28, 20, 0.92)).
+2. Monograma Dinamico Inteligente (extractBrandInitials):
+   - O logo superior (ex: "MS.dev" ou "JV.dev") agora extrai as iniciais do nome
+     cadastrado no banco de dados de forma inteligente.
+   - O algoritmo ignora preposicoes e stopwords gramaticais (ex: "de", "da", "do",
+     "dos", "das", "e", "of", "and"), evitando erros como "DD.dev" quando o nome
+     possui conectivos ou fallback generico.
+   - Para voce (Marcos Santos), quando seu Supabase conecta com o seu nome cadastrado,
+     o logo exibe automaticamente "MS.dev"!
+3. Dropdown Moderno para Download de Curriculos:
+   - O botao de curriculo agora eh um menu dropdown com opcoes claras de download
+     ("Curriculo em Portugues" e "Resume in English").
+   - Totalmente acessivel via teclado (Escape, Tab, clique fora fecha o menu) e
+     responsivo para mobile.
+
+
+[MELHORIA 9] Paleta Editorial Quente (Bege & Marrom Cafe) e Centralizacao Matematica (DECISAO-017)
+--------------------------------------------------------------------------------
+1. Nova Paleta Bege & Marrom:
+   - Substituicao do cinza/chumbo frio por uma paleta sofisticada, acolhedora e moderna:
+     * Fundo da pagina: bege linho suave (#f5f0e6).
+     * Cards e alternancia: bege pergaminho (#e8dfd1).
+     * Tipografia e titulos: marrom espresso profundo (#261a14), com contraste WCAG AAA.
+     * Realces e destaques: dourado/caramelo (#d6ba90) e champanhe (#f7e7ce).
+2. Centralizacao Perfeita da Barra Superior:
+   - O container da barra agora usa Grid de 3 colunas (1fr auto 1fr):
+     * Coluna esquerda: logo da marca alinhado a esquerda (justify-self: start).
+     * Coluna central: links de navegacao (Sobre, Projetos, etc.) travados no centro
+       geometrico exato da tela (justify-self: center).
+     * Coluna direita: botoes de acao (Curriculo e Idioma) alinhados a direita (justify-self: end).
+   - Nao ha mais deslocamento visual da navegacao decorrente da diferenca de largura
+     entre o logo e os botoes da direita.
+
+
+[MELHORIA 10] Tipografia Moderna, Hero Card em 2 Colunas e Trava de Rolagem no ScrollSpy (DECISAO-018)
+--------------------------------------------------------------------------------
+1. Tipografia Moderna (Inter + Space Grotesk):
+   - Adicionadas as fontes Google Fonts 'Inter' (leitura fluida e moderna para corpo,
+     menus e botoes) e 'Space Grotesk' (titulos de destaque e logo), substituindo
+     antigas fontes monoespacadas do sistema.
+2. Hero Card em Duas Colunas com Acoes Rapidas:
+   - Layout fluido de 2 colunas:
+     * Coluna esquerda: Titulo principal com o nome do desenvolvedor, cargo em destaque
+       ("Engenheiro de Software" / "Software Engineer"), badge pulsante de disponibilidade
+       ("● Disponivel para novos projetos · Remoto"), botoes de acao ("Ver projetos" e
+       "Fale comigo" direcionando suavemente para a secao #contato), e links de contato
+       (LinkedIn, GitHub, Email, Telefone) modernizados com icones SVG circulares.
+     * Coluna direita: Card estilizado com degrade marrom e moldura de avatar com silhueta
+       cinza neutra (placeholder pronto para receber foto de perfil real).
+3. Trava de Rolagem Suave no ScrollSpy (Zero Flickering):
+   - Corrigido o bug onde clicar em um link da barra de navegacao fazia o indicador
+     ficar piscando/pulando pelas secoes intermediarias durante a rolagem suave.
+   - Implementado o mecanismo startNavigatingLock(): ao clicar, o menu ativa o item
+     imediatamente e suspende a deteccao do IntersectionObserver ate o fim da rolagem
+     (evento scrollend ou timeout), reativando instantaneamente caso o usuario interaja.
+4. Ordem e Ergonomia dos Botoes da Barra Superior:
+   - Na barra superior, o botao de download de curriculo [ Curriculo v ] vem primeiro,
+     seguido pelo seletor de idioma [ PT v ].
+
 --------------------------------------------------------------------------------
 3. COMO DAR MERGE NO SEU REPOSITORIO
 --------------------------------------------------------------------------------
@@ -130,4 +195,6 @@ npm run build
 ```
 Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
 exibindo perfeitamente todos os seus dados reais!
+Todos os 163 testes unitarios estao passando com 100% de sucesso e o build de producao
+permanece enxuto em 469.41 kB (bem abaixo do limite de 500 kB).
 ================================================================================
