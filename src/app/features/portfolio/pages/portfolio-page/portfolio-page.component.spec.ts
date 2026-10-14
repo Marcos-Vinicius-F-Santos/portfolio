@@ -543,10 +543,10 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('[data-testid="header-cv-trigger"]')).toBeTruthy();
     expect(element.querySelector('[data-testid="header-lang-trigger"]')).toBeTruthy();
 
-    // Verify button order: language trigger is first, CV trigger is second
+    // Verify button order: CV trigger is first, language trigger is second
     const triggers = element.querySelectorAll('.site-header__actions .header-dropdown button.action-pill');
-    expect(triggers[0].getAttribute('data-testid')).toBe('header-lang-trigger');
-    expect(triggers[1].getAttribute('data-testid')).toBe('header-cv-trigger');
+    expect(triggers[0].getAttribute('data-testid')).toBe('header-cv-trigger');
+    expect(triggers[1].getAttribute('data-testid')).toBe('header-lang-trigger');
 
     // Verify CV trigger text in Portuguese defaults to Currículo
     expect(element.querySelector('[data-testid="header-cv-trigger"]')?.textContent).toContain('Currículo');

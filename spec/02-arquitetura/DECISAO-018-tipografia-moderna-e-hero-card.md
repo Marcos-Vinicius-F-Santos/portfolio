@@ -56,3 +56,4 @@ Após a implementação da barra de navegação e da paleta bege e marrom, foram
   - Totalmente responsivo, performático e compatível com acessibilidade (WCAG).
   - 163 testes automatizados passando sem quebra de contrato ou regressão.
   - Build de produção do Angular com 469.41 kB inicial (dentro do orçamento estrito de 500 kB) e zero avisos de compilação.
+
