@@ -291,14 +291,14 @@
 
           <div class="hero-actions">
             @if (showProjects()) {
-              <a href="#projetos" class="hero-btn hero-btn--primary" (click)="navigateToSection($event, 'projetos')">
+              <a href="#projetos" class="hero-btn hero-btn--primary hero-action hero-action--primary" (click)="navigateToSection($event, 'projetos')">
                 <span>{{ language.language() === 'en' ? 'View Projects' : 'Ver projetos' }}</span>
                 <svg class="hero-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </a>
             }
-            <a href="#contato" class="hero-btn hero-btn--secondary" data-testid="hero-contact-button" (click)="navigateToSection($event, 'contato')">
+            <a href="#contato" class="hero-btn hero-btn--secondary hero-action" data-testid="hero-contact-button" (click)="navigateToSection($event, 'contato')">
               <svg class="hero-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m22 2-7 20-4-9-9-4Z"/>
                 <path d="M22 2 11 13"/>
@@ -600,7 +600,7 @@
             }
           </div>
         } @else if (item.targetId === 'projetos') {
-          <div class="projects-sections" data-testid="projects-section">
+          <div class="projects-sections" data-testid="projects-section" data-editorial-project-collection>
             @for (
               group of [
                 {
@@ -683,6 +683,25 @@
                             />
                           </div>
                         </div>
+                        @if (projectGalleryImages(project); as gallery) {
+                          @if (gallery.length) {
+                            <div class="project-gallery" data-testid="project-gallery">
+                              @for (image of gallery; track image.id; let first = $first) {
+                                <figure class="project-gallery-item">
+                                  <img
+                                    [attr.data-testid]="first ? 'project-cover' : 'project-gallery-image'"
+                                    width="600"
+                                    height="320"
+                                    [src]="image.publicUrl"
+                                    [alt]="project.name + ' — ' + image.originalName"
+                                    loading="lazy"
+                                    (error)="onProjectCoverImageError(project.id, image.id)"
+                                  />
+                                </figure>
+                              }
+                            </div>
+                          }
+                        }
                         <a class="project-full-link" [href]="(editorialMode ? '/admin/editor/projetos/' : '/projetos/') + project.id"
                           >{{
                             language.language() === 'en'
@@ -704,68 +723,45 @@
             data-testid="academic-background"
             data-editorial-collection-kind="academic"
           >
-            @for (entry of academicEntries(); track entry.id) {
-              <article
-                class="academic-card"
-                [attr.data-testid]="'academic-' + entry.id"
-                [attr.data-editorial-item-id]="entry.id"
-              >
-                <h3>
-                  <span
-                    [attr.data-editorial-entity]="entry.id"
-                    data-editorial-field="name"
-                    [attr.data-editorial-locale]="language.language()"
-                    >{{ academicEntryName(entry) }}</span
-                  >
-                </h3>
-                <p>
-                  <strong>
-                    <ng-container
-                      *ngTemplateOutlet="localized; context: { key: 'educationInstitutionLabel' }"
-                    />:
-                  </strong>
-                  <span
-                    [attr.data-editorial-entity]="entry.id"
-                    data-editorial-field="institution"
-                    [attr.data-editorial-locale]="language.language()"
-                    >{{ entry.institution || 'Unopar Anhanguera' }}</span
-                  >
-                </p>
-                @if (academicPeriod(entry); as period) {
-                  <p>
-                    <strong>
-                      <ng-container
-                        *ngTemplateOutlet="localized; context: { key: 'educationPeriodLabel' }"
-                      />:
-                    </strong>
-                    {{ period }}
-                  </p>
-                }
-                @if (entry.competencies?.length) {
-                  <p>
-                    <strong>
-                      <ng-container
-                        *ngTemplateOutlet="
-                          localized;
-                          context: { key: 'educationCompetenciesLabel' }
-                        "
-                      />:
-                    </strong>
-                    {{ listText(entry.competencies) }}
-                  </p>
-                }
-                @if (entry.studiedContent?.length) {
-                  <p>
-                    <strong>
-                      <ng-container
-                        *ngTemplateOutlet="localized; context: { key: 'educationContentLabel' }"
-                      />:
-                    </strong>
-                    {{ listText(entry.studiedContent) }}
-                  </p>
-                }
-              </article>
-            }
+            <div class="academic-table" role="list">
+              @for (entry of academicEntries(); track entry.id) {
+                <article
+                  class="academic-card academic-table-row"
+                  role="listitem"
+                  [attr.data-testid]="'academic-' + entry.id"
+                  [attr.data-editorial-item-id]="entry.id"
+                >
+                  <div class="academic-cell academic-name">
+                    <h3>
+                      <span
+                        [attr.data-editorial-entity]="entry.id"
+                        data-editorial-field="name"
+                        [attr.data-editorial-locale]="language.language()"
+                        >{{ academicEntryName(entry) }}</span
+                      >
+                    </h3>
+                  </div>
+                  <div class="academic-cell">
+                    <span
+                      [attr.data-editorial-entity]="entry.id"
+                      data-editorial-field="institution"
+                      [attr.data-editorial-locale]="language.language()"
+                      >{{ entry.institution || '' }}</span
+                    >
+                  </div>
+                  <div class="academic-cell">
+                    <span>{{ academicEntryLevel(entry) }}</span>
+                  </div>
+                  <div class="academic-cell">
+                    <span
+                      class="academic-status"
+                      [class.academic-status--current]="entry.isCurrent"
+                      >{{ entry.isCurrent ? copy().educationCurrentLabel : copy().educationCompletedLabel }}</span
+                    >
+                  </div>
+                </article>
+              }
+            </div>
           </div>
         } @else if (item.targetId === 'contato') {
           <div

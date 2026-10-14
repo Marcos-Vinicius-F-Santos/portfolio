@@ -187,6 +187,11 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
 4. Ordem e Ergonomia dos Botoes da Barra Superior:
    - Na barra superior, o botao de download de curriculo [ Curriculo v ] vem primeiro,
      seguido pelo seletor de idioma [ PT v ].
+5. Imagens dos Projetos e Formacao Academica Tabular (Sincronizado do Upstream):
+   - Adicionada a feature de capa e galeria nos cards de projetos (apresentacao-imagens-projetos).
+   - Suporte a upload de fotos de projetos e hidratacao de URLs assinadas no painel admin.
+   - Formacao academica atualizada para tabela limpa em 4 colunas com nivel academico (Graduacao / Pos).
+   - Utilitario seguro createUuid() para compatibilidade ampla sem depender de crypto.randomUUID().
 
 --------------------------------------------------------------------------------
 3. COMO DAR MERGE NO SEU REPOSITORIO
@@ -200,6 +205,6 @@ npm run build
 ```
 Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
 exibindo perfeitamente todos os seus dados reais!
-Todos os 166 testes unitarios estao passando com 100% de sucesso e o build de producao
+Todos os 169 testes unitarios estao passando com 100% de sucesso e o build de producao
 permanece enxuto em 469.41 kB (bem abaixo do limite de 500 kB).
 ================================================================================

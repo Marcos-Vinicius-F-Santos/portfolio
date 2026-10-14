@@ -185,6 +185,7 @@ export function snapshotToAcademicEntries(
       nameKey: id,
       name: getSnapshotText(snapshot, locale, id, 'name'),
       institution: getSnapshotText(snapshot, locale, id, 'institution'),
+      level: getSnapshotText(snapshot, locale, id, 'level'),
       startDate: nullableString(entity.data['startDate']),
       endDate: nullableString(entity.data['endDate']),
       isCurrent: Boolean(entity.data['isCurrent']),

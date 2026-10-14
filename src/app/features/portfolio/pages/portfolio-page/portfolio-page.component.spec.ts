@@ -18,6 +18,7 @@ import type {
   PortfolioExperience,
   PortfolioFile,
   PortfolioProject,
+  PortfolioProjectImage,
 } from '../../services/portfolio-content.models';
 import { ENGLISH_COPY } from '../../services/portfolio-translations';
 
@@ -142,13 +143,14 @@ describe('PortfolioPage', () => {
     ).toContain('JavaScript');
     expect(element.querySelector('#formacao-academica')).toBeTruthy();
     expect(element.querySelectorAll('.academic-card')).toHaveLength(1);
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Período');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain(
-      PORTFOLIO_ACADEMIC_ENTRIES[0].competencies?.[0] ?? '',
-    );
+    expect(element.querySelector('#formacao-academica h2')?.textContent).toContain('Formação acadêmica');
     expect(element.querySelector('#formacao-academica')?.textContent).toContain(
       ORIGINAL_COPY.educationDataScience,
     );
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Graduação');
+    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Concluído');
+    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Período');
+    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Conteúdos estudados');
     expect(element.querySelector('#contato')).toBeTruthy();
     expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
@@ -466,6 +468,10 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('#projetos')).toBeTruthy();
     expect(element.querySelector('a[href="#projetos"]')).toBeTruthy();
+    expect(element.querySelector('.hero-action--primary')?.getAttribute('href')).toBe('#projetos');
+    expect(element.querySelector('.hero-action:not(.hero-action--primary)')?.getAttribute('href')).toBe(
+      '#contato',
+    );
     expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
     expect(element.querySelector('[data-testid="personal-projects"]')).toBeTruthy();
 
@@ -486,6 +492,61 @@ describe('PortfolioPage', () => {
     expect((professional.querySelector('.project-full-link') as HTMLAnchorElement).href).toBe(
       new URL('/projetos/professional-1', document.baseURI).href,
     );
+  });
+
+  it('renders the first project image by display order with accessible fixed dimensions', async () => {
+    const projectWithImages = createProject('personal-images', 'personal', 1);
+    projectWithImages.images = [
+      createImage('later', 'personal-images', 2),
+      createImage('first', 'personal-images', 1),
+    ];
+    const projectWithoutImages = createProject('personal-without-images', 'personal', 2);
+    projectRows = [projectWithImages, projectWithoutImages];
+
+    const { element } = await render();
+    const card = element.querySelector('[data-testid="personal-project-personal-images"]')!;
+    const image = card.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
+
+    expect(image.src).toBe('https://storage.test/personal-images-first.png');
+    expect(image.alt).toBe('Projeto personal-images — first.png');
+    expect(image.getAttribute('loading')).toBe('lazy');
+    expect(image.getAttribute('width')).toBe('600');
+    expect(image.getAttribute('height')).toBe('320');
+    expect(card.querySelectorAll('[data-testid="project-gallery"] img')).toHaveLength(2);
+    expect(card.querySelector('[data-testid="project-gallery-image"]')?.getAttribute('src')).toBe(
+      'https://storage.test/personal-images-later.png',
+    );
+    expect(
+      element
+        .querySelector('[data-testid="personal-project-personal-without-images"]')
+        ?.querySelector('[data-testid="project-cover"]'),
+    ).toBeNull();
+  });
+
+  it('tries the next project image after a cover failure and isolates the fallback per project', async () => {
+    const firstProject = createProject('personal-first', 'personal', 1);
+    firstProject.images = [
+      createImage('first-broken', 'personal-first', 1),
+      createImage('second', 'personal-first', 2),
+    ];
+    const secondProject = createProject('personal-second', 'personal', 2);
+    secondProject.images = [createImage('other-first', 'personal-second', 1)];
+    projectRows = [firstProject, secondProject];
+
+    const { fixture, element } = await render();
+    const firstCard = element.querySelector('[data-testid="personal-project-personal-first"]')!;
+    const firstImage = firstCard.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
+    firstImage.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+
+    expect(firstCard.querySelector<HTMLImageElement>('[data-testid="project-cover"]')?.src).toBe(
+      'https://storage.test/personal-first-second.png',
+    );
+    expect(
+      element
+        .querySelector('[data-testid="personal-project-personal-second"] [data-testid="project-cover"]')
+        ?.getAttribute('src'),
+    ).toBe('https://storage.test/personal-second-other-first.png');
   });
 
   it('hides an empty project subsection and the entire section when no projects are complete', async () => {
@@ -771,6 +832,19 @@ describe('PortfolioPage', () => {
       learnings: ['Aprendizado ' + id],
       links: [{ label: 'Site ' + id, url: 'https://example.com/' + id }],
       images: [],
+    };
+  }
+
+  function createImage(id: string, projectId: string, displayOrder: number): PortfolioProjectImage {
+    return {
+      id,
+      projectId,
+      storagePath: projectId + '/' + id + '.png',
+      originalName: id + '.png',
+      mimeType: 'image/png',
+      sizeBytes: 100,
+      displayOrder,
+      publicUrl: 'https://storage.test/' + projectId + '-' + id + '.png',
     };
   }
 

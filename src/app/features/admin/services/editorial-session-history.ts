@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { EditorialAutosaveQueue } from './editorial-autosave-queue';
+import { createUuid } from '../../../core/create-uuid';
 import type { EditorialCommandReceipt, EditorialDraftCommand } from './editorial-draft.models';
 
 export interface EditorialHistoryEntry {
@@ -53,7 +54,7 @@ export class EditorialSessionHistory {
     let receipt: EditorialCommandReceipt | undefined;
     for (const [index, command] of sequence.entries()) {
       receipt = await this.autosave.enqueue({
-        operationId: index === 0 ? operationId : crypto.randomUUID(),
+        operationId: index === 0 ? operationId : createUuid(),
         target,
         command,
       });

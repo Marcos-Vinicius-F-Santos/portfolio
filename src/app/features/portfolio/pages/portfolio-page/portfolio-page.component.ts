@@ -34,6 +34,7 @@ import {
   type PortfolioAcademicEntry,
   type PortfolioContactLink,
   type PortfolioProject,
+  type PortfolioProjectImage,
   type PortfolioSkill,
   type PortfolioSkillCategory,
 } from '../../services/portfolio-content.models';
@@ -180,6 +181,7 @@ export class PortfolioPageComponent {
   protected readonly experiences = signal<PortfolioExperience[]>([]);
   protected readonly showExperiences = computed(() => this.experiences().length > 0);
   protected readonly projects = signal<PortfolioProject[]>([]);
+  protected readonly failedProjectImageIds = signal<Record<string, string[]>>({});
   protected readonly curriculum = signal<PortfolioFile | null>(null);
   protected readonly professionalProjects = computed(() =>
     this.projects().filter((project) => project.type === 'professional'),
@@ -310,6 +312,7 @@ export class PortfolioPageComponent {
 
   private async loadProjects(): Promise<void> {
     const projects = await this.content.listProjects(this.language.language());
+    this.failedProjectImageIds.set({});
     this.projects.set(this.editorialMode ? projects : projects.filter(hasPortfolioProjectContent));
   }
 
@@ -388,6 +391,24 @@ export class PortfolioPageComponent {
     return entry.name?.trim() || this.copy()[entry.nameKey as keyof PortfolioCopy] || '';
   }
 
+  protected academicEntryLevel(entry: PortfolioAcademicEntry): string {
+    const level = entry.level?.trim();
+    if (level) return level;
+
+    const name = this.academicEntryName(entry).toLocaleLowerCase('pt-BR');
+    const isEnglish = this.language.language() === 'en';
+    if (name.includes('ciência de dados') || name.includes('data science')) {
+      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
+    }
+    if (name.includes('estatística aplicada') || name.includes('applied statistics')) {
+      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
+    }
+    if (name.includes('design gráfico') || name.includes('graphic design')) {
+      return isEnglish ? 'Technologist' : 'Tecnólogo';
+    }
+    return '';
+  }
+
   protected contactLinkLabel(link: PortfolioContactLink): string {
     return link.label?.trim() || this.copy()[link.labelKey as keyof PortfolioCopy] || '';
   }
@@ -414,6 +435,20 @@ export class PortfolioPageComponent {
       return;
     }
     image.hidden = true;
+  }
+
+  protected projectGalleryImages(project: PortfolioProject): PortfolioProjectImage[] {
+    const failedIds = new Set(this.failedProjectImageIds()[project.id] ?? []);
+    return [...project.images]
+      .filter((image) => image.publicUrl.trim().length > 0 && !failedIds.has(image.id))
+      .sort((left, right) => left.displayOrder - right.displayOrder);
+  }
+
+  protected onProjectCoverImageError(projectId: string, imageId: string): void {
+    this.failedProjectImageIds.update((current) => ({
+      ...current,
+      [projectId]: [...new Set([...(current[projectId] ?? []), imageId])],
+    }));
   }
 
   private formatExperienceDate(value: string | null): string {

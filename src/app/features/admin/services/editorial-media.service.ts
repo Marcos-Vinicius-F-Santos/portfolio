@@ -1,14 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
+import { createUuid } from '../../../core/create-uuid';
 import {
   validateEditorialUpload,
   type EditorialMediaPurpose,
   type EditorialMediaReservation,
 } from './editorial-media.models';
+import type { EditorialCommandReceipt } from './editorial-draft.models';
 
 @Injectable({ providedIn: 'root' })
 export class EditorialMediaService {
-  private readonly client = inject(SUPABASE_CLIENT);
+  private readonly client = inject(SUPABASE_CLIENT, { optional: true });
 
   async upload(
     expectedRevision: number,
@@ -56,16 +58,35 @@ export class EditorialMediaService {
     };
   }
 
-  async associate(expectedRevision: number, entityId: string, mediaId: string, field = 'projectImage', position = 0): Promise<void> {
+  async associate(expectedRevision: number, entityId: string, mediaId: string, field = 'projectImage', position = 0): Promise<EditorialCommandReceipt> {
     if (!this.client) throw new Error('Supabase is not configured');
-    const { error } = await this.client.rpc('associate_editorial_media', {
+    const { data, error } = await this.client.rpc('associate_editorial_media', {
       expected_revision: expectedRevision,
-      operation_id: crypto.randomUUID(),
+      operation_id: createUuid(),
       entity_id: entityId,
       media_id: mediaId,
       field_name: field,
       media_position: position,
     });
     if (error) throw error;
+    if (!isReceipt(data)) throw new Error('Invalid editorial media receipt');
+    return data;
   }
+
+  async createSignedUrl(bucket: string, path: string, expiresIn = 3600): Promise<string> {
+    if (!this.client) throw new Error('Supabase is not configured');
+    const { data, error } = await this.client.storage.from(bucket).createSignedUrl(path, expiresIn);
+    if (error || !data?.signedUrl) throw error ?? new Error('Editorial media URL unavailable');
+    return data.signedUrl;
+  }
+}
+
+function isReceipt(value: unknown): value is EditorialCommandReceipt {
+  if (!value || typeof value !== 'object') return false;
+  const receipt = value as Record<string, unknown>;
+  return (
+    typeof receipt['operationId'] === 'string' &&
+    typeof receipt['revision'] === 'number' &&
+    typeof receipt['repeated'] === 'boolean'
+  );
 }

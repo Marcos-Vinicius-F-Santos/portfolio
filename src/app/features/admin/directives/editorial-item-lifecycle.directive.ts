@@ -14,6 +14,7 @@ import type { EditorialDraftCommand } from '../services/editorial-draft.models';
 import { EditorialSessionHistory } from '../services/editorial-session-history';
 import type { EditorialEntityKind } from '../../portfolio/services/editorial-snapshot.models';
 import { EditorialDraftContentService } from '../services/editorial-draft-content.service';
+import { createUuid } from '../../../core/create-uuid';
 
 type AddCommand = Extract<EditorialDraftCommand, { type: 'add_entity' }>;
 
@@ -45,30 +46,53 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
 
   private prepare(): void {
     if (!this.enabled()) return;
-      this.host
+    this.host
       .querySelectorAll<HTMLElement>('[data-editorial-collection-kind]')
       .forEach((collection) => {
         const kind = collection.dataset['editorialCollectionKind'] as EditorialEntityKind;
         if (kind === 'skill') {
           if (!collection.querySelector(':scope > .editorial-skill-picker'))
             collection.append(this.skillPicker(collection));
-        } else if (!collection.querySelector(':scope > .editorial-add-item')) {
-          const add = this.button('Adicionar item', 'editorial-add-item', () => this.add(collection));
-          collection.append(add);
+        } else if (
+          kind !== 'project' ||
+          !collection.closest('[data-editorial-project-collection]')
+        ) {
+          if (!collection.querySelector(':scope > .editorial-add-item')) {
+            const add = this.button('Adicionar conteúdo', 'editorial-add-item', () => this.add(collection), '+');
+            collection.append(add);
+          }
         }
+      });
+    this.host
+      .querySelectorAll<HTMLElement>('[data-editorial-project-collection]')
+      .forEach((collection) => {
+        if (!collection.querySelector(':scope > .editorial-project-picker'))
+          collection.append(this.projectPicker(collection));
       });
     this.host.querySelectorAll<HTMLElement>('[data-editorial-item-id]').forEach((item) => {
       if (item.querySelector(':scope > .editorial-remove-item')) return;
-      const remove = this.button('Remover item', 'editorial-remove-item', () => this.remove(item));
+      const remove = this.button('Remover item', 'editorial-remove-item', () => this.remove(item), '×');
       item.prepend(remove);
     });
   }
 
-  private button(label: string, className: string, action: () => void): HTMLButtonElement {
+  private button(label: string, className: string, action: () => void, icon?: string): HTMLButtonElement {
     const button = this.host.ownerDocument.createElement('button');
     button.type = 'button';
     button.className = className;
-    button.textContent = label;
+    button.title = label;
+    button.setAttribute('aria-label', label);
+    if (icon) {
+      const visual = this.host.ownerDocument.createElement('span');
+      visual.className = 'editorial-button-icon';
+      visual.setAttribute('aria-hidden', 'true');
+      visual.textContent = icon;
+      button.append(visual);
+    }
+    const text = this.host.ownerDocument.createElement('span');
+    text.className = icon ? 'editorial-button-label editorial-visually-hidden' : 'editorial-button-label';
+    text.textContent = label;
+    button.append(text);
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -82,6 +106,11 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
     const parentId = collection.dataset['editorialParentId'] || undefined;
     const command = this.newEntity(kind, parentId, collection);
     this.persistAdd(command);
+  }
+
+  private addProject(collection: HTMLElement, type: string): void {
+    const projectType = type === 'professional' ? 'professional' : 'personal';
+    this.persistAdd(this.newEntity('project', undefined, collection, undefined, projectType));
   }
 
   private addSkill(collection: HTMLElement, technologyId: string): void {
@@ -104,7 +133,7 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
     this.history.record({ target: `${command.entityId}.create`, forward: command, inverse });
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: `${command.entityId}.create`,
         command,
       })
@@ -127,6 +156,7 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
     }
     const add = this.button('Adicionar habilidade', 'editorial-add-skill', () =>
       this.addSkill(collection, select.value),
+      '+',
     );
     if (!technologies.length) {
       add.disabled = true;
@@ -136,6 +166,32 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
       wrapper.append(hint);
     }
     wrapper.append(select, add);
+    return wrapper;
+  }
+
+  private projectPicker(collection: HTMLElement): HTMLElement {
+    const wrapper = this.host.ownerDocument.createElement('div');
+    wrapper.className = 'editorial-project-picker';
+
+    const label = this.host.ownerDocument.createElement('label');
+    label.textContent = 'Tipo do novo projeto';
+    const select = this.host.ownerDocument.createElement('select');
+    select.setAttribute('aria-label', 'Tipo do novo projeto');
+    for (const optionData of [
+      ['personal', 'Pessoal'],
+      ['professional', 'Profissional'],
+    ]) {
+      const option = this.host.ownerDocument.createElement('option');
+      option.value = optionData[0];
+      option.textContent = optionData[1];
+      select.append(option);
+    }
+    label.append(select);
+    const add = this.button('Adicionar projeto', 'editorial-add-project', () =>
+      this.addProject(collection, select.value),
+      '+',
+    );
+    wrapper.append(label, add);
     return wrapper;
   }
 
@@ -150,7 +206,7 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
     this.history.record({ target: `${entityId}.remove`, forward, inverse: restore });
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: `${entityId}.remove`,
         command: forward,
       })
@@ -162,10 +218,12 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
     parentId: string | undefined,
     collection: HTMLElement,
     technologyId?: string,
+    projectType?: string,
   ): AddCommand {
     const data: Record<string, string | boolean | null> = {};
     if (kind === 'experience') Object.assign(data, { startDate: '', endDate: null });
-    if (kind === 'project') data['type'] = collection.dataset['editorialNewType'] ?? 'personal';
+    if (kind === 'project')
+      data['type'] = projectType ?? collection.dataset['editorialNewType'] ?? 'personal';
     if (kind === 'academic')
       Object.assign(data, { startDate: null, endDate: null, isCurrent: false });
     if (kind === 'skill' && technologyId) {
@@ -188,7 +246,7 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
       : {};
     return {
       type: 'add_entity',
-      entityId: crypto.randomUUID(),
+      entityId: createUuid(),
       kind,
       parentId,
       position: this.content.nextPosition(kind, parentId),
@@ -199,7 +257,9 @@ export class EditorialItemLifecycleDirective implements AfterViewInit, OnDestroy
 
   private clear(): void {
     this.host
-      .querySelectorAll('.editorial-add-item,.editorial-add-skill,.editorial-skill-picker,.editorial-remove-item')
+      .querySelectorAll(
+        '.editorial-add-item,.editorial-add-project,.editorial-add-skill,.editorial-skill-picker,.editorial-project-picker,.editorial-remove-item',
+      )
       .forEach((control) => control.remove());
   }
 }

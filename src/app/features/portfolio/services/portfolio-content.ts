@@ -36,7 +36,11 @@ export interface PortfolioCopy {
   educationDataScience: string;
   educationAppliedStatistics: string;
   educationGraphicDesign: string;
+  educationNameLabel: string;
   educationInstitutionLabel: string;
+  educationLevelLabel: string;
+  educationStatusLabel: string;
+  educationCompletedLabel: string;
   educationPeriodLabel: string;
   educationCompetenciesLabel: string;
   educationContentLabel: string;
@@ -175,6 +179,7 @@ export const PORTFOLIO_ACADEMIC_ENTRIES: readonly PortfolioAcademicEntry[] = [
     id: 'academic-fallback',
     nameKey: 'educationDataScience',
     institution: 'Instituição de Ensino Superior',
+    level: 'Graduação',
     startDate: '2020-01-01',
     endDate: '2024-12-31',
     isCurrent: false,
@@ -260,7 +265,11 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   educationDataScience: 'Computação e Engenharia de Software',
   educationAppliedStatistics: 'Estatística Aplicada',
   educationGraphicDesign: 'Design Gráfico',
+  educationNameLabel: 'Formação',
   educationInstitutionLabel: 'Instituição',
+  educationLevelLabel: 'Nível',
+  educationStatusLabel: 'Status',
+  educationCompletedLabel: 'Concluído',
   educationPeriodLabel: 'Período',
   educationCompetenciesLabel: 'Competências desenvolvidas',
   educationContentLabel: 'Conteúdos estudados',

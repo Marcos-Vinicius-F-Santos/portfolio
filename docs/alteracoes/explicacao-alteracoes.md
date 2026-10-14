@@ -386,6 +386,21 @@ Esta atualização adaptou o design de apresentação e tipografia seguindo o po
   2. `[ PT v ]` / `[ EN v ]` (Dropdown discreto de alternância de idioma).
 
 ### H. Evidências de Validação
-- **Suíte de Testes:** **166 testes unitários** passando com 100% de sucesso (`npm test`).
+- **Suíte de Testes:** **169 testes unitários** passando com 100% de sucesso (`npm test`).
 - **Build de Produção:** **469.41 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
+
+### I. Sincronização e Adaptação dos Aprimoramentos do Upstream (Marcos)
+- **Comparação Realizada:** Analisados os commits upstream do Marcos (`d5310ba`, `ca90d67`, PR #2).
+- **Apresentação de Imagens dos Projetos (`spec/03-features/apresentacao-imagens-projetos`):**
+  - **Capa e Galeria nos Cards:** Cada projeto agora renderiza a imagem de capa em destaque (`data-testid="project-cover"`) com dimensões acessíveis (`width="600"`, `height="320"`, `loading="lazy"`) e galeria completa quando existirem múltiplas imagens.
+  - **Fallback Monotônico por Projeto:** `onProjectCoverImageError(projectId, imageId)` isola falhas por projeto, alternando automaticamente para a próxima imagem em ordem de exibição sem quebrar os outros cards. Projetos sem imagens não exibem galeria quebrada.
+  - **Gerenciamento Editorial de Projetos:** `EditorialProjectDetailComponent` atualizado com upload de fotos (PNG/JPG até 1 MB), vinculação no draft via RPC e hidratação assíncrona de URLs assinadas no Supabase Storage.
+- **Formação Acadêmica Tabular e Nível Acadêmico (`academic_level`):**
+  - Migração de banco `20261014000000_add_academic_level.sql` adicionando suporte à coluna `level`.
+  - Redesenho da seção `#formacao-academica` para o formato tabular `.academic-table` com 4 colunas organizadas: *Formação / Curso*, *Instituição*, *Nível* (`academicEntryLevel`) e *Status* (Pill com Em andamento / Concluído).
+- **Utilitário Seguro `createUuid()`:**
+  - Adicionado `src/app/core/create-uuid.ts` com fallback para ambientes onde `crypto.randomUUID()` não está disponível.
+- **Arquitetura Preservada sem Regressões:**
+  - Mantido CSS nativo limpo, estrutura canônica de pastas, ScrollSpy geométrico matemático, navegação em cápsula com 3 colunas e multi-tenancy dinâmico.
+
 

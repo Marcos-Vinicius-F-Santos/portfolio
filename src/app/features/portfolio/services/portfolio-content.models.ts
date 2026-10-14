@@ -95,6 +95,7 @@ export interface PortfolioAcademicEntry {
   nameKey: string;
   name?: string;
   institution: string;
+  level?: string;
   startDate?: string | null;
   endDate?: string | null;
   isCurrent?: boolean;
