@@ -291,14 +291,14 @@
 
           <div class="hero-actions">
             @if (showProjects()) {
-              <a href="#projetos" class="hero-btn hero-btn--primary">
+              <a href="#projetos" class="hero-btn hero-btn--primary" (click)="navigateToSection($event, 'projetos')">
                 <span>{{ language.language() === 'en' ? 'View Projects' : 'Ver projetos' }}</span>
                 <svg class="hero-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </a>
             }
-            <a href="#contato" class="hero-btn hero-btn--secondary" data-testid="hero-contact-button">
+            <a href="#contato" class="hero-btn hero-btn--secondary" data-testid="hero-contact-button" (click)="navigateToSection($event, 'contato')">
               <svg class="hero-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m22 2-7 20-4-9-9-4Z"/>
                 <path d="M22 2 11 13"/>

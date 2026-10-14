@@ -468,11 +468,45 @@ export class PortfolioPageComponent {
     this.mobileMenuOpen.set(false);
   }
 
+  private isNavigating = false;
+  private navigatingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  private startNavigatingLock(targetId: string): void {
+    this.activeSectionId.set(targetId);
+    this.isNavigating = true;
+
+    if (this.navigatingTimeout) {
+      clearTimeout(this.navigatingTimeout);
+      this.navigatingTimeout = null;
+    }
+
+    const win = this.document.defaultView;
+    if (win) {
+      const unlock = () => {
+        this.isNavigating = false;
+        if (this.navigatingTimeout) {
+          clearTimeout(this.navigatingTimeout);
+          this.navigatingTimeout = null;
+        }
+        win.removeEventListener('scrollend', unlock);
+        win.removeEventListener('wheel', unlock);
+        win.removeEventListener('touchmove', unlock);
+      };
+
+      win.addEventListener('scrollend', unlock, { once: true });
+      win.addEventListener('wheel', unlock, { once: true, passive: true });
+      win.addEventListener('touchmove', unlock, { once: true, passive: true });
+
+      this.navigatingTimeout = setTimeout(unlock, 900);
+    }
+  }
+
   private initScrollSpy(): void {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
     const targets = Object.keys(SECTION_ID_BY_TARGET);
     this.observer = new IntersectionObserver(
       (entries) => {
+        if (this.isNavigating) return;
         for (const entry of entries) {
           if (entry.isIntersecting && entry.target.id) {
             this.activeSectionId.set(entry.target.id);
@@ -488,6 +522,9 @@ export class PortfolioPageComponent {
     }
     this.destroyRef.onDestroy(() => {
       this.observer?.disconnect();
+      if (this.navigatingTimeout) {
+        clearTimeout(this.navigatingTimeout);
+      }
     });
   }
 
@@ -510,7 +547,7 @@ export class PortfolioPageComponent {
 
   protected scrollToTop(event: Event): void {
     event.preventDefault();
-    this.activeSectionId.set('apresentacao');
+    this.startNavigatingLock('apresentacao');
     this.closeAllMenus();
     const target = this.document.getElementById('apresentacao');
     if (target) {
@@ -522,7 +559,7 @@ export class PortfolioPageComponent {
 
   protected navigateToSection(event: Event, targetId: string): void {
     event.preventDefault();
-    this.activeSectionId.set(targetId);
+    this.startNavigatingLock(targetId);
     this.closeAllMenus();
     const target = this.document.getElementById(targetId);
     target?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
