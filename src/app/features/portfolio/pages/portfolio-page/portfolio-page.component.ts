@@ -255,6 +255,18 @@ export class PortfolioPageComponent {
     const defaultInitials = config?.brandInitials?.trim() || 'JV';
     return extractBrandInitials(this.copy().name, defaultInitials);
   });
+  protected readonly authorName = computed(() => {
+    const config = typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
+    if (config?.authorName?.trim()) return config.authorName.trim();
+    const copyName = this.copy().name?.trim();
+    if (copyName && !GENERIC_TITLES.has(copyName.toLowerCase())) {
+      return copyName;
+    }
+    return 'João Vitor Dias Fernandes';
+  });
+  protected readonly roleSubtitle = computed(() =>
+    this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software',
+  );
   protected readonly cvMenuOpen = signal(false);
   protected readonly languageMenuOpen = signal(false);
   protected readonly mobileMenuOpen = signal(false);

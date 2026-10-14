@@ -3,6 +3,7 @@ export interface SupabaseRuntimeConfig {
   publishableKey: string;
   adminUserId: string;
   brandInitials?: string;
+  authorName?: string;
 }
 
 declare global {

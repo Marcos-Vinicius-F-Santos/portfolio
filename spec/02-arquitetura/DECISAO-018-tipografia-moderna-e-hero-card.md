@@ -27,13 +27,14 @@ Após a implementação da barra de navegação e da paleta bege e marrom, foram
 - **Tamanho e Proporção do Título Hero:**
   - Redução do clamp excessivo anterior (que atingia `8.5rem`, causando quebras inadequadas em nomes longos) para `clamp(2.5rem, 5.5vw, 4.25rem)` no desktop e `clamp(2.2rem, 9vw, 3.2rem)` no mobile.
 
-### B. Layout do Hero Card (`.page-header`)
-- **Estrutura em Grid Responsivo:**
-  - Desktop (`min-width: 920px`): grid de 2 colunas (`1.3fr 1fr`) centralizado com largura máxima de `84rem`.
-  - Mobile (`< 920px`): empilhamento vertical fluído com espaçamentos confortáveis.
-- **Coluna da Esquerda (Conteúdo & Ações):**
-  - Eyebrow em caixa alta com espaçamento de caracteres refinado.
-  - Título com o nome do desenvolvedor (`copy().name || copy().presentationTitle`).
+### B. Layout do Hero Card (`.page-header`) e Centralização do Topbar
+- **Centralização da Barra de Navegação (Topbar):**
+  - No desktop, `.site-header__container` utiliza grid de 3 colunas (`1fr auto 1fr`), garantindo que o menu central de navegação (`.nav-capsule`) fique perfeitamente centralizado na viewport, independente das larguras do logo à esquerda e dos botões à direita.
+  - Alinhamento vertical milimétrico dos itens da cápsula (`.nav-capsule__link`), com `display: inline-flex; align-items: center; justify-content: center; line-height: 1; min-height: 2.25rem`, eliminando qualquer descompasso visual de baseline ou assimetria de padding.
+- **Coluna da Esquerda do Hero (Conteúdo & Ações):**
+  - Remoção do eyebrow genérico ("Portfólio profissional" / "Professional portfolio").
+  - Título principal (`h1.hero-name`) exibindo o nome completo do autor (`João Vitor Dias Fernandes`, derivável dinamicamente de `authorName`).
+  - Subtítulo de cargo (`.hero-subtitle`) em destaque dourado/caramelo (`#d6ba90`): `"Engenheiro de Software"` em português e `"Software Engineer"` em inglês.
   - Parágrafo de introdução bio com line-height 1.6 e cor `#d8cbbe`.
   - Grupo de botões de ação (`.hero-actions`):
     - Botão primário: "Ver projetos" / "View Projects" (quando houver projetos cadastrados), com ícone de seta `→`.

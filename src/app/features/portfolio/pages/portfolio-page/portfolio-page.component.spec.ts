@@ -132,6 +132,9 @@ describe('PortfolioPage', () => {
     };
     const { element } = await render();
 
+    expect(element.querySelector('.hero-name')?.textContent).toContain('João Vitor Dias Fernandes');
+    expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Engenheiro de Software');
+    expect(element.querySelector('.eyebrow')).toBeNull();
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Habilidades');
     expect(element.querySelectorAll('.skill-category')).toHaveLength(6);
     expect(
@@ -198,6 +201,7 @@ describe('PortfolioPage', () => {
     select.dispatchEvent(new Event('change'));
     await fixture.whenStable();
 
+    expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Software Engineer');
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Skills');
     expect(element.querySelector('#formacao-academica')?.textContent).toContain('Computer Science');
     expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
