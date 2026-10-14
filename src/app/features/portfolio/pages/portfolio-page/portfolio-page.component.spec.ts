@@ -538,6 +538,14 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('.nav-capsule')).toBeTruthy();
     expect(element.querySelector('[data-testid="header-cv-trigger"]')).toBeTruthy();
     expect(element.querySelector('[data-testid="header-lang-trigger"]')).toBeTruthy();
+
+    // Verify button order: language trigger is first, CV trigger is second
+    const triggers = element.querySelectorAll('.site-header__actions .header-dropdown button.action-pill');
+    expect(triggers[0].getAttribute('data-testid')).toBe('header-lang-trigger');
+    expect(triggers[1].getAttribute('data-testid')).toBe('header-cv-trigger');
+
+    // Verify CV trigger text in Portuguese defaults to Currículo
+    expect(element.querySelector('[data-testid="header-cv-trigger"]')?.textContent).toContain('Currículo');
   });
 
   it('toggles CV download dropdown and triggers download on selection', async () => {
@@ -563,7 +571,7 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('.dropdown-menu--cv')).toBeNull();
   });
 
-  it('toggles language dropdown and switches language', async () => {
+  it('toggles language dropdown, switches language, and updates CV trigger text to Resume', async () => {
     const fixture = TestBed.createComponent(PortfolioPageComponent);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -585,6 +593,7 @@ describe('PortfolioPage', () => {
 
     expect(TestBed.inject(PortfolioLanguageService).language()).toBe('en');
     expect(element.querySelector('.dropdown-menu--lang')).toBeNull();
+    expect(element.querySelector('[data-testid="header-cv-trigger"]')?.textContent).toContain('Resume');
   });
 
   it('toggles mobile drawer on hamburger button click', async () => {
