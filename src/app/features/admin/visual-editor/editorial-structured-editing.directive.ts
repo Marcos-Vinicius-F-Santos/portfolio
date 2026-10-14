@@ -10,6 +10,7 @@ import {
   input,
 } from '@angular/core';
 import { EditorialAutosaveQueue } from '../content-management/editorial-autosave-queue';
+import { createUuid } from '../../../core/create-uuid';
 import { EditorialDraftContentService } from './editorial-draft-content.service';
 
 @Directive({ selector: '[appEditorialStructuredEditing]' })
@@ -173,6 +174,6 @@ export class EditorialStructuredEditingDirective implements AfterViewInit, OnDes
     target: string,
     command: Parameters<EditorialAutosaveQueue['enqueue']>[0]['command'],
   ): Promise<void> {
-    await this.autosave.enqueue({ operationId: crypto.randomUUID(), target, command });
+    await this.autosave.enqueue({ operationId: createUuid(), target, command });
   }
 }

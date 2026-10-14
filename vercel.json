@@ -1,1 +1,11 @@
-{ "rewrites": [{ "source": "/projetos/:id", "destination": "/index.html" }] }
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/portfolio/browser",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

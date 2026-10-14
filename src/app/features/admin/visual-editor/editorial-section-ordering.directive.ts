@@ -9,6 +9,7 @@ import {
   input,
 } from '@angular/core';
 import { EditorialAutosaveQueue } from '../content-management/editorial-autosave-queue';
+import { createUuid } from '../../../core/create-uuid';
 import { EditorialDraftContentService } from './editorial-draft-content.service';
 
 @Directive({ selector: '[appEditorialSectionOrdering]' })
@@ -56,16 +57,25 @@ export class EditorialSectionOrderingDirective implements AfterViewInit, OnDestr
       controls.className = 'editorial-section-controls';
       controls.setAttribute('aria-label', 'Ordenar seção');
       controls.append(
-        this.button('Mover acima', () => this.move(id, -1)),
-        this.button('Mover abaixo', () => this.move(id, 1)),
+        this.button('Mover acima', () => this.move(id, -1), '↑'),
+        this.button('Mover abaixo', () => this.move(id, 1), '↓'),
       );
       section.prepend(controls);
     });
   }
-  private button(label: string, action: () => void): HTMLButtonElement {
+  private button(label: string, action: () => void, icon: string): HTMLButtonElement {
     const button = this.host.ownerDocument.createElement('button');
     button.type = 'button';
-    button.textContent = label;
+    button.title = label;
+    button.setAttribute('aria-label', label);
+    const visual = this.host.ownerDocument.createElement('span');
+    visual.className = 'editorial-button-icon';
+    visual.setAttribute('aria-hidden', 'true');
+    visual.textContent = icon;
+    const text = this.host.ownerDocument.createElement('span');
+    text.className = 'editorial-button-label editorial-visually-hidden';
+    text.textContent = label;
+    button.append(visual, text);
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -96,7 +106,7 @@ export class EditorialSectionOrderingDirective implements AfterViewInit, OnDestr
     this.content.reorderSections(ids);
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: 'sections.order',
         command: { type: 'set_section_order', sectionIds: ids },
       })

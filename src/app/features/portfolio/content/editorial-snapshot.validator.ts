@@ -92,7 +92,7 @@ const TRANSLATION_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]
   experience: ['title', 'context', 'responsibilities', 'technicalDecisions', 'results'],
   skillCategory: ['label'],
   skill: ['name'],
-  academic: ['name', 'institution', 'competencies', 'studiedContent'],
+  academic: ['name', 'institution', 'level', 'competencies', 'studiedContent'],
   project: [
     'name',
     'description',

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 
 import { EditorialAutosaveQueue } from '../content-management/editorial-autosave-queue';
+import { createUuid } from '../../../core/create-uuid';
 import { EditorialDraftContentService } from './editorial-draft-content.service';
 
 type EditorialTarget = HTMLElement & {
@@ -185,7 +186,7 @@ export class EditorialTextEditingDirective implements AfterViewInit, OnDestroy {
 
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: `${entityId}.${locale}.${field}`,
         command: { type: 'set_translation', entityId, locale, field, value: nextValue },
       })
@@ -255,7 +256,7 @@ export class EditorialTextEditingDirective implements AfterViewInit, OnDestroy {
     this.sessionValues.set(key, value);
     void this.autosave
       .enqueue({
-        operationId: crypto.randomUUID(),
+        operationId: createUuid(),
         target: key,
         command: { type: 'set_translation', entityId, locale: this.activeLocale, field, value },
       })

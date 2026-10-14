@@ -146,6 +146,7 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
       nameKey: '',
       name: this.text(snapshot, locale, id, 'name'),
       institution: this.text(snapshot, locale, id, 'institution'),
+      level: this.text(snapshot, locale, id, 'level'),
       startDate: nullableString(entity.data['startDate']),
       endDate: nullableString(entity.data['endDate']),
       isCurrent: entity.data['isCurrent'] === true,

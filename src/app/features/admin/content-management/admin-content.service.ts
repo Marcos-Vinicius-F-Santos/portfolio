@@ -217,6 +217,7 @@ export class AdminContentService {
         (value) => ({
           name: value.name,
           institution: value.institution,
+          level: value.level,
           competencies: value.competencies,
           studied_content: value.studiedContent,
         }),
@@ -414,12 +415,14 @@ export class AdminContentService {
           'pt-BR': {
             name: String(translation['pt-BR']?.['name'] ?? ''),
             institution: String(translation['pt-BR']?.['institution'] ?? ''),
+            level: String(translation['pt-BR']?.['level'] ?? ''),
             competencies: stringArray(translation['pt-BR']?.['competencies']),
             studiedContent: stringArray(translation['pt-BR']?.['studied_content']),
           },
           en: {
             name: String(translation.en?.['name'] ?? ''),
             institution: String(translation.en?.['institution'] ?? ''),
+            level: String(translation.en?.['level'] ?? ''),
             competencies: stringArray(translation.en?.['competencies']),
             studiedContent: stringArray(translation.en?.['studied_content']),
           },
@@ -621,12 +624,14 @@ function fallbackAcademicDrafts(): AdminAcademicDraft[] {
       'pt-BR': {
         name: entry.nameKey,
         institution: entry.institution,
+        level: entry.level ?? '',
         competencies: entry.competencies ?? [],
         studiedContent: entry.studiedContent ?? [],
       },
       en: {
         name: entry.nameKey,
         institution: entry.institution,
+        level: entry.level ?? '',
         competencies: entry.competencies ?? [],
         studiedContent: entry.studiedContent ?? [],
       },

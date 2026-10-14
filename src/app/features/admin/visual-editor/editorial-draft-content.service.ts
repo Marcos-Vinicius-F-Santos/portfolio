@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { EditorialMediaService } from '../media-management/editorial-media.service';
 
 import type {
   EditorialDraftCommand,
@@ -16,6 +17,7 @@ import type {
 
 @Injectable()
 export class EditorialDraftContentService {
+  private readonly mediaService = inject(EditorialMediaService, { optional: true });
   private readonly draftState = signal<EditorialDraftV1 | null>(null);
   private readonly contentRevisionState = signal(0);
   readonly draft = this.draftState.asReadonly();
@@ -198,10 +200,10 @@ export class EditorialDraftContentService {
   async listProjects(locale: PortfolioLocale): Promise<PortfolioProject[]> {
     await this.readyPromise;
     const draft = this.requireDraft();
-    return this.entities('project').map(([id, entity]) => ({
+    const projects = this.entities('project').map(([id, entity]) => ({
       id,
       displayOrder: entity.position,
-      type: entity.data['type'] === 'professional' ? 'professional' : 'personal',
+      type: (entity.data['type'] === 'professional' ? 'professional' : 'personal') as PortfolioProject['type'],
       locale,
       name: this.text(draft, locale, id, 'name'),
       description: this.text(draft, locale, id, 'description'),
@@ -220,10 +222,16 @@ export class EditorialDraftContentService {
         : [],
       results: this.list(draft, locale, id, 'results'),
       learnings: this.list(draft, locale, id, 'learnings'),
-      links: [],
-      images: [],
+      links: this.projectLinks(draft, locale, id),
+      images: this.projectImages(draft, locale, id),
       editorialListIds: this.listIds(draft, id),
     }));
+    return Promise.all(
+      projects.map(async (project) => ({
+        ...project,
+        images: await this.resolveProjectImageUrls(project.images, draft),
+      })),
+    );
   }
   async listSkillCategories(locale: PortfolioLocale): Promise<PortfolioSkillCategory[]> {
     await this.readyPromise;
@@ -250,6 +258,7 @@ export class EditorialDraftContentService {
       nameKey: '',
       name: this.text(draft, locale, id, 'name'),
       institution: this.text(draft, locale, id, 'institution'),
+      level: this.text(draft, locale, id, 'level'),
       startDate: String(entity.data['startDate'] ?? ''),
       endDate: typeof entity.data['endDate'] === 'string' ? entity.data['endDate'] : null,
       isCurrent: entity.data['isCurrent'] === true,
@@ -296,6 +305,68 @@ export class EditorialDraftContentService {
     const iconMediaId = draft.technologies[technologyId]?.iconMediaId;
     if (!iconMediaId) return undefined;
     return draft.media[iconMediaId]?.assetPath;
+  }
+
+  private projectLinks(
+    draft: EditorialDraftV1,
+    locale: PortfolioLocale,
+    parentId: string,
+  ): PortfolioProject['links'] {
+    return this.entities('projectLink')
+      .filter(([, entity]) => entity.parentId === parentId)
+      .map(([id, entity]) => ({
+        label: this.text(draft, locale, id, 'label'),
+        url: String(entity.data['href'] ?? ''),
+      }));
+  }
+
+  private projectImages(
+    draft: EditorialDraftV1,
+    locale: PortfolioLocale,
+    parentId: string,
+  ): PortfolioProject['images'] {
+    return this.entities('projectImage')
+      .filter(([, entity]) => entity.parentId === parentId)
+      .flatMap(([id, entity]) => {
+        const media = draft.media[String(entity.data['mediaId'] ?? '')];
+        if (
+          !media ||
+          (media.mime !== 'image/png' && media.mime !== 'image/jpeg') ||
+          (!media.assetPath && (!media.bucket || !media.storagePath))
+        ) return [];
+        return [{
+          id,
+          projectId: parentId,
+          storagePath: media.assetPath ?? media.storagePath ?? '',
+          originalName: this.text(draft, locale, id, 'originalName')
+            || this.text(draft, locale, id, 'alt')
+            || id,
+          mimeType: media.mime,
+          sizeBytes: media.bytes,
+          displayOrder: entity.position,
+          publicUrl: media.assetPath ?? '',
+        }];
+      });
+  }
+
+  private async resolveProjectImageUrls(
+    images: PortfolioProject['images'],
+    draft: EditorialDraftV1,
+  ): Promise<PortfolioProject['images']> {
+    if (!this.mediaService) return images;
+    return Promise.all(
+      images.map(async (image) => {
+        if (image.publicUrl.startsWith('/')) return image;
+        const entity = draft.entities[image.id];
+        const media = draft.media[String(entity?.data['mediaId'] ?? '')];
+        if (!media?.bucket || !media.storagePath) return image;
+        try {
+          return { ...image, publicUrl: await this.mediaService!.createSignedUrl(media.bucket, media.storagePath) };
+        } catch {
+          return image;
+        }
+      }),
+    );
   }
   private list(
     draft: EditorialDraftV1,

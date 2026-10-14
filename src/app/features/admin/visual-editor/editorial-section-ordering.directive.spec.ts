@@ -42,9 +42,9 @@ describe('EditorialSectionOrderingDirective', () => {
     const about = fixture.nativeElement.querySelector(
       '[data-editorial-section-id="about-section"]',
     ) as HTMLElement;
-    const down = Array.from(about.querySelectorAll('button')).find(
-      (button) => button.textContent === 'Mover abaixo',
-    ) as HTMLButtonElement;
+    const controls = about.querySelector('.editorial-section-controls') as HTMLElement;
+    expect(controls.querySelectorAll('button[aria-label^="Mover "]')).toHaveLength(2);
+    const down = controls.querySelector<HTMLButtonElement>('[aria-label="Mover abaixo"]') as HTMLButtonElement;
     down.click();
     expect(order()).toEqual(['presentation-section', 'skills-section', 'about-section']);
     expect(enqueue.mock.calls[0][0].command).toEqual({

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
+import { createUuid } from '../../../core/create-uuid';
 import type { PortfolioLocale } from '../../portfolio/content/portfolio-content.models';
 import {
   type AdminMediaCurriculum,
@@ -119,7 +120,7 @@ export class MediaManagementService {
       const uploaded = await this.uploadEditorialSkillIcon(draft.revision, file);
       const technologyReceipt = await this.callReceipt(client, 'create_editorial_technology', {
         expected_revision: draft.revision,
-        operation_id: crypto.randomUUID(),
+        operation_id: createUuid(),
         technology_id: id,
         technology_label: normalizedLabel,
         icon_media_id: uploaded.mediaId,
@@ -149,7 +150,7 @@ export class MediaManagementService {
       }
       const receipt = await this.callReceipt(client, 'update_editorial_technology', {
         expected_revision: expectedRevision,
-        operation_id: crypto.randomUUID(),
+        operation_id: createUuid(),
         technology_id: skillId,
         technology_label: normalizedLabel,
         icon_media_id: iconMediaId,
@@ -478,7 +479,7 @@ function createStoragePath(scope: string, originalName: string): string {
   const normalized = originalName.toLowerCase().replace(/[^a-z0-9._-]+/g, '-');
   const randomId =
     typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-      ? crypto.randomUUID()
+      ? createUuid()
       : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   return `${scope}/${randomId}-${normalized || 'file'}`;
 }

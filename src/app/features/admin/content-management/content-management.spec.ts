@@ -16,7 +16,7 @@ describe('ContentManagement', () => {
     expect(fixture.nativeElement.textContent).toContain('Experiências');
     expect(fixture.nativeElement.textContent).toContain('Projetos');
     expect(fixture.nativeElement.textContent).toContain('Habilidades');
-    expect(fixture.nativeElement.textContent).toContain('Formação');
+    expect(fixture.nativeElement.textContent).toContain('Cursos e formação');
     expect(fixture.nativeElement.textContent).toContain('Contatos');
     expect(fixture.nativeElement.querySelectorAll('textarea').length).toBeGreaterThan(0);
   });

@@ -7,6 +7,12 @@ import type {
   EditorialTextDirection,
 } from '../../portfolio/content/editorial-snapshot.models';
 
+export interface EditorialDraftMedia extends EditorialSnapshotMedia {
+  bucket?: string;
+  storagePath?: string;
+  originalName?: string;
+}
+
 export type EditorialDraftLocaleStatus = 'preparation' | 'active';
 
 export interface EditorialDraftLocale {
@@ -31,7 +37,7 @@ export interface EditorialDraftV1 {
   entities: Readonly<Record<string, EditorialSnapshotEntity>>;
   translations: EditorialSnapshotTranslations;
   technologies: Readonly<Record<string, EditorialSnapshotTechnology>>;
-  media: Readonly<Record<string, EditorialSnapshotMedia>>;
+  media: Readonly<Record<string, EditorialDraftMedia>>;
 }
 
 export type EditorialDraftCommand =

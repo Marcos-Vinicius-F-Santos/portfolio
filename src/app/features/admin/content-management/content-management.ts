@@ -126,6 +126,11 @@ export class ContentManagement {
     this.clearMessages();
   }
 
+  protected setAcademicCompletion(entry: AdminAcademicDraft, event: Event): void {
+    entry.isCurrent = !(event.target as HTMLInputElement).checked;
+    this.clearMessages();
+  }
+
   protected setContactField(contact: AdminContactDraft, locale: AdminLocale, value: string): void {
     contact.label[locale] = value;
     this.clearMessages();
@@ -362,8 +367,8 @@ function emptyAcademic(index: number): AdminAcademicDraft {
     endDate: '',
     isCurrent: false,
     translation: {
-      'pt-BR': { name: '', institution: '', competencies: [], studiedContent: [] },
-      en: { name: '', institution: '', competencies: [], studiedContent: [] },
+      'pt-BR': { name: '', institution: '', level: '', competencies: [], studiedContent: [] },
+      en: { name: '', institution: '', level: '', competencies: [], studiedContent: [] },
     },
   };
 }
