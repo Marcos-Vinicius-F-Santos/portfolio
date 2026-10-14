@@ -294,3 +294,35 @@ Inspirado na referência de excelência visual `josiasbroch-dev.vercel.app`, a b
 - **Suíte de Testes:** 158 testes unitários em 33 arquivos, todos passando com 100% de sucesso (`npm test`).
 - **Build de Produção:** `npm run build` gerando pacote inicial de **469.30 kB** (< 500 kB budget) e zero avisos de estilos de componente.
 
+---
+
+## 9. Tema Visual Bege & Marrom e Correção do Monograma Dinâmico (DECISAO-017)
+
+Esta atualização atendeu aos dois requisitos de refinamento estético e de marca do projeto:
+
+### A. Paleta de Cores Quente: Bege & Marrom
+- **Motivação:** Substituir o antigo preto/chumbo de alto contraste por uma paleta sofisticada, acolhedora e editorial baseada em tons quentes de marrom café e linho/bege natural.
+- **Implementação:**
+  - **Fundo da página (`--paper` / `body`):** `#f5f0e6` (bege linho quente e elegante).
+  - **Cards e seções alternadas (`--paper-strong`):** `#e8dfd1` (bege pergaminho).
+  - **Linhas divisórias (`--line`):** `#c8baa8` (bege-areia suave).
+  - **Texto Principal & Hero Header (`--ink`):** `#261a14` (marrom profundo espresso, com contraste acessível WCAG AAA de ~14:1 contra o fundo bege).
+  - **Barra Superior (`.site-header`):** `rgba(42, 28, 20, 0.92)` com *glassmorphism* (`backdrop-filter: blur(14px)`), tornando a barra visivelmente marrom e premium.
+  - **Menus Dropdown & Gaveta Mobile:** `#2a1c14` e `rgba(42, 28, 20, 0.98)` com realces suaves em champanhe `#f7e7ce` e caramelo/dourado `#d6ba90`.
+  - **Painel de Contato e Botões Administrativos:** Botões em marrom `#261a14` com hover `#3b281f` e bordas suaves `rgba(38, 26, 20, 0.25)`.
+  - **Página de Detalhe de Projeto:** Adaptada para o fundo bege `#f5f0e6` e textos marrons `#261a14`.
+
+### B. Correção e Robustez do Monograma (`extractBrandInitials`)
+- **Problema Anterior:** O algoritmo de extração de iniciais pegava a primeira letra da 1ª e da 2ª palavra de `copy().name`. Quando o banco não estava conectado ou o conteúdo carregado era o fallback neutro `"Desenvolvedor de Software"`, a segunda palavra era `"de"`, gerando incorretamente `DD.dev` no logo!
+- **Solução Implementada:**
+  1. Criação do helper puro `extractBrandInitials(name, defaultInitials)`.
+  2. Filtro automático de preposições e stopwords gramaticais (`de`, `da`, `do`, `das`, `dos`, `e`, `of`, `and`, etc.) para nunca selecionar preposições como iniciais de pessoas (ex: "Lucas de Souza" $\to$ `LS`).
+  3. Reconhecimento de títulos de papéis genéricos (`"Desenvolvedor de Software"`, `"Software Engineer"`), acionando o fallback configurado do ambiente (`defaultInitials`, default: `'JV'`).
+  4. Suporte a `brandInitials` no arquivo `public/runtime-config.js` e script `scripts/generate-runtime-config.mjs` via variável de ambiente `PORTFOLIO_BRAND_INITIALS`.
+  5. Para o João Vitor, o logo exibe fielmente **`JV.dev`**. Para o Marcos Santos, quando seus dados reais do Supabase carregam (ex: `"Marcos Santos"`), o algoritmo dinamicamente extrai **`MS.dev`**, mantendo total conformidade multi-tenant.
+
+### C. Evidências de Validação
+- **Suíte de Testes:** **163 testes unitários** passando (5 novos testes específicos para extração de iniciais e monograma da marca).
+- **Build de Produção:** **469.34 kB** inicial (< 500 kB budget), 0 erros, 0 avisos.
+
+

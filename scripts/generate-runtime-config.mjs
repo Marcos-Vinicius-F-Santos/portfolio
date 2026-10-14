@@ -17,10 +17,11 @@ const outputPath = new URL('../public/runtime-config.js', import.meta.url);
 const url = process.env.SUPABASE_URL ?? '';
 const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? '';
 const adminUserId = process.env.SUPABASE_ADMIN_USER_ID ?? '';
+const brandInitials = process.env.PORTFOLIO_BRAND_INITIALS ?? process.env.AUTHOR_INITIALS ?? 'JV';
 
 await mkdir(new URL('../public/', import.meta.url), { recursive: true });
 await writeFile(
   outputPath,
-  `globalThis.__PORTFOLIO_SUPABASE_CONFIG__ = ${JSON.stringify({ url, publishableKey, adminUserId })};\n`,
+  `globalThis.__PORTFOLIO_SUPABASE_CONFIG__ = ${JSON.stringify({ url, publishableKey, adminUserId, brandInitials })};\n`,
   'utf8',
 );

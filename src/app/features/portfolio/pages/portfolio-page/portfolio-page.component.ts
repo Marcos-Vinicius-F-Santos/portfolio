@@ -83,6 +83,47 @@ const PROFESSIONAL_RESULTS: readonly ProfessionalResultItem[] = [
   },
 ];
 
+const STOPWORDS = new Set([
+  'de',
+  'da',
+  'do',
+  'das',
+  'dos',
+  'e',
+  'of',
+  'and',
+  'the',
+  'van',
+  'von',
+  'del',
+  'der',
+]);
+
+const GENERIC_TITLES = new Set([
+  'desenvolvedor de software',
+  'desenvolvedor',
+  'software engineer',
+  'software developer',
+  'engenheiro de software',
+  'engenharia de software',
+]);
+
+export function extractBrandInitials(name: string | undefined | null, defaultInitials = 'JV'): string {
+  const clean = name?.trim() || '';
+  if (!clean || GENERIC_TITLES.has(clean.toLowerCase())) {
+    return defaultInitials;
+  }
+
+  const words = clean
+    .split(/\s+/)
+    .map((w) => w.replace(/[^a-zA-ZÀ-ÿ]/g, ''))
+    .filter((w) => w.length > 0 && !STOPWORDS.has(w.toLowerCase()));
+
+  if (words.length === 0) return defaultInitials;
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] + words[1][0]).toUpperCase();
+}
+
 @Component({
   selector: 'app-portfolio-page',
   imports: [NgTemplateOutlet, ProjectTechnologiesComponent, ContactPanelComponent],
@@ -210,11 +251,9 @@ export class PortfolioPageComponent {
   private readonly selector = viewChild<ElementRef<HTMLSelectElement>>('selector');
 
   protected readonly brandMonogram = computed(() => {
-    const name = this.copy().name?.trim() || '';
-    if (!name) return 'DEV';
-    const words = name.split(/\s+/).filter(Boolean);
-    if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-    return (words[0][0] + (words[1]?.[0] || words[words.length - 1][0] || '')).toUpperCase();
+    const config = typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
+    const defaultInitials = config?.brandInitials?.trim() || 'JV';
+    return extractBrandInitials(this.copy().name, defaultInitials);
   });
   protected readonly cvMenuOpen = signal(false);
   protected readonly languageMenuOpen = signal(false);

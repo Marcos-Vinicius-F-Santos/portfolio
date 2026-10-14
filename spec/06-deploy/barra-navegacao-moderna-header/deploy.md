@@ -37,3 +37,4 @@ Data: 2026-10-13
      - Validar clique em "Download CV" abrindo as opções em Português e Inglês.
      - Validar alternância de idiomas pelo menu discreto.
      - Validar menu hambúrguer em resolução mobile.
+

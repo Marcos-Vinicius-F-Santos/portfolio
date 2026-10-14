@@ -1,11 +1,11 @@
 :host {
-  --ink: #11130f;
-  --paper: #f4f1e9;
-  --paper-strong: #e8e4d9;
+  --ink: #261a14;
+  --paper: #f5f0e6;
+  --paper-strong: #e8dfd1;
   --red: #a8322d;
-  --green: #176b4d;
-  --green-light: #b9efd2;
-  --line: #c9c4b7;
+  --green: #23654a;
+  --green-light: #b0e3c8;
+  --line: #c8baa8;
   --mono: Consolas, 'Courier New', monospace;
   display: block;
   color: var(--ink);
@@ -20,10 +20,10 @@
   position: fixed;
   z-index: 50;
   inset: 0 0 auto;
-  background: rgba(17, 19, 15, 0.88);
+  background: rgba(42, 28, 20, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(201, 196, 183, 0.12);
+  border-bottom: 1px solid rgba(200, 186, 168, 0.16);
   transition: background-color 200ms ease, border-color 200ms ease;
 }
 
@@ -71,7 +71,7 @@
 .intro {
   max-width: 34rem;
   margin: 0;
-  color: #d8d9cf;
+  color: #e5dacd;
   font-size: clamp(1.05rem, 2vw, 1.4rem);
   line-height: 1.5;
 }
@@ -115,11 +115,11 @@
 }
 
 .brand-logo__initials {
-  color: var(--green-light);
-  background: rgba(23, 107, 77, 0.35);
+  color: #f7e7ce;
+  background: rgba(85, 55, 38, 0.75);
   padding: 0.2rem 0.45rem;
   border-radius: 0.35rem;
-  border: 1px solid rgba(185, 239, 210, 0.2);
+  border: 1px solid rgba(214, 186, 144, 0.35);
   margin-right: 0.15rem;
 }
 
@@ -140,8 +140,8 @@
   margin: 0;
   padding: 0.25rem 0.35rem;
   list-style: none;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(201, 196, 183, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(200, 186, 168, 0.15);
   border-radius: 9999px;
 }
 
@@ -156,7 +156,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.38rem 0.8rem;
-  color: #a8a8a2;
+  color: #c4b5a5;
   font-family: var(--mono);
   font-size: 0.82rem;
   font-weight: 500;
@@ -167,13 +167,13 @@
 }
 
 .nav-capsule__link:hover {
-  color: var(--paper);
-  background: rgba(255, 255, 255, 0.06);
+  color: #faf5ed;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .nav-capsule__link--active {
-  color: var(--paper);
-  background: rgba(23, 107, 77, 0.4);
+  color: #faf5ed;
+  background: rgba(85, 55, 38, 0.65);
   font-weight: 600;
 }
 
@@ -185,7 +185,7 @@
   width: 14px;
   height: 2px;
   border-radius: 9999px;
-  background: var(--green-light);
+  background: #d6ba90;
 }
 
 .site-header__actions {
@@ -213,20 +213,20 @@
   cursor: pointer;
   transition: all 160ms ease;
   user-select: none;
-  border: 1px solid rgba(201, 196, 183, 0.22);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(200, 186, 168, 0.25);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--paper);
 }
 
 .action-pill:hover,
 .action-pill[aria-expanded="true"] {
-  border-color: var(--green-light);
-  background: rgba(23, 107, 77, 0.3);
-  color: var(--paper);
+  border-color: #d6ba90;
+  background: rgba(85, 55, 38, 0.55);
+  color: #faf5ed;
 }
 
 .action-pill:focus-visible {
-  outline: 2px solid var(--green-light);
+  outline: 2px solid #d6ba90;
   outline-offset: 2px;
 }
 
@@ -247,11 +247,11 @@
   top: calc(100% + 0.5rem);
   right: 0;
   min-width: 13rem;
-  background: #181b16;
-  border: 1px solid rgba(201, 196, 183, 0.2);
+  background: #2a1c14;
+  border: 1px solid rgba(200, 186, 168, 0.22);
   border-radius: 0.75rem;
   padding: 0.35rem;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
   z-index: 60;
   display: flex;
   flex-direction: column;
@@ -289,14 +289,14 @@
 }
 
 .dropdown-item:hover {
-  background: rgba(23, 107, 77, 0.35);
-  color: var(--green-light);
+  background: rgba(85, 55, 38, 0.6);
+  color: #f7e7ce;
 }
 
 .dropdown-item--active {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   font-weight: 600;
-  color: var(--green-light);
+  color: #f7e7ce;
 }
 
 .dropdown-item__flag {
@@ -308,7 +308,7 @@
 }
 
 .check-icon {
-  color: var(--green-light);
+  color: #d6ba90;
   font-weight: bold;
 }
 
@@ -332,8 +332,8 @@
   gap: 4px;
   width: 2.25rem;
   height: 2.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(201, 196, 183, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(200, 186, 168, 0.22);
   border-radius: 0.45rem;
   cursor: pointer;
   padding: 0;
@@ -362,8 +362,8 @@
 
 .mobile-drawer {
   display: none;
-  background: rgba(17, 19, 15, 0.98);
-  border-top: 1px solid rgba(201, 196, 183, 0.12);
+  background: rgba(42, 28, 20, 0.98);
+  border-top: 1px solid rgba(200, 186, 168, 0.16);
   padding: 1rem 1.25rem 1.5rem;
   max-height: calc(100vh - 4.25rem);
   overflow-y: auto;
@@ -381,7 +381,7 @@
 .mobile-nav__link {
   display: block;
   padding: 0.6rem 0.8rem;
-  color: #a8a8a2;
+  color: #c4b5a5;
   font-family: var(--mono);
   font-size: 0.9rem;
   text-decoration: none;
@@ -391,8 +391,8 @@
 
 .mobile-nav__link:hover,
 .mobile-nav__link--active {
-  background: rgba(23, 107, 77, 0.35);
-  color: var(--green-light);
+  background: rgba(85, 55, 38, 0.6);
+  color: #f7e7ce;
   font-weight: 600;
 }
 
@@ -401,7 +401,7 @@
   flex-direction: column;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(201, 196, 183, 0.12);
+  border-top: 1px solid rgba(200, 186, 168, 0.16);
 }
 
 .mobile-actions-label {
@@ -410,7 +410,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #8b8f88;
+  color: #ad9e8e;
   margin-bottom: 0.35rem;
 }
 
@@ -425,8 +425,8 @@
   flex: 1;
   min-width: 6.5rem;
   padding: 0.5rem 0.75rem;
-  border: 1px solid rgba(201, 196, 183, 0.2);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(200, 186, 168, 0.22);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--paper);
   border-radius: 0.4rem;
   font-family: var(--mono);
@@ -437,9 +437,9 @@
 
 .mobile-action-btn:hover,
 .mobile-action-btn--active {
-  background: var(--green);
-  border-color: var(--green-light);
-  color: white;
+  background: rgba(85, 55, 38, 0.7);
+  border-color: #d6ba90;
+  color: #faf5ed;
 }
 
 .sections {
@@ -528,14 +528,14 @@ section h2 {
 
 section > p {
   margin: 0;
-  color: #44463f;
+  color: #544439;
   font-size: 1rem;
   line-height: 1.65;
 }
 
 .academic-card p {
   margin: 0;
-  color: #44463f;
+  color: #544439;
   font-size: 1rem;
   line-height: 1.55;
 }
@@ -624,7 +624,7 @@ section > p {
 
 .experience-card .experience-title {
   margin: 0.5rem 0 0;
-  color: #44463f;
+  color: #544439;
   font-size: 1.05rem;
   line-height: 1.5;
 }
@@ -672,7 +672,7 @@ section > p {
 .project-block p {
   max-width: none;
   margin: 0;
-  color: #44463f;
+  color: #544439;
   font-size: 0.98rem;
   line-height: 1.6;
 }

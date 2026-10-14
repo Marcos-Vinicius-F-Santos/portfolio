@@ -1,7 +1,7 @@
 :host {
   display: block;
-  background: #f4f1e9;
-  color: #11130f;
+  background: #f5f0e6;
+  color: #261a14;
   min-height: 100vh;
 }
 main {
@@ -52,7 +52,7 @@ li {
 }
 section {
   margin-top: 2rem;
-  border-top: 1px solid #c9c4b7;
+  border-top: 1px solid #c8baa8;
   padding-top: 1rem;
 }
 h2 {
@@ -73,7 +73,7 @@ img {
   width: 100%;
   height: auto;
   display: block;
-  border: 1px solid #c9c4b7;
+  border: 1px solid #c8baa8;
 }
 a:focus-visible,
 select:focus-visible {

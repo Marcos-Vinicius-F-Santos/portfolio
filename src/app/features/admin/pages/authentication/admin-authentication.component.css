@@ -1,8 +1,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #11130f;
-  color: #f4f1e9;
+  background: #261a14;
+  color: #f5f0e6;
 }
 
 .admin-authentication {
@@ -16,7 +16,7 @@
   width: min(100%, 28rem);
   border: 1px solid #59635c;
   padding: clamp(1.5rem, 5vw, 3rem);
-  background: #1b211c;
+  background: #33231b;
 }
 
 .eyebrow {
@@ -61,14 +61,14 @@ button {
 }
 
 input {
-  background: #11130f;
-  color: #f4f1e9;
+  background: #261a14;
+  color: #f5f0e6;
 }
 
 button {
   margin-top: 0.5rem;
   background: #b9efd2;
-  color: #11130f;
+  color: #261a14;
   cursor: pointer;
   font-weight: 700;
 }

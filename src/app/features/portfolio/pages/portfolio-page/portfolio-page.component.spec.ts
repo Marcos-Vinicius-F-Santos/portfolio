@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { PortfolioPageComponent } from './portfolio-page.component';
+import { PortfolioPageComponent, extractBrandInitials } from './portfolio-page.component';
 import {
   BROWSER_LANGUAGE,
   PortfolioLanguageService,
@@ -605,6 +605,48 @@ describe('PortfolioPage', () => {
     fixture.detectChanges();
 
     expect(element.querySelector('.mobile-drawer')).toBeNull();
+  });
+
+  describe('extractBrandInitials', () => {
+    it('returns default initials (JV) for generic fallback role titles', () => {
+      expect(extractBrandInitials('Desenvolvedor de Software')).toBe('JV');
+      expect(extractBrandInitials('Software Engineer')).toBe('JV');
+      expect(extractBrandInitials('desenvolvedor')).toBe('JV');
+      expect(extractBrandInitials('')).toBe('JV');
+      expect(extractBrandInitials(null)).toBe('JV');
+      expect(extractBrandInitials(undefined)).toBe('JV');
+    });
+
+    it('returns custom default initials when provided for generic roles', () => {
+      expect(extractBrandInitials('Desenvolvedor de Software', 'MS')).toBe('MS');
+    });
+
+    it('extracts initials dynamically from personal names', () => {
+      expect(extractBrandInitials('João Vitor Dias Fernandes')).toBe('JV');
+      expect(extractBrandInitials('João Vitor')).toBe('JV');
+      expect(extractBrandInitials('Marcos Vinícius Santos')).toBe('MV');
+      expect(extractBrandInitials('Marcos Santos')).toBe('MS');
+    });
+
+    it('skips Portuguese and English prepositions/stopwords', () => {
+      expect(extractBrandInitials('Lucas de Souza')).toBe('LS');
+      expect(extractBrandInitials('Ana da Silva')).toBe('AS');
+      expect(extractBrandInitials('Carlos do Carmo')).toBe('CC');
+      expect(extractBrandInitials('John of York')).toBe('JY');
+    });
+  });
+
+  it('renders JV.dev on the brand monogram header when default fallback is active', async () => {
+    const fixture = TestBed.createComponent(PortfolioPageComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const monogram = element.querySelector('.brand-logo__initials');
+    expect(monogram?.textContent?.trim()).toBe('JV');
+
+    const suffix = element.querySelector('.brand-logo__suffix');
+    expect(suffix?.textContent?.trim()).toBe('.dev');
   });
 
   function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
