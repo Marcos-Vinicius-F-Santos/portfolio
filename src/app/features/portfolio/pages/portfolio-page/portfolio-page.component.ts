@@ -1,6 +1,5 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { getUiLabels } from '../../services/portfolio-ui-labels';
-import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
 import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
 import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
 import { technologyIcon } from '../../services/technology-icons';
@@ -29,6 +28,7 @@ import { PortfolioLanguageService } from '../../services/portfolio-language.serv
 import { ENGLISH_COPY, TRANSLATION_SOURCE } from '../../services/portfolio-translations';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import {
+  hasPortfolioProjectCardContent,
   hasPortfolioProjectContent,
   type PortfolioFile,
   type PortfolioExperience,
@@ -39,6 +39,7 @@ import {
   type PortfolioSkill,
   type PortfolioSkillCategory,
 } from '../../services/portfolio-content.models';
+import { ProjectCardComponent } from '../../../../shared/components/project-card/project-card.component';
 
 type NavigationItem = {
   title: keyof PortfolioCopy;
@@ -52,6 +53,7 @@ const SECTION_ID_BY_TARGET: Readonly<Record<string, string>> = {
   experiencias: 'experiences-section',
   'stack-tecnica': 'skills-section',
   'formacao-academica': 'education-section',
+  portfolio: 'projects-section',
   projetos: 'projects-section',
   contato: 'contact-section',
 };
@@ -128,7 +130,7 @@ export function extractBrandInitials(name: string | undefined | null, defaultIni
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [NgTemplateOutlet, ProjectTechnologiesComponent, ContactPanelComponent],
+  imports: [NgTemplateOutlet, ContactPanelComponent, ProjectCardComponent],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.css',
 })
@@ -182,6 +184,16 @@ export class PortfolioPageComponent {
   protected readonly experiences = signal<PortfolioExperience[]>([]);
   protected readonly showExperiences = computed(() => this.experiences().length > 0);
   protected readonly projects = signal<PortfolioProject[]>([]);
+  protected readonly projectFilter = signal<'all' | 'professional' | 'personal'>('all');
+  protected readonly filteredProjects = computed(() => {
+    const filter = this.projectFilter();
+    const all = this.projects();
+    if (filter === 'all') return all;
+    return all.filter((project) => project.type === filter);
+  });
+  protected setProjectFilter(filter: 'all' | 'professional' | 'personal'): void {
+    this.projectFilter.set(filter);
+  }
   protected readonly failedProjectImageIds = signal<Record<string, string[]>>({});
   protected readonly curriculum = signal<PortfolioFile | null>(null);
   protected readonly professionalProjects = computed(() =>
@@ -214,18 +226,11 @@ export class PortfolioPageComponent {
         targetId: 'experiencias',
       });
     }
-    if (this.showResults()) {
-      items.push({
-        title: 'resultsTitle',
-        body: 'resultsTitle',
-        targetId: 'resultados-profissionais',
-      });
-    }
     if (this.showProjects() || this.editorialMode) {
       items.push({
-        title: 'projectsTitle',
-        body: 'projectsTitle',
-        targetId: 'projetos',
+        title: 'portfolioEyebrow',
+        body: 'portfolioSubtitle',
+        targetId: 'portfolio',
       });
     }
     items.push({
@@ -322,7 +327,7 @@ export class PortfolioPageComponent {
   private async loadProjects(): Promise<void> {
     const projects = await this.content.listProjects(this.language.language());
     this.failedProjectImageIds.set({});
-    this.projects.set(this.editorialMode ? projects : projects.filter(hasPortfolioProjectContent));
+    this.projects.set(this.editorialMode ? projects : projects.filter(hasPortfolioProjectCardContent));
   }
 
   private async loadCurriculum(): Promise<void> {

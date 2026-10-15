@@ -24,7 +24,7 @@ export interface PortfolioProjectImage {
   projectId: string;
   storagePath: string;
   originalName: string;
-  mimeType: 'image/png' | 'image/jpeg';
+  mimeType: 'image/png' | 'image/jpeg' | 'image/webp';
   sizeBytes: number;
   displayOrder: number;
   publicUrl: string;
@@ -61,6 +61,10 @@ export function hasPortfolioProjectContent(project: PortfolioProject): boolean {
     project.results.some((item) => item.trim().length > 0) &&
     project.learnings.some((item) => item.trim().length > 0)
   );
+}
+
+export function hasPortfolioProjectCardContent(project: PortfolioProject): boolean {
+  return project.name.trim().length > 0 && project.description.trim().length > 0;
 }
 
 export interface PortfolioFile {

@@ -6,7 +6,7 @@
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values
-  ('project-images', 'project-images', true, 1048576, array['image/png', 'image/jpeg']),
+  ('project-images', 'project-images', true, 3145728, array['image/png', 'image/jpeg', 'image/webp']),
   ('skill-icons', 'skill-icons', true, 1048576, array['image/png', 'image/jpeg', 'image/svg+xml']),
   ('curricula', 'curricula', true, 52428800, array['application/pdf'])
 on conflict (id) do update set

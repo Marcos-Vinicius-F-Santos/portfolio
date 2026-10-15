@@ -72,28 +72,28 @@ describe('PortfolioPage', () => {
     return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  it('renders the presentation, about, results, and existing sections with stable navigation targets', async () => {
+  it('renders the presentation, about, and existing sections with stable navigation targets', async () => {
     const { fixture, element } = await render();
     const sections = [...element.querySelectorAll('.sections > section')];
     for (const language of ['en', 'pt-BR'] as const) {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
       expect(element.querySelector('#apresentacao')).toBeTruthy();
-      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'resultados-profissionais']) {
+      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'formacao-academica', 'contato']) {
         expect(element.querySelector('#' + id)).toBeTruthy();
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
+      expect(element.querySelector('#resultados-profissionais')).toBeNull();
       expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
       expect([...element.querySelectorAll('.sections > section')]).toEqual(sections);
       expect([...element.querySelectorAll('.sections > section')].map((section) => section.id)).toEqual([
         'sobre-mim',
         'stack-tecnica',
         'experiencias',
-        'resultados-profissionais',
         'formacao-academica',
         'contato',
       ]);
-      expect(element.querySelectorAll('nav a')).toHaveLength(7);
+      expect(element.querySelectorAll('nav a')).toHaveLength(6);
     }
   });
 
@@ -102,7 +102,7 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('.site-header nav')).toBeTruthy();
     expect(element.querySelector('.page-header nav')).toBeNull();
-    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(7);
+    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(6);
   });
 
   it('aplica a mesma ordem editorial às seções e ao menu', async () => {
@@ -231,7 +231,8 @@ describe('PortfolioPage', () => {
     'sobre-mim',
     'experiencias',
     'stack-tecnica',
-    'resultados-profissionais',
+    'formacao-academica',
+    'contato',
   ])('scrolls smoothly to %s', async (id) => {
     const { element } = await render();
     const target = element.querySelector('#' + id)!;
@@ -400,26 +401,21 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('#sobre-mim')).toBe(section);
   });
 
-  it('renders the approved professional results in the happy path', async () => {
-    const { element } = await render();
-    expect(element.querySelector('#resultados-profissionais')).toBeTruthy();
-    expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeTruthy();
-    expect(element.querySelectorAll('.result-card')).toHaveLength(4);
-    expect(
-      element.querySelector('[data-testid="professional-result-time-reduction"]')?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsTimeReduction);
-    expect(
-      element.querySelector('[data-testid="professional-result-steps-reduction"]')?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsStepsReduction);
-    expect(
-      element.querySelector('[data-testid="professional-result-users-served"]')?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsUsersServed);
-    expect(
-      element.querySelector('[data-testid="professional-result-productivity-gain"]')?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsProductivityGain);
+  it('omits professional results section from the home page while keeping resultItems available for project details', async () => {
+    const { fixture, element } = await render();
+    const component = fixture.componentInstance as any;
+    expect(element.querySelector('#resultados-profissionais')).toBeNull();
+    expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeNull();
+    expect(component.resultItems()).toHaveLength(4);
+    expect(component.resultItems().map((r: any) => r.testId)).toEqual([
+      'time-reduction',
+      'steps-reduction',
+      'users-served',
+      'productivity-gain',
+    ]);
   });
 
-  it('renders only the approved professional results that are available', async () => {
+  it('filters resultItems based on available copy values without rendering on home page', async () => {
     const original = {
       resultsTimeReduction: ORIGINAL_COPY.resultsTimeReduction,
       resultsStepsReduction: ORIGINAL_COPY.resultsStepsReduction,
@@ -429,21 +425,14 @@ describe('PortfolioPage', () => {
     ORIGINAL_COPY.resultsTimeReduction = '';
     ORIGINAL_COPY.resultsStepsReduction = '';
     try {
-      const { element } = await render();
-      expect(element.querySelector('#resultados-profissionais')).toBeTruthy();
-      expect(element.querySelectorAll('.result-card')).toHaveLength(2);
-      expect(
-        element.querySelector('[data-testid="professional-result-users-served"]'),
-      ).toBeTruthy();
-      expect(
-        element.querySelector('[data-testid="professional-result-productivity-gain"]'),
-      ).toBeTruthy();
-      expect(
-        element.querySelector('[data-testid="professional-result-time-reduction"]'),
-      ).toBeNull();
-      expect(
-        element.querySelector('[data-testid="professional-result-steps-reduction"]'),
-      ).toBeNull();
+      const { fixture, element } = await render();
+      const component = fixture.componentInstance as any;
+      expect(element.querySelector('#resultados-profissionais')).toBeNull();
+      expect(component.resultItems()).toHaveLength(2);
+      expect(component.resultItems().map((r: any) => r.testId)).toEqual([
+        'users-served',
+        'productivity-gain',
+      ]);
     } finally {
       ORIGINAL_COPY.resultsTimeReduction = original.resultsTimeReduction;
       ORIGINAL_COPY.resultsStepsReduction = original.resultsStepsReduction;
@@ -452,7 +441,7 @@ describe('PortfolioPage', () => {
     }
   });
 
-  it('hides the professional results section when no approved result is available', async () => {
+  it('handles empty result metrics cleanly without rendering on home page', async () => {
     const original = {
       resultsTimeReduction: ORIGINAL_COPY.resultsTimeReduction,
       resultsStepsReduction: ORIGINAL_COPY.resultsStepsReduction,
@@ -464,9 +453,11 @@ describe('PortfolioPage', () => {
     ORIGINAL_COPY.resultsUsersServed = '';
     ORIGINAL_COPY.resultsProductivityGain = '';
     try {
-      const { element } = await render();
+      const { fixture, element } = await render();
+      const component = fixture.componentInstance as any;
       expect(element.querySelector('#resultados-profissionais')).toBeNull();
       expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeNull();
+      expect(component.resultItems()).toHaveLength(0);
       expect(element.querySelector('#experiencias')).toBeTruthy();
     } finally {
       ORIGINAL_COPY.resultsTimeReduction = original.resultsTimeReduction;
@@ -476,63 +467,66 @@ describe('PortfolioPage', () => {
     }
   });
 
-  it('uses the original approved result when the selected translation is missing', async () => {
-    TestBed.overrideProvider(TRANSLATION_SOURCE, {
-      useValue: () => ({
-        ...ENGLISH_COPY,
-        resultsTimeReduction: '',
-      }),
-    });
-    const { fixture, element } = await render();
-    TestBed.inject(PortfolioLanguageService).choose('en');
-    await fixture.whenStable();
-    expect(
-      element.querySelector('[data-testid="professional-result-time-reduction"] p .translated-text')
-        ?.textContent,
-    ).toContain(ORIGINAL_COPY.resultsTimeReduction);
-    expect(
-      element.querySelector(
-        '[data-testid="professional-result-steps-reduction"] p .translated-text',
-      )?.textContent,
-    ).toContain(ENGLISH_COPY.resultsStepsReduction);
-  });
-
-  it('renders project summaries and links to complete project pages', async () => {
+  it('renders portfolio cards, category filter tabs, and links to complete project pages', async () => {
     projectRows = [
       createProject('professional-1', 'professional', 2),
       createProject('personal-1', 'personal', 1),
     ];
     const { element } = await render();
 
+    expect(element.querySelector('#portfolio')).toBeTruthy();
     expect(element.querySelector('#projetos')).toBeTruthy();
-    expect(element.querySelector('a[href="#projetos"]')).toBeTruthy();
-    expect(element.querySelector('.hero-action--primary')?.getAttribute('href')).toBe('#projetos');
+    expect(element.querySelector('a[href="#portfolio"]')).toBeTruthy();
+    expect(element.querySelector('.hero-action--primary')?.getAttribute('href')).toBe('#portfolio');
     expect(element.querySelector('.hero-action:not(.hero-action--primary)')?.getAttribute('href')).toBe(
       '#contato',
     );
-    expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
-    expect(element.querySelector('[data-testid="personal-projects"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="filter-all"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="filter-professional"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="filter-personal"]')).toBeTruthy();
 
     const professional = element.querySelector(
       '[data-testid="professional-project-professional-1"]',
     )!;
     expect(professional.textContent).toContain('Projeto professional-1');
-    expect(professional.textContent).not.toContain('Papel professional-1');
-    expect(professional.textContent).not.toContain('Resultado professional-1');
-    for (const value of [
-      'Descrição professional-1',
-      'Contexto professional-1',
-      'Tecnologia professional-1',
-    ]) {
-      expect(professional.textContent).toContain(value);
-    }
+    expect(professional.textContent).toContain('Descrição professional-1');
+    expect(professional.textContent).toContain('Tecnologia professional-1');
     expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
     expect((professional.querySelector('.project-full-link') as HTMLAnchorElement).href).toBe(
       new URL('/projetos/professional-1', document.baseURI).href,
     );
   });
 
-  it('renders the first project image by display order with accessible fixed dimensions', async () => {
+  it('filters portfolio cards by category tabs: all, professional, and personal', async () => {
+    projectRows = [
+      createProject('professional-1', 'professional', 2),
+      createProject('personal-1', 'personal', 1),
+    ];
+    const { fixture, element } = await render();
+
+    expect(element.querySelector('[data-testid="professional-project-professional-1"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
+
+    const profBtn = element.querySelector<HTMLButtonElement>('[data-testid="filter-professional"]')!;
+    profBtn.click();
+    fixture.detectChanges();
+    expect(element.querySelector('[data-testid="professional-project-professional-1"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeNull();
+
+    const personalBtn = element.querySelector<HTMLButtonElement>('[data-testid="filter-personal"]')!;
+    personalBtn.click();
+    fixture.detectChanges();
+    expect(element.querySelector('[data-testid="professional-project-professional-1"]')).toBeNull();
+    expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
+
+    const allBtn = element.querySelector<HTMLButtonElement>('[data-testid="filter-all"]')!;
+    allBtn.click();
+    fixture.detectChanges();
+    expect(element.querySelector('[data-testid="professional-project-professional-1"]')).toBeTruthy();
+    expect(element.querySelector('[data-testid="personal-project-personal-1"]')).toBeTruthy();
+  });
+
+  it('renders the first project image by display order with 16:10 dimensions or placeholder fallback', async () => {
     const projectWithImages = createProject('personal-images', 'personal', 1);
     projectWithImages.images = [
       createImage('later', 'personal-images', 2),
@@ -542,23 +536,18 @@ describe('PortfolioPage', () => {
     projectRows = [projectWithImages, projectWithoutImages];
 
     const { element } = await render();
-    const card = element.querySelector('[data-testid="personal-project-personal-images"]')!;
-    const image = card.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
+    const cardWithImages = element.querySelector('[data-testid="personal-project-personal-images"]')!;
+    const image = cardWithImages.querySelector<HTMLImageElement>('[data-testid="project-cover"]')!;
 
     expect(image.src).toBe('https://storage.test/personal-images-first.png');
     expect(image.alt).toBe('Projeto personal-images — first.png');
     expect(image.getAttribute('loading')).toBe('lazy');
     expect(image.getAttribute('width')).toBe('600');
-    expect(image.getAttribute('height')).toBe('320');
-    expect(card.querySelectorAll('[data-testid="project-gallery"] img')).toHaveLength(2);
-    expect(card.querySelector('[data-testid="project-gallery-image"]')?.getAttribute('src')).toBe(
-      'https://storage.test/personal-images-later.png',
-    );
-    expect(
-      element
-        .querySelector('[data-testid="personal-project-personal-without-images"]')
-        ?.querySelector('[data-testid="project-cover"]'),
-    ).toBeNull();
+    expect(image.getAttribute('height')).toBe('375');
+
+    const cardWithoutImages = element.querySelector('[data-testid="personal-project-personal-without-images"]')!;
+    expect(cardWithoutImages.querySelector('[data-testid="project-cover"]')).toBeNull();
+    expect(cardWithoutImages.querySelector('[data-testid="project-cover-placeholder"]')).toBeTruthy();
   });
 
   it('tries the next project image after a cover failure and isolates the fallback per project', async () => {
@@ -587,19 +576,18 @@ describe('PortfolioPage', () => {
     ).toBe('https://storage.test/personal-second-other-first.png');
   });
 
-  it('hides an empty project subsection and the entire section when no projects are complete', async () => {
+  it('hides the entire portfolio section when no projects are available', async () => {
     projectRows = [createProject('professional-1', 'professional', 1)];
     const { element } = await render();
-    expect(element.querySelector('[data-testid="professional-projects"]')).toBeTruthy();
-    expect(element.querySelector('[data-testid="personal-projects"]')).toBeNull();
+    expect(element.querySelector('#portfolio')).toBeTruthy();
 
     projectRows = [];
     const empty = await render();
-    expect(empty.element.querySelector('#projetos')).toBeNull();
-    expect(empty.element.querySelector('a[href="#projetos"]')).toBeNull();
+    expect(empty.element.querySelector('#portfolio')).toBeNull();
+    expect(empty.element.querySelector('a[href="#portfolio"]')).toBeNull();
   });
 
-  it('filters incomplete projects and does not render an empty links block', async () => {
+  it('filters incomplete projects without name or description', async () => {
     const incomplete = createProject('incomplete', 'personal', 1);
     incomplete.description = '';
     const withoutLinks = createProject('without-links', 'personal', 2);
@@ -610,9 +598,6 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('[data-testid="personal-project-incomplete"]')).toBeNull();
     expect(element.querySelector('[data-testid="personal-project-without-links"]')).toBeTruthy();
-    expect(
-      element.querySelector('[data-testid="personal-project-without-links"] .project-links'),
-    ).toBeNull();
   });
 
   it('reloads project translations when the language changes', async () => {
@@ -627,11 +612,7 @@ describe('PortfolioPage', () => {
     const project = element.querySelector('[data-testid="personal-project-personal-1"]');
     expect(project?.textContent).toContain('English Projeto personal-1');
     expect(project?.textContent).toContain('English description');
-    expect(project?.textContent).toContain('English context');
-    expect(
-      element.querySelector('[data-testid="personal-projects"] .project-subsection-title')
-        ?.textContent,
-    ).toContain('Personal projects');
+    expect(element.querySelector('[data-testid="filter-all"]')?.textContent?.trim()).toBe('All');
   });
 
   it('renders the modern header with dynamic brand monogram, capsule nav, and action pills', async () => {

@@ -301,7 +301,7 @@
 
           <div class="hero-actions">
             @if (showProjects()) {
-              <a href="#projetos" class="hero-btn hero-btn--primary hero-action hero-action--primary" (click)="navigateToSection($event, 'projetos')">
+              <a href="#portfolio" class="hero-btn hero-btn--primary hero-action hero-action--primary" (click)="navigateToSection($event, 'portfolio')">
                 <span>{{ ui().viewProjects }}</span>
                 <svg class="hero-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -572,22 +572,6 @@
               </article>
             }
           </div>
-        } @else if (item.targetId === 'resultados-profissionais') {
-          <div class="results-grid" data-testid="professional-results">
-            @for (result of resultItems(); track result.testId) {
-              <article
-                class="result-card"
-                [attr.data-testid]="'professional-result-' + result.testId"
-              >
-                <h3>
-                  <ng-container *ngTemplateOutlet="localized; context: { key: result.label }" />
-                </h3>
-                <p>
-                  <ng-container *ngTemplateOutlet="localized; context: { key: result.value }" />
-                </p>
-              </article>
-            }
-          </div>
         } @else if (item.targetId === 'experiencias') {
           <div
             class="experiences-list"
@@ -733,118 +717,67 @@
               </article>
             }
           </div>
-        } @else if (item.targetId === 'projetos') {
-          <div class="projects-sections" data-testid="projects-section" data-editorial-project-collection>
-            @for (
-              group of [
-                {
-                  type: 'professional',
-                  title: copy().professionalProjectsTitle,
-                  projects: professionalProjects(),
-                },
-                {
-                  type: 'personal',
-                  title: copy().personalProjectsTitle,
-                  projects: personalProjects(),
-                },
-              ];
-              track group.type
-            ) {
-              @if (group.projects.length || editorialMode) {
-                <div class="project-subsection" [attr.data-testid]="group.type + '-projects'">
-                  <h3
-                    class="project-subsection-title"
-                    [attr.data-editorial-entity]="
-                      'copy-' +
-                      (group.type === 'professional'
-                        ? 'professionalProjectsTitle'
-                        : 'personalProjectsTitle')
-                    "
-                    data-editorial-field="text"
-                    [attr.data-editorial-locale]="language.language()"
-                  >
-                    {{ group.title }}
-                  </h3>
-                  <div
-                    class="projects-list"
-                    data-editorial-collection-kind="project"
-                    [attr.data-editorial-new-type]="group.type"
-                  >
-                    @for (project of group.projects; track project.id) {
-                      <article
-                        class="project-card"
-                        [attr.data-testid]="group.type + '-project-' + project.id"
-                        [attr.data-editorial-entity]="project.id"
-                        data-editorial-control="project-type"
-                        [attr.data-editorial-value]="project.type"
-                        [attr.data-editorial-item-id]="project.id"
-                      >
-                        <h4
-                          [attr.data-editorial-entity]="project.id"
-                          data-editorial-field="name"
-                          [attr.data-editorial-locale]="language.language()"
-                        >
-                          {{ project.name }}
-                        </h4>
-                        <div class="project-details">
-                          <div class="project-block">
-                            <h5>{{ copy().projectDescriptionLabel }}</h5>
-                            <p
-                              [attr.data-editorial-entity]="project.id"
-                              data-editorial-field="description"
-                              [attr.data-editorial-locale]="language.language()"
-                            >
-                              {{ project.description }}
-                            </p>
-                          </div>
-                          <div class="project-block">
-                            <h5>{{ copy().projectContextLabel }}</h5>
-                            <p
-                              [attr.data-editorial-entity]="project.id"
-                              data-editorial-field="problemContext"
-                              [attr.data-editorial-locale]="language.language()"
-                            >
-                              {{ project.problemContext }}
-                            </p>
-                          </div>
-                          <div class="project-block">
-                            <h5>{{ copy().projectTechnologiesLabel }}</h5>
-                            <app-project-technologies
-                              [technologies]="project.technologies"
-                              [attr.data-editorial-entity]="project.id"
-                              data-editorial-control="technologies"
-                              [attr.data-editorial-value]="project.technologyIds?.join(',')"
-                            />
-                          </div>
-                        </div>
-                        @if (projectGalleryImages(project); as gallery) {
-                          @if (gallery.length) {
-                            <div class="project-gallery" data-testid="project-gallery">
-                              @for (image of gallery; track image.id; let first = $first) {
-                                <figure class="project-gallery-item">
-                                  <img
-                                    [attr.data-testid]="first ? 'project-cover' : 'project-gallery-image'"
-                                    width="600"
-                                    height="320"
-                                    [src]="image.publicUrl"
-                                    [alt]="project.name + ' — ' + image.originalName"
-                                    loading="lazy"
-                                    (error)="onProjectCoverImageError(project.id, image.id)"
-                                  />
-                                </figure>
-                              }
-                            </div>
-                          }
-                        }
-                        <a class="project-full-link" [href]="(editorialMode ? '/admin/editor/projetos/' : '/projetos/') + project.id"
-                          >{{ ui().viewFullProject }} →</a
-                        >
-                      </article>
-                    }
-                  </div>
-                </div>
-              }
+        } @else if (item.targetId === 'portfolio' || item.targetId === 'projetos') {
+          <span id="projetos" class="section-anchor-compat" aria-hidden="true"></span>
+          <div class="portfolio-showcase" data-testid="portfolio-section" data-editorial-project-collection>
+            @if (copy().portfolioSubtitle) {
+              <p
+                class="section-subtitle portfolio-subtitle"
+                [attr.data-editorial-entity]="'copy-portfolioSubtitle'"
+                data-editorial-field="text"
+                [attr.data-editorial-locale]="language.language()"
+              >
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'portfolioSubtitle' }" />
+              </p>
             }
+            <div class="portfolio-filter-tabs" role="tablist" aria-label="Filtro de projetos">
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'all'"
+                [attr.aria-selected]="projectFilter() === 'all'"
+                (click)="setProjectFilter('all')"
+                data-testid="filter-all"
+              >
+                {{ ui().filterAll }}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'professional'"
+                [attr.aria-selected]="projectFilter() === 'professional'"
+                (click)="setProjectFilter('professional')"
+                data-testid="filter-professional"
+              >
+                {{ ui().filterProfessional }}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'personal'"
+                [attr.aria-selected]="projectFilter() === 'personal'"
+                (click)="setProjectFilter('personal')"
+                data-testid="filter-personal"
+              >
+                {{ ui().filterPersonal }}
+              </button>
+            </div>
+            <div
+              class="portfolio-grid"
+              data-editorial-collection-kind="project"
+              [attr.data-editorial-new-type]="projectFilter() === 'all' ? 'personal' : projectFilter()"
+            >
+              @for (project of filteredProjects(); track project.id) {
+                <app-project-card
+                  [project]="project"
+                  [editorialMode]="editorialMode"
+                  [locale]="language.language()"
+                />
+              }
+            </div>
           </div>
         } @else if (item.targetId === 'formacao-academica') {
           <div
