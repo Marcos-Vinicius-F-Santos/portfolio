@@ -34,8 +34,8 @@ insert into portfolio_editorial.draft (id, revision, default_locale)
 values (1, 0, 'pt-BR')
 on conflict (id) do nothing;
 
-insert into portfolio_editorial.site_state (id, default_locale)
-values (1, 'pt-BR')
+insert into portfolio_editorial.site_state (id)
+values (1)
 on conflict (id) do nothing;
 
 -- 5. Desativar temporariamente o trigger de imutabilidade se existir para permitir re-publicacao do snapshot
@@ -81,6 +81,7 @@ begin
     select 1,e.key,l.key,l.value->e.key
     from jsonb_each(payload->'entities') e
     cross join jsonb_each(payload->'translations') l
+    where l.value ? e.key
     on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;
 
   insert into portfolio_editorial.technologies(id,label,aliases,bundled_asset)
