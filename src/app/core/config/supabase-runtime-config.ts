@@ -20,6 +20,7 @@ export const supabaseRuntimeConfig: SupabaseRuntimeConfig = {
   publishableKey: runtimeConfig.publishableKey ?? '',
   adminUserId: runtimeConfig.adminUserId ?? '',
   brandInitials: runtimeConfig.brandInitials ?? '',
+  authorName: runtimeConfig.authorName ?? 'João Vitor',
   web3FormsAccessKey: runtimeConfig.web3FormsAccessKey ?? '',
 };
 

@@ -17,6 +17,8 @@ import {
   PORTFOLIO_ACADEMIC_ENTRIES,
   PORTFOLIO_CONTACT_LINKS,
   PORTFOLIO_SKILL_CATEGORIES,
+  getFallbackExperiences,
+  getFallbackProjects,
   type PortfolioCopy,
 } from './portfolio-content';
 import {
@@ -128,10 +130,11 @@ export class PortfolioContentService {
   async listExperiences(locale: PortfolioLocale): Promise<PortfolioExperience[]> {
     const snapshot = await this.getSnapshot();
     if (snapshot) {
-      return snapshotToExperiences(snapshot, locale);
+      const experiences = snapshotToExperiences(snapshot, locale);
+      if (experiences.length > 0) return experiences;
     }
 
-    if (!this.client) return [];
+    if (!this.client) return fallbackExperiences(locale);
     const client = this.client;
 
     try {
@@ -185,10 +188,11 @@ export class PortfolioContentService {
   async listProjects(locale: PortfolioLocale): Promise<PortfolioProject[]> {
     const snapshot = await this.getSnapshot();
     if (snapshot) {
-      return snapshotToProjects(snapshot, locale, this.storageUrlResolver);
+      const projects = snapshotToProjects(snapshot, locale, this.storageUrlResolver);
+      if (projects.length > 0) return projects;
     }
 
-    if (!this.client) return [];
+    if (!this.client) return fallbackProjects(locale);
     const client = this.client;
 
     try {
@@ -656,6 +660,14 @@ function fallbackAcademicEntries(): PortfolioAcademicEntry[] {
 
 function fallbackContactLinks(): PortfolioContactLink[] {
   return PORTFOLIO_CONTACT_LINKS.map((link) => ({ ...link }));
+}
+
+function fallbackExperiences(locale: PortfolioLocale): PortfolioExperience[] {
+  return getFallbackExperiences(locale);
+}
+
+function fallbackProjects(locale: PortfolioLocale): PortfolioProject[] {
+  return getFallbackProjects(locale);
 }
 
 function contactSymbol(value: unknown): PortfolioContactLink['symbol'] | null {

@@ -21,6 +21,8 @@ import {
   ORIGINAL_COPY,
   PORTFOLIO_ACADEMIC_ENTRIES,
   PORTFOLIO_CONTACT_LINKS,
+  PORTFOLIO_EXPERIENCES,
+  PORTFOLIO_PROJECTS,
   PORTFOLIO_SKILL_CATEGORIES,
   PortfolioCopy,
   selectPortfolioCopy,
@@ -183,9 +185,13 @@ export class PortfolioPageComponent {
     return PROFESSIONAL_RESULTS.filter((result) => copy[result.value].trim().length > 0);
   });
   protected readonly showResults = computed(() => this.resultItems().length > 0);
-  protected readonly experiences = signal<PortfolioExperience[]>([]);
+  protected readonly experiences = signal<PortfolioExperience[]>([
+    ...PORTFOLIO_EXPERIENCES,
+  ]);
   protected readonly showExperiences = computed(() => this.experiences().length > 0);
-  protected readonly projects = signal<PortfolioProject[]>([]);
+  protected readonly projects = signal<PortfolioProject[]>([
+    ...PORTFOLIO_PROJECTS,
+  ]);
   protected readonly projectFilter = signal<'all' | 'professional' | 'personal'>('all');
   protected readonly filteredProjects = computed(() => {
     const filter = this.projectFilter();
@@ -236,11 +242,6 @@ export class PortfolioPageComponent {
       });
     }
     items.push({
-      title: 'educationTitle',
-      body: 'educationBody',
-      targetId: 'formacao-academica',
-    });
-    items.push({
       title: 'contactTitle',
       body: 'contactBody',
       targetId: 'contato',
@@ -276,7 +277,7 @@ export class PortfolioPageComponent {
     if (copyName && !GENERIC_TITLES.has(copyName.toLowerCase())) {
       return copyName;
     }
-    return 'Desenvolvedor de Software';
+    return 'João Vitor';
   });
   protected readonly ui = computed(() => getUiLabels(this.language.language()));
   protected readonly roleSubtitle = computed(() => {

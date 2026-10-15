@@ -779,52 +779,6 @@
               }
             </div>
           </div>
-        } @else if (item.targetId === 'formacao-academica') {
-          <div
-            class="academic-list"
-            data-testid="academic-background"
-            data-editorial-collection-kind="academic"
-          >
-            <div class="academic-table" role="list">
-              @for (entry of academicEntries(); track entry.id) {
-                <article
-                  class="academic-card academic-table-row"
-                  role="listitem"
-                  [attr.data-testid]="'academic-' + entry.id"
-                  [attr.data-editorial-item-id]="entry.id"
-                >
-                  <div class="academic-cell academic-name">
-                    <h3>
-                      <span
-                        [attr.data-editorial-entity]="entry.id"
-                        data-editorial-field="name"
-                        [attr.data-editorial-locale]="language.language()"
-                        >{{ academicEntryName(entry) }}</span
-                      >
-                    </h3>
-                  </div>
-                  <div class="academic-cell">
-                    <span
-                      [attr.data-editorial-entity]="entry.id"
-                      data-editorial-field="institution"
-                      [attr.data-editorial-locale]="language.language()"
-                      >{{ entry.institution || '' }}</span
-                    >
-                  </div>
-                  <div class="academic-cell">
-                    <span>{{ academicEntryLevel(entry) }}</span>
-                  </div>
-                  <div class="academic-cell">
-                    <span
-                      class="academic-status"
-                      [class.academic-status--current]="entry.isCurrent"
-                      >{{ entry.isCurrent ? copy().educationCurrentLabel : copy().educationCompletedLabel }}</span
-                    >
-                  </div>
-                </article>
-              }
-            </div>
-          </div>
         } @else if (item.targetId === 'contato') {
           <div class="contact-section-container">
             <div class="contact-intro-header">

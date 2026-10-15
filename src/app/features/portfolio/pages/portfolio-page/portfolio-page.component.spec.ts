@@ -10,6 +10,7 @@ import {
   ORIGINAL_COPY,
   PORTFOLIO_ACADEMIC_ENTRIES,
   PORTFOLIO_CONTACT_LINKS,
+  PORTFOLIO_PROJECTS,
   type PortfolioCopy,
 } from '../../services/portfolio-content';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
@@ -79,21 +80,21 @@ describe('PortfolioPage', () => {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
       expect(element.querySelector('#apresentacao')).toBeTruthy();
-      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'formacao-academica', 'contato']) {
+      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'contato']) {
         expect(element.querySelector('#' + id)).toBeTruthy();
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
       expect(element.querySelector('#resultados-profissionais')).toBeNull();
+      expect(element.querySelector('#formacao-academica')).toBeNull();
       expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
       expect([...element.querySelectorAll('.sections > section')]).toEqual(sections);
       expect([...element.querySelectorAll('.sections > section')].map((section) => section.id)).toEqual([
         'sobre-mim',
         'stack-tecnica',
         'experiencias',
-        'formacao-academica',
         'contato',
       ]);
-      expect(element.querySelectorAll('nav a')).toHaveLength(6);
+      expect(element.querySelectorAll('nav a')).toHaveLength(5);
     }
   });
 
@@ -102,7 +103,7 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('.site-header nav')).toBeTruthy();
     expect(element.querySelector('.page-header nav')).toBeNull();
-    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(6);
+    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(5);
   });
 
   it('aplica a mesma ordem editorial às seções e ao menu', async () => {
@@ -141,16 +142,7 @@ describe('PortfolioPage', () => {
     expect(
       element.querySelector('[data-testid="skills-languages-runtime"]')?.textContent,
     ).toContain('JavaScript');
-    expect(element.querySelector('#formacao-academica')).toBeTruthy();
-    expect(element.querySelectorAll('.academic-card')).toHaveLength(1);
-    expect(element.querySelector('#formacao-academica h2')?.textContent).toContain('Formação acadêmica');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain(
-      ORIGINAL_COPY.educationDataScience,
-    );
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Graduação');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Concluído');
-    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Período');
-    expect(element.querySelector('#formacao-academica')?.textContent).not.toContain('Conteúdos estudados');
+    expect(element.querySelector('#formacao-academica')).toBeNull();
     expect(element.querySelector('#contato')).toBeTruthy();
     expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
@@ -205,7 +197,7 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Software Engineer');
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Skills');
-    expect(element.querySelector('#formacao-academica')?.textContent).toContain('Computer Science');
+    expect(element.querySelector('#formacao-academica')).toBeNull();
     expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
       'Get in touch',
     );
@@ -231,7 +223,6 @@ describe('PortfolioPage', () => {
     'sobre-mim',
     'experiencias',
     'stack-tecnica',
-    'formacao-academica',
     'contato',
   ])('scrolls smoothly to %s', async (id) => {
     const { element } = await render();
@@ -585,6 +576,18 @@ describe('PortfolioPage', () => {
     const empty = await render();
     expect(empty.element.querySelector('#portfolio')).toBeNull();
     expect(empty.element.querySelector('a[href="#portfolio"]')).toBeNull();
+  });
+
+  it('renders João Vitor as author name, displays portfolio projects fallback, and omits academic background', async () => {
+    projectRows = [...PORTFOLIO_PROJECTS];
+    const { element } = await render();
+
+    expect(element.querySelector('.hero-name')?.textContent?.trim()).toBe('João Vitor');
+    expect(element.querySelector('.hero-subtitle')?.textContent?.trim()).toBe('Engenheiro de Software');
+    expect(element.querySelector('#portfolio')).toBeTruthy();
+    expect(element.querySelector('a[href="#portfolio"]')).toBeTruthy();
+    expect(element.querySelector('#formacao-academica')).toBeNull();
+    expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
   });
 
   it('filters incomplete projects without name or description', async () => {

@@ -4,8 +4,8 @@ import type { PortfolioCopy } from './portfolio-content';
 export type PortfolioTranslations = Partial<PortfolioCopy>;
 
 export const ENGLISH_COPY: PortfolioCopy = {
-  name: 'Software Engineer',
-  heroName: 'Software Engineer',
+  name: 'João Vitor',
+  heroName: 'João Vitor',
   heroRole: 'Software Engineer',
   heroAvailability: 'Open to new opportunities · Remote',
   eyebrow: 'Professional portfolio',
