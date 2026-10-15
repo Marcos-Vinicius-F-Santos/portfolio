@@ -10,9 +10,9 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #f4f1e9;
-  color: #11130f;
-  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f5f0e6;
+  color: #261a14;
+  font-family: 'Segoe UI', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -38,8 +38,10 @@ a {
   aspect-ratio: 1;
   margin: 0 auto;
   overflow: hidden;
-  border: 1px solid #b9efd2;
-  border-radius: 50%;
+  border: 1px solid rgb(214 186 144 / 22%);
+  border-radius: 1.5rem;
+  background: linear-gradient(160deg, rgb(46 30 22 / 85%) 0%, rgb(20 12 8 / 95%) 100%);
+  box-shadow: 0 24px 48px -12px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 4%);
 }
 
 .portfolio-page .hero-portrait img {

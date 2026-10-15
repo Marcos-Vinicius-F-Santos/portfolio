@@ -1,36 +1,38 @@
 <main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
   <header class="site-header">
-    <a
-      class="site-brand"
-      [href]="showPresentation() ? '#apresentacao' : '#sobre-mim'"
-      (click)="navigateToSection($event, showPresentation() ? 'apresentacao' : 'sobre-mim')"
-      aria-label="Marcos Santos — início"
-    >
-      marcos<span>.dev</span>
-    </a>
-    <nav [attr.aria-label]="copy().navigation">
-      <ul>
-        @for (item of navigationItems(); track item.targetId) {
-          <li>
-            <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
-              <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
-            </a>
-          </li>
-        }
-      </ul>
-    </nav>
-    <label class="language-control">
-      <select
-        #selector
-        [value]="language.language()"
-        (change)="choose(selector.value)"
-        [attr.aria-label]="copy().languageLabel"
-        data-testid="language-select"
+    <div class="site-header__container">
+      <a
+        class="site-brand"
+        [href]="showPresentation() ? '#apresentacao' : '#sobre-mim'"
+        (click)="navigateToSection($event, showPresentation() ? 'apresentacao' : 'sobre-mim')"
+        aria-label="Marcos Santos — início"
       >
-        <option value="pt-BR" lang="pt-BR">PT</option>
-        <option value="en" lang="en">EN</option>
-      </select>
-    </label>
+        marcos<span>.dev</span>
+      </a>
+      <nav [attr.aria-label]="copy().navigation">
+        <ul>
+          @for (item of navigationItems(); track item.targetId) {
+            <li>
+              <a [href]="'#' + item.targetId" (click)="navigateToSection($event, item.targetId)">
+                <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+      <label class="language-control">
+        <select
+          #selector
+          [value]="language.language()"
+          (change)="choose(selector.value)"
+          [attr.aria-label]="copy().languageLabel"
+          data-testid="language-select"
+        >
+          <option value="pt-BR" lang="pt-BR">PT</option>
+          <option value="en" lang="en">EN</option>
+        </select>
+      </label>
+    </div>
   </header>
   <header
     class="page-header"
