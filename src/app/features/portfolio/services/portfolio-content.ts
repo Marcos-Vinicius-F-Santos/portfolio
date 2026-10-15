@@ -10,10 +10,16 @@ export type PortfolioTranslations = Partial<PortfolioCopy>;
 
 export interface PortfolioCopy {
   name: string;
+  heroName: string;
+  heroRole: string;
+  heroAvailability: string;
   eyebrow: string;
   presentationTitle: string;
   intro: string;
   navigation: string;
+  portfolioEyebrow: string;
+  portfolioTitle: string;
+  portfolioSubtitle: string;
   aboutTitle: string;
   aboutHeadline: string;
   aboutBody: string;
@@ -249,27 +255,34 @@ export const PORTFOLIO_CONTACT_LINKS: readonly PortfolioContactLink[] = [
 
 export const ORIGINAL_COPY: PortfolioCopy = {
   name: 'Desenvolvedor de Software',
+  heroName: 'Desenvolvedor de Software',
+  heroRole: 'Engenheiro de Software',
+  heroAvailability: 'Disponível para novos projetos · Remoto',
   eyebrow: 'Portfólio profissional',
   presentationTitle: 'Apresentação',
   intro:
     'Desenvolvedor de Software com atuação em engenharia de sistemas, desenvolvimento web e soluções modernas. Experiência na construção de aplicações escaláveis, APIs RESTful, automação e integrações corporativas.',
   navigation: 'Navegação principal',
+  portfolioEyebrow: 'Portfólio',
+  portfolioTitle: 'Projetos em Destaque',
+  portfolioSubtitle:
+    'Projetos e soluções desenvolvidos com foco em engenharia, performance e usabilidade.',
   aboutTitle: 'Sobre mim',
   aboutHeadline:
     'Construindo soluções robustas com engenharia de software, arquitetura limpa e visão técnica',
   aboutBody:
-    'Sou Engenheiro de Software e Bacharel em Ciência da Computação pelo IFMG, com sólida atuação no desenvolvimento de sistemas web em produção, plataformas de monitoramento industrial em tempo real e arquiteturas modulares. Minha postura profissional vai além da escrita de código: busco compreender a fundo as regras de negócio, projetar soluções escaláveis, otimizar performance e garantir entregas confiáveis para clientes corporativos.',
+    'Engenheiro de Software com sólida formação e experiência em desenvolvimento de software e soluções web. Atuação orientada a boas práticas de engenharia, arquitetura limpa, performance e colaboração técnica.',
   aboutFocus:
-    'Foco principal: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Visão Computacional (OpenCV, YOLOv8), PostgreSQL, Supabase e Docker.',
+    'Foco principal: TypeScript, Angular, APIs RESTful, bancos de dados relacionais e arquiteturas modernas.',
   aboutPillar1Title: 'Engenharia Front-end & Performance',
   aboutPillar1Description:
-    'Desenvolvimento de SPAs escaláveis com Angular e TypeScript, arquitetura modular com lazy loading (redução de 85% de pacote), bibliotecas de componentes reutilizáveis e telemetria de sensores em tempo real.',
-  aboutPillar2Title: 'Backend & Integrações Corporativas',
+    'Desenvolvimento de SPAs escaláveis, arquitetura modular, componentização reutilizável e interfaces responsivas.',
+  aboutPillar2Title: 'Backend & APIs Escaláveis',
   aboutPillar2Description:
-    'Criação de APIs RESTful de alta performance com Python (FastAPI), Java (Spring Boot) e Laravel, persistência eficiente com PostgreSQL e Supabase, cache com Redis e containerização Docker.',
-  aboutPillar3Title: 'Visão Computacional & Automação',
+    'Criação de APIs RESTful de alta performance, integrações eficientes, modelagem de dados e conteinerização.',
+  aboutPillar3Title: 'Arquitetura & Automação',
   aboutPillar3Description:
-    'Pipelines de inteligência artificial em tempo real com OpenCV e YOLOv8, OCR automatizado para leitura e extração de documentos e inferência integrada a transmissões de vídeo ao vivo.',
+    'Desenvolvimento de soluções com foco em automação, confiabilidade operacional e arquitetura de sistemas.',
   experienceTitle: 'Experiências',
   experienceBody: 'Experiências profissionais em engenharia de software e desenvolvimento de soluções tecnológicas.',
   experiencePeriodLabel: 'Período',

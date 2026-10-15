@@ -285,8 +285,18 @@
     <div class="page-header__container">
       <div class="page-header__content">
         @if (showPresentation()) {
-          <h1 class="hero-name">{{ authorName() }}</h1>
-          <p class="hero-subtitle">{{ roleSubtitle() }}</p>
+          <h1
+            class="hero-name"
+            [attr.data-editorial-entity]="'copy-heroName'"
+            data-editorial-field="text"
+            [attr.data-editorial-locale]="language.language()"
+          >{{ authorName() }}</h1>
+          <p
+            class="hero-subtitle"
+            [attr.data-editorial-entity]="'copy-heroRole'"
+            data-editorial-field="text"
+            [attr.data-editorial-locale]="language.language()"
+          >{{ roleSubtitle() }}</p>
           <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
 
           <div class="hero-actions">
@@ -356,7 +366,12 @@
 
             <div class="hero-status">
               <span class="hero-status__dot"></span>
-              <span class="hero-status__text">{{ language.language() === 'en' ? 'Open to new opportunities · Remote' : 'Disponível para novos projetos · Remoto' }}</span>
+              <span
+                class="hero-status__text"
+                [attr.data-editorial-entity]="'copy-heroAvailability'"
+                data-editorial-field="text"
+                [attr.data-editorial-locale]="language.language()"
+              >{{ heroAvailability() }}</span>
             </div>
           </div>
         }

@@ -5,27 +5,34 @@ export type PortfolioTranslations = Partial<PortfolioCopy>;
 
 export const ENGLISH_COPY: PortfolioCopy = {
   name: 'Software Engineer',
+  heroName: 'Software Engineer',
+  heroRole: 'Software Engineer',
+  heroAvailability: 'Open to new opportunities · Remote',
   eyebrow: 'Professional portfolio',
   presentationTitle: 'Presentation',
   intro:
     'Software Engineer focused on systems engineering, web application development, and modern architectures. Experienced in building scalable applications, RESTful APIs, automation, and technical collaboration.',
   navigation: 'Main navigation',
+  portfolioEyebrow: 'Portfolio',
+  portfolioTitle: 'Featured Projects',
+  portfolioSubtitle:
+    'Projects and solutions engineered with focus on performance, scalability, and usability.',
   aboutTitle: 'About me',
   aboutHeadline:
     'Engineering scalable solutions with clean architecture, performance, and precision',
   aboutBody:
-    "I'm a Software Engineer and Computer Science graduate from IFMG, with solid hands-on experience developing production web applications, real-time industrial monitoring platforms, and modular architectures. My approach goes beyond writing code: I seek to deeply understand business rules, design scalable systems, optimize performance, and deliver reliable solutions for enterprise clients.",
+    'Software Engineer with solid background and experience building modern web applications. Driven by clean architecture, high performance, and reliable technical delivery.',
   aboutFocus:
-    'Main focus: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Computer Vision (OpenCV, YOLOv8), PostgreSQL, Supabase, and Docker.',
+    'Main focus: TypeScript, Angular, RESTful APIs, relational databases, and modern cloud architectures.',
   aboutPillar1Title: 'Frontend Engineering & Performance',
   aboutPillar1Description:
-    'Scalable SPAs with Angular and TypeScript, modular architecture with lazy loading (85% bundle reduction), reusable component systems, and real-time telemetry.',
-  aboutPillar2Title: 'Backend & Enterprise Integrations',
+    'Scalable single-page applications, modular architectures, reusable design systems, and responsive user interfaces.',
+  aboutPillar2Title: 'Backend & Scalable APIs',
   aboutPillar2Description:
-    'High-performance RESTful APIs with Python (FastAPI), Java (Spring Boot), and Laravel, PostgreSQL and Supabase persistence, Redis caching, and Docker containerization.',
-  aboutPillar3Title: 'Computer Vision & Automation',
+    'High-performance RESTful APIs, robust integrations, efficient data persistence, and containerization.',
+  aboutPillar3Title: 'Architecture & Automation',
   aboutPillar3Description:
-    'Real-time AI pipelines using OpenCV and YOLOv8, automated document OCR extraction, and live video stream inference overlays.',
+    'Engineering resilient digital solutions with emphasis on automated workflows and operational reliability.',
   experienceTitle: 'Experience',
   experienceBody: 'Professional experience in software engineering, frontend and full-stack development.',
   experiencePeriodLabel: 'Period',

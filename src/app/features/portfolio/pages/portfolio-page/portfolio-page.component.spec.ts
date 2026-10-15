@@ -133,7 +133,7 @@ describe('PortfolioPage', () => {
     };
     const { element } = await render();
 
-    expect(element.querySelector('.hero-name')?.textContent).toContain('João Vitor Dias Fernandes');
+    expect(element.querySelector('.hero-name')?.textContent).toContain(ORIGINAL_COPY.heroName);
     expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Engenheiro de Software');
     expect(element.querySelector('.eyebrow')).toBeNull();
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Habilidades');

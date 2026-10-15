@@ -261,16 +261,23 @@ export class PortfolioPageComponent {
   protected readonly authorName = computed(() => {
     const config = typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
     if (config?.authorName?.trim()) return config.authorName.trim();
+    const copyHeroName = this.copy().heroName?.trim();
+    if (copyHeroName && !GENERIC_TITLES.has(copyHeroName.toLowerCase())) {
+      return copyHeroName;
+    }
     const copyName = this.copy().name?.trim();
     if (copyName && !GENERIC_TITLES.has(copyName.toLowerCase())) {
       return copyName;
     }
-    return 'João Vitor Dias Fernandes';
+    return 'Desenvolvedor de Software';
   });
   protected readonly ui = computed(() => getUiLabels(this.language.language()));
-  protected readonly roleSubtitle = computed(() =>
-    this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software',
-  );
+  protected readonly roleSubtitle = computed(() => {
+    return this.copy().heroRole?.trim() || (this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software');
+  });
+  protected readonly heroAvailability = computed(() => {
+    return this.copy().heroAvailability?.trim() || (this.language.language() === 'en' ? 'Open to new opportunities · Remote' : 'Disponível para novos projetos · Remoto');
+  });
   protected readonly cvMenuOpen = signal(false);
   protected readonly languageMenuOpen = signal(false);
   protected readonly mobileMenuOpen = signal(false);
@@ -394,21 +401,7 @@ export class PortfolioPageComponent {
   }
 
   protected academicEntryLevel(entry: PortfolioAcademicEntry): string {
-    const level = entry.level?.trim();
-    if (level) return level;
-
-    const name = this.academicEntryName(entry).toLocaleLowerCase('pt-BR');
-    const isEnglish = this.language.language() === 'en';
-    if (name.includes('ciência de dados') || name.includes('data science')) {
-      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
-    }
-    if (name.includes('estatística aplicada') || name.includes('applied statistics')) {
-      return isEnglish ? 'Postgraduate' : 'Pós-Graduação';
-    }
-    if (name.includes('design gráfico') || name.includes('graphic design')) {
-      return isEnglish ? 'Technologist' : 'Tecnólogo';
-    }
-    return '';
+    return entry.level?.trim() || '';
   }
 
   protected contactLinkLabel(link: PortfolioContactLink): string {
