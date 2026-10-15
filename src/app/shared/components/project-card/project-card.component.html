@@ -1,0 +1,141 @@
+<article
+  class="project-card"
+  [attr.data-testid]="project().type + '-project-' + project().id"
+  [attr.data-editorial-entity]="project().id"
+  data-editorial-control="project-type"
+  [attr.data-editorial-value]="project().type"
+  [attr.data-editorial-item-id]="project().id"
+>
+  <!-- Window Mockup Bar (3 dots inspired by Josias Broch) -->
+  <div class="project-card__window-bar" aria-hidden="true">
+    <div class="project-card__dots">
+      <span class="project-card__dot project-card__dot--red"></span>
+      <span class="project-card__dot project-card__dot--yellow"></span>
+      <span class="project-card__dot project-card__dot--green"></span>
+    </div>
+    <div class="project-card__window-title">
+      {{ project().name }}
+    </div>
+  </div>
+
+  <!-- Cover Media (16:10 aspect ratio) -->
+  <div class="project-card__cover-wrapper">
+    @if (coverImage(); as image) {
+      <img
+        [src]="image.publicUrl"
+        [alt]="project().name + ' — ' + image.originalName"
+        class="project-card__cover-img"
+        width="600"
+        height="375"
+        loading="lazy"
+        (error)="onImageError(image.id)"
+        data-testid="project-cover"
+      />
+    } @else {
+      <!-- Clean SVG / CSS Placeholder -->
+      <div class="project-card__placeholder" data-testid="project-cover-placeholder">
+        <div class="project-card__placeholder-glow"></div>
+        <div class="project-card__placeholder-content">
+          <svg
+            class="project-card__placeholder-icon"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          <span class="project-card__placeholder-monogram">{{ projectInitials() }}</span>
+        </div>
+      </div>
+    }
+
+    <!-- Quick Action / Demo Overlay on Hover -->
+    @if (externalUrl(); as url) {
+      <a
+        [href]="url"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="project-card__demo-badge"
+        (click)="$event.stopPropagation()"
+        data-testid="project-demo-link"
+        aria-label="Abrir demonstração ou repositório em nova aba"
+      >
+        <span>Demo</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 17L17 7M17 7H7M17 7V17" />
+        </svg>
+      </a>
+    }
+  </div>
+
+  <!-- Text Body -->
+  <div class="project-card__body">
+    <div class="project-card__header-row">
+      <h3
+        class="project-card__title"
+        [attr.data-editorial-entity]="project().id"
+        data-editorial-field="name"
+        [attr.data-editorial-locale]="locale()"
+      >
+        <a [href]="detailsUrl()" class="project-card__title-link">
+          {{ project().name }}
+        </a>
+      </h3>
+
+      @if (externalUrl(); as url) {
+        <a
+          [href]="url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-card__ext-icon"
+          [title]="'Link externo para ' + project().name"
+          (click)="$event.stopPropagation()"
+          aria-label="Link externo"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17L17 7M17 7H7M17 7V17" />
+          </svg>
+        </a>
+      }
+    </div>
+
+    <p
+      class="project-card__description"
+      [attr.data-editorial-entity]="project().id"
+      data-editorial-field="description"
+      [attr.data-editorial-locale]="locale()"
+    >
+      {{ project().description }}
+    </p>
+
+    <!-- Technologies Chips -->
+    @if (project().technologies.length > 0) {
+      <div class="project-card__technologies">
+        <app-project-technologies
+          [technologies]="project().technologies"
+          [attr.data-editorial-entity]="project().id"
+          data-editorial-control="technologies"
+          [attr.data-editorial-value]="project().technologyIds?.join(',')"
+        />
+      </div>
+    }
+
+    <!-- Footer Action -->
+    <div class="project-card__footer">
+      <a [href]="detailsUrl()" class="project-card__details-btn project-full-link">
+        <span>{{ ui().viewFullProject }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+

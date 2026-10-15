@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+h2 {
+  margin: 0;
+  color: #172033;
+}
+
+p {
+  margin: 0.5rem 0 0;
+  color: #667085;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .admin-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

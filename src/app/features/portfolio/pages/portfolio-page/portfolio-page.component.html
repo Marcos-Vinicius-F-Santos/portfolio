@@ -1,0 +1,955 @@
+<main class="portfolio-page" data-testid="portfolio-page" [attr.lang]="language.language()">
+  <header class="site-header" [class.site-header--open]="mobileMenuOpen()">
+    <div class="site-header__container">
+      <!-- 1. Left: Dynamic Brand Monogram -->
+      <a
+        href="#apresentacao"
+        class="brand-logo"
+        (click)="scrollToTop($event)"
+        [attr.aria-label]="copy().name || 'Início'"
+      >
+        <span class="brand-logo__initials">{{ brandMonogram() }}</span>
+        <span class="brand-logo__suffix">.dev</span>
+      </a>
+
+      <!-- 2. Center: Capsule Navigation with ScrollSpy -->
+      <nav class="nav-capsule" [attr.aria-label]="copy().navigation">
+        <ul class="nav-capsule__list">
+          @for (item of navigationItems(); track item.targetId) {
+            <li class="nav-capsule__item">
+              <a
+                [href]="'#' + item.targetId"
+                class="nav-capsule__link"
+                [class.nav-capsule__link--active]="activeSectionId() === item.targetId"
+                (click)="navigateToSection($event, item.targetId)"
+              >
+                <span class="nav-capsule__text">
+                  <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+                </span>
+                @if (activeSectionId() === item.targetId) {
+                  <span class="nav-capsule__indicator" aria-hidden="true"></span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <!-- 3. Right: Action Buttons -->
+      <div class="site-header__actions">
+        <!-- Download CV Dropdown (Opção A) -->
+        <div class="header-dropdown" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="action-pill action-pill--cv"
+            [attr.aria-expanded]="cvMenuOpen()"
+            aria-haspopup="true"
+            (click)="toggleCvMenu($event)"
+            data-testid="header-cv-trigger"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 15V3" />
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <path d="m7 10 5 5 5-5" />
+            </svg>
+            <span>{{ ui().cvButton }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="chevron-icon"
+              [class.chevron-icon--open]="cvMenuOpen()"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          @if (cvMenuOpen()) {
+            <div class="dropdown-menu dropdown-menu--cv" role="menu">
+              <button
+                type="button"
+                class="dropdown-item"
+                role="menuitem"
+                (click)="downloadCurriculum('pt-BR')"
+                data-testid="download-cv-pt"
+              >
+                <span class="dropdown-item__flag">🇧🇷</span>
+                <span class="dropdown-item__label">Português (PT-BR)</span>
+              </button>
+              <button
+                type="button"
+                class="dropdown-item"
+                role="menuitem"
+                (click)="downloadCurriculum('en')"
+                data-testid="download-cv-en"
+              >
+                <span class="dropdown-item__flag">🇺🇸</span>
+                <span class="dropdown-item__label">English (EN)</span>
+              </button>
+            </div>
+          }
+        </div>
+
+        <!-- Language Discreet Dropdown -->
+        <div class="header-dropdown" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="action-pill action-pill--lang"
+            [attr.aria-expanded]="languageMenuOpen()"
+            aria-haspopup="true"
+            (click)="toggleLanguageMenu($event)"
+            data-testid="header-lang-trigger"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+              <path d="M2 12h20" />
+            </svg>
+            <span>{{ language.language() === 'en' ? 'EN' : 'PT' }}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="chevron-icon"
+              [class.chevron-icon--open]="languageMenuOpen()"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          @if (languageMenuOpen()) {
+            <div class="dropdown-menu dropdown-menu--lang" role="menu">
+              <button
+                type="button"
+                class="dropdown-item"
+                [class.dropdown-item--active]="language.language() === 'pt-BR'"
+                role="menuitem"
+                (click)="choose('pt-BR')"
+                data-testid="lang-option-pt"
+              >
+                <span class="dropdown-item__label">Português (Brasil)</span>
+                @if (language.language() === 'pt-BR') {
+                  <span class="check-icon" aria-hidden="true">✓</span>
+                }
+              </button>
+              <button
+                type="button"
+                class="dropdown-item"
+                [class.dropdown-item--active]="language.language() === 'en'"
+                role="menuitem"
+                (click)="choose('en')"
+                data-testid="lang-option-en"
+              >
+                <span class="dropdown-item__label">English</span>
+                @if (language.language() === 'en') {
+                  <span class="check-icon" aria-hidden="true">✓</span>
+                }
+              </button>
+            </div>
+          }
+
+          <!-- Preserved accessible select for automated tests / assistive tech -->
+          <select
+            #selector
+            class="sr-only-select"
+            [value]="language.language()"
+            (change)="choose(selector.value)"
+            data-testid="language-select"
+            aria-label="Selecionar idioma / Select language"
+          >
+            <option value="pt-BR">Português (Brasil)</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          type="button"
+          class="mobile-menu-toggle"
+          [attr.aria-expanded]="mobileMenuOpen()"
+          aria-label="Menu"
+          (click)="toggleMobileMenu($event)"
+        >
+          <span class="hamburger-bar" [class.hamburger-bar--top]="mobileMenuOpen()"></span>
+          <span class="hamburger-bar" [class.hamburger-bar--mid]="mobileMenuOpen()"></span>
+          <span class="hamburger-bar" [class.hamburger-bar--bot]="mobileMenuOpen()"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Panel -->
+    @if (mobileMenuOpen()) {
+      <div class="mobile-drawer" (click)="$event.stopPropagation()">
+        <nav class="mobile-nav" [attr.aria-label]="copy().navigation">
+          <ul class="mobile-nav__list">
+            @for (item of navigationItems(); track item.targetId) {
+              <li class="mobile-nav__item">
+                <a
+                  [href]="'#' + item.targetId"
+                  class="mobile-nav__link"
+                  [class.mobile-nav__link--active]="activeSectionId() === item.targetId"
+                  (click)="navigateToSection($event, item.targetId)"
+                >
+                  <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+                </a>
+              </li>
+            }
+          </ul>
+        </nav>
+        <div class="mobile-drawer__actions">
+          <div class="mobile-lang-actions">
+            <span class="mobile-actions-label">{{ ui().languageLabel }}</span>
+            <div class="mobile-lang-buttons">
+              <button
+                type="button"
+                class="mobile-action-btn"
+                [class.mobile-action-btn--active]="language.language() === 'pt-BR'"
+                (click)="choose('pt-BR')"
+              >
+                Português
+              </button>
+              <button
+                type="button"
+                class="mobile-action-btn"
+                [class.mobile-action-btn--active]="language.language() === 'en'"
+                (click)="choose('en')"
+              >
+                English
+              </button>
+            </div>
+          </div>
+          <div class="mobile-cv-actions">
+            <span class="mobile-actions-label">{{ ui().resumeLabel }}</span>
+            <div class="mobile-cv-buttons">
+              <button
+                type="button"
+                class="mobile-action-btn"
+                (click)="downloadCurriculum('pt-BR')"
+              >
+                🇧🇷 Português
+              </button>
+              <button
+                type="button"
+                class="mobile-action-btn"
+                (click)="downloadCurriculum('en')"
+              >
+                🇺🇸 English
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </header>
+  <header
+    class="page-header"
+    [attr.id]="showPresentation() ? 'apresentacao' : null"
+    data-editorial-section-id="presentation-section"
+  >
+    <div class="page-header__container">
+      <div class="page-header__content">
+        @if (showPresentation()) {
+          <h1
+            class="hero-name"
+            [attr.data-editorial-entity]="'copy-heroName'"
+            data-editorial-field="text"
+            [attr.data-editorial-locale]="language.language()"
+          >{{ authorName() }}</h1>
+          <p
+            class="hero-subtitle"
+            [attr.data-editorial-entity]="'copy-heroRole'"
+            data-editorial-field="text"
+            [attr.data-editorial-locale]="language.language()"
+          >{{ roleSubtitle() }}</p>
+          <p class="intro"><ng-container *ngTemplateOutlet="localized; context: { key: 'intro' }" /></p>
+
+          <div class="hero-actions">
+            @if (showProjects()) {
+              <a href="#portfolio" class="hero-btn hero-btn--primary hero-action hero-action--primary" (click)="navigateToSection($event, 'portfolio')">
+                <span>{{ ui().viewProjects }}</span>
+                <svg class="hero-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            }
+            <a href="#contato" class="hero-btn hero-btn--secondary hero-action" data-testid="hero-contact-button" (click)="navigateToSection($event, 'contato')">
+              <svg class="hero-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m22 2-7 20-4-9-9-4Z"/>
+                <path d="M22 2 11 13"/>
+              </svg>
+              <span>{{ ui().contactMe }}</span>
+            </a>
+          </div>
+
+          <div class="hero-footer">
+            <div class="compact-contact-links" data-testid="compact-contact-links">
+              @for (link of contactLinks(); track link.id) {
+                <a
+                  class="compact-contact-link"
+                  [href]="link.href"
+                  [attr.data-editorial-entity]="link.id"
+                  data-editorial-control="url"
+                  data-editorial-field="href"
+                  [attr.data-editorial-value]="link.href"
+                  [attr.aria-label]="contactLinkLabel(link)"
+                  [title]="contactLinkLabel(link)"
+                >
+                  @if (link.symbol === 'linkedin') {
+                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.68 1.68 0 1 0 0-3.36 1.68 1.68 0 0 0 0 3.36m1.39 9.74v-8.37H5.07v8.37h2.78z"/>
+                    </svg>
+                  } @else if (link.symbol === 'github') {
+                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                  } @else if (link.symbol === 'email') {
+                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect width="20" height="16" x="2" y="4" rx="2"/>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                  } @else if (link.symbol === 'phone') {
+                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                  } @else {
+                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                  }
+                  <span
+                    class="sr-only"
+                    [attr.data-editorial-entity]="link.id"
+                    data-editorial-field="label"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ contactLinkLabel(link) }}</span
+                  >
+                </a>
+              }
+            </div>
+
+            <div class="hero-status">
+              <span class="hero-status__dot"></span>
+              <span
+                class="hero-status__text"
+                [attr.data-editorial-entity]="'copy-heroAvailability'"
+                data-editorial-field="text"
+                [attr.data-editorial-locale]="language.language()"
+              >{{ heroAvailability() }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (showPresentation()) {
+        <div class="page-header__media" aria-hidden="true">
+          <div class="profile-card">
+            <div class="profile-card__avatar">
+              <img
+                src="/assets/profile/joao-vitor.jpg"
+                [alt]="authorName()"
+                class="profile-card__photo"
+                loading="eager"
+              />
+            </div>
+            <div class="profile-card__badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>{{ roleSubtitle() }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </header>
+  <div class="sections">
+    @for (item of sectionItems(); track item.targetId) {
+      <section
+        [id]="item.targetId"
+        [attr.aria-labelledby]="item.targetId + '-title'"
+        [attr.data-editorial-section-id]="sectionIdByTarget[item.targetId]"
+      >
+        <h2 [id]="item.targetId + '-title'">
+          <ng-container *ngTemplateOutlet="localized; context: { key: item.title }" />
+        </h2>
+        @if (item.targetId === 'sobre-mim') {
+          <div class="about-container">
+            <h3 class="about-headline">
+              <ng-container *ngTemplateOutlet="localized; context: { key: 'aboutHeadline' }" />
+            </h3>
+            <div class="about-text-content">
+              <p class="about-bio">
+                <ng-container *ngTemplateOutlet="localized; context: { key: item.body }" />
+              </p>
+              <div class="about-focus-box">
+                <span class="about-focus-badge">{{ ui().focusBadge }}</span>
+                <p class="about-focus-text">
+                  <ng-container *ngTemplateOutlet="localized; context: { key: 'aboutFocus' }" />
+                </p>
+              </div>
+            </div>
+
+            <div class="about-pillars-grid">
+              <!-- Pillar 1: Front-end Engineering & Performance -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m18 16 4-4-4-4" />
+                    <path d="m6 8-4 4 4 4" />
+                    <path d="m14.5 4-5 16" />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar1Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar1Description' }"
+                  />
+                </p>
+              </article>
+
+              <!-- Pillar 2: Backend & Enterprise Integrations -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"
+                    />
+                    <path
+                      d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"
+                    />
+                    <path
+                      d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"
+                    />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar2Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar2Description' }"
+                  />
+                </p>
+              </article>
+
+              <!-- Pillar 3: Computer Vision & AI -->
+              <article class="about-pillar-card">
+                <div class="about-pillar-icon" aria-hidden="true">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </div>
+                <h4 class="about-pillar-title">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar3Title' }"
+                  />
+                </h4>
+                <p class="about-pillar-desc">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'aboutPillar3Description' }"
+                  />
+                </p>
+              </article>
+            </div>
+          </div>
+        } @else if (item.targetId === 'stack-tecnica') {
+          <div
+            class="skills-grid"
+            data-testid="skills-section"
+            data-editorial-collection-kind="skillCategory"
+          >
+            @for (category of skillCategories(); track category.id) {
+              <article
+                class="skill-category"
+                [attr.data-testid]="'skills-' + category.id"
+                [attr.data-editorial-item-id]="category.id"
+              >
+                <h3>
+                  <span
+                    [attr.data-editorial-entity]="category.id"
+                    data-editorial-field="label"
+                    [attr.data-editorial-locale]="language.language()"
+                    >{{ skillCategoryLabel(category) }}</span
+                  >
+                </h3>
+                <ul
+                  data-editorial-collection-kind="skill"
+                  [attr.data-editorial-parent-id]="category.id"
+                >
+                  @for (skill of category.skills; track skill.id) {
+                    <li class="skill-item" [attr.data-editorial-item-id]="'skill-' + skill.id">
+                      @if (skillIcon(skill); as icon) {
+                        <img
+                          [src]="icon"
+                          [alt]="skill.name"
+                          (error)="onSkillIconError($event, skill)"
+                        />
+                      }
+                      <span
+                        [attr.data-editorial-entity]="'skill-' + skill.id"
+                        data-editorial-field="name"
+                        [attr.data-editorial-locale]="language.language()"
+                        >{{ skill.name }}</span
+                      >
+                    </li>
+                  }
+                </ul>
+              </article>
+            }
+          </div>
+        } @else if (item.targetId === 'experiencias') {
+          <div
+            class="experiences-list"
+            data-testid="professional-experiences"
+            data-editorial-collection-kind="experience"
+          >
+            @for (experience of experiences(); track experience.id) {
+              <article
+                class="experience-card"
+                [attr.data-testid]="'professional-experience-' + experience.id"
+                [attr.data-editorial-item-id]="experience.id"
+              >
+                <header class="experience-card-header">
+                  <p
+                    class="experience-period"
+                    [attr.data-editorial-entity]="experience.id"
+                    data-editorial-control="date-range"
+                    [attr.data-editorial-start-date]="experience.startDate"
+                    [attr.data-editorial-end-date]="experience.endDate"
+                  >
+                    <span class="experience-period-label">
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experiencePeriodLabel' }"
+                      />:
+                    </span>
+                    {{ formatExperiencePeriod(experience) }}
+                  </p>
+                  <p
+                    class="experience-title"
+                    [attr.data-editorial-entity]="experience.id"
+                    data-editorial-field="title"
+                    [attr.data-editorial-locale]="language.language()"
+                  >
+                    {{ experience.title }}
+                  </p>
+                </header>
+                <div class="experience-details">
+                  <div class="experience-block experience-block--context">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experienceContextLabel' }"
+                      />
+                    </h4>
+                    <p
+                      [attr.data-editorial-entity]="experience.id"
+                      data-editorial-field="context"
+                      [attr.data-editorial-locale]="language.language()"
+                    >
+                      {{ experience.context }}
+                    </p>
+                  </div>
+                  <div class="experience-block experience-block--responsibilities">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="
+                          localized;
+                          context: { key: 'experienceResponsibilitiesLabel' }
+                        "
+                      />
+                    </h4>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="responsibilities"
+                    >
+                      @for (responsibility of experience.responsibilities; track $index) {
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['responsibilities']?.[$index] ??
+                            experience.id + '-responsibilities-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['responsibilities']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ responsibility }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="experience-block experience-block--decisions">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="
+                          localized;
+                          context: { key: 'experienceTechnicalDecisionsLabel' }
+                        "
+                      />
+                    </h4>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="technicalDecisions"
+                    >
+                      @for (decision of experience.technicalDecisions; track $index) {
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['technicalDecisions']?.[$index] ??
+                            experience.id + '-technicalDecisions-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['technicalDecisions']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ decision }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="experience-block experience-block--results">
+                    <h4>
+                      <ng-container
+                        *ngTemplateOutlet="localized; context: { key: 'experienceResultsLabel' }"
+                      />
+                    </h4>
+                    <ul
+                      data-editorial-collection-kind="listItem"
+                      [attr.data-editorial-parent-id]="experience.id"
+                      data-editorial-list-name="results"
+                    >
+                      @for (result of experience.results; track $index) {
+                        <li
+                          [attr.data-editorial-entity]="
+                            experience.editorialListIds?.['results']?.[$index] ??
+                            experience.id + '-results-' + ($index + 1)
+                          "
+                          [attr.data-editorial-item-id]="
+                            experience.editorialListIds?.['results']?.[$index]
+                          "
+                          data-editorial-field="text"
+                          [attr.data-editorial-locale]="language.language()"
+                        >
+                          {{ result }}
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else if (item.targetId === 'portfolio' || item.targetId === 'projetos') {
+          <span id="projetos" class="section-anchor-compat" aria-hidden="true"></span>
+          <div class="portfolio-showcase" data-testid="portfolio-section" data-editorial-project-collection>
+            @if (copy().portfolioSubtitle) {
+              <p
+                class="section-subtitle portfolio-subtitle"
+                [attr.data-editorial-entity]="'copy-portfolioSubtitle'"
+                data-editorial-field="text"
+                [attr.data-editorial-locale]="language.language()"
+              >
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'portfolioSubtitle' }" />
+              </p>
+            }
+            <div class="portfolio-filter-tabs" role="tablist" aria-label="Filtro de projetos">
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'all'"
+                [attr.aria-selected]="projectFilter() === 'all'"
+                (click)="setProjectFilter('all')"
+                data-testid="filter-all"
+              >
+                {{ ui().filterAll }}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'professional'"
+                [attr.aria-selected]="projectFilter() === 'professional'"
+                (click)="setProjectFilter('professional')"
+                data-testid="filter-professional"
+              >
+                {{ ui().filterProfessional }}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                class="portfolio-filter-btn"
+                [class.portfolio-filter-btn--active]="projectFilter() === 'personal'"
+                [attr.aria-selected]="projectFilter() === 'personal'"
+                (click)="setProjectFilter('personal')"
+                data-testid="filter-personal"
+              >
+                {{ ui().filterPersonal }}
+              </button>
+            </div>
+            <div
+              class="portfolio-grid"
+              data-editorial-collection-kind="project"
+              [attr.data-editorial-new-type]="projectFilter() === 'all' ? 'personal' : projectFilter()"
+            >
+              @for (project of filteredProjects(); track project.id) {
+                <app-project-card
+                  [project]="project"
+                  [editorialMode]="editorialMode"
+                  [locale]="language.language()"
+                />
+              }
+            </div>
+          </div>
+        } @else if (item.targetId === 'formacao-academica') {
+          <div
+            class="academic-list"
+            data-testid="academic-background"
+            data-editorial-collection-kind="academic"
+          >
+            <div class="academic-table" role="list">
+              @for (entry of academicEntries(); track entry.id) {
+                <article
+                  class="academic-card academic-table-row"
+                  role="listitem"
+                  [attr.data-testid]="'academic-' + entry.id"
+                  [attr.data-editorial-item-id]="entry.id"
+                >
+                  <div class="academic-cell academic-name">
+                    <h3>
+                      <span
+                        [attr.data-editorial-entity]="entry.id"
+                        data-editorial-field="name"
+                        [attr.data-editorial-locale]="language.language()"
+                        >{{ academicEntryName(entry) }}</span
+                      >
+                    </h3>
+                  </div>
+                  <div class="academic-cell">
+                    <span
+                      [attr.data-editorial-entity]="entry.id"
+                      data-editorial-field="institution"
+                      [attr.data-editorial-locale]="language.language()"
+                      >{{ entry.institution || '' }}</span
+                    >
+                  </div>
+                  <div class="academic-cell">
+                    <span>{{ academicEntryLevel(entry) }}</span>
+                  </div>
+                  <div class="academic-cell">
+                    <span
+                      class="academic-status"
+                      [class.academic-status--current]="entry.isCurrent"
+                      >{{ entry.isCurrent ? copy().educationCurrentLabel : copy().educationCompletedLabel }}</span
+                    >
+                  </div>
+                </article>
+              }
+            </div>
+          </div>
+        } @else if (item.targetId === 'contato') {
+          <div class="contact-section-container">
+            <div class="contact-intro-header">
+              <h3 class="contact-headline">
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'contactHeadline' }" />
+              </h3>
+              <p class="contact-subtitle">
+                <ng-container *ngTemplateOutlet="localized; context: { key: 'contactSubtitle' }" />
+              </p>
+            </div>
+
+            <div class="contact-layout-split">
+              <!-- Left Column: Platforms & Explanatory text -->
+              <div class="contact-left-col">
+                <p class="contact-explanation">
+                  <ng-container
+                    *ngTemplateOutlet="localized; context: { key: 'contactExplanation' }"
+                  />
+                </p>
+
+                <div
+                  class="contact-grid contact-platforms-stack"
+                  data-testid="contact-links"
+                  data-editorial-collection-kind="contact"
+                >
+                  @for (link of contactLinks(); track link.id) {
+                    <a
+                      class="contact-link contact-platform-pill"
+                      [href]="link.href"
+                      [attr.data-testid]="'contact-' + link.id"
+                      [attr.data-editorial-entity]="link.id"
+                      data-editorial-control="url"
+                      data-editorial-field="href"
+                      [attr.data-editorial-value]="link.href"
+                      [attr.data-editorial-item-id]="link.id"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="contact-platform-icon" aria-hidden="true">
+                        <img [src]="link.iconPath" alt="" aria-hidden="true" />
+                      </div>
+                      <div class="contact-platform-content">
+                        <span class="contact-label">
+                          <span
+                            [attr.data-editorial-entity]="link.id"
+                            data-editorial-field="label"
+                            [attr.data-editorial-locale]="language.language()"
+                            >{{ contactLinkLabel(link) }}</span
+                          >
+                        </span>
+                        <span class="contact-platform-value">
+                          {{ platformDisplayValue(link) }}
+                        </span>
+                      </div>
+                    </a>
+                  }
+                </div>
+
+                @if (curriculum(); as currentCurriculum) {
+                  <a
+                    class="contact-link contact-platform-pill contact-curriculum-pill"
+                    [href]="currentCurriculum.publicUrl"
+                    [attr.download]="currentCurriculum.originalName"
+                    data-testid="contact-curriculum"
+                  >
+                    <div class="contact-platform-icon" aria-hidden="true">
+                      <img src="/assets/contact/curriculum.svg" alt="" aria-hidden="true" />
+                    </div>
+                    <div class="contact-platform-content">
+                      <span class="contact-label">
+                        <ng-container
+                          *ngTemplateOutlet="localized; context: { key: curriculumLabelKey() }"
+                        />
+                      </span>
+                      <span class="contact-platform-value">
+                        {{ ui().downloadCurriculumPdf }}
+                      </span>
+                    </div>
+                  </a>
+                }
+              </div>
+
+              <!-- Right Column: Direct Message Form -->
+              <div class="contact-right-col">
+                <app-contact-panel
+                  class="contact-panel-layout"
+                  [copy]="copy()"
+                  [destinations]="contactDestinations()"
+                />
+              </div>
+            </div>
+          </div>
+        } @else {
+          <p><ng-container *ngTemplateOutlet="localized; context: { key: item.body }" /></p>
+        }
+      </section>
+    }
+  </div>
+</main>
+
+<ng-template #localized let-key="key">
+  <span class="localized-copy">
+    <span class="translation-size" aria-hidden="true">{{ $any(original)[key] }}</span>
+    <span class="translation-size" aria-hidden="true">{{ $any(english)[key] }}</span>
+    <span
+      class="translated-text"
+      [attr.data-editorial-entity]="'copy-' + key"
+      data-editorial-field="text"
+      [attr.data-editorial-locale]="language.language()"
+      >{{ $any(copy())[key] }}</span
+    >
+  </span>
+</ng-template>
+
+<dialog
+  #suggestion
+  closedby="none"
+  class="language-suggestion"
+  aria-labelledby="language-suggestion-title"
+  lang="pt-BR"
+  (cancel)="$event.preventDefault()"
+>
+  <p id="language-suggestion-title">Idioma sugerido: Inglês</p>
+  <div class="suggestion-actions">
+    <button type="button" (click)="respond(false)">Recusar</button>
+    <button type="button" class="accept" (click)="respond(true)">Aceitar</button>
+  </div>
+</dialog>

@@ -1,0 +1,107 @@
+:host {
+  display: block;
+}
+
+.media-management {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+  color: #172033;
+}
+
+.media-section h3 {
+  margin: 0;
+}
+
+.media-section p {
+  margin: 0.5rem 0 0;
+}
+
+.media-section {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.media-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.skill-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+}
+
+.skill-preview img {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+}
+
+.muted-status {
+  color: #667085;
+}
+
+.skill-catalog-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.75rem;
+}
+
+.skill-catalog-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  border: 1px solid #dfe3ec;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #172033;
+  text-align: left;
+}
+
+.skill-catalog-item img,
+.skill-icon-placeholder {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  display: grid;
+  place-items: center;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: #475467;
+  font-size: 0.875rem;
+}
+
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cfd5df;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  color: #172033;
+  font: inherit;
+}
+
+button {
+  width: fit-content;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  background: #172033;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
