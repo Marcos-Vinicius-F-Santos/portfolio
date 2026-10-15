@@ -255,6 +255,10 @@ function sanitizeMigration(sql) {
   res = res.replace(/create index /gi, 'create index if not exists ');
   res = res.replace(/create index if not exists if not exists/gi, 'create index if not exists');
 
+  // Function creation idempotency
+  res = res.replace(/create function /gi, 'create or replace function ');
+  res = res.replace(/create or replace function or replace function /gi, 'create or replace function ');
+
   // Safe drop constraint
   res = res.replace(/drop constraint (?:if exists )?([a-zA-Z0-9_]+);/gi, 'drop constraint if exists $1;');
 
