@@ -3,7 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
 import { PortfolioContentService } from './portfolio-content.service';
 import { PublishedSnapshotService } from './published-snapshot.service';
-import snapshotJson from '../../../../../spec/05-verificacao/ativacao-painel-admin-joao-vitor/initial-editorial-snapshot-joao-v1.json';
+import { GENERIC_EDITORIAL_SNAPSHOT as snapshotJson } from './editorial-snapshot.fixture';
 
 describe('PortfolioContentService', () => {
   it('loads the selected translation and keeps the content key', async () => {
@@ -390,14 +390,14 @@ describe('PortfolioContentService', () => {
     const service = TestBed.inject(PortfolioContentService);
 
     const copy = await service.loadCopy('pt-BR');
-    expect(copy.aboutTitle).toBe('Sobre mim');
+    expect(copy.aboutTitle).toBe('Sobre o perfil');
 
     const experiences = await service.listExperiences('pt-BR');
-    expect(experiences.length).toBe(4);
-    expect(experiences[0]?.title).toBe('Desenvolvedor Front-end · SensorEng');
+    expect(experiences.length).toBe(1);
+    expect(experiences[0]?.title).toBe('Experiência de software');
 
     const projects = await service.listProjects('pt-BR');
-    expect(projects.length).toBe(2);
+    expect(projects.length).toBe(1);
 
     const sectionOrder = await service.listSectionOrder();
     expect(sectionOrder).toContain('presentation-section');

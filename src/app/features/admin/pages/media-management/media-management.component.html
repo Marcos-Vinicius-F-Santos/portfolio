@@ -28,6 +28,26 @@
   }
 
   @if (!loading()) {
+    <section class="media-section" aria-labelledby="profile-media-title">
+      <app-admin-section-header
+        title="Imagem de perfil"
+        description="A foto será armazenada no Supabase Storage e associada ao perfil publicado."
+      />
+      <app-admin-card>
+        <label>
+          <span>Nova foto (PNG/JPG/WebP até 3 MB)</span>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            (change)="setProfileFile($event)"
+          />
+        </label>
+        <button class="admin-button" type="button" (click)="uploadProfileImage()" [disabled]="saving()">
+          Enviar foto de perfil
+        </button>
+      </app-admin-card>
+    </section>
+
     <section class="media-section" aria-labelledby="project-media-title">
       <app-admin-section-header
         title="Imagens dos projetos"

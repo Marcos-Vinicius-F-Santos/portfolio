@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
 import { PublishedSnapshotService } from './published-snapshot.service';
-import type { EditorialSnapshotV1 } from './editorial-snapshot.models';
+import type { EditorialProfileIdentity, EditorialSnapshotV1 } from './editorial-snapshot.models';
 import {
   snapshotToAcademicEntries,
   snapshotToContactLinks,
@@ -10,6 +10,7 @@ import {
   snapshotToCurriculum,
   snapshotToExperiences,
   snapshotToProjects,
+  snapshotToProfileIdentity,
   snapshotToSectionOrder,
   snapshotToSkillCategories,
 } from './editorial-snapshot-adapter';
@@ -44,9 +45,11 @@ export class PortfolioContentService {
   private snapshotPromise: Promise<EditorialSnapshotV1 | null> | null = null;
 
   private readonly remoteCopyState = signal<Partial<PortfolioCopy>>({});
+  private readonly profileIdentityState = signal<EditorialProfileIdentity | null>(null);
   private readonly errorState = signal<Error | null>(null);
 
   readonly remoteCopy = computed(() => this.remoteCopyState());
+  readonly profileIdentity = computed(() => this.profileIdentityState());
   readonly lastError = computed(() => this.errorState());
   readonly isAvailable = computed(() => this.client !== null);
 
@@ -57,10 +60,18 @@ export class PortfolioContentService {
   private async getSnapshot(): Promise<EditorialSnapshotV1 | null> {
     if (!this.snapshotService) return null;
     const existing = this.snapshotService.snapshot();
-    if (existing) return existing;
+    if (existing) return this.applySnapshot(existing);
     if (this.snapshotPromise) return this.snapshotPromise;
-    this.snapshotPromise = this.snapshotService.load().catch(() => null);
+    this.snapshotPromise = this.snapshotService
+      .load()
+      .then((snapshot) => this.applySnapshot(snapshot))
+      .catch(() => null);
     return this.snapshotPromise;
+  }
+
+  private applySnapshot(snapshot: EditorialSnapshotV1): EditorialSnapshotV1 {
+    this.profileIdentityState.set(snapshotToProfileIdentity(snapshot, this.storageUrlResolver));
+    return snapshot;
   }
 
   async loadCopy(locale: PortfolioLocale): Promise<Partial<PortfolioCopy>> {

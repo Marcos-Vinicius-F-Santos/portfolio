@@ -4,6 +4,8 @@ export interface SupabaseRuntimeConfig {
   adminUserId: string;
   brandInitials?: string;
   authorName?: string;
+  profileId?: string;
+  profileImageUrl?: string;
   web3FormsAccessKey?: string;
 }
 
@@ -20,7 +22,9 @@ export const supabaseRuntimeConfig: SupabaseRuntimeConfig = {
   publishableKey: runtimeConfig.publishableKey ?? '',
   adminUserId: runtimeConfig.adminUserId ?? '',
   brandInitials: runtimeConfig.brandInitials ?? '',
-  authorName: runtimeConfig.authorName ?? 'João Vitor',
+  authorName: runtimeConfig.authorName ?? '',
+  profileId: runtimeConfig.profileId ?? '',
+  profileImageUrl: runtimeConfig.profileImageUrl ?? '',
   web3FormsAccessKey: runtimeConfig.web3FormsAccessKey ?? '',
 };
 

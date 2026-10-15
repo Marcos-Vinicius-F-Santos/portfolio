@@ -183,6 +183,22 @@ export class MediaManagementService {
     });
   }
 
+  async uploadProfileImage(file: File): Promise<MediaOperationResult> {
+    return this.run('profile image upload', async () => {
+      if (!this.editorialMedia) throw new Error('Fluxo editorial de mídia indisponível.');
+      validateProfileImage(file);
+      const draft = await this.loadEditorialDraft(this.requireClient());
+      const uploaded = await this.editorialMedia.upload(draft.revision, 'profile_image', file);
+      await this.editorialMedia.associate(
+        draft.revision,
+        'profile',
+        uploaded.mediaId,
+        'profileImage',
+        0,
+      );
+    });
+  }
+
   async replaceProjectImage(imageId: string, file: File): Promise<MediaOperationResult> {
     return this.run('project image replacement', async (client) => {
       this.validateProjectId(imageId);
@@ -442,7 +458,10 @@ export class MediaManagementService {
       return { ok: true };
     } catch (error) {
       console.error('[portfolio-media-operation-failed]', { label, error });
-      return { ok: false, message: mediaErrorMessage(error) };
+      return {
+        ok: false,
+        message: mediaErrorMessage(error, label === 'profile image upload'),
+      };
     }
   }
 
@@ -464,6 +483,15 @@ function validateImage(file: File): void {
 function validateSkillIcon(file: File): void {
   if (!SKILL_ICON_TYPES.has(file.type)) throw new Error('Invalid skill icon type');
   if (file.size <= 0 || file.size > MAX_IMAGE_SIZE) throw new Error('Invalid skill icon size');
+}
+
+function validateProfileImage(file: File): void {
+  if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+    throw new Error('A foto de perfil deve ser PNG, JPG ou WebP.');
+  }
+  if (file.size <= 0 || file.size > 3_145_728) {
+    throw new Error('A foto de perfil deve ter no máximo 3 MB.');
+  }
 }
 
 function validateCurriculum(file: File): void {
@@ -497,7 +525,7 @@ function isUuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }
 
-function mediaErrorMessage(error: unknown): string {
+function mediaErrorMessage(error: unknown, includeDetails = false): string {
   if (error instanceof Error) {
     if (
       error.message.includes('Invalid') ||
@@ -508,6 +536,15 @@ function mediaErrorMessage(error: unknown): string {
     )
       return error.message;
     if (error.message.includes('Project not found')) return 'Projeto não encontrado.';
+    if (includeDetails && error.message.trim()) return error.message;
+  }
+  if (includeDetails && error && typeof error === 'object') {
+    const value = error as Record<string, unknown>;
+    const message = typeof value['message'] === 'string' ? value['message'] : '';
+    const details = typeof value['details'] === 'string' ? value['details'] : '';
+    const hint = typeof value['hint'] === 'string' ? value['hint'] : '';
+    const detail = [message, details, hint].filter(Boolean).join(' — ');
+    if (detail) return detail;
   }
   return 'Não foi possível salvar a mídia. Tente novamente.';
 }

@@ -46,6 +46,7 @@ export class MediaManagementComponent {
   protected selectedImageFile: File | null = null;
   protected selectedSkillFile: File | null = null;
   protected newSkillFile: File | null = null;
+  protected selectedProfileFile: File | null = null;
 
   constructor() {
     void this.reload();
@@ -93,6 +94,19 @@ export class MediaManagementComponent {
   protected setNewSkillFile(event: Event): void {
     this.newSkillFile = this.fileFrom(event);
     this.clearMessages();
+  }
+
+  protected setProfileFile(event: Event): void {
+    this.selectedProfileFile = this.fileFrom(event);
+    this.clearMessages();
+  }
+
+  protected async uploadProfileImage(): Promise<void> {
+    if (!this.selectedProfileFile) {
+      this.errorMessage.set('Selecione uma foto de perfil válida.');
+      return;
+    }
+    await this.save(() => this.service.uploadProfileImage(this.selectedProfileFile as File));
   }
 
   protected setSkill(event: Event): void {
@@ -144,6 +158,7 @@ export class MediaManagementComponent {
     );
     this.newSkillLabel = '';
     this.newSkillFile = null;
+    this.selectedProfileFile = null;
   }
 
   protected async uploadImage(): Promise<void> {

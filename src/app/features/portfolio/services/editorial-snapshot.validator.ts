@@ -53,6 +53,7 @@ const SECTION_KINDS: readonly EditorialSectionKind[] = [
 ];
 const ENTITY_KINDS: readonly EditorialEntityKind[] = [
   'presentation',
+  'profile',
   'about',
   'result',
   'experience',
@@ -70,6 +71,7 @@ const ENTITY_KINDS: readonly EditorialEntityKind[] = [
 
 const ENTITY_DATA_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]>> = {
   presentation: [],
+  profile: ['profileId', 'mediaId'],
   about: [],
   result: [],
   experience: ['startDate', 'endDate'],
@@ -87,6 +89,7 @@ const ENTITY_DATA_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]
 
 const TRANSLATION_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]>> = {
   presentation: ['eyebrow', 'title', 'displayName', 'summary'],
+  profile: [],
   about: ['title', 'body'],
   result: ['title', 'description', 'value'],
   experience: ['title', 'context', 'responsibilities', 'technicalDecisions', 'results'],
@@ -113,6 +116,7 @@ const TRANSLATION_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]
 
 const REQUIRED_TRANSLATION_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]>> = {
   presentation: ['title', 'displayName', 'summary'],
+  profile: [],
   about: ['title', 'body'],
   result: ['title', 'value'],
   experience: ['title', 'context'],
@@ -280,6 +284,10 @@ function validateEntityData(
   if (kind === 'academic' && typeof data['isCurrent'] !== 'boolean') {
     add(issues, 'invalid_type', `${path}.isCurrent`, 'isCurrent deve ser booleano.');
   }
+  if (kind === 'profile') {
+    requireId(data['profileId'], `${path}.profileId`, issues);
+    if (data['mediaId'] !== undefined) requireId(data['mediaId'], `${path}.mediaId`, issues);
+  }
   if (kind === 'project' && data['type'] !== 'professional' && data['type'] !== 'personal') {
     add(issues, 'invalid_value', `${path}.type`, 'Projeto deve ser professional ou personal.');
   }
@@ -321,7 +329,7 @@ function validateMedia(value: unknown, issues: EditorialSnapshotValidationIssue[
       add(issues, 'invalid_value', `${path}.bytes`, 'bytes deve ser inteiro não negativo.');
     }
     if (media['assetPath'] !== undefined)
-      validateSafeAssetPath(media['assetPath'], `${path}.assetPath`, issues);
+      validateSafeMediaPath(media, `${path}.assetPath`, issues);
   }
   return ids;
 }
@@ -578,6 +586,28 @@ function validateSafeAssetPath(
   ) {
     add(issues, 'invalid_value', path, 'Caminho público de mídia inválido.');
   }
+}
+
+function validateSafeMediaPath(
+  media: Record<string, unknown>,
+  path: string,
+  issues: EditorialSnapshotValidationIssue[],
+): void {
+  if (media['source'] === 'managed') {
+    const value = media['assetPath'];
+    if (
+      typeof value !== 'string' ||
+      value.length === 0 ||
+      value.length > 512 ||
+      value.startsWith('/') ||
+      value.includes('..') ||
+      !/^[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(value)
+    ) {
+      add(issues, 'invalid_value', path, 'Caminho gerenciado de mídia inválido.');
+    }
+    return;
+  }
+  validateSafeAssetPath(media['assetPath'], path, issues);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

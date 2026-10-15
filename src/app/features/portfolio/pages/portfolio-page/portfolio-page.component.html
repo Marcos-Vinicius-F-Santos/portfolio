@@ -379,23 +379,15 @@
 
       @if (showPresentation()) {
         <div class="page-header__media" aria-hidden="true">
-          <div class="profile-card">
-            <div class="profile-card__avatar">
-              <img
-                src="/assets/profile/joao-vitor.jpg"
-                [alt]="authorName()"
-                class="profile-card__photo"
-                loading="eager"
-              />
-            </div>
-            <div class="profile-card__badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              <span>{{ roleSubtitle() }}</span>
-            </div>
-          </div>
+          <figure class="hero-portrait">
+            <img
+              [src]="profileImageUrl()"
+              [alt]="authorName()"
+              class="hero-portrait__photo"
+              loading="eager"
+              (error)="onProfileImageError()"
+            />
+          </figure>
         </div>
       }
     </div>
@@ -569,151 +561,6 @@
                     </li>
                   }
                 </ul>
-              </article>
-            }
-          </div>
-        } @else if (item.targetId === 'experiencias') {
-          <div
-            class="experiences-list"
-            data-testid="professional-experiences"
-            data-editorial-collection-kind="experience"
-          >
-            @for (experience of experiences(); track experience.id) {
-              <article
-                class="experience-card"
-                [attr.data-testid]="'professional-experience-' + experience.id"
-                [attr.data-editorial-item-id]="experience.id"
-              >
-                <header class="experience-card-header">
-                  <p
-                    class="experience-period"
-                    [attr.data-editorial-entity]="experience.id"
-                    data-editorial-control="date-range"
-                    [attr.data-editorial-start-date]="experience.startDate"
-                    [attr.data-editorial-end-date]="experience.endDate"
-                  >
-                    <span class="experience-period-label">
-                      <ng-container
-                        *ngTemplateOutlet="localized; context: { key: 'experiencePeriodLabel' }"
-                      />:
-                    </span>
-                    {{ formatExperiencePeriod(experience) }}
-                  </p>
-                  <p
-                    class="experience-title"
-                    [attr.data-editorial-entity]="experience.id"
-                    data-editorial-field="title"
-                    [attr.data-editorial-locale]="language.language()"
-                  >
-                    {{ experience.title }}
-                  </p>
-                </header>
-                <div class="experience-details">
-                  <div class="experience-block experience-block--context">
-                    <h4>
-                      <ng-container
-                        *ngTemplateOutlet="localized; context: { key: 'experienceContextLabel' }"
-                      />
-                    </h4>
-                    <p
-                      [attr.data-editorial-entity]="experience.id"
-                      data-editorial-field="context"
-                      [attr.data-editorial-locale]="language.language()"
-                    >
-                      {{ experience.context }}
-                    </p>
-                  </div>
-                  <div class="experience-block experience-block--responsibilities">
-                    <h4>
-                      <ng-container
-                        *ngTemplateOutlet="
-                          localized;
-                          context: { key: 'experienceResponsibilitiesLabel' }
-                        "
-                      />
-                    </h4>
-                    <ul
-                      data-editorial-collection-kind="listItem"
-                      [attr.data-editorial-parent-id]="experience.id"
-                      data-editorial-list-name="responsibilities"
-                    >
-                      @for (responsibility of experience.responsibilities; track $index) {
-                        <li
-                          [attr.data-editorial-entity]="
-                            experience.editorialListIds?.['responsibilities']?.[$index] ??
-                            experience.id + '-responsibilities-' + ($index + 1)
-                          "
-                          [attr.data-editorial-item-id]="
-                            experience.editorialListIds?.['responsibilities']?.[$index]
-                          "
-                          data-editorial-field="text"
-                          [attr.data-editorial-locale]="language.language()"
-                        >
-                          {{ responsibility }}
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div class="experience-block experience-block--decisions">
-                    <h4>
-                      <ng-container
-                        *ngTemplateOutlet="
-                          localized;
-                          context: { key: 'experienceTechnicalDecisionsLabel' }
-                        "
-                      />
-                    </h4>
-                    <ul
-                      data-editorial-collection-kind="listItem"
-                      [attr.data-editorial-parent-id]="experience.id"
-                      data-editorial-list-name="technicalDecisions"
-                    >
-                      @for (decision of experience.technicalDecisions; track $index) {
-                        <li
-                          [attr.data-editorial-entity]="
-                            experience.editorialListIds?.['technicalDecisions']?.[$index] ??
-                            experience.id + '-technicalDecisions-' + ($index + 1)
-                          "
-                          [attr.data-editorial-item-id]="
-                            experience.editorialListIds?.['technicalDecisions']?.[$index]
-                          "
-                          data-editorial-field="text"
-                          [attr.data-editorial-locale]="language.language()"
-                        >
-                          {{ decision }}
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div class="experience-block experience-block--results">
-                    <h4>
-                      <ng-container
-                        *ngTemplateOutlet="localized; context: { key: 'experienceResultsLabel' }"
-                      />
-                    </h4>
-                    <ul
-                      data-editorial-collection-kind="listItem"
-                      [attr.data-editorial-parent-id]="experience.id"
-                      data-editorial-list-name="results"
-                    >
-                      @for (result of experience.results; track $index) {
-                        <li
-                          [attr.data-editorial-entity]="
-                            experience.editorialListIds?.['results']?.[$index] ??
-                            experience.id + '-results-' + ($index + 1)
-                          "
-                          [attr.data-editorial-item-id]="
-                            experience.editorialListIds?.['results']?.[$index]
-                          "
-                          data-editorial-field="text"
-                          [attr.data-editorial-locale]="language.language()"
-                        >
-                          {{ result }}
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                </div>
               </article>
             }
           </div>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">Avatar genérico</title>
+  <desc id="desc">Silhueta neutra para perfil sem imagem configurada.</desc>
+  <rect width="320" height="320" rx="160" fill="#241811"/>
+  <circle cx="160" cy="126" r="58" fill="#c4baa9"/>
+  <path d="M65 286c8-62 45-94 95-94s87 32 95 94" fill="#c4baa9"/>
+  <circle cx="140" cy="124" r="6" fill="#241811"/>
+  <circle cx="180" cy="124" r="6" fill="#241811"/>
+  <path d="M143 153c11 8 23 8 34 0" fill="none" stroke="#241811" stroke-linecap="round" stroke-width="6"/>
+</svg>

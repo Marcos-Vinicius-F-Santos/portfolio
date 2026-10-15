@@ -8,30 +8,30 @@ import {
 import { TRANSLATION_SOURCE } from '../../services/portfolio-translations';
 import {
   ORIGINAL_COPY,
-  PORTFOLIO_ACADEMIC_ENTRIES,
-  PORTFOLIO_CONTACT_LINKS,
-  PORTFOLIO_PROJECTS,
   type PortfolioCopy,
 } from '../../services/portfolio-content';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import type {
   PortfolioContactLink,
-  PortfolioExperience,
   PortfolioFile,
   PortfolioProject,
   PortfolioProjectImage,
 } from '../../services/portfolio-content.models';
 import { ENGLISH_COPY } from '../../services/portfolio-translations';
 
-let experienceRows: PortfolioExperience[] = [];
 let projectRows: PortfolioProject[] = [];
 let curriculumRows: Partial<Record<'pt-BR' | 'en', PortfolioFile | null>> = {};
 const editorialOrder = signal<string[]>([]);
+const TEST_CONTACT_LINKS: PortfolioContactLink[] = [
+  { id: 'linkedin', labelKey: 'contactLinkedinLabel', href: 'https://example.com/network', symbol: 'linkedin', iconPath: '/assets/contact/linkedin.svg' },
+  { id: 'github', labelKey: 'contactGithubLabel', href: 'https://github.com/example', symbol: 'github', iconPath: '/assets/contact/github.svg' },
+  { id: 'email', labelKey: 'contactEmailLabel', href: 'mailto:contact@example.com', symbol: 'email', iconPath: '/assets/contact/email.svg' },
+  { id: 'phone', labelKey: 'contactPhoneLabel', href: 'tel:+5511999990000', symbol: 'phone', iconPath: '/assets/contact/phone.svg' },
+];
 
 describe('PortfolioPage', () => {
   beforeEach(async () => {
     localStorage.clear();
-    experienceRows = createExperiences('pt-BR');
     projectRows = [];
     curriculumRows = {};
     editorialOrder.set([]);
@@ -39,9 +39,6 @@ describe('PortfolioPage', () => {
       remoteCopy: signal<Partial<PortfolioCopy>>({}),
       editorialSectionOrder: editorialOrder,
       loadCopy: vi.fn(async () => ({})),
-      listExperiences: vi.fn(async (locale: 'pt-BR' | 'en') =>
-        experienceRows.length > 0 ? createExperiences(locale) : [],
-      ),
       listProjects: vi.fn(async (locale: 'pt-BR' | 'en') =>
         projectRows.map((project) => ({
           ...project,
@@ -57,6 +54,7 @@ describe('PortfolioPage', () => {
         })),
       ),
       getCurriculum: vi.fn(async (locale: 'pt-BR' | 'en') => curriculumRows[locale] ?? null),
+      listContactLinks: vi.fn(async () => TEST_CONTACT_LINKS),
     };
     await TestBed.configureTestingModule({
       imports: [PortfolioPageComponent],
@@ -80,21 +78,19 @@ describe('PortfolioPage', () => {
       TestBed.inject(PortfolioLanguageService).choose(language);
       await fixture.whenStable();
       expect(element.querySelector('#apresentacao')).toBeTruthy();
-      for (const id of ['sobre-mim', 'experiencias', 'stack-tecnica', 'contato']) {
+      for (const id of ['sobre-mim', 'stack-tecnica', 'contato']) {
         expect(element.querySelector('#' + id)).toBeTruthy();
         expect(element.querySelector(`a[href="#${id}"]`)).toBeTruthy();
       }
       expect(element.querySelector('#resultados-profissionais')).toBeNull();
-      expect(element.querySelector('#formacao-academica')).toBeNull();
       expect(element.querySelector('a[href="#apresentacao"]')).toBeTruthy();
       expect([...element.querySelectorAll('.sections > section')]).toEqual(sections);
       expect([...element.querySelectorAll('.sections > section')].map((section) => section.id)).toEqual([
         'sobre-mim',
         'stack-tecnica',
-        'experiencias',
         'contato',
       ]);
-      expect(element.querySelectorAll('nav a')).toHaveLength(5);
+      expect(element.querySelectorAll('nav a')).toHaveLength(4);
     }
   });
 
@@ -103,7 +99,7 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('.site-header nav')).toBeTruthy();
     expect(element.querySelector('.page-header nav')).toBeNull();
-    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(5);
+    expect(element.querySelectorAll('.site-header nav a')).toHaveLength(4);
   });
 
   it('aplica a mesma ordem editorial às seções e ao menu', async () => {
@@ -111,9 +107,7 @@ describe('PortfolioPage', () => {
       'presentation-section',
       'skills-section',
       'about-section',
-      'experiences-section',
       'results-section',
-      'education-section',
       'contact-section',
     ]);
     const { element } = await render();
@@ -127,7 +121,7 @@ describe('PortfolioPage', () => {
     ).toEqual(['#apresentacao', '#stack-tecnica', '#sobre-mim']);
   });
 
-  it('renders the approved skills, academic background, contact links and curriculum', async () => {
+  it('renders the approved skills, contact links and curriculum', async () => {
     curriculumRows = {
       'pt-BR': createCurriculum('pt-BR'),
       en: createCurriculum('en'),
@@ -143,19 +137,20 @@ describe('PortfolioPage', () => {
       element.querySelector('[data-testid="skills-languages-runtime"]')?.textContent,
     ).toContain('JavaScript');
     expect(element.querySelector('#formacao-academica')).toBeNull();
+    expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
     expect(element.querySelector('#contato')).toBeTruthy();
     expect([...element.querySelectorAll('.sections > section')].at(-1)?.id).toBe('contato');
     expect(
       (element.querySelector('[data-testid="contact-linkedin"]') as HTMLAnchorElement).href,
-    ).toBe(PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'linkedin')?.href);
+    ).toBe(TEST_CONTACT_LINKS.find((l) => l.symbol === 'linkedin')?.href);
     expect(
       (element.querySelector('[data-testid="contact-github"]') as HTMLAnchorElement).href,
-    ).toBe(PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'github')?.href);
+    ).toBe(TEST_CONTACT_LINKS.find((l) => l.symbol === 'github')?.href);
     expect((element.querySelector('[data-testid="contact-email"]') as HTMLAnchorElement).href).toBe(
-      PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'email')?.href,
+      TEST_CONTACT_LINKS.find((l) => l.symbol === 'email')?.href,
     );
     expect((element.querySelector('[data-testid="contact-phone"]') as HTMLAnchorElement).href).toBe(
-      PORTFOLIO_CONTACT_LINKS.find((l: PortfolioContactLink) => l.symbol === 'phone')?.href,
+      TEST_CONTACT_LINKS.find((l) => l.symbol === 'phone')?.href,
     );
     expect(element.querySelector('[data-testid="contact-links"]')?.textContent).toContain(
       'LinkedIn',
@@ -170,7 +165,6 @@ describe('PortfolioPage', () => {
     const heroContactBtn = element.querySelector('[data-testid="hero-contact-button"]') as HTMLAnchorElement;
     expect(heroContactBtn).toBeTruthy();
     expect(heroContactBtn.getAttribute('href')).toBe('#contato');
-    expect(element.querySelector('.profile-card')).toBeTruthy();
     expect(element.querySelectorAll('.section-index')).toHaveLength(0);
     const contactContent = element.querySelector('#contato')!;
     expect(
@@ -221,7 +215,6 @@ describe('PortfolioPage', () => {
   it.each([
     'apresentacao',
     'sobre-mim',
-    'experiencias',
     'stack-tecnica',
     'contato',
   ])('scrolls smoothly to %s', async (id) => {
@@ -233,43 +226,13 @@ describe('PortfolioPage', () => {
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
   });
 
-  it('renders the structured experiences in chronological order', async () => {
-    const { element } = await render();
-    const experiences = [...element.querySelectorAll<HTMLElement>('.experience-card')];
-
-    expect(experiences.map((experience) => experience.dataset['testid'])).toEqual([
-      'professional-experience-newer',
-      'professional-experience-older',
-    ]);
-    expect(experiences[0]?.textContent).not.toContain('Dairy Corp');
-    expect(experiences[0]?.textContent).not.toContain('Digital Corp');
-    expect(experiences[0]?.textContent).toContain('05/2025 – 03/2026');
-    expect(experiences[0]?.textContent).toContain('Engenheiro de software');
-    expect(experiences[0]?.textContent).toContain('Setor de laticínios');
-    expect(experiences[0]?.textContent).toContain('Responsabilidade nova');
-    expect(experiences[0]?.textContent).toContain('Decisão nova');
-    expect(experiences[0]?.textContent).toContain('Resultado novo');
-  });
-
-  it('hides the experience section and navigation when no experience is available', async () => {
-    experienceRows = [];
+  it('does not render the removed experience or academic sections', async () => {
     const { element } = await render();
 
     expect(element.querySelector('#experiencias')).toBeNull();
     expect(element.querySelector('a[href="#experiencias"]')).toBeNull();
-    expect(element.querySelector('#sobre-mim')).toBeTruthy();
-    expect(element.querySelector('#stack-tecnica')).toBeTruthy();
-  });
-
-  it('reloads translated experience fields when the language changes', async () => {
-    const { fixture, element } = await render();
-    const select = element.querySelector('select')!;
-    select.value = 'en';
-    select.dispatchEvent(new Event('change'));
-    await fixture.whenStable();
-
-    expect(element.querySelector('.experience-title')?.textContent).toContain('Software Engineer');
-    expect(element.querySelector('.experience-block p')?.textContent).toContain('Dairy industry');
+    expect(element.querySelector('#formacao-academica')).toBeNull();
+    expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
   });
 
   it('keeps the page usable when the actual navigation target is missing', async () => {
@@ -291,7 +254,7 @@ describe('PortfolioPage', () => {
       expect(element.querySelector('#sobre-mim')).toBeNull();
       expect(element.querySelector('a[href="#sobre-mim"]')).toBeNull();
       expect(element.querySelector('#apresentacao')).toBeTruthy();
-      expect(element.querySelector('#experiencias')).toBeTruthy();
+      expect(element.querySelector('#contato')).toBeTruthy();
     } finally {
       ORIGINAL_COPY.aboutTitle = originalTitle;
       ORIGINAL_COPY.aboutBody = originalBody;
@@ -449,7 +412,7 @@ describe('PortfolioPage', () => {
       expect(element.querySelector('#resultados-profissionais')).toBeNull();
       expect(element.querySelector('a[href="#resultados-profissionais"]')).toBeNull();
       expect(component.resultItems()).toHaveLength(0);
-      expect(element.querySelector('#experiencias')).toBeTruthy();
+      expect(element.querySelector('#contato')).toBeTruthy();
     } finally {
       ORIGINAL_COPY.resultsTimeReduction = original.resultsTimeReduction;
       ORIGINAL_COPY.resultsStepsReduction = original.resultsStepsReduction;
@@ -578,18 +541,6 @@ describe('PortfolioPage', () => {
     expect(empty.element.querySelector('a[href="#portfolio"]')).toBeNull();
   });
 
-  it('renders João Vitor as author name, displays portfolio projects fallback, and omits academic background', async () => {
-    projectRows = [...PORTFOLIO_PROJECTS];
-    const { element } = await render();
-
-    expect(element.querySelector('.hero-name')?.textContent?.trim()).toBe('João Vitor');
-    expect(element.querySelector('.hero-subtitle')?.textContent?.trim()).toBe('Engenheiro de Software');
-    expect(element.querySelector('#portfolio')).toBeTruthy();
-    expect(element.querySelector('a[href="#portfolio"]')).toBeTruthy();
-    expect(element.querySelector('#formacao-academica')).toBeNull();
-    expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
-  });
-
   it('filters incomplete projects without name or description', async () => {
     const incomplete = createProject('incomplete', 'personal', 1);
     incomplete.description = '';
@@ -708,24 +659,24 @@ describe('PortfolioPage', () => {
   });
 
   describe('extractBrandInitials', () => {
-    it('returns default initials (JV) for generic fallback role titles', () => {
-      expect(extractBrandInitials('Desenvolvedor de Software')).toBe('JV');
-      expect(extractBrandInitials('Software Engineer')).toBe('JV');
-      expect(extractBrandInitials('desenvolvedor')).toBe('JV');
-      expect(extractBrandInitials('')).toBe('JV');
-      expect(extractBrandInitials(null)).toBe('JV');
-      expect(extractBrandInitials(undefined)).toBe('JV');
+    it('returns default initials (PF) for generic fallback role titles', () => {
+      expect(extractBrandInitials('Desenvolvedor de Software')).toBe('PF');
+      expect(extractBrandInitials('Software Engineer')).toBe('PF');
+      expect(extractBrandInitials('desenvolvedor')).toBe('PF');
+      expect(extractBrandInitials('')).toBe('PF');
+      expect(extractBrandInitials(null)).toBe('PF');
+      expect(extractBrandInitials(undefined)).toBe('PF');
     });
 
     it('returns custom default initials when provided for generic roles', () => {
-      expect(extractBrandInitials('Desenvolvedor de Software', 'MS')).toBe('MS');
+      expect(extractBrandInitials('Desenvolvedor de Software', 'GX')).toBe('GX');
     });
 
     it('extracts initials dynamically from personal names', () => {
-      expect(extractBrandInitials('João Vitor Dias Fernandes')).toBe('JV');
-      expect(extractBrandInitials('João Vitor')).toBe('JV');
-      expect(extractBrandInitials('Marcos Vinícius Santos')).toBe('MV');
-      expect(extractBrandInitials('Marcos Santos')).toBe('MS');
+      expect(extractBrandInitials('Ada Lovelace')).toBe('AL');
+      expect(extractBrandInitials('Ada Byron')).toBe('AB');
+      expect(extractBrandInitials('Grace Hopper')).toBe('GH');
+      expect(extractBrandInitials('Alan Turing')).toBe('AT');
     });
 
     it('skips Portuguese and English prepositions/stopwords', () => {
@@ -736,14 +687,14 @@ describe('PortfolioPage', () => {
     });
   });
 
-  it('renders JV.dev on the brand monogram header when default fallback is active', async () => {
+  it('renders PF.dev on the brand monogram header when default fallback is active', async () => {
     const fixture = TestBed.createComponent(PortfolioPageComponent);
     fixture.detectChanges();
     await fixture.whenStable();
 
     const element = fixture.nativeElement as HTMLElement;
     const monogram = element.querySelector('.brand-logo__initials');
-    expect(monogram?.textContent?.trim()).toBe('JV');
+    expect(monogram?.textContent?.trim()).toBe('PF');
 
     const suffix = element.querySelector('.brand-logo__suffix');
     expect(suffix?.textContent?.trim()).toBe('.dev');
@@ -804,34 +755,6 @@ describe('PortfolioPage', () => {
       expect(component.activeSectionId()).toBe('sobre-mim');
     });
   });
-
-  function createExperiences(locale: 'pt-BR' | 'en'): PortfolioExperience[] {
-    const english = locale === 'en';
-    return [
-      {
-        id: 'newer',
-        startDate: '2025-05-01',
-        endDate: '2026-03-01',
-        displayOrder: 2,
-        title: english ? 'Software Engineer' : 'Engenheiro de software',
-        context: english ? 'Dairy industry' : 'Setor de laticínios',
-        responsibilities: [english ? 'New responsibility' : 'Responsabilidade nova'],
-        technicalDecisions: [english ? 'New decision' : 'Decisão nova'],
-        results: [english ? 'New result' : 'Resultado novo'],
-      },
-      {
-        id: 'older',
-        startDate: '2023-12-01',
-        endDate: '2025-05-01',
-        displayOrder: 1,
-        title: english ? 'Developer' : 'Desenvolvedor',
-        context: english ? 'Corporate digitization' : 'Digitalização corporativa',
-        responsibilities: [english ? 'Old responsibility' : 'Responsabilidade antiga'],
-        technicalDecisions: [english ? 'Old decision' : 'Decisão antiga'],
-        results: [english ? 'Old result' : 'Resultado antigo'],
-      },
-    ];
-  }
 
   function createProject(
     id: string,

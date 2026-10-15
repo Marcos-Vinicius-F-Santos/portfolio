@@ -1,4 +1,7 @@
-import type { EditorialSnapshotV1 } from './editorial-snapshot.models';
+import type {
+  EditorialProfileIdentity,
+  EditorialSnapshotV1,
+} from './editorial-snapshot.models';
 import type { PortfolioCopy } from './portfolio-content';
 import type {
   PortfolioAcademicEntry,
@@ -35,6 +38,30 @@ export function snapshotToCopy(
     }
   }
   return copy as Partial<PortfolioCopy>;
+}
+
+export function snapshotToProfileIdentity(
+  snapshot: EditorialSnapshotV1,
+  storageUrlResolver?: (bucket: string, path: string) => string,
+): EditorialProfileIdentity | null {
+  const profile = Object.entries(snapshot.entities)
+    .filter(([, entity]) => entity.kind === 'profile')
+    .sort((left, right) => left[1].position - right[1].position)[0]?.[1];
+  if (!profile || typeof profile.data['profileId'] !== 'string') return null;
+
+  const mediaId = typeof profile.data['mediaId'] === 'string' ? profile.data['mediaId'] : undefined;
+  const media = mediaId ? snapshot.media[mediaId] : undefined;
+  const assetPath = media?.assetPath;
+  const imageUrl =
+    media?.source === 'managed' && assetPath && storageUrlResolver
+      ? storageUrlResolver('editorial-profile-images', assetPath)
+      : assetPath;
+
+  return {
+    profileId: profile.data['profileId'],
+    ...(mediaId ? { mediaId } : {}),
+    ...(imageUrl ? { imageUrl } : {}),
+  };
 }
 
 export function snapshotToExperiences(
