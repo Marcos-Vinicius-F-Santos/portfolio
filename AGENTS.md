@@ -1,14 +1,14 @@
 # Regras para Agentes de IA neste Repositório
 
 Este projeto segue Spec-Driven Development. Estas regras valem pra qualquer IA (Claude Code,
-Claude, etc.) que for gerar ou alterar código aqui.
+Claude, Antigravity, etc.) que for gerar ou alterar código aqui.
 
 ## Antes de tocar em código
 
-1. Leia `specs/00-principios/principios.md`.
-2. Leia a Spec do Produto em `specs/01-produto/`.
-3. Leia a Spec da Feature específica em `specs/03-features/<feature>/spec.md` e o
-   plano/tarefas correspondente em `specs/04-plano/<feature>/`.
+1. Leia `spec/00-principios/principios.md`.
+2. Leia a Spec do Produto em `spec/01-produto/`.
+3. Leia a Spec da Feature específica em `spec/03-features/<feature>/spec.md` e o
+   plano/tarefas correspondente em `spec/04-plano/<feature>/`.
 4. Se a spec da feature não existir ainda, **pare e peça pra eu criar uma antes de
    escrever código** — não invente requisito, não assuma comportamento.
 
@@ -17,7 +17,7 @@ Claude, etc.) que for gerar ou alterar código aqui.
 - **Não invente funcionalidade fora da spec.** Se algo está ambíguo e isso afeta o
   comportamento, registre como "Suposição" ou "Pergunta aberta" na spec da feature em vez
   de decidir por conta própria.
-- **Respeite a arquitetura de pastas já definida** em `specs/02-arquitetura/` (organização
+- **Respeite a arquitetura de pastas já definida** em `spec/02-arquitetura/` (organização
   por feature/domínio, não por tipo de arquivo).
 - **Não altere comportamento de features existentes** sem isso estar explícito na tarefa
   atual — se perceber que precisa, avise antes de fazer.
@@ -45,9 +45,9 @@ Uma tarefa só está pronta quando:
 - o critério de aceite da feature (Given/When/Then) é satisfeito;
 - as features existentes continuam funcionando (sem regressão óbvia);
 - o teste do nível de prioridade indicado no plano de verificação foi feito;
-- eu (Marcos) revisei e aprovei antes do deploy.
+- eu (João Vitor neste fork / Marcos no upstream) revisei e aprovei antes do deploy.
 
 ## Lembrete final
 
-Eu sou o aprovador final em todo portão do ciclo (spec do produto, spec de cada feature,
+Eu (João Vitor) sou o aprovador final em todo portão do ciclo deste fork (spec do produto, spec de cada feature,
 deploy). Velocidade nunca substitui essa aprovação.

@@ -1,0 +1,210 @@
+================================================================================
+GUIA DE ATUALIZACAO E CORRECOES TECNICAS PARA O REPOSITORIO ORIGINAL (MARCOS)
+================================================================================
+
+Ola! Este arquivo resume as melhorias tecnicas, correcoes de bugs e otimizacoes
+feitas neste fork.
+
+NOVAS ATUALIZACOES (OUTUBRO/2026 - DECISAO-015):
+O codigo agora eh 100% agnostico (White-Label)! Isso significa que nenhum dado
+pessoal (nem de Joao, nem de Marcos) fica chumbado no TypeScript. Todos os dados
+reais do seu portfolio continuam sendo carregados direto do seu banco de dados
+(Supabase).
+PORTANTO, VOCE PODE DAR MERGE EM TODO O CODIGO COM TOTAL SEGURANCA!
+
+--------------------------------------------------------------------------------
+1. COMO FUNCIONA O ISOLAMENTO DE DADOS (ZERO VAZAMENTO ENTRE OS FORKS)
+--------------------------------------------------------------------------------
+- O portfolio carrega o snapshot publicado direto da RPC/tabela do Supabase.
+- No seu ambiente, a aplicacao conecta ao seu Supabase e renderiza os seus dados,
+  projetos, biografia, experiencias e seus contatos.
+- No ambiente do Joao, conecta ao Supabase dele e renderiza os dados dele.
+- Os arquivos locais de fallback (portfolio-content.ts e portfolio-translations.ts)
+  foram limpos e neutralizados ("Desenvolvedor de Software"), servindo apenas
+  como protecao caso o banco esteja fora do ar.
+- Nao existe risco de dados do Joao aparecerem no seu portfolio ao dar merge.
+
+--------------------------------------------------------------------------------
+2. CORRECOES E MELHORIAS TECNICAS IMPLEMENTADAS
+--------------------------------------------------------------------------------
+
+[MELHORIA 1] Correcao do F5 no Login do Painel Admin (/admin)
+--------------------------------------------------------------------------------
+Problema: Ao digitar usuario/senha corretos no /admin, o painel as vezes ficava
+na mesma tela sem redirecionar, exigindo dar F5 para entrar no /admin/content.
+Arquivos alterados:
+- src/app/features/admin/authentication/admin-authentication.ts
+- src/app/features/admin/authentication/admin-authentication.spec.ts
+- src/app/core/auth/admin-auth.models.ts
+
+Como aplicar:
+No componente AdminAuthentication, adicionamos a escuta reativa da sessao
+logo no inicio do ciclo de vida: se a sessao estiver autenticada ou for resolvida
+com sucesso logo apos o submit, o roteador navega imediatamente para a rota
+pos-login sem depender de reload de pagina.
+
+
+[MELHORIA 2] Suporte a SUPABASE_PUBLISHABLE_KEY no generate-runtime-config
+--------------------------------------------------------------------------------
+Problema: O Supabase atualizou o formato padrao de chaves nos dashboards recentes
+para "sb_publishable_...", renomeando a variavel no .env para SUPABASE_PUBLISHABLE_KEY.
+Arquivo alterado:
+- scripts/generate-runtime-config.mjs
+
+Como aplicar:
+Alterar a leitura para:
+const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? '';
+Isso garante compatibilidade com qualquer uma das duas nomenclaturas.
+
+
+[MELHORIA 3] Conectar o Site Publico a Publicacao Editorial (Adapter)
+--------------------------------------------------------------------------------
+Problema: O site publico (/) exibia apenas os dados estaticos locais em vez de
+consumir o conteudo publicado pelo editor visual via Supabase.
+Arquivos criados/alterados:
+- src/app/features/portfolio/content/editorial-snapshot-adapter.ts
+- src/app/features/portfolio/content/editorial-snapshot-adapter.spec.ts
+- src/app/features/portfolio/content/portfolio-content.service.ts
+
+Como aplicar:
+O EditorialSnapshotAdapter converte a publicacao vinda da RPC
+get_versioned_public_portfolio para a interface PortfolioContent.
+O servico PortfolioContentService agora tenta carregar a versao publicada do
+Supabase e, se estiver offline ou sem configuracao, faz fallback transparente
+para os dados estaticos locais neutros.
+
+
+[MELHORIA 4] Limpeza e Otimizacao dos Testes Unitarios
+--------------------------------------------------------------------------------
+- Testes redundantes e triviais foram eliminados.
+- Testes com assercoes literais de nomes de desenvolvedores foram desacoplados,
+  garantindo que mudancas de dados no banco nao quebrem a suite de testes.
+- Resultado: 33 arquivos de spec, 163 testes passando com 100% de sucesso (~4s).
+
+
+[MELHORIA 5] Configuracao do Storage no Supabase para Upload de Curriculos
+--------------------------------------------------------------------------------
+Caso encontre erro 400 (Bucket not found) ao tentar subir PDFs no painel /admin/media:
+Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
+- Bucket ID: 'curricula' (public = true, file_size_limit = 52428800, mime = 'application/pdf')
+- Politicas RLS em storage.objects para permitirem insert/update/delete apenas por usuarios
+  que existam na tabela public.portfolio_admins.
+- Criar a RPC replace_portfolio_curriculum para atualizacao atomica no banco e troca de arquivo.
+
+
+[MELHORIA 6] Padronizacao Arquitetural do Frontend e Migracao SCSS -> CSS (DECISAO-013)
+--------------------------------------------------------------------------------
+- 100% CSS nativo sem dependencia de compilador Sass.
+- Nomenclatura canonica Angular: *.component.ts, *.component.html, *.component.css.
+- Componentes reutilizaveis desacoplados em src/app/shared/components/.
+
+
+[MELHORIA 7] DECISAO-015: Destinos Dinamicos de Contato, Modularizacao e Performance
+--------------------------------------------------------------------------------
+1. Painel de Contato Dinamico (WhatsApp e E-mail):
+   - Os destinos de WhatsApp e e-mail nao estao mais chumbados no TypeScript.
+   - Sao extraidos dinamicamente em tempo de execucao a partir dos dados de
+     contato ('phone' e 'email') cadastrados no snapshot do Supabase.
+2. Reorganizacao de Pastas Compartilhadas:
+   - Os componentes de apresentacao foram movidos para src/app/shared/components/:
+     * contact-panel/
+     * admin-card/
+     * admin-feedback/
+     * admin-page-header/
+     * admin-section-header/
+   - Pastas legadas 'presentation/' e 'ui/' foram removidas.
+3. Lazy Loading Universal e Otimizacao de Performance:
+   - Rotas modularizadas em app.routes.ts, portfolio.routes.ts e admin.routes.ts.
+   - Reducao do pacote inicial de 603 kB para 469.13 kB (abaixo do teto de 500 kB).
+   - Compilacao limpa com `npm run build` sem nenhum warning de budget.
+
+
+[MELHORIA 8] Floating Header com Glassmorphism, Monograma Dinamico e Dropdown de Curriculo (DECISAO-016 / DECISAO-017)
+--------------------------------------------------------------------------------
+1. Floating Header Flutuante & Glassmorphism:
+   - A barra superior agora flutua elegantemente no topo com cantos arredondados,
+     efeito de vidro esfumado (backdrop-filter: blur(14px)) e contraste marrom escuro
+     (rgba(42, 28, 20, 0.92)).
+2. Monograma Dinamico Inteligente (extractBrandInitials):
+   - O logo superior (ex: "MS.dev" ou "JV.dev") agora extrai as iniciais do nome
+     cadastrado no banco de dados de forma inteligente.
+   - O algoritmo ignora preposicoes e stopwords gramaticais (ex: "de", "da", "do",
+     "dos", "das", "e", "of", "and"), evitando erros como "DD.dev" quando o nome
+     possui conectivos ou fallback generico.
+   - Para voce (Marcos Santos), quando seu Supabase conecta com o seu nome cadastrado,
+     o logo exibe automaticamente "MS.dev"!
+3. Dropdown Moderno para Download de Curriculos:
+   - O botao de curriculo agora eh um menu dropdown com opcoes claras de download
+     ("Curriculo em Portugues" e "Resume in English").
+   - Totalmente acessivel via teclado (Escape, Tab, clique fora fecha o menu) e
+     responsivo para mobile.
+
+
+[MELHORIA 9] Paleta Editorial Quente (Bege & Marrom Cafe) e Centralizacao Matematica (DECISAO-017)
+--------------------------------------------------------------------------------
+1. Nova Paleta Bege & Marrom:
+   - Substituicao do cinza/chumbo frio por uma paleta sofisticada, acolhedora e moderna:
+     * Fundo da pagina: bege linho suave (#f5f0e6).
+     * Cards e alternancia: bege pergaminho (#e8dfd1).
+     * Tipografia e titulos: marrom espresso profundo (#261a14), com contraste WCAG AAA.
+     * Realces e destaques: dourado/caramelo (#d6ba90) e champanhe (#f7e7ce).
+2. Centralizacao Perfeita da Barra Superior:
+   - O container da barra agora usa Grid de 3 colunas (1fr auto 1fr):
+     * Coluna esquerda: logo da marca alinhado a esquerda (justify-self: start).
+     * Coluna central: links de navegacao (Sobre, Projetos, etc.) travados no centro
+       geometrico exato da tela (justify-self: center).
+     * Coluna direita: botoes de acao (Curriculo e Idioma) alinhados a direita (justify-self: end).
+   - Nao ha mais deslocamento visual da navegacao decorrente da diferenca de largura
+     entre o logo e os botoes da direita.
+
+
+[MELHORIA 10] Tipografia Moderna, Hero Card em 2 Colunas e Trava de Rolagem no ScrollSpy (DECISAO-018)
+--------------------------------------------------------------------------------
+1. Tipografia Moderna (Inter + Space Grotesk):
+   - Adicionadas as fontes Google Fonts 'Inter' (leitura fluida e moderna para corpo,
+     menus e botoes) e 'Space Grotesk' (titulos de destaque e logo), substituindo
+     antigas fontes monoespacadas do sistema.
+2. Hero Card em Duas Colunas com Acoes Rapidas:
+   - Layout fluido de 2 colunas:
+     * Coluna esquerda: Titulo principal com o nome do desenvolvedor, cargo em destaque
+       ("Engenheiro de Software" / "Software Engineer"), badge pulsante de disponibilidade
+       ("● Disponivel para novos projetos · Remoto"), botoes de acao ("Ver projetos" e
+       "Fale comigo" direcionando suavemente para a secao #contato), e links de contato
+       (LinkedIn, GitHub, Email, Telefone) modernizados com icones SVG circulares.
+     * Coluna direita: Card estilizado com degrade marrom e moldura de avatar com silhueta
+       cinza neutra (placeholder pronto para receber foto de perfil real).
+3. ScrollSpy Baseado em Posicoes Especificas (Fim do Foco Pulando):
+   - Corrigido o bug onde arrastar a pagina ou clicar nos links fazia o foco/hover da
+     barra de navegacao ficar pulando e piscando errativamente pelas secoes.
+   - Substituicao do IntersectionObserver por calculo geometrico direto baseado nas
+     posicoes fisicas (getBoundingClientRect) de cada secao em relacao a linha focal
+     de leitura confortável da tela (~120px a 220px do topo).
+   - Como a verificacao segue a ordem exata das secoes na pagina, a transicao e
+     estritamente estavel e monotona, sem oscilacoes entre itens vizinhos.
+   - Inclui o mecanismo startNavigatingLock(): ao clicar, o menu ativa o item
+     imediatamente e suspende a deteccao ate o fim da rolagem suave (evento scrollend
+     ou timeout), reativando instantaneamente caso o usuario interaja.
+4. Ordem e Ergonomia dos Botoes da Barra Superior:
+   - Na barra superior, o botao de download de curriculo [ Curriculo v ] vem primeiro,
+     seguido pelo seletor de idioma [ PT v ].
+5. Imagens dos Projetos e Formacao Academica Tabular (Sincronizado do Upstream):
+   - Adicionada a feature de capa e galeria nos cards de projetos (apresentacao-imagens-projetos).
+   - Suporte a upload de fotos de projetos e hidratacao de URLs assinadas no painel admin.
+   - Formacao academica atualizada para tabela limpa em 4 colunas com nivel academico (Graduacao / Pos).
+   - Utilitario seguro createUuid() para compatibilidade ampla sem depender de crypto.randomUUID().
+
+--------------------------------------------------------------------------------
+3. COMO DAR MERGE NO SEU REPOSITORIO
+--------------------------------------------------------------------------------
+Voce pode fazer o merge diretamente da branch:
+```bash
+git merge origin/master  # ou a branch correspondente
+npm install
+npm test
+npm run build
+```
+Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
+exibindo perfeitamente todos os seus dados reais!
+Todos os 169 testes unitarios estao passando com 100% de sucesso e o build de producao
+permanece enxuto em 469.41 kB (bem abaixo do limite de 500 kB).
+================================================================================

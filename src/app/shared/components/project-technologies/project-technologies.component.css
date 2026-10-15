@@ -1,0 +1,29 @@
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+}
+
+img,
+.symbol {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.symbol {
+  display: grid;
+  place-items: center;
+  font-family: monospace;
+  font-weight: bold;
+}
