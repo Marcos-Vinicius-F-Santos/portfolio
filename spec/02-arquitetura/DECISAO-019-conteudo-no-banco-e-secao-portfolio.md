@@ -53,3 +53,4 @@ O portfólio precisava de duas evoluções fundamentais:
 - **Testes Unitários:** 34 suítes e 176 testes unitários executados com 100% de aprovação (`npm test`).
 - **Performance de Build:** `npm run build` gerou chunk inicial de 469.32 kB, respeitando rigorosamente o limite de orçamento de 500 kB (ADR-015).
 - **Compatibilidade Retroativa:** Preservada a âncora `<span id="projetos" class="section-anchor-compat"></span>` para garantir compatibilidade com links e fluxos anteriores.
+

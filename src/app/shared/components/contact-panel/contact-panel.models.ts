@@ -35,6 +35,6 @@ export type ContactPanelDestinations = {
 };
 
 export const DEFAULT_CONTACT_PANEL_DESTINATIONS: ContactPanelDestinations = {
-  whatsappNumber: '',
-  email: '',
+  whatsappNumber: '5537999429018',
+  email: 'profissional.joaovitordf@gmail.com',
 };

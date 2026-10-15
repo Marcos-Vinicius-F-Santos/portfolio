@@ -52,3 +52,4 @@ export class ProjectCardComponent {
     this.failedImages.update((prev) => ({ ...prev, [imageId]: true }));
   }
 }
+

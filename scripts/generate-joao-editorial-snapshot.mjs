@@ -671,7 +671,7 @@ const JOAO_CONTACT_HREFS = {
   linkedin: 'https://www.linkedin.com/in/xjoaovitordf/',
   github: 'https://github.com/joaovitordf',
   email: 'mailto:profissional.joaovitordf@gmail.com',
-  phone: 'tel:+553799429018',
+  phone: 'tel:+5537999429018',
 };
 
 PORTFOLIO_ACADEMIC_ENTRIES.forEach((item, position) => {

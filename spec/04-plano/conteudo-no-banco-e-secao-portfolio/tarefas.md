@@ -26,3 +26,4 @@ Este documento detalha o checklist de execução e o progresso incremental da fe
 - [x] **T-015:** Documentar alterações de arquitetura em `spec/02-arquitetura/DECISAO-019-conteudo-no-banco-e-secao-portfolio.md`.
 - [x] **T-016:** Atualizar `spec/05-verificacao/conteudo-no-banco-e-secao-portfolio/verificacao.md`.
 - [ ] **T-017:** Apresentar relatório de conclusão e solicitar aprovação de João Vitor.
+

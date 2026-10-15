@@ -64,3 +64,4 @@ SPEC DA FEATURE ↔ PLANO/TAREFAS ↔ CÓDIGO ↔ TESTE
    - `src/app/shared/components/project-card/project-card.component.spec.ts` (5 testes).
    - `src/app/features/portfolio/pages/portfolio-page/portfolio-page.component.spec.ts` (45 testes).
    - Suíte geral: 176 testes passando.
+

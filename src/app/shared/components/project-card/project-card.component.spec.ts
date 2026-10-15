@@ -110,3 +110,4 @@ describe('ProjectCardComponent', () => {
     expect(linkAdmin?.href).toContain('/admin/editor/projetos/proj-xyz');
   });
 });
+

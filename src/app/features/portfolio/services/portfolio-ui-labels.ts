@@ -61,3 +61,4 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
 export function getUiLabels(locale: PortfolioLocale): UiLabels {
   return PORTFOLIO_UI_LABELS[locale] ?? PORTFOLIO_UI_LABELS['pt-BR'];
 }
+
