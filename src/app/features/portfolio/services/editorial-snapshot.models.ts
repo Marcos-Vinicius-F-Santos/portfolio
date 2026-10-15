@@ -14,6 +14,7 @@ export type EditorialSectionKind =
 
 export type EditorialEntityKind =
   | 'presentation'
+  | 'profile'
   | 'about'
   | 'result'
   | 'experience'
@@ -61,6 +62,12 @@ export interface EditorialSnapshotMedia {
   mime: string;
   bytes: number;
   assetPath?: string;
+}
+
+export interface EditorialProfileIdentity {
+  profileId: string;
+  mediaId?: string;
+  imageUrl?: string;
 }
 
 export type EditorialSnapshotTranslation = Readonly<Record<string, string>>;

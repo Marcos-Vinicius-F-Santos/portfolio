@@ -7,6 +7,27 @@ describe('editorial snapshot v1 contract (T-003)', () => {
     );
   });
 
+  it('accepts the additive profile identity and a managed storage path', () => {
+    const snapshot = validSnapshot();
+    snapshot['entities']['profile'] = {
+      kind: 'profile',
+      position: 0,
+      data: { profileId: 'profile-generic', mediaId: 'profile-image' },
+    };
+    snapshot['translations']['pt-BR']['profile'] = {};
+    snapshot['translations']['en']['profile'] = {};
+    snapshot['media']['profile-image'] = {
+      source: 'managed',
+      mime: 'image/webp',
+      bytes: 2048,
+      assetPath: 'profile/default.webp',
+    };
+
+    expect(validateEditorialSnapshot(snapshot)).toEqual(
+      expect.objectContaining({ valid: true, issues: [] }),
+    );
+  });
+
   it('rejects an unknown format version', () => {
     const snapshot = validSnapshot();
     snapshot['formatVersion'] = 2;

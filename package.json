@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "check:white-label": "node scripts/check-white-label-references.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prestart": "node scripts/generate-runtime-config.mjs",

@@ -19,7 +19,6 @@ import {
 import {
   hasPortfolioSectionContent,
   ORIGINAL_COPY,
-  PORTFOLIO_ACADEMIC_ENTRIES,
   PORTFOLIO_CONTACT_LINKS,
   PORTFOLIO_SKILL_CATEGORIES,
   PortfolioCopy,
@@ -32,8 +31,6 @@ import {
   hasPortfolioProjectCardContent,
   hasPortfolioProjectContent,
   type PortfolioFile,
-  type PortfolioExperience,
-  type PortfolioAcademicEntry,
   type PortfolioContactLink,
   type PortfolioProject,
   type PortfolioProjectImage,
@@ -51,9 +48,7 @@ const SECTION_ID_BY_TARGET: Readonly<Record<string, string>> = {
   apresentacao: 'presentation-section',
   'sobre-mim': 'about-section',
   'resultados-profissionais': 'results-section',
-  experiencias: 'experiences-section',
   'stack-tecnica': 'skills-section',
-  'formacao-academica': 'education-section',
   portfolio: 'projects-section',
   projetos: 'projects-section',
   contato: 'contact-section',
@@ -112,8 +107,9 @@ const GENERIC_TITLES = new Set([
   'engenheiro de software',
   'engenharia de software',
 ]);
+const GENERIC_PROFILE_IMAGE = '/assets/profile/avatar-generic.svg';
 
-export function extractBrandInitials(name: string | undefined | null, defaultInitials = 'JV'): string {
+export function extractBrandInitials(name: string | undefined | null, defaultInitials = 'PF'): string {
   const clean = name?.trim() || '';
   if (!clean || GENERIC_TITLES.has(clean.toLowerCase())) {
     return defaultInitials;
@@ -157,9 +153,6 @@ export class PortfolioPageComponent {
   protected readonly skillCategories = signal<PortfolioSkillCategory[]>([
     ...PORTFOLIO_SKILL_CATEGORIES,
   ]);
-  protected readonly academicEntries = signal<PortfolioAcademicEntry[]>([
-    ...PORTFOLIO_ACADEMIC_ENTRIES,
-  ]);
   protected readonly contactLinks = signal<PortfolioContactLink[]>([...PORTFOLIO_CONTACT_LINKS]);
   protected readonly contactDestinations = computed<ContactPanelDestinations>(() => {
     const links = this.contactLinks();
@@ -183,8 +176,6 @@ export class PortfolioPageComponent {
     return PROFESSIONAL_RESULTS.filter((result) => copy[result.value].trim().length > 0);
   });
   protected readonly showResults = computed(() => this.resultItems().length > 0);
-  protected readonly experiences = signal<PortfolioExperience[]>([]);
-  protected readonly showExperiences = computed(() => this.experiences().length > 0);
   protected readonly projects = signal<PortfolioProject[]>([]);
   protected readonly projectFilter = signal<'all' | 'professional' | 'personal'>('all');
   protected readonly filteredProjects = computed(() => {
@@ -221,13 +212,6 @@ export class PortfolioPageComponent {
     }
 
     items.push({ title: 'stackTitle', body: 'stackBody', targetId: 'stack-tecnica' });
-    if (this.showExperiences() || this.editorialMode) {
-      items.push({
-        title: 'experienceTitle',
-        body: 'experienceBody',
-        targetId: 'experiencias',
-      });
-    }
     if (this.showProjects() || this.editorialMode) {
       items.push({
         title: 'portfolioEyebrow',
@@ -235,11 +219,6 @@ export class PortfolioPageComponent {
         targetId: 'portfolio',
       });
     }
-    items.push({
-      title: 'educationTitle',
-      body: 'educationBody',
-      targetId: 'formacao-academica',
-    });
     items.push({
       title: 'contactTitle',
       body: 'contactBody',
@@ -262,7 +241,7 @@ export class PortfolioPageComponent {
 
   protected readonly brandMonogram = computed(() => {
     const config = typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
-    const defaultInitials = config?.brandInitials?.trim() || 'JV';
+    const defaultInitials = config?.brandInitials?.trim() || 'PF';
     return extractBrandInitials(this.copy().name, defaultInitials);
   });
   protected readonly authorName = computed(() => {
@@ -278,6 +257,23 @@ export class PortfolioPageComponent {
     }
     return 'Desenvolvedor de Software';
   });
+  protected readonly profileImageFailed = signal(false);
+  protected readonly profileImageUrl = computed(() => {
+    if (this.profileImageFailed()) return GENERIC_PROFILE_IMAGE;
+    const config =
+      typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
+    const configuredUrl = config?.profileImageUrl?.trim();
+    if (configuredUrl) return configuredUrl;
+    const profileIdentity = (
+      this.content as PortfolioContentService & {
+        profileIdentity?: () => { imageUrl?: string } | null;
+      }
+    ).profileIdentity?.();
+    return profileIdentity?.imageUrl?.trim() || GENERIC_PROFILE_IMAGE;
+  });
+  protected onProfileImageError(): void {
+    this.profileImageFailed.set(true);
+  }
   protected readonly ui = computed(() => getUiLabels(this.language.language()));
   protected readonly roleSubtitle = computed(() => {
     return this.copy().heroRole?.trim() || (this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software');
@@ -301,7 +297,6 @@ export class PortfolioPageComponent {
       this.language.initialize();
       this.document.documentElement.lang = this.language.language();
       void this.content.loadCopy(this.language.language());
-      void this.loadExperiences();
       void this.loadProjects();
       void this.loadCurriculum();
       void this.loadEditableCatalogs();
@@ -311,7 +306,7 @@ export class PortfolioPageComponent {
     });
   }
   private async reloadEditableContent(): Promise<void> {
-    await Promise.all([this.loadExperiences(), this.loadProjects(), this.loadEditableCatalogs()]);
+    await Promise.all([this.loadProjects(), this.loadEditableCatalogs()]);
   }
   private async loadSectionOrder(): Promise<void> {
     const content = this.content as PortfolioContentService & {
@@ -319,11 +314,6 @@ export class PortfolioPageComponent {
     };
     if (typeof content.listSectionOrder === 'function')
       this.sectionOrder.set(await content.listSectionOrder());
-  }
-
-  private async loadExperiences(): Promise<void> {
-    const experiences = await this.content.listExperiences(this.language.language());
-    this.experiences.set(experiences);
   }
 
   private async loadProjects(): Promise<void> {
@@ -344,23 +334,18 @@ export class PortfolioPageComponent {
     const locale = this.language.language();
     const content = this.content as PortfolioContentService & {
       listSkillCategories?: PortfolioContentService['listSkillCategories'];
-      listAcademicEntries?: PortfolioContentService['listAcademicEntries'];
       listContactLinks?: PortfolioContentService['listContactLinks'];
     };
-    const [skills, academic, contacts] = await Promise.all([
+    const [skills, contacts] = await Promise.all([
       typeof content.listSkillCategories === 'function'
         ? content.listSkillCategories(locale)
         : Promise.resolve([...PORTFOLIO_SKILL_CATEGORIES]),
-      typeof content.listAcademicEntries === 'function'
-        ? content.listAcademicEntries(locale)
-        : Promise.resolve([...PORTFOLIO_ACADEMIC_ENTRIES]),
       typeof content.listContactLinks === 'function'
         ? content.listContactLinks(locale)
         : Promise.resolve([...PORTFOLIO_CONTACT_LINKS]),
     ]);
     if (locale !== this.language.language()) return;
     this.skillCategories.set(skills);
-    this.academicEntries.set(academic);
     this.contactLinks.set(contacts);
   }
 
@@ -369,7 +354,6 @@ export class PortfolioPageComponent {
     this.language.choose(language);
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
-    void this.loadExperiences();
     void this.loadProjects();
     void this.loadCurriculum();
     void this.loadEditableCatalogs();
@@ -381,16 +365,11 @@ export class PortfolioPageComponent {
     else this.language.declineSuggestion();
     this.document.documentElement.lang = this.language.language();
     void this.content.loadCopy(this.language.language());
-    void this.loadExperiences();
     void this.loadProjects();
     void this.loadCurriculum();
     void this.loadEditableCatalogs();
     this.suggestion()?.nativeElement.close?.();
     this.selector()?.nativeElement.focus({ preventScroll: true });
-  }
-
-  protected formatExperiencePeriod(experience: PortfolioExperience): string {
-    return `${this.formatExperienceDate(experience.startDate)} – ${this.formatExperienceDate(experience.endDate)}`;
   }
 
   protected curriculumLabelKey(): keyof PortfolioCopy {
@@ -401,14 +380,6 @@ export class PortfolioPageComponent {
 
   protected skillCategoryLabel(category: PortfolioSkillCategory): string {
     return category.label?.trim() || this.copy()[category.labelKey as keyof PortfolioCopy] || '';
-  }
-
-  protected academicEntryName(entry: PortfolioAcademicEntry): string {
-    return entry.name?.trim() || this.copy()[entry.nameKey as keyof PortfolioCopy] || '';
-  }
-
-  protected academicEntryLevel(entry: PortfolioAcademicEntry): string {
-    return entry.level?.trim() || '';
   }
 
   protected contactLinkLabel(link: PortfolioContactLink): string {
@@ -431,17 +402,6 @@ export class PortfolioPageComponent {
       return link.href.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '');
     }
     return link.href;
-  }
-
-  protected academicPeriod(entry: PortfolioAcademicEntry): string {
-    const start = this.formatAcademicDate(entry.startDate);
-    if (entry.isCurrent) return `${start} – ${this.copy().educationCurrentLabel}`;
-    const end = this.formatAcademicDate(entry.endDate);
-    return start && end ? `${start} – ${end}` : start || end;
-  }
-
-  protected listText(values: string[] | undefined): string {
-    return (values ?? []).filter(Boolean).join(' · ');
   }
 
   protected skillIcon(skill: PortfolioSkill): string | null {
@@ -469,18 +429,6 @@ export class PortfolioPageComponent {
       ...current,
       [projectId]: [...new Set([...(current[projectId] ?? []), imageId])],
     }));
-  }
-
-  private formatExperienceDate(value: string | null): string {
-    if (!value) return '';
-    const [year, month] = value.slice(0, 10).split('-');
-    return year && month ? `${month}/${year}` : '';
-  }
-
-  private formatAcademicDate(value: string | null | undefined): string {
-    if (!value) return '';
-    const [year, month] = value.slice(0, 10).split('-');
-    return year && month ? `${month}/${year}` : '';
   }
 
   @HostListener('document:click')

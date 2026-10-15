@@ -5,26 +5,31 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const snapshotPath = resolve(
   root,
-  'spec/05-verificacao/ativacao-painel-admin-joao-vitor/initial-editorial-snapshot-joao-v1.json',
+  process.env.PORTFOLIO_SNAPSHOT_PATH ??
+    'spec/05-verificacao/editorial-snapshot/initial-editorial-snapshot-v1.json',
 );
 const snapshot = JSON.parse(await readFile(snapshotPath, 'utf8'));
 const compactSnapshot = JSON.stringify(snapshot).replaceAll("'", "''");
 const snapshotHash = createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');
 
-const editorialSqlPath = resolve(root, 'supabase/setup_editorial_joao_vitor.sql');
+const editorialSqlPath = resolve(
+  root,
+  process.env.PORTFOLIO_EDITORIAL_SQL_PATH ?? 'supabase/setup_editorial.sql',
+);
 
-// Storage buckets and policies for public media (curricula, project-images, skill-icons)
+// Storage buckets and policies for public media (curricula, project-images, skill-icons, profile)
 const storageHeaderSql = `
 -- =====================================================================
--- SETUP EDITORIAL CMS & STORAGE — JOÃO VITOR DIAS FERNANDES
+-- SETUP EDITORIAL CMS & STORAGE — GENERIC PORTFOLIO INSTANCE
 -- =====================================================================
--- 0. Buckets de Storage e Políticas para Upload de Currículos e Imagens
+-- 0. Buckets de Storage e Políticas para Upload de Currículos, Imagens e Perfil
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values
   ('project-images', 'project-images', true, 1048576, array['image/png', 'image/jpeg']),
   ('skill-icons', 'skill-icons', true, 1048576, array['image/png', 'image/jpeg', 'image/svg+xml']),
-  ('curricula', 'curricula', true, 52428800, array['application/pdf'])
+  ('curricula', 'curricula', true, 52428800, array['application/pdf']),
+  ('editorial-profile-images', 'editorial-profile-images', true, 3145728, array['image/png', 'image/jpeg', 'image/webp'])
 on conflict (id) do update set
   public = excluded.public,
   file_size_limit = excluded.file_size_limit,
@@ -34,14 +39,14 @@ drop policy if exists storage_public_read on storage.objects;
 create policy storage_public_read
   on storage.objects for select
   to anon, authenticated
-  using (bucket_id in ('project-images', 'skill-icons', 'curricula'));
+  using (bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images'));
 
 drop policy if exists storage_admin_insert on storage.objects;
 create policy storage_admin_insert
   on storage.objects for insert
   to authenticated
   with check (
-    bucket_id in ('project-images', 'skill-icons', 'curricula')
+    bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images')
     and exists (
       select 1 from public.portfolio_admins
       where user_id = (select auth.uid())
@@ -53,14 +58,14 @@ create policy storage_admin_update
   on storage.objects for update
   to authenticated
   using (
-    bucket_id in ('project-images', 'skill-icons', 'curricula')
+    bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images')
     and exists (
       select 1 from public.portfolio_admins
       where user_id = (select auth.uid())
     )
   )
   with check (
-    bucket_id in ('project-images', 'skill-icons', 'curricula')
+    bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images')
     and exists (
       select 1 from public.portfolio_admins
       where user_id = (select auth.uid())
@@ -74,7 +79,7 @@ create policy storage_admin_delete
   on storage.objects for delete
   to authenticated
   using (
-    bucket_id in ('project-images', 'skill-icons', 'curricula')
+    bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images')
     and exists (
       select 1 from public.portfolio_admins
       where user_id = (select auth.uid())
@@ -211,11 +216,11 @@ revoke execute on function public.replace_portfolio_project_image(uuid, text, te
 grant execute on function public.replace_portfolio_project_image(uuid, text, text, text, bigint) to authenticated;
 `;
 
-// List of migrations in order from 20260926093000 onwards (skipping 20260926103000 which imported Marcos's snapshot)
+// List of migrations in order from 20260926093000 onwards (the initial snapshot is imported dynamically)
 const migrationFiles = [
   '20260926093000_create_private_editorial_schema.sql',
   '20260926100000_create_private_editorial_media_flow.sql',
-  // initial snapshot import inserted here dynamically with João's data
+  // initial snapshot import inserted here dynamically from the configured artifact
   '20260926110000_create_atomic_editorial_commands.sql',
   '20260926113000_validate_editorial_publication.sql',
   '20260926120000_publish_editorial_draft.sql',
@@ -233,6 +238,7 @@ const migrationFiles = [
   '20260927134500_publish_shared_skill_catalog.sql',
   '20260927135000_sync_skill_catalog_labels.sql',
   '20260927141000_grant_editorial_storage_finalize_access.sql',
+  '20261015100000_add_profile_media_support.sql',
 ];
 
 function sanitizeMigration(sql) {
@@ -294,8 +300,16 @@ const part2 = sanitizeMigration(await readFile(resolve(root, 'supabase/migration
 fullSql += `-- Migration: ${migrationFiles[0]}\n` + part1 + '\n\n';
 fullSql += `-- Migration: ${migrationFiles[1]}\n` + part2 + '\n\n';
 
-// 2. Snapshot import for João Vitor
-fullSql += `-- Importação do snapshot inicial editorial de João Vitor
+// 2. Snapshot import from the configured generic artifact
+fullSql += `-- Extensão aditiva do contrato para a identidade do perfil
+alter table portfolio_editorial.draft_entities drop constraint if exists draft_entities_kind_check;
+alter table portfolio_editorial.draft_entities add constraint draft_entities_kind_check check (kind in (
+  'presentation', 'profile', 'about', 'result', 'experience', 'skillCategory', 'skill',
+  'academic', 'project', 'contact', 'projectLink', 'projectImage', 'curriculum',
+  'interfaceText', 'listItem'
+));
+
+-- Importação do snapshot inicial editorial parametrizado
 do $$ declare payload jsonb := '${compactSnapshot}'::jsonb; begin
 insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'en','English','ltr','active',1) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_entities(draft_id,id,kind,parent_id,position,data) select 1,e.key,e.value->>'kind',nullif(e.value->>'parentId',''),(e.value->>'position')::int,e.value->'data' from jsonb_each(payload->'entities') e on conflict(draft_id,id) do update set kind=excluded.kind,parent_id=excluded.parent_id,position=excluded.position,data=excluded.data;

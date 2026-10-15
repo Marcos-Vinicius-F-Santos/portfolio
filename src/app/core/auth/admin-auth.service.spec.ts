@@ -7,7 +7,7 @@ import { SUPABASE_CLIENT } from '../supabase/supabase-client';
 
 const adminUser = {
   id: '00000000-0000-0000-0000-000000000001',
-  email: 'marcos@example.com',
+  email: 'admin@example.invalid',
 } as never;
 
 function authClient(overrides: Partial<SupabaseClient['auth']> = {}): SupabaseClient {
@@ -36,15 +36,15 @@ function service(client: SupabaseClient, authorized = true): AdminAuthService {
 }
 
 describe('AdminAuthService', () => {
-  it('authenticates Marcos with email and password', async () => {
+  it('authenticates the configured admin with email and password', async () => {
     const client = authClient({
       signInWithPassword: vi.fn().mockResolvedValue({ data: { user: adminUser }, error: null }),
     });
-    const result = await service(client).signIn('marcos@example.com', 'secret');
+    const result = await service(client).signIn('admin@example.invalid', 'secret');
 
     expect(result).toEqual({ ok: true });
     expect(client.auth.signInWithPassword).toHaveBeenCalledWith({
-      email: 'marcos@example.com',
+      email: 'admin@example.invalid',
       password: 'secret',
     });
   });
@@ -63,7 +63,7 @@ describe('AdminAuthService', () => {
     });
   });
 
-  it('signs out an authenticated account that is not Marcos', async () => {
+  it('signs out an authenticated account that is not authorized', async () => {
     const client = authClient({
       signInWithPassword: vi.fn().mockResolvedValue({
         data: { user: { id: '00000000-0000-0000-0000-000000000000' } },

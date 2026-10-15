@@ -75,13 +75,13 @@ describe('AdminAuthenticationComponent', () => {
     const fixture = TestBed.createComponent(AdminAuthenticationComponent);
     await fixture.whenStable();
 
-    fixture.componentInstance['email'].set('profissional.joaovitordf@gmail.com');
+    fixture.componentInstance['email'].set('admin@example.invalid');
     fixture.componentInstance['password'].set('password123');
 
     await fixture.componentInstance['submit']();
 
     expect(signInSpy).toHaveBeenCalledWith(
-      'profissional.joaovitordf@gmail.com',
+      'admin@example.invalid',
       'password123',
     );
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/', { skipLocationChange: true });

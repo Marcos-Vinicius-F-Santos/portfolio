@@ -5,15 +5,18 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const inventoryPath = resolve(
   root,
-  'spec/05-verificacao/edicao-visual-rascunho-publicacao/inventario-2026-09-26.json',
+  process.env.PORTFOLIO_CONTENT_INVENTORY ??
+    'spec/05-verificacao/edicao-visual-rascunho-publicacao/inventario-2026-09-26.json',
 );
 const outputPath = resolve(
   root,
-  'spec/05-verificacao/edicao-visual-rascunho-publicacao/initial-editorial-snapshot-v1.json',
+  process.env.PORTFOLIO_SNAPSHOT_PATH ??
+    'spec/05-verificacao/editorial-snapshot/initial-editorial-snapshot-v1.json',
 );
 const migrationPath = resolve(
   root,
-  'supabase/migrations/20260926103000_import_initial_editorial_snapshot.sql',
+  process.env.PORTFOLIO_EDITORIAL_MIGRATION_PATH ??
+    'supabase/migrations/20260926103000_import_initial_editorial_snapshot.sql',
 );
 const inventory = JSON.parse(await readFile(inventoryPath, 'utf8'));
 const entities = {};
@@ -219,6 +222,24 @@ local.contacts.forEach((item, position) =>
     { label: local.english[item.labelKey] },
   ),
 );
+
+const profileId = process.env.PORTFOLIO_PROFILE_ID?.trim() || 'profile-generic';
+const profileImagePath = process.env.PORTFOLIO_PROFILE_IMAGE_PATH?.trim();
+entities.profile = {
+  kind: 'profile',
+  position: 0,
+  data: { profileId, ...(profileImagePath ? { mediaId: 'profile-image' } : {}) },
+};
+translations['pt-BR'].profile = {};
+translations.en.profile = {};
+if (profileImagePath) {
+  media['profile-image'] = {
+    source: 'managed',
+    mime: process.env.PORTFOLIO_PROFILE_IMAGE_MIME || 'image/png',
+    bytes: Number(process.env.PORTFOLIO_PROFILE_IMAGE_BYTES || 1),
+    assetPath: profileImagePath,
+  };
+}
 
 const snapshot = {
   formatVersion: 1,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import snapshotJson from '../../../../../spec/05-verificacao/ativacao-painel-admin-joao-vitor/initial-editorial-snapshot-joao-v1.json';
-import type { EditorialSnapshotV1 } from './editorial-snapshot.models';
+import { GENERIC_EDITORIAL_SNAPSHOT as snapshot } from './editorial-snapshot.fixture';
 import {
+  snapshotToProfileIdentity,
   snapshotToAcademicEntries,
   snapshotToContactLinks,
   snapshotToCopy,
@@ -12,47 +12,46 @@ import {
 } from './editorial-snapshot-adapter';
 
 describe('editorial-snapshot-adapter', () => {
-  const snapshot = snapshotJson as unknown as EditorialSnapshotV1;
+  it('resolves the profile identity and managed image through the instance storage', () => {
+    expect(
+      snapshotToProfileIdentity(snapshot, (bucket, path) => `https://storage.example/${bucket}/${path}`),
+    ).toEqual({
+      profileId: 'profile-generic',
+      mediaId: 'profile-image',
+      imageUrl: 'https://storage.example/editorial-profile-images/profile/default.png',
+    });
+  });
 
   it('projects copy texts correctly for pt-BR and en', () => {
     const ptCopy = snapshotToCopy(snapshot, 'pt-BR');
-    expect(ptCopy.aboutTitle).toBe('Sobre mim');
-    expect(ptCopy.resultsTitle).toBe('Resultados profissionais');
+    expect(ptCopy.aboutTitle).toBe('Sobre o perfil');
+    expect(ptCopy.resultsTitle).toBe('Resultados');
 
     const enCopy = snapshotToCopy(snapshot, 'en');
-    expect(enCopy.aboutTitle).toBe('About me');
-    expect(enCopy.resultsTitle).toBe('Professional results');
+    expect(enCopy.aboutTitle).toBe('About the profile');
+    expect(enCopy.resultsTitle).toBe('Results');
   });
 
   it('projects experiences with details and list items', () => {
     const experiences = snapshotToExperiences(snapshot, 'pt-BR');
-    expect(experiences.length).toBe(4);
+    expect(experiences.length).toBe(1);
 
     const first = experiences[0]!;
-    expect(first.title).toBe('Desenvolvedor Front-end · SensorEng');
+    expect(first.title).toBe('Experiência de software');
     expect(first.responsibilities.length).toBeGreaterThan(0);
     expect(first.technicalDecisions.length).toBeGreaterThan(0);
     expect(first.results.length).toBeGreaterThan(0);
 
     const enExperiences = snapshotToExperiences(snapshot, 'en');
-    expect(enExperiences[0]!.title).toBe('Frontend Developer · SensorEng');
+    expect(enExperiences[0]!.title).toBe('Software experience');
   });
 
   it('projects projects with technologies, links, and details', () => {
     const projects = snapshotToProjects(snapshot, 'pt-BR');
-    expect(projects.length).toBe(2);
-
-    const russian = projects.find((p) => p.name.includes('Russian'))!;
-    expect(russian).toBeDefined();
-    expect(russian.technologies).toContain('Angular');
-    expect(russian.technologies).toContain('FastAPI');
-    expect(russian.links[0]?.label).toBe('GitHub');
-    expect(russian.links[0]?.url).toBe('https://github.com/joaovitordf');
-
-    const boxing = projects.find((p) => p.name.includes('Boxe'))!;
-    expect(boxing).toBeDefined();
-    expect(boxing.technologies).toContain('Python');
-    expect(boxing.technologies).toContain('OpenCV');
+    expect(projects.length).toBe(1);
+    expect(projects[0]?.name).toBe('Projeto de referência');
+    expect(projects[0]?.technologies).toContain('TypeScript');
+    expect(projects[0]?.links[0]).toEqual({ label: 'Site', url: 'https://example.com/project' });
   });
 
   it('projects skill categories and skills', () => {
@@ -68,7 +67,7 @@ describe('editorial-snapshot-adapter', () => {
     const entries = snapshotToAcademicEntries(snapshot, 'pt-BR');
     expect(entries.length).toBe(1);
     const firstAcademic = entries[0]!;
-    expect(firstAcademic.institution).toBe('Instituto Federal de Minas Gerais (IFMG)');
+    expect(firstAcademic.institution).toBe('Instituição de referência');
     expect(firstAcademic.isCurrent).toBe(false);
     expect((firstAcademic.competencies ?? []).length).toBeGreaterThan(0);
   });

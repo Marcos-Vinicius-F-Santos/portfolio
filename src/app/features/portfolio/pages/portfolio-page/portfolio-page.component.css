@@ -256,74 +256,21 @@
   align-items: center;
 }
 
-.profile-card {
-  width: 100%;
-  max-width: 320px;
-  aspect-ratio: 4 / 4.8;
-  background: linear-gradient(160deg, rgba(46, 30, 22, 0.85) 0%, rgba(20, 12, 8, 0.95) 100%);
-  border: 1px solid rgba(214, 186, 144, 0.22);
-  border-radius: 1.5rem;
-  padding: 2.25rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  position: relative;
-  overflow: hidden;
-}
-
-.profile-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(214, 186, 144, 0.45), transparent);
-}
-
-.profile-card__avatar {
-  width: 140px;
-  height: 140px;
+.hero-portrait {
+  width: min(32vw, 28rem);
+  aspect-ratio: 1;
+  margin: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid rgba(214, 186, 144, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid var(--green-light);
   overflow: hidden;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.profile-card__photo {
+.hero-portrait__photo {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 20%;
-  border-radius: 50%;
-  display: block;
-}
-
-.profile-card__silhouette {
-  width: 100px;
-  height: 100px;
-}
-
-.profile-card__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 1rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(214, 186, 144, 0.2);
-  color: #c4b5a5;
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
 }
 
 .sr-only {
@@ -865,7 +812,6 @@ section h2 {
   margin: 0;
 }
 
-.academic-list,
 .contact-grid,
 .results-grid {
   display: grid;
@@ -887,18 +833,10 @@ section h2 {
   gap: 1.25rem;
 }
 
-.academic-card,
 .result-card {
   border: 1px solid var(--line);
   padding: 1.25rem;
   background: var(--paper-strong);
-}
-
-.academic-card h3 {
-  margin: 0 0 0.9rem;
-  color: var(--green);
-  font-size: 1.1rem;
-  line-height: 1.25;
 }
 
 .skill-category h3 {
@@ -979,13 +917,6 @@ section > p {
   color: #544439;
   font-size: 1rem;
   line-height: 1.65;
-}
-
-.academic-card p {
-  margin: 0;
-  color: #544439;
-  font-size: 1rem;
-  line-height: 1.55;
 }
 
 .contact-grid {
@@ -1199,14 +1130,6 @@ section > p {
   width: 100%;
 }
 
-.experiences-list {
-  display: grid;
-  gap: 1.25rem;
-  grid-column: 1 / -1;
-  margin-top: 3rem;
-}
-
-.experience-card,
 .project-card {
   border: 1px solid var(--line);
   background: var(--paper-strong);
@@ -1216,67 +1139,6 @@ section > p {
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-.experience-card {
-  padding: 0;
-}
-
-.experience-card-header {
-  border-bottom: 1px solid var(--line);
-  padding: clamp(1.25rem, 3vw, 2rem);
-}
-
-.experience-period {
-  margin: 0 0 0.75rem;
-  color: var(--green);
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-.experience-card h3 {
-  margin: 0;
-  color: var(--ink);
-  font-size: clamp(1.4rem, 3vw, 2.25rem);
-  letter-spacing: -0.04em;
-}
-
-.experience-card .experience-title {
-  margin: 0.5rem 0 0;
-  color: #544439;
-  font-size: 1.05rem;
-  line-height: 1.5;
-}
-
-.experience-details {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-areas:
-    'context decisions'
-    'responsibilities results';
-}
-
-.experience-block {
-  padding: clamp(1.25rem, 3vw, 2rem);
-}
-
-.experience-block--context {
-  grid-area: context;
-}
-
-.experience-block--decisions {
-  grid-area: decisions;
-}
-
-.experience-block--responsibilities {
-  grid-area: responsibilities;
-}
-
-.experience-block--results {
-  grid-area: results;
-}
-
-.experience-block h4,
 .project-block h5 {
   margin: 0 0 0.65rem;
   color: var(--green);
@@ -1286,22 +1148,12 @@ section > p {
   text-transform: uppercase;
 }
 
-.experience-block p,
-.experience-block ul,
 .project-block p {
   max-width: none;
   margin: 0;
   color: #544439;
   font-size: 0.98rem;
   line-height: 1.6;
-}
-
-.experience-block ul {
-  padding-left: 1.2rem;
-}
-
-.experience-block li + li {
-  margin-top: 0.45rem;
 }
 
 .results-grid {
@@ -1423,41 +1275,6 @@ section > p {
   }
 }
 
-.academic-table {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.academic-table-row {
-  display: grid;
-  grid-template-columns: 1.25fr 1.15fr 0.9fr max-content;
-  align-items: center;
-  gap: 1rem;
-}
-
-.academic-cell {
-  display: flex;
-  align-items: center;
-}
-
-.academic-cell.academic-name h3 {
-  margin: 0;
-}
-
-.academic-status {
-  display: inline-block;
-  border: 1px solid var(--green);
-  border-radius: 999px;
-  padding: 0.2rem 0.6rem;
-  color: var(--green);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.academic-status--current {
-  background: color-mix(in srgb, var(--green) 12%, transparent);
-}
-
 @media (max-width: 760px) {
   .page-header {
     min-height: auto;
@@ -1468,13 +1285,16 @@ section > p {
     font-size: clamp(2.2rem, 9vw, 3.2rem);
   }
 
+  .hero-portrait {
+    width: min(70vw, 22rem);
+  }
+
   .sections {
     display: block;
     padding-top: 0;
   }
 
-  .contact-grid,
-  .academic-list {
+  .contact-grid {
     margin-top: 2rem;
   }
 
@@ -1510,20 +1330,6 @@ section > p {
 
   .skill-item span {
     font-size: 0.9rem;
-  }
-
-  .experience-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .experience-block {
-    border-left: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .experience-block--results {
-    border-bottom: 0;
   }
 
   section {

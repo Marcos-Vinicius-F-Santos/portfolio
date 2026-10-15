@@ -139,17 +139,8 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
     expect(skills.get('GitLab')).toBe('/assets/skills/gitlab.svg');
   });
 
-  it('contains the approved contact destinations and bilingual labels', () => {
-    expect(PORTFOLIO_CONTACT_LINKS.map((link) => link.symbol)).toEqual([
-      'linkedin',
-      'github',
-      'email',
-      'phone',
-    ]);
-    expect(PORTFOLIO_CONTACT_LINKS.every((link) => Boolean(link.href))).toBe(true);
-    expect(
-      PORTFOLIO_CONTACT_LINKS.every((link) => link.iconPath.startsWith('/assets/contact/')),
-    ).toBe(true);
+  it('keeps contact fallback neutral and preserves bilingual labels', () => {
+    expect(PORTFOLIO_CONTACT_LINKS).toEqual([]);
     expect(selectPortfolioCopy('en', () => ENGLISH_COPY)).toMatchObject({
       stackTitle: 'Skills',
       educationTitle: 'Academic background',
