@@ -28,13 +28,41 @@ export class PublishedSnapshotService {
   clear(): void { this.snapshotState.set(null); }
 
   private async fetch(publicationId: string | null): Promise<EditorialSnapshotV1> {
-    if (!this.client) throw new Error('Supabase is not configured');
-    const { data, error } = await this.client.rpc('get_published_snapshot', { publication_id: publicationId });
-    if (error) {
-      if (error.code === 'P0002' || error.message?.includes('VERSION_EXPIRED'))
-        throw new PublishedVersionExpiredError('A versão navegada expirou; recarregue a página.');
-      throw error;
+    if (!this.client) {
+      return this.fetchFallback(null, new Error('Supabase is not configured'));
     }
+    try {
+      const { data, error } = await this.client.rpc('get_published_snapshot', { publication_id: publicationId });
+      if (error) {
+        if (error.code === 'P0002' || error.message?.includes('VERSION_EXPIRED')) {
+          throw new PublishedVersionExpiredError('A versão navegada expirou; recarregue a página.');
+        }
+        return this.fetchFallback(publicationId, error);
+      }
+      return this.applySnapshotData(data);
+    } catch (err) {
+      if (err instanceof PublishedVersionExpiredError) throw err;
+      return this.fetchFallback(publicationId, err);
+    }
+  }
+
+  private async fetchFallback(publicationId: string | null, originalError: unknown): Promise<EditorialSnapshotV1> {
+    if (typeof fetch === 'function' && !publicationId) {
+      try {
+        const response = await fetch('/snapshot.json');
+        if (response.ok) {
+          const data = await response.json();
+          return this.applySnapshotData(data);
+        }
+      } catch {
+        // Fallback unavailable
+      }
+    }
+    if (originalError instanceof Error) throw originalError;
+    throw new Error(String(originalError ?? 'Failed to load published snapshot'));
+  }
+
+  private applySnapshotData(data: unknown): EditorialSnapshotV1 {
     const validation = validateEditorialSnapshot(data);
     if (!validation.valid) throw new Error('Invalid published snapshot');
     const configuredProfileId = supabaseRuntimeConfig.profileId?.trim();
