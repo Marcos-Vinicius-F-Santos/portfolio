@@ -23,12 +23,24 @@ on conflict (id) do update set
   file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
--- 2. Leitura publica dos buckets
+-- 2. Leitura publica dos buckets e upload para o perfil
 drop policy if exists storage_public_read on storage.objects;
 create policy storage_public_read
   on storage.objects for select
   to anon, authenticated
   using (bucket_id in ('project-images', 'skill-icons', 'curricula', 'editorial-profile-images'));
+
+drop policy if exists storage_profile_upload on storage.objects;
+create policy storage_profile_upload
+  on storage.objects for insert
+  to anon, authenticated
+  with check (bucket_id = 'editorial-profile-images');
+
+drop policy if exists storage_profile_update on storage.objects;
+create policy storage_profile_update
+  on storage.objects for update
+  to anon, authenticated
+  using (bucket_id = 'editorial-profile-images');
 
 -- 3. Atualizar constraint de entidades para aceitar 'profile'
 alter table portfolio_editorial.draft_entities drop constraint if exists draft_entities_kind_check;

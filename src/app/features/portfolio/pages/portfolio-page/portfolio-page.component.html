@@ -635,17 +635,16 @@
               <p class="contact-subtitle">
                 <ng-container *ngTemplateOutlet="localized; context: { key: 'contactSubtitle' }" />
               </p>
+              <p class="contact-explanation">
+                <ng-container
+                  *ngTemplateOutlet="localized; context: { key: 'contactExplanation' }"
+                />
+              </p>
             </div>
 
             <div class="contact-layout-split">
-              <!-- Left Column: Platforms & Explanatory text -->
+              <!-- Left Column: Platforms & Curriculum -->
               <div class="contact-left-col">
-                <p class="contact-explanation">
-                  <ng-container
-                    *ngTemplateOutlet="localized; context: { key: 'contactExplanation' }"
-                  />
-                </p>
-
                 <div
                   class="contact-grid contact-platforms-stack"
                   data-testid="contact-links"

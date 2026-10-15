@@ -167,6 +167,8 @@ describe('PortfolioPage', () => {
     expect(heroContactBtn.getAttribute('href')).toBe('#contato');
     expect(element.querySelectorAll('.section-index')).toHaveLength(0);
     const contactContent = element.querySelector('#contato')!;
+    expect(contactContent.querySelector('.contact-intro-header .contact-explanation')).toBeTruthy();
+    expect(contactContent.querySelector('.contact-left-col .contact-explanation')).toBeNull();
     expect(
       [...contactContent.querySelectorAll('[data-testid="contact-links"], [data-testid="contact-panel"], [data-testid="contact-curriculum"]')].map(
         (node) => node.getAttribute('data-testid'),

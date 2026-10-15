@@ -965,7 +965,8 @@ section > p {
 }
 
 .contact-intro-header {
-  margin-bottom: 2rem;
+  width: 100%;
+  margin-bottom: 2.25rem;
 }
 
 .contact-headline {
@@ -983,7 +984,7 @@ section > p {
   line-height: 1.6;
   color: #544439;
   margin: 0;
-  max-width: 50rem;
+  max-width: none;
 }
 
 .contact-layout-split {
@@ -1004,32 +1005,44 @@ section > p {
     display: flex;
     flex-direction: column;
     height: 100%;
+    gap: 1.25rem;
+  }
+
+  .contact-right-col {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .contact-platforms-stack {
     display: flex !important;
     flex-direction: column;
-    flex: 1;
+    flex: 4 1 calc(3 * 1.25rem);
     gap: 1.25rem;
-    justify-content: space-between;
   }
 
-  .contact-platform-pill {
-    flex: 1;
+  .contact-platforms-stack .contact-platform-pill {
+    flex: 1 1 0px;
+  }
+
+  .contact-curriculum-pill {
+    flex: 1 1 0px;
+    margin-top: 0;
   }
 }
 
 .contact-left-col {
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
 }
 
 .contact-explanation {
   font-size: 1.125rem;
   line-height: 1.75;
   color: #4a3b31;
-  margin: 0 0 2rem;
-  max-width: 44rem;
+  margin: 1rem 0 0;
+  max-width: none;
 }
 
 .contact-platforms-stack {
@@ -1114,7 +1127,7 @@ section > p {
 }
 
 .contact-curriculum-pill {
-  margin-top: 1.25rem;
+  margin-top: 0;
   border-style: dashed;
 }
 
@@ -1128,6 +1141,8 @@ section > p {
 
 .contact-right-col {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card {

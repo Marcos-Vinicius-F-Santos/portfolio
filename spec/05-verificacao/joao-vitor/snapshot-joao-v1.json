@@ -1662,7 +1662,7 @@
         "text": "Apresentação"
       },
       "copy-intro": {
-        "text": "João Vitor Dias Fernandes é bacharel em Ciência da Computação (IFMG) com sólida atuação em engenharia de software e desenvolvimento web. Possui experiência na construção de aplicações em produção, interfaces em tempo real com vídeo contínuo e telemetria IoT, APIs RESTful, automação e visão computacional."
+        "text": "Desenvolvo sistemas web ponta a ponta, APIs de alto desempenho e soluções integradas com visão computacional. Bacharel em Ciência da Computação pelo IFMG com foco em arquitetura sólida, código limpo e performance."
       },
       "copy-navigation": {
         "text": "Navegação principal"
@@ -1680,31 +1680,31 @@
         "text": "Sobre mim"
       },
       "copy-aboutHeadline": {
-        "text": "Construindo soluções robustas com engenharia de software, arquitetura limpa e visão técnica"
+        "text": "Construção de software robusto do banco de dados à interface."
       },
       "copy-aboutBody": {
-        "text": "Sou Engenheiro de Software e Bacharel em Ciência da Computação pelo IFMG, com sólida atuação no desenvolvimento de sistemas web em produção, plataformas de monitoramento industrial em tempo real e arquiteturas modulares. Minha postura profissional vai além da escrita de código: busco compreender a fundo as regras de negócio, projetar soluções escaláveis, otimizar performance e garantir entregas confiáveis para clientes corporativos."
+        "text": "Sou Bacharel em Ciência da Computação pelo IFMG e atuo no desenvolvimento de software full stack. Minha formação combina fundamentos sólidos de computação (algoritmos, estruturas de dados e arquitetura) com experiência prática na entrega de sistemas em produção, desenvolvimento de APIs RESTful e aplicação de inteligência artificial em problemas reais."
       },
       "copy-aboutFocus": {
-        "text": "Foco principal: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Visão Computacional (OpenCV, YOLOv8), PostgreSQL, Supabase e Docker."
+        "text": "Principais tecnologias: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), PostgreSQL, Docker e OpenCV / YOLO."
       },
       "copy-aboutPillar1Title": {
-        "text": "Engenharia Front-end & Performance"
+        "text": "Front-end & Componentização"
       },
       "copy-aboutPillar1Description": {
-        "text": "Desenvolvimento de SPAs escaláveis com Angular e TypeScript, arquitetura modular com lazy loading (redução de 85% de pacote), bibliotecas de componentes reutilizáveis e telemetria de sensores em tempo real."
+        "text": "Desenvolvimento de Single Page Applications modernas, arquitetura modular, bibliotecas de componentes reutilizáveis, gerenciamento de estado e interfaces responsivas."
       },
       "copy-aboutPillar2Title": {
-        "text": "Backend & Integrações Corporativas"
+        "text": "Back-end & APIs"
       },
       "copy-aboutPillar2Description": {
-        "text": "Criação de APIs RESTful de alta performance com Python (FastAPI), Java (Spring Boot) e Laravel, persistência eficiente com PostgreSQL e Supabase, cache com Redis e containerização Docker."
+        "text": "Construção de APIs RESTful estruturadas, regras de negócio bem isoladas, modelagem e otimização de bancos relacionais, camadas de cache e conteinerização com Docker."
       },
       "copy-aboutPillar3Title": {
-        "text": "Visão Computacional & Automação"
+        "text": "Visão Computacional & IA"
       },
       "copy-aboutPillar3Description": {
-        "text": "Pipelines de inteligência artificial em tempo real com OpenCV e YOLOv8, OCR automatizado para leitura e extração de documentos e inferência integrada a transmissões de vídeo ao vivo."
+        "text": "Pipelines de processamento de imagem, rastreamento e detecção com modelos customizados, leitura e extração automatizada de texto em documentos e inferência em tempo real."
       },
       "copy-experienceTitle": {
         "text": "Experiências"
@@ -2294,7 +2294,7 @@
         "text": "Presentation"
       },
       "copy-intro": {
-        "text": "João Vitor Dias Fernandes is a software engineer and Computer Science graduate (IFMG) with extensive experience in production web systems, real-time interfaces with video streaming and IoT telemetry, RESTful APIs, automation, and computer vision."
+        "text": "I build end-to-end web systems, high-performance APIs, and computer vision solutions. Computer Science graduate from IFMG focused on solid architecture, clean code, and performance."
       },
       "copy-navigation": {
         "text": "Main navigation"
@@ -2312,31 +2312,31 @@
         "text": "About me"
       },
       "copy-aboutHeadline": {
-        "text": "Engineering scalable solutions with clean architecture, performance, and precision"
+        "text": "Building robust software from the database to the user interface."
       },
       "copy-aboutBody": {
-        "text": "I'm a Software Engineer and Computer Science graduate from IFMG, with solid hands-on experience developing production web applications, real-time industrial monitoring platforms, and modular architectures. My approach goes beyond writing code: I seek to deeply understand business rules, design scalable systems, optimize performance, and deliver reliable solutions for enterprise clients."
+        "text": "I hold a Bachelor degree in Computer Science from IFMG and work as a full-stack software engineer. My background combines strong computing fundamentals (algorithms, data structures, and architecture) with hands-on experience delivering production systems, RESTful APIs, and applied artificial intelligence."
       },
       "copy-aboutFocus": {
-        "text": "Main focus: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Computer Vision (OpenCV, YOLOv8), PostgreSQL, Supabase, and Docker."
+        "text": "Core technologies: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), PostgreSQL, Docker, and OpenCV / YOLO."
       },
       "copy-aboutPillar1Title": {
-        "text": "Frontend Engineering & Performance"
+        "text": "Frontend & Component Architecture"
       },
       "copy-aboutPillar1Description": {
-        "text": "Scalable SPAs with Angular and TypeScript, modular architecture with lazy loading (85% bundle reduction), reusable component systems, and real-time telemetry."
+        "text": "Modern Single Page Applications, modular architecture, reusable component libraries, state management, and responsive interfaces."
       },
       "copy-aboutPillar2Title": {
-        "text": "Backend & Enterprise Integrations"
+        "text": "Backend & APIs"
       },
       "copy-aboutPillar2Description": {
-        "text": "High-performance RESTful APIs with Python (FastAPI), Java (Spring Boot), and Laravel, PostgreSQL and Supabase persistence, Redis caching, and Docker containerization."
+        "text": "Structured RESTful APIs, cleanly isolated business logic, relational database modeling and optimization, caching layers, and containerization with Docker."
       },
       "copy-aboutPillar3Title": {
-        "text": "Computer Vision & Automation"
+        "text": "Computer Vision & AI"
       },
       "copy-aboutPillar3Description": {
-        "text": "Real-time AI pipelines using OpenCV and YOLOv8, automated document OCR extraction, and live video stream inference overlays."
+        "text": "Image processing pipelines, tracking and object detection with custom models, automated text extraction from documents, and real-time inference."
       },
       "copy-experienceTitle": {
         "text": "Experience"
@@ -3296,6 +3296,12 @@
       "mime": "image/svg+xml",
       "bytes": 957,
       "assetPath": "/assets/skills/mediapipe.svg"
+    },
+    "profile-image": {
+      "source": "managed",
+      "mime": "image/jpeg",
+      "bytes": 22092,
+      "assetPath": "profile.jpg"
     }
   }
 }
