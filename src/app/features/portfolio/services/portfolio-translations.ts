@@ -79,7 +79,7 @@ export const ENGLISH_COPY: PortfolioCopy = {
   contactMessagePlaceholder: 'Write your message...',
   contactWhatsAppActionLabel: 'Send via WhatsApp',
   contactEmailActionLabel: 'Send by email',
-  contactEmailSubject: '',
+  contactEmailSubject: 'Contact via Portfolio',
   contactNameRequiredMessage: 'Enter your name.',
   contactEmailRequiredMessage: 'Enter your email.',
   contactEmailInvalidMessage: 'Enter a valid email.',

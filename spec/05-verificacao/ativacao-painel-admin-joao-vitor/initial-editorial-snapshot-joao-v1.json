@@ -60,429 +60,695 @@
     }
   ],
   "entities": {
-    "copy-eyebrow": {
+    "copy-name": {
       "kind": "interfaceText",
       "position": 0,
+      "data": {
+        "key": "name"
+      }
+    },
+    "copy-heroName": {
+      "kind": "interfaceText",
+      "position": 1,
+      "data": {
+        "key": "heroName"
+      }
+    },
+    "copy-heroRole": {
+      "kind": "interfaceText",
+      "position": 2,
+      "data": {
+        "key": "heroRole"
+      }
+    },
+    "copy-heroAvailability": {
+      "kind": "interfaceText",
+      "position": 3,
+      "data": {
+        "key": "heroAvailability"
+      }
+    },
+    "copy-eyebrow": {
+      "kind": "interfaceText",
+      "position": 4,
       "data": {
         "key": "eyebrow"
       }
     },
     "copy-presentationTitle": {
       "kind": "interfaceText",
-      "position": 1,
+      "position": 5,
       "data": {
         "key": "presentationTitle"
       }
     },
     "copy-intro": {
       "kind": "interfaceText",
-      "position": 2,
+      "position": 6,
       "data": {
         "key": "intro"
       }
     },
     "copy-navigation": {
       "kind": "interfaceText",
-      "position": 3,
+      "position": 7,
       "data": {
         "key": "navigation"
       }
     },
+    "copy-portfolioEyebrow": {
+      "kind": "interfaceText",
+      "position": 8,
+      "data": {
+        "key": "portfolioEyebrow"
+      }
+    },
+    "copy-portfolioTitle": {
+      "kind": "interfaceText",
+      "position": 9,
+      "data": {
+        "key": "portfolioTitle"
+      }
+    },
+    "copy-portfolioSubtitle": {
+      "kind": "interfaceText",
+      "position": 10,
+      "data": {
+        "key": "portfolioSubtitle"
+      }
+    },
     "copy-aboutTitle": {
       "kind": "interfaceText",
-      "position": 4,
+      "position": 11,
       "data": {
         "key": "aboutTitle"
       }
     },
+    "copy-aboutHeadline": {
+      "kind": "interfaceText",
+      "position": 12,
+      "data": {
+        "key": "aboutHeadline"
+      }
+    },
     "copy-aboutBody": {
       "kind": "interfaceText",
-      "position": 5,
+      "position": 13,
       "data": {
         "key": "aboutBody"
       }
     },
+    "copy-aboutFocus": {
+      "kind": "interfaceText",
+      "position": 14,
+      "data": {
+        "key": "aboutFocus"
+      }
+    },
+    "copy-aboutPillar1Title": {
+      "kind": "interfaceText",
+      "position": 15,
+      "data": {
+        "key": "aboutPillar1Title"
+      }
+    },
+    "copy-aboutPillar1Description": {
+      "kind": "interfaceText",
+      "position": 16,
+      "data": {
+        "key": "aboutPillar1Description"
+      }
+    },
+    "copy-aboutPillar2Title": {
+      "kind": "interfaceText",
+      "position": 17,
+      "data": {
+        "key": "aboutPillar2Title"
+      }
+    },
+    "copy-aboutPillar2Description": {
+      "kind": "interfaceText",
+      "position": 18,
+      "data": {
+        "key": "aboutPillar2Description"
+      }
+    },
+    "copy-aboutPillar3Title": {
+      "kind": "interfaceText",
+      "position": 19,
+      "data": {
+        "key": "aboutPillar3Title"
+      }
+    },
+    "copy-aboutPillar3Description": {
+      "kind": "interfaceText",
+      "position": 20,
+      "data": {
+        "key": "aboutPillar3Description"
+      }
+    },
     "copy-experienceTitle": {
       "kind": "interfaceText",
-      "position": 6,
+      "position": 21,
       "data": {
         "key": "experienceTitle"
       }
     },
     "copy-experienceBody": {
       "kind": "interfaceText",
-      "position": 7,
+      "position": 22,
       "data": {
         "key": "experienceBody"
       }
     },
     "copy-experiencePeriodLabel": {
       "kind": "interfaceText",
-      "position": 8,
+      "position": 23,
       "data": {
         "key": "experiencePeriodLabel"
       }
     },
     "copy-experienceContextLabel": {
       "kind": "interfaceText",
-      "position": 9,
+      "position": 24,
       "data": {
         "key": "experienceContextLabel"
       }
     },
     "copy-experienceResponsibilitiesLabel": {
       "kind": "interfaceText",
-      "position": 10,
+      "position": 25,
       "data": {
         "key": "experienceResponsibilitiesLabel"
       }
     },
     "copy-experienceTechnicalDecisionsLabel": {
       "kind": "interfaceText",
-      "position": 11,
+      "position": 26,
       "data": {
         "key": "experienceTechnicalDecisionsLabel"
       }
     },
     "copy-experienceResultsLabel": {
       "kind": "interfaceText",
-      "position": 12,
+      "position": 27,
       "data": {
         "key": "experienceResultsLabel"
       }
     },
     "copy-stackTitle": {
       "kind": "interfaceText",
-      "position": 13,
+      "position": 28,
       "data": {
         "key": "stackTitle"
       }
     },
     "copy-stackBody": {
       "kind": "interfaceText",
-      "position": 14,
+      "position": 29,
       "data": {
         "key": "stackBody"
       }
     },
     "copy-skillsLanguagesRuntimeLabel": {
       "kind": "interfaceText",
-      "position": 15,
+      "position": 30,
       "data": {
         "key": "skillsLanguagesRuntimeLabel"
       }
     },
     "copy-skillsCorporateIntegrationsLabel": {
       "kind": "interfaceText",
-      "position": 16,
+      "position": 31,
       "data": {
         "key": "skillsCorporateIntegrationsLabel"
       }
     },
     "copy-skillsFrontendLabel": {
       "kind": "interfaceText",
-      "position": 17,
+      "position": 32,
       "data": {
         "key": "skillsFrontendLabel"
       }
     },
     "copy-skillsDevopsObservabilityLabel": {
       "kind": "interfaceText",
-      "position": 18,
+      "position": 33,
       "data": {
         "key": "skillsDevopsObservabilityLabel"
       }
     },
     "copy-skillsDatabasesLabel": {
       "kind": "interfaceText",
-      "position": 19,
+      "position": 34,
       "data": {
         "key": "skillsDatabasesLabel"
       }
     },
     "copy-skillsVersionControlLabel": {
       "kind": "interfaceText",
-      "position": 20,
+      "position": 35,
       "data": {
         "key": "skillsVersionControlLabel"
       }
     },
     "copy-educationTitle": {
       "kind": "interfaceText",
-      "position": 21,
+      "position": 36,
       "data": {
         "key": "educationTitle"
       }
     },
     "copy-educationBody": {
       "kind": "interfaceText",
-      "position": 22,
+      "position": 37,
       "data": {
         "key": "educationBody"
       }
     },
     "copy-educationDataScience": {
       "kind": "interfaceText",
-      "position": 23,
+      "position": 38,
       "data": {
         "key": "educationDataScience"
       }
     },
     "copy-educationAppliedStatistics": {
       "kind": "interfaceText",
-      "position": 24,
+      "position": 39,
       "data": {
         "key": "educationAppliedStatistics"
       }
     },
     "copy-educationGraphicDesign": {
       "kind": "interfaceText",
-      "position": 25,
+      "position": 40,
       "data": {
         "key": "educationGraphicDesign"
       }
     },
+    "copy-educationNameLabel": {
+      "kind": "interfaceText",
+      "position": 41,
+      "data": {
+        "key": "educationNameLabel"
+      }
+    },
     "copy-educationInstitutionLabel": {
       "kind": "interfaceText",
-      "position": 26,
+      "position": 42,
       "data": {
         "key": "educationInstitutionLabel"
       }
     },
+    "copy-educationLevelLabel": {
+      "kind": "interfaceText",
+      "position": 43,
+      "data": {
+        "key": "educationLevelLabel"
+      }
+    },
+    "copy-educationStatusLabel": {
+      "kind": "interfaceText",
+      "position": 44,
+      "data": {
+        "key": "educationStatusLabel"
+      }
+    },
+    "copy-educationCompletedLabel": {
+      "kind": "interfaceText",
+      "position": 45,
+      "data": {
+        "key": "educationCompletedLabel"
+      }
+    },
     "copy-educationPeriodLabel": {
       "kind": "interfaceText",
-      "position": 27,
+      "position": 46,
       "data": {
         "key": "educationPeriodLabel"
       }
     },
     "copy-educationCompetenciesLabel": {
       "kind": "interfaceText",
-      "position": 28,
+      "position": 47,
       "data": {
         "key": "educationCompetenciesLabel"
       }
     },
     "copy-educationContentLabel": {
       "kind": "interfaceText",
-      "position": 29,
+      "position": 48,
       "data": {
         "key": "educationContentLabel"
       }
     },
     "copy-educationCurrentLabel": {
       "kind": "interfaceText",
-      "position": 30,
+      "position": 49,
       "data": {
         "key": "educationCurrentLabel"
       }
     },
     "copy-contactTitle": {
       "kind": "interfaceText",
-      "position": 31,
+      "position": 50,
       "data": {
         "key": "contactTitle"
       }
     },
+    "copy-contactHeadline": {
+      "kind": "interfaceText",
+      "position": 51,
+      "data": {
+        "key": "contactHeadline"
+      }
+    },
+    "copy-contactSubtitle": {
+      "kind": "interfaceText",
+      "position": 52,
+      "data": {
+        "key": "contactSubtitle"
+      }
+    },
+    "copy-contactExplanation": {
+      "kind": "interfaceText",
+      "position": 53,
+      "data": {
+        "key": "contactExplanation"
+      }
+    },
+    "copy-contactRedirectNote": {
+      "kind": "interfaceText",
+      "position": 54,
+      "data": {
+        "key": "contactRedirectNote"
+      }
+    },
     "copy-contactBody": {
       "kind": "interfaceText",
-      "position": 32,
+      "position": 55,
       "data": {
         "key": "contactBody"
       }
     },
+    "copy-contactPanelTitle": {
+      "kind": "interfaceText",
+      "position": 56,
+      "data": {
+        "key": "contactPanelTitle"
+      }
+    },
+    "copy-contactPanelBody": {
+      "kind": "interfaceText",
+      "position": 57,
+      "data": {
+        "key": "contactPanelBody"
+      }
+    },
+    "copy-contactNameLabel": {
+      "kind": "interfaceText",
+      "position": 58,
+      "data": {
+        "key": "contactNameLabel"
+      }
+    },
+    "copy-contactNamePlaceholder": {
+      "kind": "interfaceText",
+      "position": 59,
+      "data": {
+        "key": "contactNamePlaceholder"
+      }
+    },
+    "copy-contactEmailFieldLabel": {
+      "kind": "interfaceText",
+      "position": 60,
+      "data": {
+        "key": "contactEmailFieldLabel"
+      }
+    },
+    "copy-contactEmailPlaceholder": {
+      "kind": "interfaceText",
+      "position": 61,
+      "data": {
+        "key": "contactEmailPlaceholder"
+      }
+    },
+    "copy-contactMessageLabel": {
+      "kind": "interfaceText",
+      "position": 62,
+      "data": {
+        "key": "contactMessageLabel"
+      }
+    },
+    "copy-contactMessagePlaceholder": {
+      "kind": "interfaceText",
+      "position": 63,
+      "data": {
+        "key": "contactMessagePlaceholder"
+      }
+    },
+    "copy-contactWhatsAppActionLabel": {
+      "kind": "interfaceText",
+      "position": 64,
+      "data": {
+        "key": "contactWhatsAppActionLabel"
+      }
+    },
+    "copy-contactEmailActionLabel": {
+      "kind": "interfaceText",
+      "position": 65,
+      "data": {
+        "key": "contactEmailActionLabel"
+      }
+    },
+    "copy-contactEmailSubject": {
+      "kind": "interfaceText",
+      "position": 66,
+      "data": {
+        "key": "contactEmailSubject"
+      }
+    },
+    "copy-contactNameRequiredMessage": {
+      "kind": "interfaceText",
+      "position": 67,
+      "data": {
+        "key": "contactNameRequiredMessage"
+      }
+    },
+    "copy-contactEmailRequiredMessage": {
+      "kind": "interfaceText",
+      "position": 68,
+      "data": {
+        "key": "contactEmailRequiredMessage"
+      }
+    },
+    "copy-contactEmailInvalidMessage": {
+      "kind": "interfaceText",
+      "position": 69,
+      "data": {
+        "key": "contactEmailInvalidMessage"
+      }
+    },
+    "copy-contactMessageRequiredMessage": {
+      "kind": "interfaceText",
+      "position": 70,
+      "data": {
+        "key": "contactMessageRequiredMessage"
+      }
+    },
     "copy-contactLinkedinLabel": {
       "kind": "interfaceText",
-      "position": 33,
+      "position": 71,
       "data": {
         "key": "contactLinkedinLabel"
       }
     },
     "copy-contactGithubLabel": {
       "kind": "interfaceText",
-      "position": 34,
+      "position": 72,
       "data": {
         "key": "contactGithubLabel"
       }
     },
     "copy-contactEmailLabel": {
       "kind": "interfaceText",
-      "position": 35,
+      "position": 73,
       "data": {
         "key": "contactEmailLabel"
       }
     },
     "copy-contactPhoneLabel": {
       "kind": "interfaceText",
-      "position": 36,
+      "position": 74,
       "data": {
         "key": "contactPhoneLabel"
       }
     },
     "copy-contactCurriculumPtLabel": {
       "kind": "interfaceText",
-      "position": 37,
+      "position": 75,
       "data": {
         "key": "contactCurriculumPtLabel"
       }
     },
     "copy-contactCurriculumEnLabel": {
       "kind": "interfaceText",
-      "position": 38,
+      "position": 76,
       "data": {
         "key": "contactCurriculumEnLabel"
       }
     },
     "copy-contactCurriculumDownloadLabel": {
       "kind": "interfaceText",
-      "position": 39,
+      "position": 77,
       "data": {
         "key": "contactCurriculumDownloadLabel"
       }
     },
     "copy-languageLabel": {
       "kind": "interfaceText",
-      "position": 40,
+      "position": 78,
       "data": {
         "key": "languageLabel"
       }
     },
     "copy-resultsTitle": {
       "kind": "interfaceText",
-      "position": 41,
+      "position": 79,
       "data": {
         "key": "resultsTitle"
       }
     },
     "copy-resultsTimeReductionLabel": {
       "kind": "interfaceText",
-      "position": 42,
+      "position": 80,
       "data": {
         "key": "resultsTimeReductionLabel"
       }
     },
     "copy-resultsTimeReduction": {
       "kind": "interfaceText",
-      "position": 43,
+      "position": 81,
       "data": {
         "key": "resultsTimeReduction"
       }
     },
     "copy-resultsStepsReductionLabel": {
       "kind": "interfaceText",
-      "position": 44,
+      "position": 82,
       "data": {
         "key": "resultsStepsReductionLabel"
       }
     },
     "copy-resultsStepsReduction": {
       "kind": "interfaceText",
-      "position": 45,
+      "position": 83,
       "data": {
         "key": "resultsStepsReduction"
       }
     },
     "copy-resultsUsersServedLabel": {
       "kind": "interfaceText",
-      "position": 46,
+      "position": 84,
       "data": {
         "key": "resultsUsersServedLabel"
       }
     },
     "copy-resultsUsersServed": {
       "kind": "interfaceText",
-      "position": 47,
+      "position": 85,
       "data": {
         "key": "resultsUsersServed"
       }
     },
     "copy-resultsProductivityGainLabel": {
       "kind": "interfaceText",
-      "position": 48,
+      "position": 86,
       "data": {
         "key": "resultsProductivityGainLabel"
       }
     },
     "copy-resultsProductivityGain": {
       "kind": "interfaceText",
-      "position": 49,
+      "position": 87,
       "data": {
         "key": "resultsProductivityGain"
       }
     },
     "copy-projectsTitle": {
       "kind": "interfaceText",
-      "position": 50,
+      "position": 88,
       "data": {
         "key": "projectsTitle"
       }
     },
     "copy-professionalProjectsTitle": {
       "kind": "interfaceText",
-      "position": 51,
+      "position": 89,
       "data": {
         "key": "professionalProjectsTitle"
       }
     },
     "copy-personalProjectsTitle": {
       "kind": "interfaceText",
-      "position": 52,
+      "position": 90,
       "data": {
         "key": "personalProjectsTitle"
       }
     },
     "copy-projectDescriptionLabel": {
       "kind": "interfaceText",
-      "position": 53,
+      "position": 91,
       "data": {
         "key": "projectDescriptionLabel"
       }
     },
     "copy-projectContextLabel": {
       "kind": "interfaceText",
-      "position": 54,
+      "position": 92,
       "data": {
         "key": "projectContextLabel"
       }
     },
     "copy-projectRoleLabel": {
       "kind": "interfaceText",
-      "position": 55,
+      "position": 93,
       "data": {
         "key": "projectRoleLabel"
       }
     },
     "copy-projectTechnicalDecisionsLabel": {
       "kind": "interfaceText",
-      "position": 56,
+      "position": 94,
       "data": {
         "key": "projectTechnicalDecisionsLabel"
       }
     },
     "copy-projectTechnologiesLabel": {
       "kind": "interfaceText",
-      "position": 57,
+      "position": 95,
       "data": {
         "key": "projectTechnologiesLabel"
       }
     },
     "copy-projectResultsLabel": {
       "kind": "interfaceText",
-      "position": 58,
+      "position": 96,
       "data": {
         "key": "projectResultsLabel"
       }
     },
     "copy-projectLearningsLabel": {
       "kind": "interfaceText",
-      "position": 59,
+      "position": 97,
       "data": {
         "key": "projectLearningsLabel"
       }
     },
     "copy-projectLinksLabel": {
       "kind": "interfaceText",
-      "position": 60,
+      "position": 98,
       "data": {
         "key": "projectLinksLabel"
       }
@@ -1001,10 +1267,19 @@
         "iconMediaId": "asset-laravel"
       }
     },
-    "skill-rest-apis": {
+    "skill-node-js": {
       "kind": "skill",
       "parentId": "corporate-integrations",
       "position": 3,
+      "data": {
+        "technologyId": "node-js",
+        "iconMediaId": "asset-node-js"
+      }
+    },
+    "skill-rest-apis": {
+      "kind": "skill",
+      "parentId": "corporate-integrations",
+      "position": 4,
       "data": {
         "technologyId": "rest-apis",
         "iconMediaId": "asset-rest-apis"
@@ -1013,7 +1288,7 @@
     "skill-jsf": {
       "kind": "skill",
       "parentId": "corporate-integrations",
-      "position": 4,
+      "position": 5,
       "data": {
         "technologyId": "jsf",
         "iconMediaId": "asset-jsf"
@@ -1142,10 +1417,19 @@
         "iconMediaId": "asset-mysql"
       }
     },
-    "skill-oracle-database": {
+    "skill-redis": {
       "kind": "skill",
       "parentId": "databases",
       "position": 3,
+      "data": {
+        "technologyId": "redis",
+        "iconMediaId": "asset-redis"
+      }
+    },
+    "skill-oracle-database": {
+      "kind": "skill",
+      "parentId": "databases",
+      "position": 4,
       "data": {
         "technologyId": "oracle-database",
         "iconMediaId": "asset-oracle-database"
@@ -1210,98 +1494,107 @@
         "iconMediaId": "asset-yolov8"
       }
     },
-    "computer-science": {
+    "skill-mediapipe": {
+      "kind": "skill",
+      "parentId": "version-control",
+      "position": 6,
+      "data": {
+        "technologyId": "mediapipe",
+        "iconMediaId": "asset-mediapipe"
+      }
+    },
+    "academic-fallback": {
       "kind": "academic",
       "position": 0,
       "data": {
-        "startDate": "2020-01-20",
-        "endDate": "2025-08-20",
+        "startDate": "2020-01-01",
+        "endDate": "2024-12-31",
         "isCurrent": false
       }
     },
-    "computer-science-competencies-1": {
+    "academic-fallback-competencies-1": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 0,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-2": {
+    "academic-fallback-competencies-2": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 1,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-3": {
+    "academic-fallback-competencies-3": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 2,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-4": {
+    "academic-fallback-competencies-4": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 3,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-5": {
+    "academic-fallback-competencies-5": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 4,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-6": {
+    "academic-fallback-competencies-6": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 5,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-7": {
+    "academic-fallback-competencies-7": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 6,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-competencies-8": {
+    "academic-fallback-competencies-8": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 7,
       "data": {
         "collection": "competencies"
       }
     },
-    "computer-science-studiedContent-1": {
+    "academic-fallback-studiedContent-1": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 8,
       "data": {
         "collection": "studiedContent"
       }
     },
-    "computer-science-studiedContent-2": {
+    "academic-fallback-studiedContent-2": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 9,
       "data": {
         "collection": "studiedContent"
       }
     },
-    "computer-science-studiedContent-3": {
+    "academic-fallback-studiedContent-3": {
       "kind": "listItem",
-      "parentId": "computer-science",
+      "parentId": "academic-fallback",
       "position": 10,
       "data": {
         "collection": "studiedContent"
@@ -1342,6 +1635,18 @@
   },
   "translations": {
     "pt-BR": {
+      "copy-name": {
+        "text": "João Vitor Dias Fernandes"
+      },
+      "copy-heroName": {
+        "text": "João Vitor Dias Fernandes"
+      },
+      "copy-heroRole": {
+        "text": "Engenheiro de Software"
+      },
+      "copy-heroAvailability": {
+        "text": "Disponível para novos projetos · Remoto"
+      },
       "copy-eyebrow": {
         "text": "Portfólio profissional"
       },
@@ -1349,22 +1654,55 @@
         "text": "Apresentação"
       },
       "copy-intro": {
-        "text": "João Vitor Dias Fernandes é bacharel em Ciência da Computação (IFMG) com atuação em engenharia de software e desenvolvimento web. Possui experiência na construção de sistemas em produção, interfaces em tempo real com vídeo contínuo e telemetria IoT, APIs RESTful, automação e visão computacional."
+        "text": "João Vitor Dias Fernandes é bacharel em Ciência da Computação (IFMG) com sólida atuação em engenharia de software e desenvolvimento web. Possui experiência na construção de aplicações em produção, interfaces em tempo real com vídeo contínuo e telemetria IoT, APIs RESTful, automação e visão computacional."
       },
       "copy-navigation": {
         "text": "Navegação principal"
       },
+      "copy-portfolioEyebrow": {
+        "text": "Portfólio"
+      },
+      "copy-portfolioTitle": {
+        "text": "Projetos em Destaque"
+      },
+      "copy-portfolioSubtitle": {
+        "text": "Projetos e soluções desenvolvidos com foco em engenharia, performance e usabilidade."
+      },
       "copy-aboutTitle": {
         "text": "Sobre mim"
       },
+      "copy-aboutHeadline": {
+        "text": "Construindo soluções robustas com engenharia de software, arquitetura limpa e visão técnica"
+      },
       "copy-aboutBody": {
-        "text": "Bacharel em Ciência da Computação pelo Instituto Federal de Minas Gerais (IFMG), com experiência em desenvolvimento de software e aplicações web. Atuei no desenvolvimento de sistemas em produção, plataformas de monitoramento industrial e projetos envolvendo APIs, processamento de dados e visão computacional."
+        "text": "Sou Engenheiro de Software e Bacharel em Ciência da Computação pelo IFMG, com sólida atuação no desenvolvimento de sistemas web em produção, plataformas de monitoramento industrial em tempo real e arquiteturas modulares. Minha postura profissional vai além da escrita de código: busco compreender a fundo as regras de negócio, projetar soluções escaláveis, otimizar performance e garantir entregas confiáveis para clientes corporativos."
+      },
+      "copy-aboutFocus": {
+        "text": "Foco principal: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Visão Computacional (OpenCV, YOLOv8), PostgreSQL, Supabase e Docker."
+      },
+      "copy-aboutPillar1Title": {
+        "text": "Engenharia Front-end & Performance"
+      },
+      "copy-aboutPillar1Description": {
+        "text": "Desenvolvimento de SPAs escaláveis com Angular e TypeScript, arquitetura modular com lazy loading (redução de 85% de pacote), bibliotecas de componentes reutilizáveis e telemetria de sensores em tempo real."
+      },
+      "copy-aboutPillar2Title": {
+        "text": "Backend & Integrações Corporativas"
+      },
+      "copy-aboutPillar2Description": {
+        "text": "Criação de APIs RESTful de alta performance com Python (FastAPI), Java (Spring Boot) e Laravel, persistência eficiente com PostgreSQL e Supabase, cache com Redis e containerização Docker."
+      },
+      "copy-aboutPillar3Title": {
+        "text": "Visão Computacional & Automação"
+      },
+      "copy-aboutPillar3Description": {
+        "text": "Pipelines de inteligência artificial em tempo real com OpenCV e YOLOv8, OCR automatizado para leitura e extração de documentos e inferência integrada a transmissões de vídeo ao vivo."
       },
       "copy-experienceTitle": {
         "text": "Experiências"
       },
       "copy-experienceBody": {
-        "text": "Experiências profissionais em engenharia de software e desenvolvimento front-end e fullstack."
+        "text": "Experiências profissionais em engenharia de software e desenvolvimento de soluções tecnológicas."
       },
       "copy-experiencePeriodLabel": {
         "text": "Período"
@@ -1403,16 +1741,16 @@
         "text": "Bancos de dados"
       },
       "copy-skillsVersionControlLabel": {
-        "text": "Visão computacional e Versionamento"
+        "text": "Versionamento e ferramentas"
       },
       "copy-educationTitle": {
         "text": "Formação acadêmica"
       },
       "copy-educationBody": {
-        "text": "Graduação realizada no Instituto Federal de Minas Gerais (IFMG)."
+        "text": "Formação acadêmica e especializações."
       },
       "copy-educationDataScience": {
-        "text": "Ciência da Computação"
+        "text": "Computação e Engenharia de Software"
       },
       "copy-educationAppliedStatistics": {
         "text": "Estatística Aplicada"
@@ -1420,8 +1758,20 @@
       "copy-educationGraphicDesign": {
         "text": "Design Gráfico"
       },
+      "copy-educationNameLabel": {
+        "text": "Formação"
+      },
       "copy-educationInstitutionLabel": {
         "text": "Instituição"
+      },
+      "copy-educationLevelLabel": {
+        "text": "Nível"
+      },
+      "copy-educationStatusLabel": {
+        "text": "Status"
+      },
+      "copy-educationCompletedLabel": {
+        "text": "Concluído"
       },
       "copy-educationPeriodLabel": {
         "text": "Período"
@@ -1438,8 +1788,65 @@
       "copy-contactTitle": {
         "text": "Contato"
       },
+      "copy-contactHeadline": {
+        "text": "Vamos conversar sobre novas oportunidades ou projetos?"
+      },
+      "copy-contactSubtitle": {
+        "text": "Estou disponível para atuar como Engenheiro de Software em projetos desafiadores."
+      },
+      "copy-contactExplanation": {
+        "text": "Fique à vontade para me enviar uma mensagem direta ou conectar nas redes."
+      },
+      "copy-contactRedirectNote": {
+        "text": "Mensagens enviadas pelo formulário são direcionadas com segurança para o meu email ou WhatsApp."
+      },
       "copy-contactBody": {
         "text": "Canais profissionais e currículos."
+      },
+      "copy-contactPanelTitle": {
+        "text": "Fale comigo"
+      },
+      "copy-contactPanelBody": {
+        "text": "Envie uma mensagem pelo canal que preferir."
+      },
+      "copy-contactNameLabel": {
+        "text": "Nome"
+      },
+      "copy-contactNamePlaceholder": {
+        "text": "Seu nome"
+      },
+      "copy-contactEmailFieldLabel": {
+        "text": "E-mail"
+      },
+      "copy-contactEmailPlaceholder": {
+        "text": "seu@email.com"
+      },
+      "copy-contactMessageLabel": {
+        "text": "Mensagem"
+      },
+      "copy-contactMessagePlaceholder": {
+        "text": "Escreva sua mensagem..."
+      },
+      "copy-contactWhatsAppActionLabel": {
+        "text": "Enviar pelo WhatsApp"
+      },
+      "copy-contactEmailActionLabel": {
+        "text": "Enviar por e-mail"
+      },
+      "copy-contactEmailSubject": {
+        "text": "Contato via Portfólio"
+      },
+      "copy-contactNameRequiredMessage": {
+        "text": "Informe seu nome."
+      },
+      "copy-contactEmailRequiredMessage": {
+        "text": "Informe seu e-mail."
+      },
+      "copy-contactEmailInvalidMessage": {
+        "text": "Informe um e-mail válido."
+      },
+      "copy-contactMessageRequiredMessage": {
+        "text": "Escreva uma mensagem."
       },
       "copy-contactLinkedinLabel": {
         "text": "LinkedIn"
@@ -1472,25 +1879,25 @@
         "text": "Otimização de carregamento"
       },
       "copy-resultsTimeReduction": {
-        "text": "Redução de 85% no tamanho do pacote inicial de carregamento da aplicação com refatoração modular e lazy loading."
+        "text": "Otimização expressiva no tempo de carregamento da aplicação com refatoração modular e lazy loading."
       },
       "copy-resultsStepsReductionLabel": {
         "text": "Eficiência de processamento"
       },
       "copy-resultsStepsReduction": {
-        "text": "Redução de 83,6% no tempo total de processamento em pipeline de visão computacional."
+        "text": "Ganhos de eficiência e estabilidade operacional em fluxos contínuos de processamento de dados."
       },
       "copy-resultsUsersServedLabel": {
         "text": "Clientes atendidos"
       },
       "copy-resultsUsersServed": {
-        "text": "Plataforma de automação industrial e visão computacional impactando diretamente mais de 50 clientes corporativos."
+        "text": "Desenvolvimento de soluções com impacto direto em usuários e clientes corporativos."
       },
       "copy-resultsProductivityGainLabel": {
         "text": "Aceleração de entrega"
       },
       "copy-resultsProductivityGain": {
-        "text": "Redução de 60% no tempo de entrega de novas telas com criação de biblioteca padronizada de componentes reutilizáveis."
+        "text": "Aumento de produtividade e padronização através de bibliotecas modulares de componentes reutilizáveis."
       },
       "copy-projectsTitle": {
         "text": "Projetos"
@@ -1723,6 +2130,9 @@
       "skill-laravel": {
         "name": "Laravel"
       },
+      "skill-node-js": {
+        "name": "Node.js"
+      },
       "skill-rest-apis": {
         "name": "REST APIs"
       },
@@ -1774,11 +2184,14 @@
       "skill-mysql": {
         "name": "MySQL"
       },
+      "skill-redis": {
+        "name": "Redis"
+      },
       "skill-oracle-database": {
         "name": "Oracle Database"
       },
       "version-control": {
-        "label": "Visão computacional e Versionamento"
+        "label": "Versionamento e ferramentas"
       },
       "skill-git": {
         "name": "Git"
@@ -1798,41 +2211,45 @@
       "skill-yolov8": {
         "name": "YOLOv8"
       },
-      "computer-science": {
-        "name": "Ciência da Computação",
-        "institution": "Instituto Federal de Minas Gerais (IFMG)"
+      "skill-mediapipe": {
+        "name": "MediaPipe"
       },
-      "computer-science-competencies-1": {
+      "academic-fallback": {
+        "name": "Ciência da Computação",
+        "institution": "Instituto Federal de Minas Gerais (IFMG)",
+        "level": "Graduação"
+      },
+      "academic-fallback-competencies-1": {
         "text": "Visão Computacional"
       },
-      "computer-science-competencies-2": {
+      "academic-fallback-competencies-2": {
         "text": "Inteligência Artificial"
       },
-      "computer-science-competencies-3": {
+      "academic-fallback-competencies-3": {
         "text": "Engenharia de Software"
       },
-      "computer-science-competencies-4": {
+      "academic-fallback-competencies-4": {
         "text": "Algoritmos e Estruturas de Dados"
       },
-      "computer-science-competencies-5": {
+      "academic-fallback-competencies-5": {
         "text": "Redes de Computadores"
       },
-      "computer-science-competencies-6": {
+      "academic-fallback-competencies-6": {
         "text": "Bancos de Dados Relacionais"
       },
-      "computer-science-competencies-7": {
+      "academic-fallback-competencies-7": {
         "text": "Sistemas Distribuídos"
       },
-      "computer-science-competencies-8": {
+      "academic-fallback-competencies-8": {
         "text": "Programação Web e Mobile"
       },
-      "computer-science-studiedContent-1": {
+      "academic-fallback-studiedContent-1": {
         "text": "Bacharelado em Ciência da Computação"
       },
-      "computer-science-studiedContent-2": {
+      "academic-fallback-studiedContent-2": {
         "text": "Trabalho de Conclusão de Curso em Visão Computacional para Análise e Contagem de Golpes em Lutas de Boxe"
       },
-      "computer-science-studiedContent-3": {
+      "academic-fallback-studiedContent-3": {
         "text": "Projetos de extensão e inovação tecnológica com automação, OCR e desenvolvimento web/mobile"
       },
       "linkedin": {
@@ -1849,6 +2266,18 @@
       }
     },
     "en": {
+      "copy-name": {
+        "text": "João Vitor Dias Fernandes"
+      },
+      "copy-heroName": {
+        "text": "João Vitor Dias Fernandes"
+      },
+      "copy-heroRole": {
+        "text": "Software Engineer"
+      },
+      "copy-heroAvailability": {
+        "text": "Open to new opportunities · Remote"
+      },
       "copy-eyebrow": {
         "text": "Professional portfolio"
       },
@@ -1856,16 +2285,49 @@
         "text": "Presentation"
       },
       "copy-intro": {
-        "text": "João Vitor Dias Fernandes is a Computer Science graduate from IFMG with hands-on experience in software engineering and web application development. Experienced in building production systems, real-time industrial monitoring platforms, and solutions involving APIs, automated data processing, and computer vision."
+        "text": "João Vitor Dias Fernandes is a software engineer and Computer Science graduate (IFMG) with extensive experience in production web systems, real-time interfaces with video streaming and IoT telemetry, RESTful APIs, automation, and computer vision."
       },
       "copy-navigation": {
         "text": "Main navigation"
       },
+      "copy-portfolioEyebrow": {
+        "text": "Portfolio"
+      },
+      "copy-portfolioTitle": {
+        "text": "Featured Projects"
+      },
+      "copy-portfolioSubtitle": {
+        "text": "Projects and solutions engineered with focus on performance, scalability, and usability."
+      },
       "copy-aboutTitle": {
         "text": "About me"
       },
+      "copy-aboutHeadline": {
+        "text": "Engineering scalable solutions with clean architecture, performance, and precision"
+      },
       "copy-aboutBody": {
-        "text": "Computer Science graduate from the Federal Institute of Minas Gerais (IFMG), with hands-on experience in software engineering and web application development. Experienced in building production systems, real-time industrial monitoring platforms, and solutions involving APIs, automated data processing, and computer vision."
+        "text": "I'm a Software Engineer and Computer Science graduate from IFMG, with solid hands-on experience developing production web applications, real-time industrial monitoring platforms, and modular architectures. My approach goes beyond writing code: I seek to deeply understand business rules, design scalable systems, optimize performance, and deliver reliable solutions for enterprise clients."
+      },
+      "copy-aboutFocus": {
+        "text": "Main focus: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Computer Vision (OpenCV, YOLOv8), PostgreSQL, Supabase, and Docker."
+      },
+      "copy-aboutPillar1Title": {
+        "text": "Frontend Engineering & Performance"
+      },
+      "copy-aboutPillar1Description": {
+        "text": "Scalable SPAs with Angular and TypeScript, modular architecture with lazy loading (85% bundle reduction), reusable component systems, and real-time telemetry."
+      },
+      "copy-aboutPillar2Title": {
+        "text": "Backend & Enterprise Integrations"
+      },
+      "copy-aboutPillar2Description": {
+        "text": "High-performance RESTful APIs with Python (FastAPI), Java (Spring Boot), and Laravel, PostgreSQL and Supabase persistence, Redis caching, and Docker containerization."
+      },
+      "copy-aboutPillar3Title": {
+        "text": "Computer Vision & Automation"
+      },
+      "copy-aboutPillar3Description": {
+        "text": "Real-time AI pipelines using OpenCV and YOLOv8, automated document OCR extraction, and live video stream inference overlays."
       },
       "copy-experienceTitle": {
         "text": "Experience"
@@ -1910,16 +2372,16 @@
         "text": "Databases"
       },
       "copy-skillsVersionControlLabel": {
-        "text": "Computer Vision and Version Control"
+        "text": "Version control and tools"
       },
       "copy-educationTitle": {
         "text": "Academic background"
       },
       "copy-educationBody": {
-        "text": "Bachelor of Science completed at Federal Institute of Minas Gerais (IFMG)."
+        "text": "Academic education and specializations."
       },
       "copy-educationDataScience": {
-        "text": "Computer Science"
+        "text": "Computer Science & Software Engineering"
       },
       "copy-educationAppliedStatistics": {
         "text": "Applied Statistics"
@@ -1927,8 +2389,20 @@
       "copy-educationGraphicDesign": {
         "text": "Graphic Design"
       },
+      "copy-educationNameLabel": {
+        "text": "Education"
+      },
       "copy-educationInstitutionLabel": {
         "text": "Institution"
+      },
+      "copy-educationLevelLabel": {
+        "text": "Level"
+      },
+      "copy-educationStatusLabel": {
+        "text": "Status"
+      },
+      "copy-educationCompletedLabel": {
+        "text": "Completed"
       },
       "copy-educationPeriodLabel": {
         "text": "Period"
@@ -1945,8 +2419,65 @@
       "copy-contactTitle": {
         "text": "Contact"
       },
+      "copy-contactHeadline": {
+        "text": "Let's connect to discuss new opportunities or projects"
+      },
+      "copy-contactSubtitle": {
+        "text": "Available for Software Engineering roles and impactful technical challenges."
+      },
+      "copy-contactExplanation": {
+        "text": "Feel free to send a direct message or connect on professional networks."
+      },
+      "copy-contactRedirectNote": {
+        "text": "Messages submitted via this form are routed securely to my email or WhatsApp."
+      },
       "copy-contactBody": {
         "text": "Professional channels and resumes."
+      },
+      "copy-contactPanelTitle": {
+        "text": "Get in touch"
+      },
+      "copy-contactPanelBody": {
+        "text": "Send a message through the channel you prefer."
+      },
+      "copy-contactNameLabel": {
+        "text": "Name"
+      },
+      "copy-contactNamePlaceholder": {
+        "text": "Your name"
+      },
+      "copy-contactEmailFieldLabel": {
+        "text": "Email"
+      },
+      "copy-contactEmailPlaceholder": {
+        "text": "your@email.com"
+      },
+      "copy-contactMessageLabel": {
+        "text": "Message"
+      },
+      "copy-contactMessagePlaceholder": {
+        "text": "Write your message..."
+      },
+      "copy-contactWhatsAppActionLabel": {
+        "text": "Send via WhatsApp"
+      },
+      "copy-contactEmailActionLabel": {
+        "text": "Send by email"
+      },
+      "copy-contactEmailSubject": {
+        "text": "Contact via Portfolio"
+      },
+      "copy-contactNameRequiredMessage": {
+        "text": "Enter your name."
+      },
+      "copy-contactEmailRequiredMessage": {
+        "text": "Enter your email."
+      },
+      "copy-contactEmailInvalidMessage": {
+        "text": "Enter a valid email."
+      },
+      "copy-contactMessageRequiredMessage": {
+        "text": "Write a message."
       },
       "copy-contactLinkedinLabel": {
         "text": "LinkedIn"
@@ -1979,25 +2510,25 @@
         "text": "Bundle optimization"
       },
       "copy-resultsTimeReduction": {
-        "text": "85% reduction in initial application bundle size through modular architectural refactoring and lazy loading."
+        "text": "Application bundle size optimization and faster load times through modular architecture and lazy loading."
       },
       "copy-resultsStepsReductionLabel": {
         "text": "Processing efficiency"
       },
       "copy-resultsStepsReduction": {
-        "text": "83.6% reduction in total processing time in a computer vision pipeline."
+        "text": "Efficiency gains and operational stability across data processing workflows."
       },
       "copy-resultsUsersServedLabel": {
         "text": "Clients served"
       },
       "copy-resultsUsersServed": {
-        "text": "Industrial automation and computer vision platform directly impacting 50+ enterprise clients."
+        "text": "Development of solutions directly impacting end users and enterprise clients."
       },
       "copy-resultsProductivityGainLabel": {
         "text": "Delivery acceleration"
       },
       "copy-resultsProductivityGain": {
-        "text": "60% reduction in development time for new screens by creating an internal reusable component library."
+        "text": "Accelerated development delivery through reusable, standardized component architectures."
       },
       "copy-projectsTitle": {
         "text": "Projects"
@@ -2230,6 +2761,9 @@
       "skill-laravel": {
         "name": "Laravel"
       },
+      "skill-node-js": {
+        "name": "Node.js"
+      },
       "skill-rest-apis": {
         "name": "REST APIs"
       },
@@ -2281,11 +2815,14 @@
       "skill-mysql": {
         "name": "MySQL"
       },
+      "skill-redis": {
+        "name": "Redis"
+      },
       "skill-oracle-database": {
         "name": "Oracle Database"
       },
       "version-control": {
-        "label": "Computer Vision and Version Control"
+        "label": "Version control and tools"
       },
       "skill-git": {
         "name": "Git"
@@ -2305,41 +2842,45 @@
       "skill-yolov8": {
         "name": "YOLOv8"
       },
-      "computer-science": {
-        "name": "Computer Science",
-        "institution": "Federal Institute of Minas Gerais (IFMG)"
+      "skill-mediapipe": {
+        "name": "MediaPipe"
       },
-      "computer-science-competencies-1": {
+      "academic-fallback": {
+        "name": "Computer Science",
+        "institution": "Federal Institute of Minas Gerais (IFMG)",
+        "level": "Bachelor's Degree"
+      },
+      "academic-fallback-competencies-1": {
         "text": "Computer Vision"
       },
-      "computer-science-competencies-2": {
+      "academic-fallback-competencies-2": {
         "text": "Artificial Intelligence"
       },
-      "computer-science-competencies-3": {
+      "academic-fallback-competencies-3": {
         "text": "Software Engineering"
       },
-      "computer-science-competencies-4": {
+      "academic-fallback-competencies-4": {
         "text": "Algorithms and Data Structures"
       },
-      "computer-science-competencies-5": {
+      "academic-fallback-competencies-5": {
         "text": "Computer Networks"
       },
-      "computer-science-competencies-6": {
+      "academic-fallback-competencies-6": {
         "text": "Relational Databases"
       },
-      "computer-science-competencies-7": {
+      "academic-fallback-competencies-7": {
         "text": "Distributed Systems"
       },
-      "computer-science-competencies-8": {
+      "academic-fallback-competencies-8": {
         "text": "Web and Mobile Development"
       },
-      "computer-science-studiedContent-1": {
+      "academic-fallback-studiedContent-1": {
         "text": "Bachelor's Degree in Computer Science"
       },
-      "computer-science-studiedContent-2": {
+      "academic-fallback-studiedContent-2": {
         "text": "Bachelor's Thesis in Computer Vision for Boxing Matches Strike Detection and Counting"
       },
-      "computer-science-studiedContent-3": {
+      "academic-fallback-studiedContent-3": {
         "text": "Extension and technological innovation projects in automation, OCR, and web/mobile development"
       },
       "linkedin": {
@@ -2394,8 +2935,10 @@
     },
     "redis": {
       "label": "Redis",
-      "aliases": [],
-      "iconMediaId": "asset-redis"
+      "iconMediaId": "asset-redis",
+      "aliases": [
+        "Redis"
+      ]
     },
     "docker": {
       "label": "Docker",
@@ -2420,8 +2963,10 @@
     },
     "mediapipe": {
       "label": "MediaPipe",
-      "aliases": [],
-      "iconMediaId": "asset-mediapipe"
+      "iconMediaId": "asset-mediapipe",
+      "aliases": [
+        "MediaPipe"
+      ]
     },
     "flutter": {
       "label": "Flutter",
@@ -2465,6 +3010,11 @@
     "laravel": {
       "label": "Laravel",
       "iconMediaId": "asset-laravel",
+      "aliases": []
+    },
+    "node-js": {
+      "label": "Node.js",
+      "iconMediaId": "asset-node-js",
       "aliases": []
     },
     "jsf": {
@@ -2593,6 +3143,12 @@
       "bytes": 2339,
       "assetPath": "/assets/skills/laravel.svg"
     },
+    "asset-node-js": {
+      "source": "bundled",
+      "mime": "image/png",
+      "bytes": 1310,
+      "assetPath": "/assets/skills/node-js.png"
+    },
     "asset-rest-apis": {
       "source": "bundled",
       "mime": "image/png",
@@ -2677,6 +3233,12 @@
       "bytes": 1188,
       "assetPath": "/assets/skills/mysql.png"
     },
+    "asset-redis": {
+      "source": "bundled",
+      "mime": "image/svg+xml",
+      "bytes": 1728,
+      "assetPath": "/assets/skills/redis.svg"
+    },
     "asset-oracle-database": {
       "source": "bundled",
       "mime": "image/svg+xml",
@@ -2718,12 +3280,6 @@
       "mime": "image/svg+xml",
       "bytes": 530,
       "assetPath": "/assets/skills/yolov8.svg"
-    },
-    "asset-redis": {
-      "source": "bundled",
-      "mime": "image/svg+xml",
-      "bytes": 1728,
-      "assetPath": "/assets/skills/redis.svg"
     },
     "asset-mediapipe": {
       "source": "bundled",

@@ -113,17 +113,105 @@ function addLists(parentId, groups, englishGroups = {}) {
   }
 }
 
-// 1. Interface copy texts
-Object.keys(ORIGINAL_COPY).forEach((key, position) =>
+// 1. Interface copy texts & João Vitor personal overrides
+const joaoCopyOverrides = {
+  name: {
+    pt: 'João Vitor Dias Fernandes',
+    en: 'João Vitor Dias Fernandes',
+  },
+  heroName: {
+    pt: 'João Vitor Dias Fernandes',
+    en: 'João Vitor Dias Fernandes',
+  },
+  heroRole: {
+    pt: 'Engenheiro de Software',
+    en: 'Software Engineer',
+  },
+  heroAvailability: {
+    pt: 'Disponível para novos projetos · Remoto',
+    en: 'Open to new opportunities · Remote',
+  },
+  intro: {
+    pt: 'João Vitor Dias Fernandes é bacharel em Ciência da Computação (IFMG) com sólida atuação em engenharia de software e desenvolvimento web. Possui experiência na construção de aplicações em produção, interfaces em tempo real com vídeo contínuo e telemetria IoT, APIs RESTful, automação e visão computacional.',
+    en: 'João Vitor Dias Fernandes is a software engineer and Computer Science graduate (IFMG) with extensive experience in production web systems, real-time interfaces with video streaming and IoT telemetry, RESTful APIs, automation, and computer vision.',
+  },
+  aboutHeadline: {
+    pt: 'Construindo soluções robustas com engenharia de software, arquitetura limpa e visão técnica',
+    en: 'Engineering scalable solutions with clean architecture, performance, and precision',
+  },
+  aboutBody: {
+    pt: 'Sou Engenheiro de Software e Bacharel em Ciência da Computação pelo IFMG, com sólida atuação no desenvolvimento de sistemas web em produção, plataformas de monitoramento industrial em tempo real e arquiteturas modulares. Minha postura profissional vai além da escrita de código: busco compreender a fundo as regras de negócio, projetar soluções escaláveis, otimizar performance e garantir entregas confiáveis para clientes corporativos.',
+    en: "I'm a Software Engineer and Computer Science graduate from IFMG, with solid hands-on experience developing production web applications, real-time industrial monitoring platforms, and modular architectures. My approach goes beyond writing code: I seek to deeply understand business rules, design scalable systems, optimize performance, and deliver reliable solutions for enterprise clients.",
+  },
+  aboutFocus: {
+    pt: 'Foco principal: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Visão Computacional (OpenCV, YOLOv8), PostgreSQL, Supabase e Docker.',
+    en: 'Main focus: TypeScript, Angular, Python (FastAPI), Java (Spring Boot), Computer Vision (OpenCV, YOLOv8), PostgreSQL, Supabase, and Docker.',
+  },
+  aboutPillar1Title: {
+    pt: 'Engenharia Front-end & Performance',
+    en: 'Frontend Engineering & Performance',
+  },
+  aboutPillar1Description: {
+    pt: 'Desenvolvimento de SPAs escaláveis com Angular e TypeScript, arquitetura modular com lazy loading (redução de 85% de pacote), bibliotecas de componentes reutilizáveis e telemetria de sensores em tempo real.',
+    en: 'Scalable SPAs with Angular and TypeScript, modular architecture with lazy loading (85% bundle reduction), reusable component systems, and real-time telemetry.',
+  },
+  aboutPillar2Title: {
+    pt: 'Backend & Integrações Corporativas',
+    en: 'Backend & Enterprise Integrations',
+  },
+  aboutPillar2Description: {
+    pt: 'Criação de APIs RESTful de alta performance com Python (FastAPI), Java (Spring Boot) e Laravel, persistência eficiente com PostgreSQL e Supabase, cache com Redis e containerização Docker.',
+    en: 'High-performance RESTful APIs with Python (FastAPI), Java (Spring Boot), and Laravel, PostgreSQL and Supabase persistence, Redis caching, and Docker containerization.',
+  },
+  aboutPillar3Title: {
+    pt: 'Visão Computacional & Automação',
+    en: 'Computer Vision & Automation',
+  },
+  aboutPillar3Description: {
+    pt: 'Pipelines de inteligência artificial em tempo real com OpenCV e YOLOv8, OCR automatizado para leitura e extração de documentos e inferência integrada a transmissões de vídeo ao vivo.',
+    en: 'Real-time AI pipelines using OpenCV and YOLOv8, automated document OCR extraction, and live video stream inference overlays.',
+  },
+  portfolioEyebrow: {
+    pt: 'Portfólio',
+    en: 'Portfolio',
+  },
+  portfolioTitle: {
+    pt: 'Projetos em Destaque',
+    en: 'Featured Projects',
+  },
+  portfolioSubtitle: {
+    pt: 'Projetos e soluções desenvolvidos com foco em engenharia, performance e usabilidade.',
+    en: 'Projects and solutions engineered with focus on performance, scalability, and usability.',
+  },
+  contactHeadline: {
+    pt: 'Vamos conversar sobre novas oportunidades ou projetos?',
+    en: "Let's connect to discuss new opportunities or projects",
+  },
+  contactSubtitle: {
+    pt: 'Estou disponível para atuar como Engenheiro de Software em projetos desafiadores.',
+    en: 'Available for Software Engineering roles and impactful technical challenges.',
+  },
+  contactExplanation: {
+    pt: 'Fique à vontade para me enviar uma mensagem direta ou conectar nas redes.',
+    en: 'Feel free to send a direct message or connect on professional networks.',
+  },
+  contactRedirectNote: {
+    pt: 'Mensagens enviadas pelo formulário são direcionadas com segurança para o meu email ou WhatsApp.',
+    en: 'Messages submitted via this form are routed securely to my email or WhatsApp.',
+  },
+};
+
+Object.keys(ORIGINAL_COPY).forEach((key, position) => {
+  const override = joaoCopyOverrides[key];
   add(
     `copy-${key}`,
     'interfaceText',
     position,
     { key },
-    { text: ORIGINAL_COPY[key] },
-    { text: ENGLISH_COPY[key] ?? ORIGINAL_COPY[key] },
-  ),
-);
+    { text: override?.pt ?? ORIGINAL_COPY[key] },
+    { text: override?.en ?? ENGLISH_COPY[key] ?? ORIGINAL_COPY[key] },
+  );
+});
 
 // 2. Experiências de João Vitor
 const joaoExperiences = [
@@ -559,18 +647,45 @@ const ENGLISH_ACADEMIC = {
   ],
 };
 
+const JOAO_ACADEMIC_PT = {
+  name: 'Ciência da Computação',
+  institution: 'Instituto Federal de Minas Gerais (IFMG)',
+  competencies: [
+    'Visão Computacional',
+    'Inteligência Artificial',
+    'Engenharia de Software',
+    'Algoritmos e Estruturas de Dados',
+    'Redes de Computadores',
+    'Bancos de Dados Relacionais',
+    'Sistemas Distribuídos',
+    'Programação Web e Mobile',
+  ],
+  studiedContent: [
+    'Bacharelado em Ciência da Computação',
+    'Trabalho de Conclusão de Curso em Visão Computacional para Análise e Contagem de Golpes em Lutas de Boxe',
+    'Projetos de extensão e inovação tecnológica com automação, OCR e desenvolvimento web/mobile',
+  ],
+};
+
+const JOAO_CONTACT_HREFS = {
+  linkedin: 'https://www.linkedin.com/in/xjoaovitordf/',
+  github: 'https://github.com/joaovitordf',
+  email: 'mailto:profissional.joaovitordf@gmail.com',
+  phone: 'tel:+553799429018',
+};
+
 PORTFOLIO_ACADEMIC_ENTRIES.forEach((item, position) => {
   add(
     item.id,
     'academic',
     position,
     { startDate: item.startDate, endDate: item.endDate, isCurrent: item.isCurrent },
-    { name: ORIGINAL_COPY[item.nameKey], institution: item.institution },
-    { name: ENGLISH_COPY[item.nameKey], institution: ENGLISH_ACADEMIC.institution },
+    { name: JOAO_ACADEMIC_PT.name, institution: JOAO_ACADEMIC_PT.institution, level: 'Graduação' },
+    { name: 'Computer Science', institution: ENGLISH_ACADEMIC.institution, level: "Bachelor's Degree" },
   );
   addLists(
     item.id,
-    { competencies: item.competencies, studiedContent: item.studiedContent },
+    { competencies: JOAO_ACADEMIC_PT.competencies, studiedContent: JOAO_ACADEMIC_PT.studiedContent },
     { competencies: ENGLISH_ACADEMIC.competencies, studiedContent: ENGLISH_ACADEMIC.studiedContent },
   );
 });
@@ -581,7 +696,7 @@ PORTFOLIO_CONTACT_LINKS.forEach((item, position) =>
     item.id,
     'contact',
     position,
-    { symbol: item.symbol, href: item.href },
+    { symbol: item.symbol, href: JOAO_CONTACT_HREFS[item.symbol] ?? item.href },
     { label: ORIGINAL_COPY[item.labelKey] },
     { label: ENGLISH_COPY[item.labelKey] },
   ),

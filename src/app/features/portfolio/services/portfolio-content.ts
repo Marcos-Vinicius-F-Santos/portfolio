@@ -329,7 +329,7 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   contactMessagePlaceholder: 'Escreva sua mensagem...',
   contactWhatsAppActionLabel: 'Enviar pelo WhatsApp',
   contactEmailActionLabel: 'Enviar por e-mail',
-  contactEmailSubject: '',
+  contactEmailSubject: 'Contato via Portfólio',
   contactNameRequiredMessage: 'Informe seu nome.',
   contactEmailRequiredMessage: 'Informe seu e-mail.',
   contactEmailInvalidMessage: 'Informe um e-mail válido.',
