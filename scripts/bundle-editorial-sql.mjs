@@ -315,6 +315,12 @@ alter table portfolio_editorial.draft_entities add constraint draft_entities_kin
 
 -- Importação do snapshot inicial editorial parametrizado
 do $$ declare payload jsonb := '${compactSnapshot}'::jsonb; begin
+set constraints all deferred;
+delete from portfolio_editorial.draft_media_refs where draft_id = 1;
+delete from portfolio_editorial.draft_translations where draft_id = 1;
+delete from portfolio_editorial.draft_entities where draft_id = 1;
+delete from portfolio_editorial.draft_locales where draft_id = 1 and code <> 'pt-BR';
+insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'pt-BR','Português','ltr','active',0) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'en','English','ltr','active',1) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_entities(draft_id,id,kind,parent_id,position,data) select 1,e.key,e.value->>'kind',nullif(e.value->>'parentId',''),(e.value->>'position')::int,e.value->'data' from jsonb_each(payload->'entities') e on conflict(draft_id,id) do update set kind=excluded.kind,parent_id=excluded.parent_id,position=excluded.position,data=excluded.data;
 insert into portfolio_editorial.draft_translations(draft_id,entity_id,locale_code,fields) select 1,e.key,l.key,l.value->e.key from jsonb_each(payload->'entities') e cross join jsonb_each(payload->'translations') l on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;

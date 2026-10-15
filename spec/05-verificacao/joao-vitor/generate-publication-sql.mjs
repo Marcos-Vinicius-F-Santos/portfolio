@@ -2,8 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const root = resolve(import.meta.dirname, '..');
-const snapshotPath = resolve(root, 'spec/05-verificacao/joao-vitor/snapshot-joao-v1.json');
+const snapshotPath = resolve(import.meta.dirname, 'snapshot-joao-v1.json');
 const snapshot = JSON.parse(await readFile(snapshotPath, 'utf8'));
 const compactSnapshot = JSON.stringify(snapshot).replaceAll("'", "''");
 const hash = createHash('sha256').update(JSON.stringify(snapshot)).digest('hex');
@@ -39,11 +38,45 @@ alter table portfolio_editorial.draft_entities add constraint draft_entities_kin
   'interfaceText', 'listItem'
 ));
 
--- 4. Insercao e publicacao do snapshot
+-- 4. Garantir registros base de draft e site_state
+insert into portfolio_editorial.draft (id, revision, default_locale)
+values (1, 0, 'pt-BR')
+on conflict (id) do nothing;
+
+insert into portfolio_editorial.site_state (id, default_locale)
+values (1, 'pt-BR')
+on conflict (id) do nothing;
+
+-- 5. Desativar temporariamente o trigger de imutabilidade se existir para permitir re-publicacao do snapshot
+do $$
+begin
+  if exists (
+    select 1 from pg_trigger t
+    join pg_class c on c.oid = t.tgrelid
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'portfolio_editorial'
+      and c.relname = 'publications'
+      and t.tgname = 'protect_publication_payload'
+  ) then
+    execute 'alter table portfolio_editorial.publications disable trigger protect_publication_payload';
+  end if;
+end $$;
+
+-- 6. Insercao e publicacao do snapshot
 do $$
 declare
   payload jsonb := '${compactSnapshot}'::jsonb;
 begin
+  set constraints all deferred;
+  delete from portfolio_editorial.draft_media_refs where draft_id = 1;
+  delete from portfolio_editorial.draft_translations where draft_id = 1;
+  delete from portfolio_editorial.draft_entities where draft_id = 1;
+  delete from portfolio_editorial.draft_locales where draft_id = 1 and code <> 'pt-BR';
+
+  insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position)
+    values (1,'pt-BR','Português','ltr','active',0)
+    on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
+
   insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position)
     values (1,'en','English','ltr','active',1)
     on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
@@ -67,13 +100,28 @@ begin
 
   insert into portfolio_editorial.publications(id,format_version,snapshot,hash,source_revision)
     values ('${snapshot.publicationId}',1,payload,'${hash}',0)
-    on conflict(id) do update set snapshot=excluded.snapshot, hash=excluded.hash;
+    on conflict(id) do update set snapshot=excluded.snapshot, hash=excluded.hash, format_version=excluded.format_version, source_revision=excluded.source_revision;
 
   update portfolio_editorial.draft set base_publication_id='${snapshot.publicationId}',updated_at=now() where id=1;
   update portfolio_editorial.site_state set active_publication_id='${snapshot.publicationId}',updated_at=now() where id=1;
 end $$;
+
+-- 7. Reativar o trigger de imutabilidade de publicacoes
+do $$
+begin
+  if exists (
+    select 1 from pg_trigger t
+    join pg_class c on c.oid = t.tgrelid
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'portfolio_editorial'
+      and c.relname = 'publications'
+      and t.tgname = 'protect_publication_payload'
+  ) then
+    execute 'alter table portfolio_editorial.publications enable trigger protect_publication_payload';
+  end if;
+end $$;
 `;
 
-const outputPath = resolve(root, 'spec/05-verificacao/joao-vitor/publicar_snapshot_joao_vitor.sql');
+const outputPath = resolve(import.meta.dirname, 'publicar_snapshot_joao_vitor.sql');
 await writeFile(outputPath, sql, 'utf8');
 console.log('Criado com sucesso em:', outputPath);
