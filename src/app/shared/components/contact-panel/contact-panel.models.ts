@@ -17,6 +17,10 @@ export type ContactPanelCopy = Pick<
   | 'contactEmailRequiredMessage'
   | 'contactEmailInvalidMessage'
   | 'contactMessageRequiredMessage'
+  | 'contactSendingLabel'
+  | 'contactSuccessTitle'
+  | 'contactSuccessBody'
+  | 'contactErrorMessage'
 >;
 
 export type ContactPanelValue = {
@@ -27,14 +31,18 @@ export type ContactPanelValue = {
 
 export type ContactPanelChannel = 'whatsapp' | 'email';
 
+export type ContactPanelSubmitStatus = 'idle' | 'sending' | 'success' | 'error';
+
 export type ContactPanelErrors = Partial<Record<keyof ContactPanelValue, string>>;
 
 export type ContactPanelDestinations = {
   whatsappNumber: string;
   email: string;
+  web3FormsAccessKey?: string;
 };
 
 export const DEFAULT_CONTACT_PANEL_DESTINATIONS: ContactPanelDestinations = {
   whatsappNumber: '5537999429018',
   email: 'profissional.joaovitordf@gmail.com',
+  web3FormsAccessKey: '',
 };

@@ -2,6 +2,7 @@ import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { getUiLabels } from '../../services/portfolio-ui-labels';
 import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
 import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
+import { supabaseRuntimeConfig } from '../../../../core/config/supabase-runtime-config';
 import { technologyIcon } from '../../services/technology-icons';
 import {
   afterNextRender,
@@ -170,6 +171,7 @@ export class PortfolioPageComponent {
     return {
       whatsappNumber,
       email: emailAddress,
+      web3FormsAccessKey: supabaseRuntimeConfig.web3FormsAccessKey,
     };
   });
   protected readonly showPresentation = computed(() =>

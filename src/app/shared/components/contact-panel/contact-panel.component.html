@@ -4,6 +4,32 @@
     <p>{{ copy().contactPanelBody }}</p>
   </header>
 
+  @if (submitStatus() === 'success') {
+    <div class="contact-panel__banner contact-panel__banner--success" role="status" data-testid="contact-panel-success">
+      <svg class="banner-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
+      </svg>
+      <div class="banner-content">
+        <h4 class="banner-title">{{ copy().contactSuccessTitle }}</h4>
+        <p class="banner-body">{{ copy().contactSuccessBody }}</p>
+      </div>
+    </div>
+  }
+
+  @if (submitStatus() === 'error') {
+    <div class="contact-panel__banner contact-panel__banner--error" role="alert" data-testid="contact-panel-error">
+      <svg class="banner-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <div class="banner-content">
+        <p class="banner-body">{{ copy().contactErrorMessage }}</p>
+      </div>
+    </div>
+  }
+
   <div class="contact-panel__fields">
     <label for="contact-panel-name">
       <span>{{ copy().contactNameLabel }}</span>
@@ -13,6 +39,7 @@
         autocomplete="name"
         [value]="value().name"
         [placeholder]="copy().contactNamePlaceholder"
+        [disabled]="isSubmitting()"
         [attr.aria-invalid]="errors().name ? 'true' : null"
         [attr.aria-describedby]="errors().name ? 'contact-panel-name-error' : null"
         (input)="setField('name', $any($event.target).value)"
@@ -32,6 +59,7 @@
         autocomplete="email"
         [value]="value().email"
         [placeholder]="copy().contactEmailPlaceholder"
+        [disabled]="isSubmitting()"
         [attr.aria-invalid]="errors().email ? 'true' : null"
         [attr.aria-describedby]="errors().email ? 'contact-panel-email-error' : null"
         (input)="setField('email', $any($event.target).value)"
@@ -50,6 +78,7 @@
         rows="6"
         [value]="value().message"
         [placeholder]="copy().contactMessagePlaceholder"
+        [disabled]="isSubmitting()"
         [attr.aria-invalid]="errors().message ? 'true' : null"
         [attr.aria-describedby]="errors().message ? 'contact-panel-message-error' : null"
         (input)="setField('message', $any($event.target).value)"
@@ -67,6 +96,7 @@
       type="button"
       data-testid="contact-panel-whatsapp"
       class="contact-btn contact-btn--whatsapp"
+      [disabled]="isSubmitting()"
       (click)="openChannel('whatsapp')"
     >
       <svg
@@ -91,28 +121,39 @@
       type="button"
       data-testid="contact-panel-email"
       class="contact-btn contact-btn--email"
+      [class.contact-btn--loading]="isSubmitting()"
+      [disabled]="isSubmitting()"
       (click)="openChannel('email')"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="send-icon"
-        aria-hidden="true"
-      >
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>
-      {{ copy().contactEmailActionLabel }}
+      @if (isSubmitting()) {
+        <span class="spinner" aria-hidden="true"></span>
+        <span>{{ copy().contactSendingLabel }}</span>
+      } @else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="send-icon"
+          aria-hidden="true"
+        >
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        <span>{{ copy().contactEmailActionLabel }}</span>
+      }
     </button>
   </div>
   <p class="contact-panel__redirect-note">
-    {{ $any(copy()).contactRedirectNote || 'Você será redirecionado para o WhatsApp ou cliente de e-mail para enviar a mensagem.' }}
+    @if (destinations().web3FormsAccessKey) {
+      {{ copy().contactPanelBody }}
+    } @else {
+      {{ $any(copy()).contactRedirectNote || 'Você será redirecionado para o WhatsApp ou cliente de e-mail para enviar a mensagem.' }}
+    }
   </p>
 </section>

@@ -23,6 +23,10 @@ const copy: ContactPanelCopy = {
   contactEmailRequiredMessage: 'Informe seu e-mail.',
   contactEmailInvalidMessage: 'Informe um e-mail válido.',
   contactMessageRequiredMessage: 'Escreva uma mensagem.',
+  contactSendingLabel: 'Enviando...',
+  contactSuccessTitle: 'Mensagem enviada com sucesso!',
+  contactSuccessBody: 'Obrigado pelo contato! Responderei em breve.',
+  contactErrorMessage: 'Não foi possível enviar a mensagem no momento.',
 };
 
 const value: ContactPanelValue = {

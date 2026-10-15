@@ -4,6 +4,7 @@ export interface SupabaseRuntimeConfig {
   adminUserId: string;
   brandInitials?: string;
   authorName?: string;
+  web3FormsAccessKey?: string;
 }
 
 declare global {
@@ -19,6 +20,7 @@ export const supabaseRuntimeConfig: SupabaseRuntimeConfig = {
   publishableKey: runtimeConfig.publishableKey ?? '',
   adminUserId: runtimeConfig.adminUserId ?? '',
   brandInitials: runtimeConfig.brandInitials ?? '',
+  web3FormsAccessKey: runtimeConfig.web3FormsAccessKey ?? '',
 };
 
 export function assertSupabaseRuntimeConfig(

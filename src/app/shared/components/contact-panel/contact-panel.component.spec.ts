@@ -19,6 +19,10 @@ const copy: ContactPanelCopy = {
   contactEmailRequiredMessage: 'Informe seu e-mail.',
   contactEmailInvalidMessage: 'Informe um e-mail válido.',
   contactMessageRequiredMessage: 'Escreva uma mensagem.',
+  contactSendingLabel: 'Enviando...',
+  contactSuccessTitle: 'Mensagem enviada com sucesso!',
+  contactSuccessBody: 'Obrigado pelo contato! Responderei em breve.',
+  contactErrorMessage: 'Não foi possível enviar a mensagem no momento.',
 };
 
 const testDestinations: ContactPanelDestinations = {
@@ -145,5 +149,77 @@ describe('ContactPanelComponent', () => {
     expect(params.get('body')).toContain('Mensagem de teste.');
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener,noreferrer');
     openSpy.mockRestore();
+  });
+
+  it('submits directly via Web3Forms and displays success banner when accessKey is provided', async () => {
+    await TestBed.configureTestingModule({ imports: [ContactPanelComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(ContactPanelComponent);
+    fixture.componentRef.setInput('copy', copy);
+    fixture.componentRef.setInput('destinations', {
+      ...testDestinations,
+      web3FormsAccessKey: 'test-key-abc',
+    });
+
+    const emailSenderMock = vi.fn().mockResolvedValue({ success: true, message: 'Delivered' });
+    fixture.componentRef.setInput('emailSender', emailSenderMock);
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    fill(fixture, '#contact-panel-name', 'Maria Silva');
+    fill(fixture, '#contact-panel-email', 'maria@exemplo.com');
+    fill(fixture, '#contact-panel-message', 'Gostaria de agendar uma reunião.');
+
+    const emailBtn = fixture.nativeElement.querySelector('[data-testid="contact-panel-email"]') as HTMLButtonElement;
+    emailBtn.click();
+    fixture.detectChanges();
+
+    expect(emailSenderMock).toHaveBeenCalledWith({
+      accessKey: 'test-key-abc',
+      name: 'Maria Silva',
+      email: 'maria@exemplo.com',
+      message: 'Gostaria de agendar uma reunião.',
+      subject: copy.contactEmailSubject,
+    });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[data-testid="contact-panel-success"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.banner-title')?.textContent).toContain(copy.contactSuccessTitle);
+    expect(fixture.nativeElement.querySelector('.banner-body')?.textContent).toContain(copy.contactSuccessBody);
+    expect(fixture.componentInstance.value()).toEqual({ name: '', email: '', message: '' });
+  });
+
+  it('displays error banner and preserves user input when direct submission fails', async () => {
+    await TestBed.configureTestingModule({ imports: [ContactPanelComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(ContactPanelComponent);
+    fixture.componentRef.setInput('copy', copy);
+    fixture.componentRef.setInput('destinations', {
+      ...testDestinations,
+      web3FormsAccessKey: 'test-key-abc',
+    });
+
+    const emailSenderMock = vi.fn().mockResolvedValue({ success: false, message: 'Server error' });
+    fixture.componentRef.setInput('emailSender', emailSenderMock);
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    fill(fixture, '#contact-panel-name', 'Carlos');
+    fill(fixture, '#contact-panel-email', 'carlos@exemplo.com');
+    fill(fixture, '#contact-panel-message', 'Mensagem importante.');
+
+    const emailBtn = fixture.nativeElement.querySelector('[data-testid="contact-panel-email"]') as HTMLButtonElement;
+    emailBtn.click();
+    fixture.detectChanges();
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[data-testid="contact-panel-error"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('.banner-body')?.textContent).toContain(copy.contactErrorMessage);
+    expect(fixture.componentInstance.value().name).toBe('Carlos');
+    expect(fixture.componentInstance.value().message).toBe('Mensagem importante.');
   });
 });

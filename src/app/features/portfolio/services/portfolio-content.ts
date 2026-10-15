@@ -80,6 +80,10 @@ export interface PortfolioCopy {
   contactEmailRequiredMessage: string;
   contactEmailInvalidMessage: string;
   contactMessageRequiredMessage: string;
+  contactSendingLabel: string;
+  contactSuccessTitle: string;
+  contactSuccessBody: string;
+  contactErrorMessage: string;
   contactLinkedinLabel: string;
   contactGithubLabel: string;
   contactEmailLabel: string;
@@ -334,6 +338,10 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   contactEmailRequiredMessage: 'Informe seu e-mail.',
   contactEmailInvalidMessage: 'Informe um e-mail válido.',
   contactMessageRequiredMessage: 'Escreva uma mensagem.',
+  contactSendingLabel: 'Enviando...',
+  contactSuccessTitle: 'Mensagem enviada com sucesso!',
+  contactSuccessBody: 'Obrigado pelo contato! Responderei em breve.',
+  contactErrorMessage: 'Não foi possível enviar a mensagem no momento. Tente novamente ou use o WhatsApp.',
   contactLinkedinLabel: 'LinkedIn',
   contactGithubLabel: 'GitHub',
   contactEmailLabel: 'E-mail',

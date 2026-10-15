@@ -156,6 +156,92 @@ textarea {
   transition: transform 180ms ease;
 }
 
+.contact-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: contact-spin 0.6s linear infinite;
+}
+
+@keyframes contact-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.contact-panel__banner {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.9rem 1.1rem;
+  border-radius: 0.85rem;
+  animation: banner-fade-in 200ms ease;
+}
+
+@keyframes banner-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-panel__banner--success {
+  background: rgba(46, 125, 50, 0.12);
+  border: 1px solid rgba(46, 125, 50, 0.3);
+  color: #1b5e20;
+}
+
+.contact-panel__banner--success .banner-icon {
+  color: #2e7d32;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.contact-panel__banner--error {
+  background: rgba(168, 50, 45, 0.12);
+  border: 1px solid rgba(168, 50, 45, 0.3);
+  color: #a8322d;
+}
+
+.contact-panel__banner--error .banner-icon {
+  color: #a8322d;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.banner-content {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.banner-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+.banner-body {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: inherit;
+}
+
 .contact-panel__redirect-note {
   font-size: 0.8rem;
   line-height: 1.5;
