@@ -1,6 +1,6 @@
 <main [attr.lang]="language.language()">
   <nav>
-    <a href="/#projetos">← {{ en() ? 'Back to projects' : 'Voltar aos projetos' }}</a>
+    <a href="/#projetos">← {{ ui().backToProjects }}</a>
     <label
       >{{ copy().languageLabel
       }}<select #locale [value]="language.language()" (change)="choose(locale.value)">
@@ -10,14 +10,10 @@
     >
   </nav>
   @if (loading()) {
-    <p role="status">{{ en() ? 'Loading project…' : 'Carregando projeto…' }}</p>
+    <p role="status">{{ ui().loadingProject }}</p>
   } @else if (error()) {
-    <h1>{{ en() ? 'Unable to load project' : 'Não foi possível carregar o projeto' }}</h1>
-    <p>
-      {{
-        en() ? 'Please refresh the page to try again.' : 'Atualize a página para tentar novamente.'
-      }}
-    </p>
+    <h1>{{ ui().errorLoadingProject }}</h1>
+    <p>{{ ui().refreshToTryAgain }}</p>
   } @else if (project(); as p) {
     <header>
       <p class="eyebrow">
@@ -53,7 +49,7 @@
     </section>
     @if (p.solution) {
       <section>
-        <h2>{{ en() ? 'Solution' : 'Solução' }}</h2>
+        <h2>{{ ui().solution }}</h2>
         <p
           [attr.data-editorial-entity]="p.id"
           data-editorial-field="solution"

@@ -63,7 +63,7 @@
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <path d="m7 10 5 5 5-5" />
             </svg>
-            <span>{{ language.language() === 'en' ? 'Resume' : 'Currículo' }}</span>
+            <span>{{ ui().cvButton }}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -234,7 +234,7 @@
         </nav>
         <div class="mobile-drawer__actions">
           <div class="mobile-lang-actions">
-            <span class="mobile-actions-label">{{ language.language() === 'en' ? 'Language:' : 'Idioma:' }}</span>
+            <span class="mobile-actions-label">{{ ui().languageLabel }}</span>
             <div class="mobile-lang-buttons">
               <button
                 type="button"
@@ -255,7 +255,7 @@
             </div>
           </div>
           <div class="mobile-cv-actions">
-            <span class="mobile-actions-label">{{ language.language() === 'en' ? 'Resume:' : 'Currículo:' }}</span>
+            <span class="mobile-actions-label">{{ ui().resumeLabel }}</span>
             <div class="mobile-cv-buttons">
               <button
                 type="button"
@@ -292,7 +292,7 @@
           <div class="hero-actions">
             @if (showProjects()) {
               <a href="#projetos" class="hero-btn hero-btn--primary hero-action hero-action--primary" (click)="navigateToSection($event, 'projetos')">
-                <span>{{ language.language() === 'en' ? 'View Projects' : 'Ver projetos' }}</span>
+                <span>{{ ui().viewProjects }}</span>
                 <svg class="hero-btn__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -303,7 +303,7 @@
                 <path d="m22 2-7 20-4-9-9-4Z"/>
                 <path d="M22 2 11 13"/>
               </svg>
-              <span>{{ language.language() === 'en' ? 'Contact Me' : 'Fale comigo' }}</span>
+              <span>{{ ui().contactMe }}</span>
             </a>
           </div>
 
@@ -405,7 +405,7 @@
                 <ng-container *ngTemplateOutlet="localized; context: { key: item.body }" />
               </p>
               <div class="about-focus-box">
-                <span class="about-focus-badge">{{ language.language() === 'en' ? 'FOCUS' : 'FOCO' }}</span>
+                <span class="about-focus-badge">{{ ui().focusBadge }}</span>
                 <p class="about-focus-text">
                   <ng-container *ngTemplateOutlet="localized; context: { key: 'aboutFocus' }" />
                 </p>
@@ -822,12 +822,7 @@
                           }
                         }
                         <a class="project-full-link" [href]="(editorialMode ? '/admin/editor/projetos/' : '/projetos/') + project.id"
-                          >{{
-                            language.language() === 'en'
-                              ? 'View full project'
-                              : 'Ver projeto completo'
-                          }}
-                          →</a
+                          >{{ ui().viewFullProject }} →</a
                         >
                       </article>
                     }
@@ -957,11 +952,7 @@
                         />
                       </span>
                       <span class="contact-platform-value">
-                        {{
-                          language.language() === 'en'
-                            ? 'Download full resume (PDF)'
-                            : 'Baixar currículo completo (PDF)'
-                        }}
+                        {{ ui().downloadCurriculumPdf }}
                       </span>
                     </div>
                   </a>

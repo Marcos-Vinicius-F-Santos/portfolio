@@ -1,4 +1,5 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { getUiLabels } from '../../services/portfolio-ui-labels';
 import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
 import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
 import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
@@ -266,6 +267,7 @@ export class PortfolioPageComponent {
     }
     return 'João Vitor Dias Fernandes';
   });
+  protected readonly ui = computed(() => getUiLabels(this.language.language()));
   protected readonly roleSubtitle = computed(() =>
     this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software',
   );

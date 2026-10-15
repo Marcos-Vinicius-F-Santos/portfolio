@@ -11,6 +11,8 @@ import {
 import { selectPortfolioCopy } from '../../services/portfolio-content';
 import { TRANSLATION_SOURCE } from '../../services/portfolio-translations';
 import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
+import { getUiLabels } from '../../services/portfolio-ui-labels';
+
 @Component({
   selector: 'app-project-detail',
   imports: [ProjectTechnologiesComponent],
@@ -26,6 +28,7 @@ export class ProjectDetailComponent {
   protected readonly copy = computed(() =>
     selectPortfolioCopy(this.language.language(), this.source),
   );
+  protected readonly ui = computed(() => getUiLabels(this.language.language()));
   protected readonly project = signal<PortfolioProject | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
