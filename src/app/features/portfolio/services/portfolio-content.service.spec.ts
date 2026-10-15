@@ -294,7 +294,7 @@ describe('PortfolioContentService', () => {
     const service = configure(null);
 
     await expect(service.loadCopy('pt-BR')).resolves.toEqual({});
-    await expect(service.listProjects('pt-BR')).resolves.toHaveLength(2);
+    await expect(service.listProjects('pt-BR')).resolves.toEqual([]);
     await expect(service.getCurriculum('pt-BR')).resolves.toBeNull();
   });
 
