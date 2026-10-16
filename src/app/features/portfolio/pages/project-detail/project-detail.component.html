@@ -1,129 +1,293 @@
-<main [attr.lang]="language.language()">
-  <nav>
-    <a href="/#projetos">← {{ ui().backToProjects }}</a>
-    <label
-      >{{ copy().languageLabel
-      }}<select #locale [value]="language.language()" (change)="choose(locale.value)">
-        <option value="pt-BR">Português (Brasil)</option>
-        <option value="en">English</option>
-      </select></label
+<header class="site-header">
+  <div class="site-header__container">
+    <!-- 1. Left: Dynamic Brand Monogram -->
+    <a
+      href="/#apresentacao"
+      class="brand-logo"
+      [attr.aria-label]="copy().name || 'Início'"
     >
-  </nav>
+      <span class="brand-logo__initials">{{ brandMonogram() }}</span>
+      <span class="brand-logo__suffix">.dev</span>
+    </a>
+
+    <!-- 2. Center: Back navigation pill -->
+    <nav class="nav-capsule" [attr.aria-label]="ui().backToProjects">
+      <a href="/#projetos" class="nav-back-pill" data-testid="nav-back-projects">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="back-icon"
+          aria-hidden="true"
+        >
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+        <span>{{ ui().backToProjects }}</span>
+      </a>
+    </nav>
+
+    <!-- 3. Right: Language discreet dropdown + sr-only select -->
+    <div class="site-header__actions">
+      <div class="header-dropdown" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          class="action-pill action-pill--lang"
+          [attr.aria-expanded]="languageMenuOpen()"
+          aria-haspopup="true"
+          (click)="toggleLanguageMenu($event)"
+          data-testid="header-lang-trigger"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </svg>
+          <span>{{ language.language() === 'en' ? 'EN' : 'PT' }}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="chevron-icon"
+            [class.chevron-icon--open]="languageMenuOpen()"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        @if (languageMenuOpen()) {
+          <div class="dropdown-menu dropdown-menu--lang" role="menu">
+            <button
+              type="button"
+              class="dropdown-item"
+              [class.dropdown-item--active]="language.language() === 'pt-BR'"
+              role="menuitem"
+              (click)="choose('pt-BR'); closeAllMenus()"
+              data-testid="lang-option-pt"
+            >
+              <span class="dropdown-item__label">Português (Brasil)</span>
+              @if (language.language() === 'pt-BR') {
+                <span class="check-icon" aria-hidden="true">✓</span>
+              }
+            </button>
+            <button
+              type="button"
+              class="dropdown-item"
+              [class.dropdown-item--active]="language.language() === 'en'"
+              role="menuitem"
+              (click)="choose('en'); closeAllMenus()"
+              data-testid="lang-option-en"
+            >
+              <span class="dropdown-item__label">English</span>
+              @if (language.language() === 'en') {
+                <span class="check-icon" aria-hidden="true">✓</span>
+              }
+            </button>
+          </div>
+        }
+
+        <label class="sr-only">
+          {{ copy().languageLabel }}
+          <select
+            #locale
+            class="sr-only-select"
+            [value]="language.language()"
+            (change)="choose(locale.value)"
+            data-testid="language-select"
+            aria-label="Selecionar idioma / Select language"
+          >
+            <option value="pt-BR">Português (Brasil)</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="project-detail-main" [attr.lang]="language.language()">
   @if (loading()) {
-    <p role="status">{{ ui().loadingProject }}</p>
+    <div class="state-container state-container--loading">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p role="status">{{ ui().loadingProject }}</p>
+    </div>
   } @else if (error()) {
-    <h1>{{ ui().errorLoadingProject }}</h1>
-    <p>{{ ui().refreshToTryAgain }}</p>
+    <div class="state-container state-container--error">
+      <h1>{{ ui().errorLoadingProject }}</h1>
+      <p>{{ ui().refreshToTryAgain }}</p>
+    </div>
   } @else if (project(); as p) {
-    <header>
-      <p class="eyebrow">
-        {{
-          p.type === 'personal' ? copy().personalProjectsTitle : copy().professionalProjectsTitle
-        }}
-      </p>
-      <h1
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="name"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.name }}
-      </h1>
-      <p
-        class="intro"
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="description"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.description }}
-      </p>
-    </header>
-    <section>
-      <h2>{{ copy().projectContextLabel }}</h2>
-      <p
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="problemContext"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.problemContext }}
-      </p>
-    </section>
-    @if (p.solution) {
-      <section>
-        <h2>{{ ui().solution }}</h2>
-        <p
+    <div class="project-detail-container">
+      <header class="project-hero">
+        <span class="project-type-badge">
+          {{
+            p.type === 'personal' ? copy().personalProjectsTitle : copy().professionalProjectsTitle
+          }}
+        </span>
+        <h1
+          class="project-title"
           [attr.data-editorial-entity]="p.id"
-          data-editorial-field="solution"
+          data-editorial-field="name"
           [attr.data-editorial-locale]="language.language()"
         >
-          {{ p.solution }}
+          {{ p.name }}
+        </h1>
+        <p
+          class="project-intro"
+          [attr.data-editorial-entity]="p.id"
+          data-editorial-field="description"
+          [attr.data-editorial-locale]="language.language()"
+        >
+          {{ p.description }}
         </p>
-      </section>
-    }
-    <section>
-      <h2>{{ copy().projectRoleLabel }}</h2>
-      <p
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="role"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.role }}
-      </p>
-    </section>
-    <section>
-      <h2>{{ copy().projectTechnologiesLabel }}</h2>
-      <app-project-technologies [technologies]="p.technologies" />
-    </section>
-    @for (list of lists(); track list.title) {
-      <section>
-        <h2>{{ list.title }}</h2>
-        <ul>
-          @for (value of list.values; track $index) {
-            <li
-              [attr.data-editorial-entity]="p.id + '-' + list.field + '-' + ($index + 1)"
-              data-editorial-field="text"
+      </header>
+
+      <div class="project-content-grid">
+        <!-- Context Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">{{ copy().projectContextLabel }}</h2>
+          <p
+            class="card-text"
+            [attr.data-editorial-entity]="p.id"
+            data-editorial-field="problemContext"
+            [attr.data-editorial-locale]="language.language()"
+          >
+            {{ p.problemContext }}
+          </p>
+        </section>
+
+        <!-- Solution Card (if exists) -->
+        @if (p.solution) {
+          <section class="detail-card">
+            <h2 class="card-heading">{{ ui().solution }}</h2>
+            <p
+              class="card-text"
+              [attr.data-editorial-entity]="p.id"
+              data-editorial-field="solution"
               [attr.data-editorial-locale]="language.language()"
             >
-              {{ value }}
-            </li>
-          }
-        </ul>
-      </section>
-    }
-    @if (p.images.length) {
-      <section>
-        <h2>{{ en() ? 'Project images' : 'Imagens do projeto' }}</h2>
-        <div class="gallery">
-          @for (image of p.images; track image.id) {
-            <figure>
-              @if (!failedImages().includes(image.id)) {
-                <a [href]="image.publicUrl" target="_blank" rel="noopener noreferrer">
-                  <img
-                    [src]="image.publicUrl"
-                    [alt]="p.name + ' — ' + image.originalName"
-                    loading="lazy"
-                    (error)="imageFailed(image.id)"
-                /></a>
-              } @else {
-                <p>{{ en() ? 'Image unavailable' : 'Imagem indisponível' }}</p>
+              {{ p.solution }}
+            </p>
+          </section>
+        }
+
+        <!-- Role Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">{{ copy().projectRoleLabel }}</h2>
+          <p
+            class="card-text"
+            [attr.data-editorial-entity]="p.id"
+            data-editorial-field="role"
+            [attr.data-editorial-locale]="language.language()"
+          >
+            {{ p.role }}
+          </p>
+        </section>
+
+        <!-- Technologies Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">{{ copy().projectTechnologiesLabel }}</h2>
+          <app-project-technologies [technologies]="p.technologies" />
+        </section>
+
+        <!-- Technical Decisions, Results, Learnings Cards -->
+        @for (list of lists(); track list.title) {
+          <section class="detail-card">
+            <h2 class="card-heading">{{ list.title }}</h2>
+            <ul class="card-list">
+              @for (value of list.values; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-' + list.field + '-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ value }}
+                </li>
               }
-            </figure>
-          }
-        </div>
-      </section>
-    }
-    @if (p.links.length) {
-      <section>
-        <h2>{{ copy().projectLinksLabel }}</h2>
-        <ul>
-          @for (link of p.links; track $index) {
-            <li>
-              <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }} ↗</a>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+            </ul>
+          </section>
+        }
+
+        <!-- Images Gallery Card -->
+        @if (p.images.length) {
+          <section class="detail-card detail-card--full">
+            <h2 class="card-heading">{{ en() ? 'Project images' : 'Imagens do projeto' }}</h2>
+            <div class="gallery">
+              @for (image of p.images; track image.id) {
+                <figure class="gallery-figure">
+                  @if (!failedImages().includes(image.id)) {
+                    <a [href]="image.publicUrl" target="_blank" rel="noopener noreferrer" class="gallery-link">
+                      <img
+                        [src]="image.publicUrl"
+                        [alt]="p.name + ' — ' + image.originalName"
+                        loading="lazy"
+                        (error)="imageFailed(image.id)"
+                        class="gallery-img"
+                      />
+                    </a>
+                  } @else {
+                    <div class="image-placeholder">
+                      <p>{{ en() ? 'Image unavailable' : 'Imagem indisponível' }}</p>
+                    </div>
+                  }
+                </figure>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- Links Card -->
+        @if (p.links.length) {
+          <section class="detail-card detail-card--full">
+            <h2 class="card-heading">{{ copy().projectLinksLabel }}</h2>
+            <ul class="project-links-list">
+              @for (link of p.links; track $index) {
+                <li>
+                  <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="project-link-btn">
+                    <span>{{ link.label }}</span>
+                    <span class="external-icon" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+    </div>
   } @else {
-    <h1>{{ en() ? 'Project not found' : 'Projeto não encontrado' }}</h1>
+    <div class="state-container state-container--not-found">
+      <h1>{{ en() ? 'Project not found' : 'Projeto não encontrado' }}</h1>
+    </div>
   }
 </main>
+
+<app-site-footer
+  [brandMonogram]="brandMonogram()"
+  [authorName]="authorName()"
+  [locale]="language.language()"
+/>

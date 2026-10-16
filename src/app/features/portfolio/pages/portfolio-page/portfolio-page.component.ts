@@ -1,6 +1,7 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { getUiLabels } from '../../services/portfolio-ui-labels';
 import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
+import { SiteFooterComponent } from '../../../../shared/components/site-footer/site-footer.component';
 import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
 import { supabaseRuntimeConfig } from '../../../../core/config/supabase-runtime-config';
 import { technologyIcon } from '../../services/technology-icons';
@@ -127,7 +128,7 @@ export function extractBrandInitials(name: string | undefined | null, defaultIni
 
 @Component({
   selector: 'app-portfolio-page',
-  imports: [NgTemplateOutlet, ContactPanelComponent, ProjectCardComponent],
+  imports: [NgTemplateOutlet, ContactPanelComponent, ProjectCardComponent, SiteFooterComponent],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.css',
 })
@@ -154,6 +155,9 @@ export class PortfolioPageComponent {
     ...PORTFOLIO_SKILL_CATEGORIES,
   ]);
   protected readonly contactLinks = signal<PortfolioContactLink[]>([...PORTFOLIO_CONTACT_LINKS]);
+  protected readonly heroContactLinks = computed(() =>
+    this.contactLinks().filter((link) => link.symbol !== 'email'),
+  );
   protected readonly contactDestinations = computed<ContactPanelDestinations>(() => {
     const links = this.contactLinks();
     const phone = links.find((l) => l.symbol === 'phone');
@@ -279,7 +283,13 @@ export class PortfolioPageComponent {
     return this.copy().heroRole?.trim() || (this.language.language() === 'en' ? 'Software Engineer' : 'Engenheiro de Software');
   });
   protected readonly heroAvailability = computed(() => {
-    return this.copy().heroAvailability?.trim() || (this.language.language() === 'en' ? 'Open to new opportunities · Remote' : 'Disponível para novos projetos · Remoto');
+    const raw = this.copy().heroAvailability?.trim();
+    if (raw) {
+      return raw.replace(/\s*·\s*(Remote|Remoto)\b/gi, '').trim();
+    }
+    return this.language.language() === 'en'
+      ? 'Open to new opportunities'
+      : 'Disponível para novos projetos';
   });
   protected readonly cvMenuOpen = signal(false);
   protected readonly languageMenuOpen = signal(false);

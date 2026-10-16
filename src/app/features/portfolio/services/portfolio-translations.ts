@@ -7,7 +7,7 @@ export const ENGLISH_COPY: PortfolioCopy = {
   name: 'Software Engineer',
   heroName: 'Software Engineer',
   heroRole: 'Software Engineer',
-  heroAvailability: 'Open to new opportunities · Remote',
+  heroAvailability: 'Open to new opportunities',
   eyebrow: 'Professional portfolio',
   presentationTitle: 'Presentation',
   intro:

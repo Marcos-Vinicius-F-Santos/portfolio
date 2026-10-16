@@ -95,6 +95,24 @@ describe('ProjectDetail routes', () => {
       'https://example.com/second.png',
     ]);
     expect(element.querySelector('nav a')?.getAttribute('href')).toBe('/#projetos');
+    expect(element.querySelector('.site-header')).not.toBeNull();
+    expect(element.querySelector('.brand-logo')?.getAttribute('href')).toBe('/#apresentacao');
+    expect(element.querySelector('[data-testid="site-footer"]')).not.toBeNull();
+    expect(element.querySelector('[data-testid="site-footer"]')?.textContent).toContain(
+      'Todos os direitos reservados',
+    );
+    const externalLink = element.querySelector('.project-link-btn');
+    expect(externalLink?.getAttribute('href')).toBe('https://example.com');
+    expect(externalLink?.getAttribute('target')).toBe('_blank');
+    expect(externalLink?.getAttribute('rel')).toBe('noopener noreferrer');
+
+    const langTrigger = element.querySelector<HTMLButtonElement>('[data-testid="header-lang-trigger"]')!;
+    expect(langTrigger).not.toBeNull();
+    expect(element.querySelector('.dropdown-menu--lang')).toBeNull();
+    langTrigger.click();
+    harness.detectChanges();
+    expect(element.querySelector('.dropdown-menu--lang')).not.toBeNull();
+
     const select = element.querySelector('select')!;
     select.value = 'en';
     select.dispatchEvent(new Event('change'));
@@ -102,6 +120,9 @@ describe('ProjectDetail routes', () => {
     harness.detectChanges();
     expect(element.textContent).toContain('English Demo');
     expect(element.textContent).toContain('Back to projects');
+    expect(element.querySelector('[data-testid="site-footer"]')?.textContent).toContain(
+      'All Rights Reserved',
+    );
   });
 
   it('keeps the detail gallery accessible when an image fails', async () => {

@@ -232,7 +232,7 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   name: 'Desenvolvedor de Software',
   heroName: 'Desenvolvedor de Software',
   heroRole: 'Engenheiro de Software',
-  heroAvailability: 'Disponível para novos projetos · Remoto',
+  heroAvailability: 'Disponível para novos projetos',
   eyebrow: 'Portfólio profissional',
   presentationTitle: 'Apresentação',
   intro:

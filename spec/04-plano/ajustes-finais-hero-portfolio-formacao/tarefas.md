@@ -20,11 +20,17 @@ Status: Em Planejamento / Execução
   - Remover `educationTitle` / `formacao-academica` de `navigationItems()`.
 - [x] **T-006:** Atualizar `portfolio-page.component.html`:
   - Remover o bloco `@else if (item.targetId === 'formacao-academica')` da iteração de seções verticais.
+- [x] **T-010:** Remover o parágrafo `.portfolio-subtitle` de `portfolio-page.component.html` e remover a linha divisória horizontal (`border-top: 1px solid var(--line)`) de `section` em `portfolio-page.component.css`.
+- [x] **T-011:** Padronizar espaçamentos verticais das seções e topo em `portfolio-page.component.css` utilizando flexbox/gap uniforme no container `.sections`, eliminando `min-height` desnecessário e zerando `margin-top` redundante em `section h2`.
+- [x] **T-012:** Ocultar o botão com `symbol === 'email'` de `.compact-contact-links` no Hero (`heroContactLinks`), mantendo-o visível na seção `#contato`.
+- [x] **T-013:** Remover o sufixo ` · Remote` / ` · Remoto` de `heroAvailability` em `portfolio-content.ts`, `portfolio-translations.ts` e `portfolio-page.component.ts`.
+- [x] **T-014:** Adicionar `target="_blank"` e `rel="noopener noreferrer"` nos links `.compact-contact-link` do Hero e nos links de download de currículo.
 
 ### Fase 3 — Testes, Validação e Convergência
 - [x] **T-007:** Atualizar `portfolio-page.component.spec.ts` e serviços relacionados:
   - Ajustar asserções de contagem de links de navegação (de 6 para 5 ou 6 com portfolio ativo).
-  - Verificar que o Hero H1 contém `"João Vitor"`.
-  - Verificar que `#portfolio` é renderizado e `#formacao-academica` não é renderizado.
+  - Verificar que o Hero H1 contém o nome esperado.
+  - Verificar que `#portfolio` é renderizado sem `.portfolio-subtitle` e `#formacao-academica` não é renderizado.
 - [x] **T-008:** Executar a suíte de testes unitários (`npm test`) e garantir 100% de sucesso.
 - [x] **T-009:** Executar o build de produção (`npm run build`).
+

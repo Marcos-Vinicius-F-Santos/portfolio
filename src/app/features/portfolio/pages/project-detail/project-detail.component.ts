@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, HostListener, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
@@ -11,11 +11,21 @@ import {
 import { selectPortfolioCopy } from '../../services/portfolio-content';
 import { TRANSLATION_SOURCE } from '../../services/portfolio-translations';
 import { ProjectTechnologiesComponent } from '../../../../shared/components/project-technologies/project-technologies.component';
+import { SiteFooterComponent } from '../../../../shared/components/site-footer/site-footer.component';
 import { getUiLabels } from '../../services/portfolio-ui-labels';
+import { extractBrandInitials } from '../portfolio-page/portfolio-page.component';
+
+const GENERIC_TITLES = new Set([
+  'desenvolvedor de software',
+  'software engineer',
+  'software developer',
+  'engenheiro de software',
+  'engenharia de software',
+]);
 
 @Component({
   selector: 'app-project-detail',
-  imports: [ProjectTechnologiesComponent],
+  imports: [ProjectTechnologiesComponent, SiteFooterComponent],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.css',
 })
@@ -29,6 +39,38 @@ export class ProjectDetailComponent {
     selectPortfolioCopy(this.language.language(), this.source),
   );
   protected readonly ui = computed(() => getUiLabels(this.language.language()));
+  protected readonly brandMonogram = computed(() => {
+    const config =
+      typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
+    const defaultInitials = config?.brandInitials?.trim() || 'PF';
+    return extractBrandInitials(this.copy().name, defaultInitials);
+  });
+  protected readonly authorName = computed(() => {
+    const config =
+      typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
+    if (config?.authorName?.trim()) return config.authorName.trim();
+    const copyHeroName = this.copy().heroName?.trim();
+    if (copyHeroName && !GENERIC_TITLES.has(copyHeroName.toLowerCase())) {
+      return copyHeroName;
+    }
+    const copyName = this.copy().name?.trim();
+    if (copyName && !GENERIC_TITLES.has(copyName.toLowerCase())) {
+      return copyName;
+    }
+    return 'Desenvolvedor de Software';
+  });
+  protected readonly languageMenuOpen = signal(false);
+  protected toggleLanguageMenu(event: Event): void {
+    event.stopPropagation();
+    this.languageMenuOpen.update((open) => !open);
+  }
+  protected closeAllMenus(): void {
+    this.languageMenuOpen.set(false);
+  }
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.closeAllMenus();
+  }
   protected readonly project = signal<PortfolioProject | null>(null);
   protected readonly loading = signal(true);
   protected readonly error = signal(false);

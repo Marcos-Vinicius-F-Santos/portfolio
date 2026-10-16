@@ -17,6 +17,8 @@ export interface UiLabels {
   loadingProject: string;
   errorLoadingProject: string;
   refreshToTryAgain: string;
+  allRightsReserved: string;
+  designedAndEngineeredBy: string;
 }
 
 export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
@@ -37,6 +39,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     loadingProject: 'Carregando projeto…',
     errorLoadingProject: 'Não foi possível carregar o projeto',
     refreshToTryAgain: 'Atualize a página para tentar novamente.',
+    allRightsReserved: 'Todos os direitos reservados.',
+    designedAndEngineeredBy: 'Projetado e desenvolvido por',
   },
   en: {
     cvButton: 'Resume',
@@ -55,6 +59,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     loadingProject: 'Loading project…',
     errorLoadingProject: 'Unable to load project',
     refreshToTryAgain: 'Please refresh the page to try again.',
+    allRightsReserved: 'All Rights Reserved.',
+    designedAndEngineeredBy: 'Designed & engineered by',
   },
 };
 

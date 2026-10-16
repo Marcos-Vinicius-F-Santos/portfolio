@@ -49,15 +49,45 @@ Onde vive no código:
 ### FR-004 — Injeção de Runtime Config
 - **GIVEN** o script de geração de runtime `scripts/generate-runtime-config.mjs`
 - **WHEN** executado durante o build ou inicialização
-- **THEN** deve injetar `authorName: process.env.PORTFOLIO_AUTHOR_NAME ?? 'João Vitor'` no objeto `globalThis.__PORTFOLIO_SUPABASE_CONFIG__`.
+- **THEN** deve injetar `authorName: process.env.PORTFOLIO_AUTHOR_NAME ?? ''` no objeto `globalThis.__PORTFOLIO_SUPABASE_CONFIG__`.
+
+### FR-005 — Remoção de subtítulo redundante na seção Portfólio e das linhas divisórias entre seções
+- **GIVEN** a página inicial pública do portfólio
+- **WHEN** as seções principais (`.sections > section`) e a seção `#portfolio` forem renderizadas
+- **THEN** o parágrafo de subtítulo redundante `.portfolio-subtitle` (`portfolioSubtitle`) não deve ser renderizado na seção `#portfolio`.
+- **AND** as linhas horizontais divisórias (`border-top: 1px solid var(--line)`) no topo dos elementos `<section>` não devem ser aplicadas.
+
+### FR-006 — Padronização de Espaçamento entre as Seções e Topo
+- **GIVEN** a página inicial pública do portfólio
+- **WHEN** as seções verticais (`.sections > section`) forem renderizadas em qualquer viewport
+- **THEN** o espaçamento entre a faixa de apresentação (Hero) e o título da primeira seção deve ser equilibrado e consistente (`padding-top: clamp(2rem, 4vw, 3.5rem)` no container `.sections`, zerando acúmulo de margens no topo).
+- **AND** o espaçamento vertical entre todas as seções consecutivas (`#sobre-mim`, `#stack-tecnica`, `#portfolio`, `#contato`) deve ser estritamente padronizado e uniforme via `gap` no container `.sections` e zeramento de `margin-top` nos títulos `section h2` e de `min-height` artificial.
+
+### FR-007 — Exclusão do botão de e-mail direto nos links compactos do Hero
+- **GIVEN** a seção de apresentação (Hero) no topo da página pública
+- **WHEN** os links de contato compactos (`compact-contact-links`) forem renderizados
+- **THEN** o link de símbolo `email` não deve ser renderizado no Hero (mantendo apenas redes como LinkedIn, GitHub e telefone).
+- **AND** a seção `#contato` no rodapé da página deve continuar exibindo todos os canais de contato normalmente, incluindo o pill de e-mail e o formulário de envio direto.
+
+### FR-008 — Ajuste de disponibilidade no Hero sem sufixo de trabalho remoto
+- **GIVEN** o badge de status de disponibilidade no Hero (`hero-status`)
+- **WHEN** for renderizado em PT-BR ou EN
+- **THEN** deve exibir apenas `"Disponível para novos projetos"` (PT-BR) ou `"Open to new opportunities"` (EN), omitindo o sufixo ` · Remoto` / ` · Remote`.
+
+### FR-009 — Abertura de links externos de contato do Hero em nova aba
+- **GIVEN** os links compactos de contato na seção Hero (`.compact-contact-link`)
+- **WHEN** renderizados no DOM
+- **THEN** devem possuir `target="_blank"` e `rel="noopener noreferrer"`, abrindo o perfil externo ou canal em uma nova aba do navegador sem descarregar a página do portfólio.
 
 ---
 
 ## 3. Critérios de Aceite (DoD)
 
-1. [ ] No topo da página pública, o nome visível é `"João Vitor"` e o subtítulo é `"Engenheiro de Software"`.
-2. [ ] Não há seção `#formacao-academica` no DOM da página pública nem item de menu correspondente na navegação.
-3. [ ] A seção `#portfolio` é exibida com os cards de *Russian Mastery* e *Pipeline de Visão Computacional para Boxe*, com seus badges de tecnologia e link para o GitHub.
-4. [ ] O botão "Ver projetos" no Hero está visível e rola suavemente até `#portfolio`.
-5. [ ] 100% dos testes unitários passando (`npm test`).
-6. [ ] Build de produção (`npm run build`) concluído com sucesso.
+1. [x] No topo da página pública, o nome do autor configurado e o subtítulo são exibidos corretamente.
+2. [x] Não há seção `#formacao-academica` no DOM da página pública nem item de menu correspondente na navegação.
+3. [x] A seção `#portfolio` é exibida com os cards de projetos, filtros de categoria e links funcionais.
+4. [x] O botão "Ver projetos" no Hero está visível e rola suavemente até `#portfolio`.
+5. [x] A seção `#portfolio` não exibe o parágrafo `.portfolio-subtitle` e as seções `.sections > section` não possuem linha divisória superior (`border-top`).
+6. [x] 100% dos testes unitários passando (`npm test`).
+7. [x] Build de produção (`npm run build`) concluído com sucesso.
+
