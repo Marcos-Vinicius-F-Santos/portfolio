@@ -22,7 +22,7 @@ Onde vive no código:
 
 2. **Variáveis de Ambiente na Vercel:**
    - A requisição pública ao `https://joaovitordf-portfolio.vercel.app/runtime-config.js` revelou que as variáveis `PORTFOLIO_AUTHOR_NAME`, `PORTFOLIO_BRAND_INITIALS` e `PORTFOLIO_PROFILE_IMAGE_URL` estão vazias `""` no ambiente da Vercel.
-   - Para que o monógrama (`JD.dev`), o nome e a foto de perfil estejam disponíveis imediatamente em runtime, essas variáveis devem ser preenchidas no painel da Vercel.
+   - Para que o monógrama (`JV.dev`), o nome e a foto de perfil estejam disponíveis imediatamente em runtime, essas variáveis devem ser preenchidas no painel da Vercel.
 
 3. **Foto de Perfil:**
    - Para a foto de perfil ser servida de forma persistente e pública em produção (sem depender de arquivos ignorados pelo Git), ela deve ser carregada no bucket `editorial-profile-images` do Supabase Storage e referenciada pelo snapshot.
@@ -45,7 +45,7 @@ Onde vive no código:
 - **GIVEN** o carregamento do snapshot válido publicado ou a injeção via runtime config
 - **WHEN** a seção de apresentação (Hero) for renderizada
 - **THEN** o título principal (`.hero-title`) DEVE exibir `"João Vitor Dias Fernandes"`
-- **AND** o monograma do header DEVE exibir `"JD.dev"` quando configurado ou derivado de João Vitor.
+- **AND** o monograma do header DEVE exibir `"JV.dev"` quando configurado ou derivado de João Vitor.
 
 ### FR-003 — Redação Fluida e Profissional baseada no Currículo Real
 - **GIVEN** as informações acadêmicas e profissionais do currículo de João Vitor
@@ -70,7 +70,7 @@ Onde vive no código:
 - **WHEN** o usuário configurar as variáveis no painel da Vercel
 - **THEN** devem ser fornecidas as instruções exatas das chaves a preencher:
   - `PORTFOLIO_AUTHOR_NAME="João Vitor Dias Fernandes"`
-  - `PORTFOLIO_BRAND_INITIALS="JD"`
+  - `PORTFOLIO_BRAND_INITIALS="JV"`
   - `PORTFOLIO_PROFILE_IMAGE_URL="https://efxcpncyzqtfaewdbaar.supabase.co/storage/v1/object/public/editorial-profile-images/profile.jpg"`
 
 ---
