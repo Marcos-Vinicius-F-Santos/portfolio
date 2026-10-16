@@ -29,6 +29,7 @@ Escopo: Ajustes de layout no Hero, padronização de espaçamentos entre seçõe
   - Exibe o ano corrente dinâmico (`new Date().getFullYear()`).
   - Exibe os direitos autorais e créditos traduzidos (`Todos os direitos reservados.` / `All Rights Reserved.` e `Projetado e desenvolvido por [Nome].` / `Designed & engineered by [Nome].`).
 - **Alinhamento e Estilo:**
+  - Altura (`height: 4.25rem`) perfeitamente alinhada com a altura do cabeçalho superior (`.site-header`), garantindo proporção e consistência visual.
   - Alinhamento centralizado das linhas de texto (`align-items: center` e `text-align: center`), garantindo perfeita harmonia entre as duas frases, sem recuos indesejados.
   - Fundo escuro com backdrop blur e borda superior sutil, idêntico à referência *Josias Broch*.
 - **Integração:**
@@ -65,3 +66,4 @@ Escopo: Ajustes de layout no Hero, padronização de espaçamentos entre seçõe
 
 - **Testes Unitários:** 183 testes passando (`npm test -- --watch=false`), incluindo novas asserções para o rodapé moderno, topbar de detalhes, links externos e alternância de idioma.
 - **Compilação de Produção:** `npm run build` gerou os bundles sem nenhum aviso ou erro de compilação.
+
