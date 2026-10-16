@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
 import { PortfolioContentService } from './portfolio-content.service';
 import { PublishedSnapshotService } from './published-snapshot.service';
+import { snapshotToProfileIdentity } from './editorial-snapshot-adapter';
 import type { EditorialSnapshotEntity, EditorialSnapshotV1 } from './editorial-snapshot.models';
 import type { PortfolioCopy } from './portfolio-content';
 import type {
@@ -39,6 +40,15 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
       }
     }
     return copy;
+  });
+  override readonly profileIdentity = computed(() => {
+    const snapshot = this.published.snapshot();
+    if (!snapshot) return null;
+    return snapshotToProfileIdentity(
+      snapshot,
+      (bucket, path) =>
+        this.snapshotClient?.storage.from(bucket).getPublicUrl(path).data.publicUrl ?? path,
+    );
   });
   override readonly lastError = this.snapshotErrorState.asReadonly();
   override readonly isAvailable = computed(() => this.snapshotClient !== null && this.published.snapshot() !== null);
