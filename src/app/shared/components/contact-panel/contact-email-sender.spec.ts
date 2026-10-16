@@ -7,7 +7,7 @@ import {
 describe('contact-email-sender', () => {
   const validParams = {
     accessKey: 'test-access-key-123',
-    name: 'João Vitor',
+    name: 'Contato Teste',
     email: 'visitante@exemplo.com',
     message: 'Olá, gostei do seu portfólio!',
     subject: 'Proposta de Projeto',
@@ -52,7 +52,7 @@ describe('contact-email-sender', () => {
 
     const body = JSON.parse(calledInit.body);
     expect(body.access_key).toBe('test-access-key-123');
-    expect(body.name).toBe('João Vitor');
+    expect(body.name).toBe('Contato Teste');
     expect(body.email).toBe('visitante@exemplo.com');
     expect(body.message).toBe('Olá, gostei do seu portfólio!');
     expect(body.subject).toBe('Proposta de Projeto');

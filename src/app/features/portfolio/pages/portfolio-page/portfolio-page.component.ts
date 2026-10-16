@@ -597,8 +597,8 @@ export class PortfolioPageComponent {
   protected async downloadCurriculum(locale: 'pt-BR' | 'en'): Promise<void> {
     this.closeAllMenus();
     const file = await this.content.getCurriculum(locale);
-    const fallbackUrl = locale === 'pt-BR' ? '/curriculum-pt.pdf' : '/curriculum-en.pdf';
-    const url = file?.publicUrl || fallbackUrl;
+    const url = file?.publicUrl?.trim();
+    if (!url) return;
     const filename =
       file?.originalName || (locale === 'pt-BR' ? 'Curriculo.pdf' : 'Curriculum.pdf');
     const a = this.document.createElement('a');

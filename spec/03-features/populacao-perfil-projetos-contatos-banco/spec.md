@@ -55,10 +55,10 @@ Onde vive no código:
 - **GIVEN** a página pública do portfólio conectada ao banco de dados com snapshot publicado
 - **WHEN** a seção `#contato` for renderizada
 - **THEN** a coluna esquerda deve exibir os 4 pills de plataformas com ícone, label e valor legível:
-  - LinkedIn: `linkedin.com/in/xjoaovitordf`
-  - GitHub: `github.com/joaovitordf`
-  - E-mail: `profissional.joaovitordf@gmail.com`
-  - Telefone: `+55 (37) 99942-9018`
+  - LinkedIn: `linkedin.com/in/exemplo`
+  - GitHub: `github.com/exemplo`
+  - E-mail: `contato@exemplo.com`
+  - Telefone: `+55 (11) 99999-0000`
 - **AND** ao clicar no pill, deve abrir a plataforma correspondente em nova aba (ou cliente de e-mail / discador).
 
 ### FR-004 — Exibição da Vitrine de Projetos `#portfolio`

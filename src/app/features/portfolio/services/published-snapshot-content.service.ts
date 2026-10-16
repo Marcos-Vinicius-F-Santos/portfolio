@@ -59,7 +59,7 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
   override async listExperiences(locale: PortfolioLocale): Promise<PortfolioExperience[]> {
     const snapshot = await this.loadSnapshot();
     if (!snapshot) return super.listExperiences(locale);
-    const experiences = this.entities(snapshot, 'experience').map(([id, entity]) => ({
+    return this.entities(snapshot, 'experience').map(([id, entity]) => ({
       id,
       startDate: stringValue(entity.data['startDate']),
       endDate: nullableString(entity.data['endDate']),
@@ -71,14 +71,12 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
       results: this.list(snapshot, locale, id, 'results'),
       editorialListIds: this.listIds(snapshot, id),
     }));
-    if (experiences.length === 0) return super.listExperiences(locale);
-    return experiences;
   }
 
   override async listProjects(locale: PortfolioLocale): Promise<PortfolioProject[]> {
     const snapshot = await this.loadSnapshot();
     if (!snapshot) return super.listProjects(locale);
-    const projects = this.entities(snapshot, 'project').map(([id, entity]) => {
+    return this.entities(snapshot, 'project').map(([id, entity]) => {
       const technologyIds = Array.isArray(entity.data['technologyIds'])
         ? entity.data['technologyIds'].map(String)
         : [];
@@ -102,8 +100,6 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
         editorialListIds: this.listIds(snapshot, id),
       } satisfies PortfolioProject;
     });
-    if (projects.length === 0) return super.listProjects(locale);
-    return projects;
   }
 
   override async getCurriculum(locale: PortfolioLocale): Promise<PortfolioFile | null> {

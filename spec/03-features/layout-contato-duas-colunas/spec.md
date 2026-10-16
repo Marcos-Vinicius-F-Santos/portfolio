@@ -37,10 +37,10 @@ O SISTEMA DEVE apresentar no cabeçalho introdutório (ocupando a largura total 
 ### FR-002 — Coluna da Esquerda: Cards Modernos de Plataformas
 QUANDO a seção `#contato` for renderizada  
 O SISTEMA DEVE exibir na coluna da esquerda os cards horizontais para cada canal de contato:
-1. **E-mail**: `profissional.joaovitordf@gmail.com`
-2. **WhatsApp / Telefone**: `+55 (37) 99942-9018`
-3. **LinkedIn**: `linkedin.com/in/xjoaovitordf`
-4. **GitHub**: `github.com/joaovitordf`
+1. **E-mail**: `contato@exemplo.com`
+2. **WhatsApp / Telefone**: `+55 (11) 99999-0000`
+3. **LinkedIn**: `linkedin.com/in/exemplo`
+4. **GitHub**: `github.com/exemplo`
 5. **Currículo (PDF)**: Botão de download do currículo no idioma ativo (`curriculum-pt.pdf` ou `curriculum-en.pdf`).
 
 Cada card deve conter:

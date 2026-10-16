@@ -106,10 +106,10 @@ label apresentada abaixo.
 
 Os destinos confirmados são:
 
-- LinkedIn: `https://www.linkedin.com/in/marcos-santos-b9b544214/`;
-- GitHub: `https://github.com/Marcos-Vinicius-F-Santos`;
-- e-mail: `marcossantosjdev@gmail.com`;
-- telefone: `+55 37 998292763`.
+- LinkedIn: `https://www.linkedin.com/in/exemplo/`;
+- GitHub: `https://github.com/exemplo`;
+- e-mail: `contato@exemplo.com`;
+- telefone: `+55 11 99999-0000`.
 
 ### BR-004 — Currículo por idioma
 
@@ -202,10 +202,7 @@ página deve permanecer aberta e utilizável.
       entre português brasileiro e inglês.
 - [x] Decisão confirmada por Marcos: serão usados símbolos oficiais públicos para os
       canais de contato, com a label correspondente abaixo de cada símbolo.
-- [x] Decisão confirmada por Marcos: os destinos são LinkedIn em
-      `https://www.linkedin.com/in/marcos-santos-b9b544214/`, GitHub em
-      `https://github.com/Marcos-Vinicius-F-Santos`, e-mail em
-      `marcossantosjdev@gmail.com` e telefone em `+55 37 998292763`.
+- [x] Decisão confirmada por Marcos: os destinos configurados no snapshot serão LinkedIn (`https://www.linkedin.com/in/exemplo/`), GitHub (`https://github.com/exemplo`), e-mail (`contato@exemplo.com`) e telefone (`+55 11 99999-0000`).
 - [x] Decisão confirmada por Marcos: os arquivos ou URLs dos currículos serão definidos
       posteriormente por upload e poderão ser atualizados quando necessário. Serão
       sempre exatamente dois arquivos PDF: um em português brasileiro e outro em inglês.

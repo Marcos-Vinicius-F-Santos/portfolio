@@ -674,18 +674,18 @@ describe('PortfolioPage', () => {
       expect(extractBrandInitials('Desenvolvedor de Software', 'GX')).toBe('GX');
     });
 
-    it('extracts initials dynamically from personal names', () => {
-      expect(extractBrandInitials('Ada Lovelace')).toBe('AL');
-      expect(extractBrandInitials('Ada Byron')).toBe('AB');
-      expect(extractBrandInitials('Grace Hopper')).toBe('GH');
-      expect(extractBrandInitials('Alan Turing')).toBe('AT');
+    it('extracts initials dynamically from multi-word labels', () => {
+      expect(extractBrandInitials('Usuario Principal')).toBe('UP');
+      expect(extractBrandInitials('Conta Teste')).toBe('CT');
+      expect(extractBrandInitials('Perfil Exemplo')).toBe('PE');
+      expect(extractBrandInitials('Autor Demonstracao')).toBe('AD');
     });
 
     it('skips Portuguese and English prepositions/stopwords', () => {
-      expect(extractBrandInitials('Lucas de Souza')).toBe('LS');
-      expect(extractBrandInitials('Ana da Silva')).toBe('AS');
-      expect(extractBrandInitials('Carlos do Carmo')).toBe('CC');
-      expect(extractBrandInitials('John of York')).toBe('JY');
+      expect(extractBrandInitials('Perfil de Exemplo')).toBe('PE');
+      expect(extractBrandInitials('Sistema da Plataforma')).toBe('SP');
+      expect(extractBrandInitials('Conta do Sistema')).toBe('CS');
+      expect(extractBrandInitials('Brand of System')).toBe('BS');
     });
   });
 

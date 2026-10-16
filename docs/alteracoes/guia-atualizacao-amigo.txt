@@ -193,18 +193,45 @@ Certifique-se de que o bucket 'curricula' existe no Supabase Storage:
    - Formacao academica atualizada para tabela limpa em 4 colunas com nivel academico (Graduacao / Pos).
    - Utilitario seguro createUuid() para compatibilidade ampla sem depender de crypto.randomUUID().
 
+
+[MELHORIA 11] Alinhamento Simetrico do Contato, Idempotencia SQL e Blindagem White-Label Raiz (15/10/2026)
+--------------------------------------------------------------------------------
+1. Alinhamento Simetrico das 2 Colunas na Secao #contato:
+   - O texto explicativo (contactExplanation) agora fica no cabecalho superior
+     (.contact-intro-header), ocupando toda a largura acima das duas colunas.
+   - A coluna da esquerda (cards de plataformas + curriculo) e a coluna da direita
+     (formulario app-contact-panel) tem exatamente a mesma altura no desktop,
+     comecando e terminando alinhadas na mesma linha horizontal.
+   - Removida a nota redundante de redirecionamento no rodape do formulario.
+2. Remocao de PDFs Pessoais Estaticos em public/ (White-Label Puro):
+   - Os arquivos public/curriculum-pt.pdf e public/curriculum-en.pdf (que continham
+     curriculo pessoal estatico versionado na pasta public/) foram removidos!
+   - O metodo downloadCurriculum() em portfolio-page.component.ts foi ajustado para
+     baixar exclusivamente a partir da URL publica vinda do Supabase Storage do autor,
+     evitando que um ambiente baixe o PDF estatico de outra pessoa por fallback.
+3. Gate White-Label Reforcado (scripts/check-white-label-references.mjs):
+   - Adicionada normalizacao de acentos Unicode (NFD) para pegar nomes acentuados.
+   - Varredura expandida para toda a pasta public/ (bloqueando PDFs estaticos em public/).
+   - Testes unitarios 100% neutros (sem nomes de pessoas reais ou historicas).
+   - Removidos 390 KB de arquivos legados obsoletos em spec/05-verificacao/historico/.
+   - Variaveis opcionais White-Label documentadas no .env.example.
+4. Idempotencia SQL (scripts/bundle-editorial-sql.mjs e supabase/setup_editorial.sql):
+   - Funcoes SQL geradas com CREATE OR REPLACE FUNCTION e constraints adiadas
+     (SET CONSTRAINTS ALL DEFERRED) para permitir re-execucao limpa sem conflitos.
+   - Corrigidos marcadores residuais de merge no angular.json.
+
 --------------------------------------------------------------------------------
 3. COMO DAR MERGE NO SEU REPOSITORIO
 --------------------------------------------------------------------------------
 Voce pode fazer o merge diretamente da branch:
-```bash
-git merge origin/master  # ou a branch correspondente
-npm install
-npm test
-npm run build
-```
-Como o codigo agora eh agnostico e busca tudo do Supabase, o seu site continuara
+  git merge origin/master
+  npm install
+  npm run check:white-label
+  npm test
+  npm run build
+
+Como o codigo agora eh 100% agnostico e busca tudo do Supabase, o seu site continuara
 exibindo perfeitamente todos os seus dados reais!
-Todos os 169 testes unitarios estao passando com 100% de sucesso e o build de producao
-permanece enxuto em 469.41 kB (bem abaixo do limite de 500 kB).
+Todos os 180 testes unitarios (35 arquivos) estao passando com 100% de sucesso e o
+gate npm run check:white-label garante zero vazamento de dados pessoais.
 ================================================================================

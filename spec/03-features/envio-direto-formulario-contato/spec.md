@@ -6,7 +6,7 @@ Onde vive no código: `src/app/shared/components/contact-panel/`, integrado na s
 
 ## 1. Objetivo
 
-Permitir que um visitante (recrutador, cliente ou colega) envie uma mensagem diretamente pelo formulário de contato do portfólio sem abrir clientes externos de desktop (como Outlook, que gerava travamentos e falhas de protocolo `mailto:`). A mensagem será entregue de forma transparente na caixa postal de João Vitor (`profissional.joaovitordf@gmail.com`) utilizando a API segura e gratuita da Web3Forms, mantendo feedback visual imediato de sucesso e preservando a ação de envio alternativo via WhatsApp.
+Permitir que um visitante (recrutador, cliente ou colega) envie uma mensagem diretamente pelo formulário de contato do portfólio sem abrir clientes externos de desktop (como Outlook, que gerava travamentos e falhas de protocolo `mailto:`). A mensagem será entregue de forma transparente na caixa postal configurada para a instância utilizando a API segura e gratuita da Web3Forms, mantendo feedback visual imediato de sucesso e preservando a ação de envio alternativo via WhatsApp.
 
 ## 2. Como funciona hoje vs. O que muda
 
