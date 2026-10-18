@@ -21,6 +21,8 @@ export interface UiLabels {
   designedAndEngineeredBy: string;
   publicProject: string;
   privateProject: string;
+  proprietaryCode: string;
+  openSourceCode: string;
 }
 
 export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
@@ -45,6 +47,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     designedAndEngineeredBy: 'Projetado e desenvolvido por',
     publicProject: 'Público',
     privateProject: 'Privado',
+    proprietaryCode: 'Código Proprietário',
+    openSourceCode: 'Código Aberto',
   },
   en: {
     cvButton: 'Resume',
@@ -67,6 +71,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     designedAndEngineeredBy: 'Designed & engineered by',
     publicProject: 'Public',
     privateProject: 'Private',
+    proprietaryCode: 'Proprietary Code',
+    openSourceCode: 'Open Source',
   },
 };
 

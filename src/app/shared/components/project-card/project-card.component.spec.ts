@@ -46,14 +46,29 @@ describe('ProjectCardComponent', () => {
     expect(element.querySelector('app-project-technologies')).toBeTruthy();
   });
 
-  it('renders SVG placeholder when project has no images', async () => {
-    const project = mockProject({ images: [] });
+  it('renders SVG padlock placeholder when private project has no images', async () => {
+    const project = mockProject({ visibility: 'private', images: [] });
     const { element } = await renderCard(project);
 
     expect(element.querySelector('[data-testid="project-cover"]')).toBeNull();
     const placeholder = element.querySelector('[data-testid="project-cover-placeholder"]');
     expect(placeholder).toBeTruthy();
-    expect(placeholder?.textContent).toContain('PE'); // Initials of "Projeto Exemplo"
+    expect(placeholder?.querySelector('[data-testid="placeholder-lock-icon"]')).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-label"]')?.textContent).toContain(
+      'Código Proprietário',
+    );
+  });
+
+  it('renders code placeholder when public project has no images', async () => {
+    const project = mockProject({ visibility: 'public', images: [] });
+    const { element } = await renderCard(project);
+
+    const placeholder = element.querySelector('[data-testid="project-cover-placeholder"]');
+    expect(placeholder).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-code-icon"]')).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-label"]')?.textContent).toContain(
+      'Código Aberto',
+    );
   });
 
   it('renders cover image when available, and falls back to placeholder on error', async () => {

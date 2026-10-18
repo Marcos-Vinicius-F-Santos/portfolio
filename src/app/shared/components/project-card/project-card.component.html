@@ -6,18 +6,6 @@
   [attr.data-editorial-value]="project().type"
   [attr.data-editorial-item-id]="project().id"
 >
-  <!-- Window Mockup Bar (3 dots inspired by Josias Broch) -->
-  <div class="project-card__window-bar" aria-hidden="true">
-    <div class="project-card__dots">
-      <span class="project-card__dot project-card__dot--red"></span>
-      <span class="project-card__dot project-card__dot--yellow"></span>
-      <span class="project-card__dot project-card__dot--green"></span>
-    </div>
-    <div class="project-card__window-title">
-      {{ project().name }}
-    </div>
-  </div>
-
   <!-- Cover Media (16:10 aspect ratio) -->
   <div class="project-card__cover-wrapper">
     <span
@@ -55,25 +43,54 @@
       />
     } @else {
       <!-- Clean SVG / CSS Placeholder -->
-      <div class="project-card__placeholder" data-testid="project-cover-placeholder">
+      <div
+        class="project-card__placeholder"
+        [class.project-card__placeholder--private]="projectVisibility() === 'private'"
+        [class.project-card__placeholder--public]="projectVisibility() === 'public'"
+        data-testid="project-cover-placeholder"
+      >
         <div class="project-card__placeholder-glow"></div>
         <div class="project-card__placeholder-content">
-          <svg
-            class="project-card__placeholder-icon"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <polyline points="16 18 22 12 16 6" />
-            <polyline points="8 6 2 12 8 18" />
-          </svg>
-          <span class="project-card__placeholder-monogram">{{ projectInitials() }}</span>
+          @if (projectVisibility() === 'private') {
+            <!-- Security Padlock for Private Projects -->
+            <svg
+              class="project-card__placeholder-icon project-card__placeholder-icon--lock"
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              data-testid="placeholder-lock-icon"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              <circle cx="12" cy="16.5" r="1.2" fill="currentColor" />
+            </svg>
+            <span class="project-card__placeholder-label" data-testid="placeholder-label">{{ ui().proprietaryCode }}</span>
+          } @else {
+            <!-- Code Brackets for Public Projects -->
+            <svg
+              class="project-card__placeholder-icon project-card__placeholder-icon--code"
+              width="34"
+              height="34"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              data-testid="placeholder-code-icon"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            <span class="project-card__placeholder-label" data-testid="placeholder-label">{{ ui().openSourceCode }}</span>
+          }
         </div>
       </div>
     }

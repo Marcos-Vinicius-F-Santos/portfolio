@@ -87,4 +87,38 @@ describe('AdminAuthenticationComponent', () => {
     expect(navigateByUrlSpy).toHaveBeenCalledWith('/', { skipLocationChange: true });
     expect(navigateSpy).toHaveBeenCalledWith(['/admin']);
   });
+
+  it('toggles password input visibility when clicking the eye button', async () => {
+    await TestBed.configureTestingModule({
+      imports: [AdminAuthenticationComponent],
+      providers: [
+        provideRouter([]),
+        {
+          provide: AdminAuthService,
+          useValue: { restoreAuthorizedSession: vi.fn().mockResolvedValue(false) },
+        },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(AdminAuthenticationComponent);
+    await fixture.whenStable();
+
+    const passwordInput = fixture.nativeElement.querySelector('input[name="password"]') as HTMLInputElement;
+    const toggleButton = fixture.nativeElement.querySelector('[data-testid="toggle-password-visibility"]') as HTMLButtonElement;
+
+    expect(passwordInput.type).toBe('password');
+    expect(toggleButton.getAttribute('aria-label')).toBe('Exibir senha');
+
+    toggleButton.click();
+    fixture.detectChanges();
+
+    expect(passwordInput.type).toBe('text');
+    expect(toggleButton.getAttribute('aria-label')).toBe('Ocultar senha');
+
+    toggleButton.click();
+    fixture.detectChanges();
+
+    expect(passwordInput.type).toBe('password');
+    expect(toggleButton.getAttribute('aria-label')).toBe('Exibir senha');
+  });
 });
