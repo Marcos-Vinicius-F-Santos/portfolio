@@ -37,7 +37,7 @@
   align-items: center;
   max-width: 110rem;
   margin: 0 auto;
-  height: 4.25rem;
+  height: 5rem;
   padding: 0 clamp(1.25rem, 6vw, 6rem);
   gap: 1rem;
 }
@@ -260,7 +260,7 @@
    ========================================================================== */
 .project-detail-main {
   flex: 1;
-  padding: calc(4.25rem + 3rem) clamp(1.25rem, 5vw, 4rem) 5rem;
+  padding: calc(5rem + 3rem) clamp(1.25rem, 5vw, 4rem) 5rem;
   max-width: 76rem;
   margin: 0 auto;
   width: 100%;
@@ -285,6 +285,15 @@
   padding-bottom: 2.25rem;
 }
 
+.project-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
 .project-type-badge {
   display: inline-flex;
   align-items: center;
@@ -298,6 +307,32 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.project-visibility-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  padding: 0.35rem 0.95rem;
+  border-radius: 9999px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.project-visibility-badge--public {
+  background: rgba(35, 101, 74, 0.1);
+  border: 1px solid rgba(35, 101, 74, 0.25);
+  color: var(--green);
+}
+
+.project-visibility-badge--private {
+  background: rgba(100, 72, 50, 0.08);
+  border: 1px solid rgba(100, 72, 50, 0.2);
+  color: var(--muted, #7c6858);
 }
 
 .project-title {

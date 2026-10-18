@@ -1,5 +1,6 @@
 export type PortfolioLocale = 'pt-BR' | 'en';
 export type PortfolioProjectType = 'professional' | 'personal';
+export type PortfolioProjectVisibility = 'public' | 'private';
 
 export interface PortfolioProjectLink {
   label: string;
@@ -34,6 +35,7 @@ export interface PortfolioProject {
   id: string;
   displayOrder: number;
   type: PortfolioProjectType;
+  visibility?: PortfolioProjectVisibility;
   locale: PortfolioLocale;
   name: string;
   description: string;

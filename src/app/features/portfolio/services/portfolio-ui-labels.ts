@@ -19,6 +19,8 @@ export interface UiLabels {
   refreshToTryAgain: string;
   allRightsReserved: string;
   designedAndEngineeredBy: string;
+  publicProject: string;
+  privateProject: string;
 }
 
 export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
@@ -41,6 +43,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     refreshToTryAgain: 'Atualize a página para tentar novamente.',
     allRightsReserved: 'Todos os direitos reservados.',
     designedAndEngineeredBy: 'Projetado e desenvolvido por',
+    publicProject: 'Público',
+    privateProject: 'Privado',
   },
   en: {
     cvButton: 'Resume',
@@ -61,6 +65,8 @@ export const PORTFOLIO_UI_LABELS: Record<PortfolioLocale, UiLabels> = {
     refreshToTryAgain: 'Please refresh the page to try again.',
     allRightsReserved: 'All Rights Reserved.',
     designedAndEngineeredBy: 'Designed & engineered by',
+    publicProject: 'Public',
+    privateProject: 'Private',
   },
 };
 

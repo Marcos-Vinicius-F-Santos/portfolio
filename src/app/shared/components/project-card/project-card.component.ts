@@ -31,6 +31,10 @@ export class ProjectCardComponent {
     return links[0]?.url || null;
   });
 
+  protected readonly projectVisibility = computed(() => {
+    return this.project().visibility ?? (this.externalUrl() ? 'public' : 'private');
+  });
+
   protected readonly detailsUrl = computed(() => {
     const base = this.editorialMode() ? '/admin/editor/projetos/' : '/projetos/';
     return base + this.project().id;

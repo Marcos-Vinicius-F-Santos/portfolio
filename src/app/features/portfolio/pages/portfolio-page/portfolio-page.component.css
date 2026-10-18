@@ -36,14 +36,14 @@
   align-items: center;
   max-width: 110rem;
   margin: 0 auto;
-  height: 4.25rem;
+  height: 5rem;
   padding: 0 clamp(1.25rem, 6vw, 6rem);
   gap: 1rem;
 }
 
 .page-header {
   min-height: min(44rem, 82vh);
-  margin-top: 4.25rem;
+  margin-top: 5rem;
   padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.25rem, 8vw, 8rem);
   background: #362319;
   color: var(--paper);
@@ -572,7 +572,7 @@
   background: rgba(18, 11, 7, 0.98);
   border-top: 1px solid rgba(200, 186, 168, 0.12);
   padding: 1rem 1.25rem 1.5rem;
-  max-height: calc(100vh - 4.25rem);
+  max-height: calc(100vh - 5rem);
   overflow-y: auto;
 }
 

@@ -93,6 +93,30 @@ describe('editorial snapshot v1 contract (T-003)', () => {
 
     expect(issueCodes(snapshot)).toContain('invalid_value');
   });
+
+  it('validates project visibility field', () => {
+    const snapshot = validSnapshot();
+    snapshot['entities']['proj-1'] = {
+      kind: 'project',
+      position: 0,
+      data: { type: 'professional', visibility: 'private', technologyIds: ['typescript'] },
+    };
+    snapshot['translations']['pt-BR']['proj-1'] = {
+      name: 'Projeto 1',
+      description: 'Desc',
+      problemContext: 'Context',
+    };
+    snapshot['translations']['en']['proj-1'] = {
+      name: 'Project 1',
+      description: 'Desc',
+      problemContext: 'Context',
+    };
+
+    expect(validateEditorialSnapshot(snapshot).valid).toBe(true);
+
+    snapshot['entities']['proj-1'].data.visibility = 'invalid-vis';
+    expect(issueCodes(snapshot)).toContain('invalid_value');
+  });
 });
 
 function issueCodes(snapshot: Record<string, any>): string[] {

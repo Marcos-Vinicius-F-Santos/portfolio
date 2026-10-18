@@ -161,6 +161,12 @@ const FALLBACK_SKILL_ICON_URLS: Readonly<Record<string, string>> = {
   Gradle: '/assets/skills/gradle.svg',
   Maven: '/assets/skills/maven.svg',
   'Spring Boot': '/assets/technologies/spring.svg',
+  RxJS: '/assets/skills/rxjs.svg',
+  Bootstrap: '/assets/skills/bootstrap.svg',
+  'Chart.js': '/assets/skills/chartjs.svg',
+  OpenLayers: '/assets/skills/openlayers.svg',
+  CUDA: '/assets/skills/cuda.svg',
+  OCR: '/assets/skills/ocr.svg',
 };
 
 export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [

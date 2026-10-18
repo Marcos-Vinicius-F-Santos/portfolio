@@ -14,6 +14,7 @@ import type {
   PortfolioProject,
   PortfolioProjectImage,
   PortfolioProjectLink,
+  PortfolioProjectVisibility,
   PortfolioSkillCategory,
 } from './portfolio-content.models';
 
@@ -90,10 +91,17 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
       const technologyIds = Array.isArray(entity.data['technologyIds'])
         ? entity.data['technologyIds'].map(String)
         : [];
+      const links = this.projectLinks(snapshot, locale, id);
+      const rawVisibility = entity.data['visibility'];
+      const visibility: PortfolioProjectVisibility =
+        rawVisibility === 'public' || rawVisibility === 'private'
+          ? rawVisibility
+          : (links.length > 0 ? 'public' : 'private');
       return {
         id,
         displayOrder: entity.position,
         type: entity.data['type'] === 'professional' ? 'professional' : 'personal',
+        visibility,
         locale,
         name: this.text(snapshot, locale, id, 'name'),
         description: this.text(snapshot, locale, id, 'description'),
@@ -105,7 +113,7 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
         technologies: technologyIds.map((technologyId) => snapshot.technologies[technologyId]?.label ?? technologyId),
         results: this.list(snapshot, locale, id, 'results'),
         learnings: this.list(snapshot, locale, id, 'learnings'),
-        links: this.projectLinks(snapshot, locale, id),
+        links,
         images: this.projectImages(snapshot, locale, id),
         editorialListIds: this.listIds(snapshot, id),
       } satisfies PortfolioProject;

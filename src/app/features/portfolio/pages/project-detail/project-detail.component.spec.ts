@@ -6,6 +6,7 @@ import { ProjectDetailComponent } from './project-detail.component';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import { PortfolioLanguageService, BROWSER_LANGUAGE } from '../../services/portfolio-language.service';
 import { PortfolioProject } from '../../services/portfolio-content.models';
+import { technologyIcon } from '../../services/technology-icons';
 
 const project: PortfolioProject = {
   id: 'demo',
@@ -157,5 +158,29 @@ describe('ProjectDetail routes', () => {
     await harness.fixture.whenStable();
     harness.detectChanges();
     expect(harness.routeNativeElement?.textContent).toContain('Não foi possível carregar');
+  });
+
+  it('renders visibility badge for public and private projects', async () => {
+    service.listProjects.mockResolvedValue([
+      { ...project, id: 'private-proj', visibility: 'private', links: [] },
+    ]);
+    const harness = await RouterTestingHarness.create('/projetos/private-proj');
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    const badge = harness.routeNativeElement?.querySelector(
+      '[data-testid="project-visibility-private"]',
+    );
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Privado');
+  });
+
+  it('resolves dedicated SVG icons for RxJS, Bootstrap, Chart.js, OpenLayers, CUDA, and OCR', () => {
+    expect(technologyIcon('RxJS')).toBe('/assets/skills/rxjs.svg');
+    expect(technologyIcon('Bootstrap')).toBe('/assets/skills/bootstrap.svg');
+    expect(technologyIcon('Chart.js')).toBe('/assets/skills/chartjs.svg');
+    expect(technologyIcon('OpenLayers')).toBe('/assets/skills/openlayers.svg');
+    expect(technologyIcon('CUDA')).toBe('/assets/skills/cuda.svg');
+    expect(technologyIcon('OCR')).toBe('/assets/skills/ocr.svg');
   });
 });

@@ -6,6 +6,8 @@ const RELATED_ICON_NAMES: Readonly<Record<string, string>> = {
   'docker compose': 'docker', minio: 'docker', 'react router': 'react', vite: 'javascript',
   'tailwind css': 'css', 'firebase authentication': 'javascript', 'cloud firestore': 'javascript',
   'firebase functions': 'javascript', vercel: 'node.js', 'java 21': 'java', 'react 18': 'react',
+  rxjs: 'typescript', bootstrap: 'css', 'chart.js': 'javascript', chartjs: 'javascript',
+  openlayers: 'javascript', 'hls.js': 'javascript', cuda: 'python', 'web scraping': 'python',
 };
 
 const DIRECT_ICON_URLS: Readonly<Record<string, string>> = {
@@ -38,6 +40,14 @@ const DIRECT_ICON_URLS: Readonly<Record<string, string>> = {
   gitkraken: '/assets/skills/gitkraken.svg',
   gradle: '/assets/skills/gradle.svg',
   maven: '/assets/skills/maven.svg',
+  rxjs: '/assets/skills/rxjs.svg',
+  bootstrap: '/assets/skills/bootstrap.svg',
+  'chart.js': '/assets/skills/chartjs.svg',
+  chartjs: '/assets/skills/chartjs.svg',
+  openlayers: '/assets/skills/openlayers.svg',
+  cuda: '/assets/skills/cuda.svg',
+  ocr: '/assets/skills/ocr.svg',
+  'optical character recognition': '/assets/skills/ocr.svg',
 };
 
 /** Shared icon catalog for skills and project technologies, including versioned names. */

@@ -109,5 +109,38 @@ describe('ProjectCardComponent', () => {
     const linkAdmin = adminEl.querySelector<HTMLAnchorElement>('.project-card__details-btn');
     expect(linkAdmin?.href).toContain('/admin/editor/projetos/proj-xyz');
   });
+
+  it('renders public visibility badge when project visibility is public', async () => {
+    const project = mockProject({ visibility: 'public' });
+    const { element } = await renderCard(project);
+
+    const badge = element.querySelector('[data-testid="project-visibility-public"]');
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Público');
+  });
+
+  it('renders private visibility badge when project visibility is private', async () => {
+    const project = mockProject({ visibility: 'private', links: [] });
+    const { element } = await renderCard(project);
+
+    const badge = element.querySelector('[data-testid="project-visibility-private"]');
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Privado');
+  });
+
+  it('renders English visibility badge when locale is en', async () => {
+    const project = mockProject({ visibility: 'private' });
+    const fixture = TestBed.createComponent(ProjectCardComponent);
+    fixture.componentRef.setInput('project', project);
+    fixture.componentRef.setInput('editorialMode', false);
+    fixture.componentRef.setInput('locale', 'en');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const badge = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-testid="project-visibility-private"]',
+    );
+    expect(badge?.textContent).toContain('Private');
+  });
 });
 
