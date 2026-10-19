@@ -40,5 +40,5 @@ Registro de alterações: [`docs/alteracoes/registro-2026-10-18-alinhamento-curr
 
 - [x] **T-005:** Atualizar e criar testes unitários cobrindo as alterações em `portfolio-content.spec.ts`, `portfolio-page.component.spec.ts`, `project-card.component.spec.ts` e `project-detail.component.spec.ts`.
 - [x] **T-006:** Executar gates de qualidade (`npm run check:white-label`, `npm test -- --watch=false`, `npm run build`).
-- [ ] **T-007:** Atualizar registro em `docs/alteracoes/` e aguardar aprovação final de João Vitor para commit/push.
+- [x] **T-007:** Atualizar registro em `docs/alteracoes/` e concluir commit/push após aprovação de João Vitor.
 
