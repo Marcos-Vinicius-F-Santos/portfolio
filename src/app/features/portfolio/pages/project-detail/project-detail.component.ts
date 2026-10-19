@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, effect, HostListener, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import { PortfolioLanguageService } from '../../services/portfolio-language.service';
@@ -33,11 +34,19 @@ export class ProjectDetailComponent {
   protected readonly language = inject(PortfolioLanguageService);
   private readonly content = inject(PortfolioContentService);
   private readonly document = inject(DOCUMENT);
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
+  private readonly router = inject(Router, { optional: true });
   private readonly params = toSignal(inject(ActivatedRoute).paramMap);
   private readonly source = inject(TRANSLATION_SOURCE);
-  protected readonly copy = computed(() =>
-    selectPortfolioCopy(this.language.language(), this.source),
-  );
+  protected readonly copy = computed(() => {
+    const localCopy = selectPortfolioCopy(this.language.language(), this.source);
+    const remoteCopy =
+      typeof (this.content as Partial<PortfolioContentService>).remoteCopy === 'function'
+        ? this.content.remoteCopy()
+        : {};
+    return Object.keys(remoteCopy).length === 0 ? localCopy : { ...localCopy, ...remoteCopy };
+  });
   protected readonly ui = computed(() => getUiLabels(this.language.language()));
   protected readonly brandMonogram = computed(() => {
     const config =
@@ -93,10 +102,26 @@ export class ProjectDetailComponent {
   });
   constructor() {
     this.language.initialize();
+    effect(() => {
+      const p = this.project();
+      const author = this.authorName();
+      if (p) {
+        const pageTitle = `${p.name} — ${author}`;
+        this.title.setTitle(pageTitle);
+        if (p.description) {
+          this.meta.updateTag({ name: 'description', content: p.description });
+          this.meta.updateTag({ property: 'og:title', content: pageTitle });
+          this.meta.updateTag({ property: 'og:description', content: p.description });
+        }
+      }
+    });
     effect((onCleanup) => {
       const id = this.params()?.get('id'),
         locale = this.language.language();
       this.document.documentElement.lang = locale;
+      if (typeof (this.content as Partial<PortfolioContentService>).loadCopy === 'function') {
+        void this.content.loadCopy(locale);
+      }
       let active = true;
       onCleanup(() => {
         active = false;
@@ -128,5 +153,20 @@ export class ProjectDetailComponent {
   }
   protected imageFailed(id: string): void {
     this.failedImages.update((ids) => [...ids, id]);
+  }
+  protected navigateToHomeSection(event: MouseEvent, fragment: string): void {
+    if (
+      !this.router ||
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+    event.preventDefault();
+    void this.router.navigate(['/'], { fragment });
   }
 }

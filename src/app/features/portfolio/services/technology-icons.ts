@@ -48,6 +48,8 @@ const DIRECT_ICON_URLS: Readonly<Record<string, string>> = {
   cuda: '/assets/skills/cuda.svg',
   ocr: '/assets/skills/ocr.svg',
   'optical character recognition': '/assets/skills/ocr.svg',
+  react: '/assets/skills/react.png',
+  'node.js': '/assets/skills/node-js.png',
 };
 
 /** Shared icon catalog for skills and project technologies, including versioned names. */
@@ -63,5 +65,6 @@ export function technologyIcon(name: string): string | undefined {
   );
   if (exact?.iconUrl) return exact.iconUrl;
   const related = RELATED_ICON_NAMES[normalized];
+  if (related && DIRECT_ICON_URLS[related]) return DIRECT_ICON_URLS[related];
   return related ? skills.find((skill) => skill.name.toLowerCase() === related)?.iconUrl : undefined;
 }

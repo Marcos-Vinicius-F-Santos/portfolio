@@ -102,16 +102,17 @@ describe('ProjectCardComponent', () => {
     expect(element.querySelector('[data-testid="project-cover-placeholder"]')).toBeTruthy();
   });
 
-  it('renders demo badge linking to external URL when link is present', async () => {
+  it('renders external link badge with actual link label when link is present', async () => {
     const project = mockProject({
-      links: [{ label: 'Demo', url: 'https://exemplo.com/demo' }],
+      links: [{ label: 'GitHub', url: 'https://exemplo.com/repo' }],
     });
     const { element } = await renderCard(project);
 
     const demoBadge = element.querySelector<HTMLAnchorElement>('[data-testid="project-demo-link"]');
     expect(demoBadge).toBeTruthy();
-    expect(demoBadge?.href).toBe('https://exemplo.com/demo');
+    expect(demoBadge?.href).toBe('https://exemplo.com/repo');
     expect(demoBadge?.target).toBe('_blank');
+    expect(demoBadge?.textContent).toContain('GitHub');
   });
 
   it('navigates to public details URL by default and admin editor URL in editorial mode', async () => {

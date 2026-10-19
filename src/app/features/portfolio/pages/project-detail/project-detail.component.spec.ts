@@ -115,11 +115,19 @@ describe('ProjectDetail routes', () => {
     expect(element.querySelector('.dropdown-menu--lang')).not.toBeNull();
 
     const select = element.querySelector('select')!;
+    expect(element.querySelector('[data-testid="project-type-badge"]')?.textContent).toContain(
+      'Projeto Pessoal',
+    );
+    expect(document.title).toContain('Demo —');
     select.value = 'en';
     select.dispatchEvent(new Event('change'));
     await harness.fixture.whenStable();
     harness.detectChanges();
     expect(element.textContent).toContain('English Demo');
+    expect(element.querySelector('[data-testid="project-type-badge"]')?.textContent).toContain(
+      'Personal Project',
+    );
+    expect(document.title).toContain('English Demo —');
     expect(element.textContent).toContain('Back to projects');
     expect(element.querySelector('[data-testid="site-footer"]')?.textContent).toContain(
       'All Rights Reserved',

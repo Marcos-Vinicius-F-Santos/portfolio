@@ -48,6 +48,7 @@ export const ENGLISH_COPY: PortfolioCopy = {
   skillsDevopsObservabilityLabel: 'DevOps and tools',
   skillsDatabasesLabel: 'Databases',
   skillsVersionControlLabel: 'Version control and tools',
+  skillsComputerVisionLabel: 'Computer Vision',
   educationTitle: 'Academic background',
   educationBody: 'Academic education and specializations.',
   educationDataScience: 'Computer Science & Software Engineering',

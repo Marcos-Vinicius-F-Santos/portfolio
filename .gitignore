@@ -50,3 +50,14 @@ Thumbs.db
 /public/profile.jpg
 /public/snapshot.json
 /spec/05-verificacao/joao-vitor/
+/spec/**/joao-vitor/
+
+# Scripts SQL de instâncias específicas, consultas ad-hoc e patches editoriais
+/supabase/sql/
+*.sql
+!supabase/setup_editorial.sql
+!supabase/migrations/*.sql
+
+# Relatórios de auditoria pessoal, análises de currículo e dados irrelevantes para o whitelabel
+/docs/auditoria*.md
+/docs/*auditoria*

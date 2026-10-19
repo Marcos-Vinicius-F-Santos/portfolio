@@ -134,10 +134,14 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('.hero-status__text')?.textContent).not.toContain('Remoto');
     expect(element.querySelector('.eyebrow')).toBeNull();
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Habilidades');
-    expect(element.querySelectorAll('.skill-category')).toHaveLength(6);
+    expect(element.querySelectorAll('.skill-category')).toHaveLength(7);
     expect(
       element.querySelector('[data-testid="skills-languages-runtime"]')?.textContent,
     ).toContain('JavaScript');
+    expect(
+      element.querySelector('[data-testid="skills-computer-vision"]')?.textContent,
+    ).toContain('OpenCV');
+    expect(document.title).toContain('Engenheiro de Software');
     expect(element.querySelector('#formacao-academica')).toBeNull();
     expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
     expect(element.querySelector('#contato')).toBeTruthy();

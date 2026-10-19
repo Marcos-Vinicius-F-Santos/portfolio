@@ -1,4 +1,5 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
 import { getUiLabels } from '../../services/portfolio-ui-labels';
 import { ContactPanelComponent } from '../../../../shared/components/contact-panel/contact-panel.component';
 import { SiteFooterComponent } from '../../../../shared/components/site-footer/site-footer.component';
@@ -239,6 +240,8 @@ export class PortfolioPageComponent {
     this.navigationItems().filter((item) => item.targetId !== 'apresentacao'),
   );
   private readonly document = inject(DOCUMENT);
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
   private readonly destroyRef = inject(DestroyRef);
   private readonly suggestion = viewChild<ElementRef<HTMLDialogElement>>('suggestion');
   private readonly selector = viewChild<ElementRef<HTMLSelectElement>>('selector');
@@ -299,6 +302,21 @@ export class PortfolioPageComponent {
   private scrollCleanups: Array<() => void> = [];
 
   constructor() {
+    effect(() => {
+      const author = this.authorName();
+      const role = this.roleSubtitle();
+      const intro = this.copy().intro?.trim() || this.copy().portfolioSubtitle?.trim() || '';
+      const pageTitle =
+        author && role && author.toLowerCase() !== role.toLowerCase()
+          ? `${author} — ${role}`
+          : author || 'Portfólio Profissional';
+      this.title.setTitle(pageTitle);
+      if (intro) {
+        this.meta.updateTag({ name: 'description', content: intro });
+        this.meta.updateTag({ property: 'og:title', content: pageTitle });
+        this.meta.updateTag({ property: 'og:description', content: intro });
+      }
+    });
     effect(() => {
       const revision = this.editorialContentRevision?.() ?? 0;
       if (revision > 0) void this.reloadEditableContent();

@@ -95,7 +95,7 @@
       </div>
     }
 
-    <!-- Quick Action / Demo Overlay on Hover -->
+    <!-- Quick Action / External Link Overlay on Hover -->
     @if (externalUrl(); as url) {
       <a
         [href]="url"
@@ -104,9 +104,9 @@
         class="project-card__demo-badge"
         (click)="$event.stopPropagation()"
         data-testid="project-demo-link"
-        aria-label="Abrir demonstração ou repositório em nova aba"
+        [attr.aria-label]="externalLinkLabel() + ' — ' + project().name"
       >
-        <span>Demo</span>
+        <span>{{ externalLinkLabel() }}</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M7 17L17 7M17 7H7M17 7V17" />
         </svg>
@@ -123,7 +123,7 @@
         data-editorial-field="name"
         [attr.data-editorial-locale]="locale()"
       >
-        <a [href]="detailsUrl()" class="project-card__title-link">
+        <a [href]="detailsUrl()" (click)="navigateToDetails($event)" class="project-card__title-link">
           {{ project().name }}
         </a>
       </h3>
@@ -168,7 +168,7 @@
 
     <!-- Footer Action -->
     <div class="project-card__footer">
-      <a [href]="detailsUrl()" class="project-card__details-btn project-full-link">
+      <a [href]="detailsUrl()" (click)="navigateToDetails($event)" class="project-card__details-btn project-full-link">
         <span>{{ ui().viewFullProject }}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7"/>

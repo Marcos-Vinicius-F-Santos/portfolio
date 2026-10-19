@@ -45,6 +45,7 @@ export interface PortfolioCopy {
   skillsDevopsObservabilityLabel: string;
   skillsDatabasesLabel: string;
   skillsVersionControlLabel: string;
+  skillsComputerVisionLabel: string;
   educationTitle: string;
   educationBody: string;
   educationDataScience: string;
@@ -178,12 +179,12 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'corporate-integrations',
     labelKey: 'skillsCorporateIntegrationsLabel',
-    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'Node.js', 'REST APIs', 'JSF'].map(fallbackSkill),
+    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'REST APIs', 'JSF'].map(fallbackSkill),
   },
   {
     id: 'frontend',
     labelKey: 'skillsFrontendLabel',
-    skills: ['Angular', 'Flutter', 'HTML', 'CSS', 'React'].map(fallbackSkill),
+    skills: ['Angular', 'Flutter', 'HTML', 'CSS'].map(fallbackSkill),
   },
   {
     id: 'devops-observability',
@@ -198,7 +199,12 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'version-control',
     labelKey: 'skillsVersionControlLabel',
-    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken', 'OpenCV', 'YOLOv8', 'MediaPipe'].map(fallbackSkill),
+    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken'].map(fallbackSkill),
+  },
+  {
+    id: 'computer-vision',
+    labelKey: 'skillsComputerVisionLabel',
+    skills: ['OpenCV', 'YOLOv8', 'MediaPipe', 'OCR'].map(fallbackSkill),
   },
 ];
 
@@ -279,6 +285,7 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   skillsDevopsObservabilityLabel: 'DevOps e ferramentas',
   skillsDatabasesLabel: 'Bancos de dados',
   skillsVersionControlLabel: 'Versionamento e ferramentas',
+  skillsComputerVisionLabel: 'Visão Computacional',
   educationTitle: 'Formação acadêmica',
   educationBody: 'Formação acadêmica e especializações.',
   educationDataScience: 'Computação e Engenharia de Software',

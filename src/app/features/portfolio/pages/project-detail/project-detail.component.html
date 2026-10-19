@@ -3,6 +3,7 @@
     <!-- 1. Left: Dynamic Brand Monogram -->
     <a
       href="/#apresentacao"
+      (click)="navigateToHomeSection($event, 'apresentacao')"
       class="brand-logo"
       [attr.aria-label]="copy().name || 'Início'"
     >
@@ -12,7 +13,12 @@
 
     <!-- 2. Center: Back navigation pill -->
     <nav class="nav-capsule" [attr.aria-label]="ui().backToProjects">
-      <a href="/#projetos" class="nav-back-pill" data-testid="nav-back-projects">
+      <a
+        href="/#projetos"
+        (click)="navigateToHomeSection($event, 'projetos')"
+        class="nav-back-pill"
+        data-testid="nav-back-projects"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -144,9 +150,9 @@
     <div class="project-detail-container">
       <header class="project-hero">
         <div class="project-badges">
-          <span class="project-type-badge">
+          <span class="project-type-badge" data-testid="project-type-badge">
             {{
-              p.type === 'personal' ? copy().personalProjectsTitle : copy().professionalProjectsTitle
+              p.type === 'personal' ? ui().personalProjectSingular : ui().professionalProjectSingular
             }}
           </span>
           <span
