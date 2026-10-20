@@ -68,6 +68,8 @@ No entanto, ao editar os campos no painel administrativo:
 - **FR-001 (Sincronização de Conteúdo no Banco e Snapshot Ativo):**
   - Atualizar o rascunho e publicar um novo snapshot ativo contendo os textos revisados em `pt-BR` e suas correspondências em `en`.
   - Garantir que a frase `"com nota máxima"` e outras alegações não verificadas sejam permanentemente removidas do snapshot ativo publicado.
+  - Remover definitivamente do projeto Avante ERP qualquer alegação indevida sobre prevenção de consultas N+1 e bloqueios de concorrência, substituindo por `"Utilização de Hibernate e Java Persistence API (JPA) para mapeamento objeto-relacional e persistência de dados."`.
+  - Garantir a expansão e explicação de siglas técnicas na primeira ocorrência visual de cada página e card (EPIs, IoT, RBAC, HLS, OCR, IFMG, EMBRAPII, API, SUAP, SSID, HTML, ERP, JSF, SQL, JPA, SM-2, YOLOv8, ROIs, FSM, TCC, GPU, CUDA).
 - **FR-002 (Correção Dinâmica de Listas no Editorial de Projetos):**
   - No `EditorialProjectDetailComponent`, refatorar `saveList` para que, ao alterar o número de linhas (adição ou remoção), despache comandos atômicos de `add_entity` e `remove_entity` para o rascunho, sincronizando a coleção completa de `listItem`.
 - **FR-003 (Feedback e Fluxo de Publicação no Detalhe do Projeto):**
@@ -81,11 +83,15 @@ No entanto, ao editar os campos no painel administrativo:
   - *Given* que o visitante acessa `/projetos/pipeline-visao-computacional-boxe`,
   - *When* o card de Resultados é renderizado,
   - *Then* o item do TCC exibe `"Desenvolvimento e aprovação do Trabalho de Conclusão de Curso em Ciência da Computação no IFMG."` sem a menção a `"nota máxima"`.
-- **CA-02 (Atualização de Todos os 6 Projetos):**
-  - *Given* a navegação por qualquer um dos 6 projetos no site público,
-  - *When* os cards de Contexto, Solução e Resultados forem visualizados,
-  - *Then* os textos correspondem estritamente aos textos auditados nesta especificação.
-- **CA-03 (Edição Dinâmica de Listas no Painel):**
+- **CA-02 (Remoção da Alegação N+1 na Avante ERP):**
+  - *Given* o projeto Avante Soluções Digitais (`7f41a8c9-9ca4-4155-b6ab-8bf4dcf6c9a9`),
+  - *When* a seção de Decisões Técnicas é renderizada,
+  - *Then* o item 3 exibe estritamente `"Utilização de Hibernate e Java Persistence API (JPA) para mapeamento objeto-relacional e persistência de dados."`, sem qualquer referência a N+1 ou concorrência.
+- **CA-03 (Expansão de Siglas na 1ª Ocorrência):**
+  - *Given* a navegação por qualquer uma das rotas dos 6 projetos ou cards da homepage,
+  - *When* termos como OCR, EPIs, IoT, RBAC, SUAP, ERP, SM-2, YOLOv8, ROIs, FSM, TCC ou IFMG aparecem pela primeira vez na página,
+  - *Then* são devidamente explicados e expandidos antes de qualquer uso isolado da sigla.
+- **CA-04 (Edição Dinâmica de Listas no Painel):**
   - *Given* o editor de projetos no painel administrativo (`/admin/editor/projetos/:id`),
   - *When* o administrador adiciona uma linha a mais ou apaga uma linha no campo de lista (Resultados, Decisões ou Aprendizados),
   - *Then* as entidades de lista correspondentes são criadas ou removidas no rascunho sem ficarem presas no tamanho original.
