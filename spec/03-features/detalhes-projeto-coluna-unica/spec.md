@@ -41,8 +41,12 @@ A sequência exata aprovada para o fluxo de leitura é:
 9. **Card 8 — Tecnologias (`technologies`):** Stack tecnológica consolidada com ícones oficiais e nomes em chips refinados.
 10. **Card 9 — Links Relacionados (`links` — se houver):** Botões de ação estilizados para repositório GitHub / demonstração em produção.
 
-### 2.2. Largura e Alinhamento da Coluna
-- Container centralizado com `max-width: 52rem` (aprox. 832px) para proporção áurea de leitura (65 a 80 caracteres por linha).
+### 2.2. Largura e Alinhamento — Split-Card Layout no Desktop
+- Container expandido para `max-width: 70rem` (~1120px) em telas desktop/ultrawide para eliminar o espaço excessivamente vazio nas laterais.
+- Estrutura Split-Card em telas desktop (`@media (min-width: 860px)`):
+  - Coluna Esquerda (`15.5rem` / ~248px): Micro-ícone + Título do Card (`card-heading`), com alinhamento sticky suave.
+  - Coluna Direita (`1fr` / ~45rem): Conteúdo textual, listas de decisões/resultados ou chips de tecnologias, preservando a largura ideal de leitura (65 a 85 caracteres por linha) sem esticar parágrafos.
+- Em telas mobile e tablets (< 860px), o layout empilha o cabeçalho acima do conteúdo de forma 100% responsiva e natural.
 - Espaçamento vertical equilibrado entre cards (`gap: 1.5rem`).
 
 ### 2.3. Estilo Visual dos Cards (Superior à Imagem de Referência)

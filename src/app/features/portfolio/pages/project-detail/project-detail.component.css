@@ -271,7 +271,7 @@
   display: flex;
   flex-direction: column;
   gap: 2.75rem;
-  max-width: 52rem;
+  max-width: 70rem;
   margin: 0 auto;
   width: 100%;
 }
@@ -353,7 +353,7 @@
   font-size: clamp(1.1rem, 2vw, 1.3rem);
   line-height: 1.6;
   color: #4a382e;
-  max-width: 52rem;
+  max-width: 60rem;
 }
 
 /* ==========================================================================
@@ -591,6 +591,36 @@
 /* ==========================================================================
    Responsive
    ========================================================================== */
+@media (min-width: 860px) {
+  .detail-card {
+    display: grid;
+    grid-template-columns: 15.5rem 1fr;
+    column-gap: 2.5rem;
+    row-gap: 0;
+    align-items: center;
+    padding: 2.25rem 2.5rem;
+  }
+
+  .card-heading {
+    align-self: center;
+    padding-top: 0;
+  }
+
+  .card-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .card-list-item {
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .site-header__container {
     padding: 0 1rem;
