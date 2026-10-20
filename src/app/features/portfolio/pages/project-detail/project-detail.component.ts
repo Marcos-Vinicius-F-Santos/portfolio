@@ -85,21 +85,6 @@ export class ProjectDetailComponent {
   protected readonly error = signal(false);
   protected readonly failedImages = signal<string[]>([]);
   protected readonly en = computed(() => this.language.language() === 'en');
-  protected readonly lists = computed(() => {
-    const p = this.project(),
-      c = this.copy();
-    return p
-      ? [
-          {
-            field: 'technicalDecisions',
-            title: c.projectTechnicalDecisionsLabel,
-            values: p.technicalDecisions,
-          },
-          { field: 'results', title: c.projectResultsLabel, values: p.results },
-          { field: 'learnings', title: c.projectLearningsLabel, values: p.learnings },
-        ]
-      : [];
-  });
   constructor() {
     this.language.initialize();
     effect(() => {

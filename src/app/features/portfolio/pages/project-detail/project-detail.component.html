@@ -196,9 +196,15 @@
       </header>
 
       <div class="project-content-grid">
-        <!-- Context Card -->
+        <!-- 1. Context Card -->
         <section class="detail-card">
-          <h2 class="card-heading">{{ copy().projectContextLabel }}</h2>
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+            <span>{{ copy().projectContextLabel }}</span>
+          </h2>
           <p
             class="card-text"
             [attr.data-editorial-entity]="p.id"
@@ -209,10 +215,36 @@
           </p>
         </section>
 
-        <!-- Solution Card (if exists) -->
+        <!-- 2. Role Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>{{ copy().projectRoleLabel }}</span>
+          </h2>
+          <p
+            class="card-text"
+            [attr.data-editorial-entity]="p.id"
+            data-editorial-field="role"
+            [attr.data-editorial-locale]="language.language()"
+          >
+            {{ p.role }}
+          </p>
+        </section>
+
+        <!-- 3. Solution Card (if exists) -->
         @if (p.solution) {
           <section class="detail-card">
-            <h2 class="card-heading">{{ ui().solution }}</h2>
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18h6"/>
+                <path d="M10 22h4"/>
+                <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+              </svg>
+              <span>{{ ui().solution }}</span>
+            </h2>
             <p
               class="card-text"
               [attr.data-editorial-entity]="p.id"
@@ -224,48 +256,17 @@
           </section>
         }
 
-        <!-- Role Card -->
-        <section class="detail-card">
-          <h2 class="card-heading">{{ copy().projectRoleLabel }}</h2>
-          <p
-            class="card-text"
-            [attr.data-editorial-entity]="p.id"
-            data-editorial-field="role"
-            [attr.data-editorial-locale]="language.language()"
-          >
-            {{ p.role }}
-          </p>
-        </section>
-
-        <!-- Technologies Card -->
-        <section class="detail-card">
-          <h2 class="card-heading">{{ copy().projectTechnologiesLabel }}</h2>
-          <app-project-technologies [technologies]="p.technologies" />
-        </section>
-
-        <!-- Technical Decisions, Results, Learnings Cards -->
-        @for (list of lists(); track list.title) {
-          <section class="detail-card">
-            <h2 class="card-heading">{{ list.title }}</h2>
-            <ul class="card-list">
-              @for (value of list.values; track $index) {
-                <li
-                  class="card-list-item"
-                  [attr.data-editorial-entity]="p.id + '-' + list.field + '-' + ($index + 1)"
-                  data-editorial-field="text"
-                  [attr.data-editorial-locale]="language.language()"
-                >
-                  {{ value }}
-                </li>
-              }
-            </ul>
-          </section>
-        }
-
-        <!-- Images Gallery Card -->
+        <!-- 4. Images Gallery Card (if exists) -->
         @if (p.images.length) {
-          <section class="detail-card detail-card--full">
-            <h2 class="card-heading">{{ en() ? 'Project images' : 'Imagens do projeto' }}</h2>
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>{{ en() ? 'Project images' : 'Imagens do projeto' }}</span>
+            </h2>
             <div class="gallery">
               @for (image of p.images; track image.id) {
                 <figure class="gallery-figure">
@@ -290,10 +291,106 @@
           </section>
         }
 
-        <!-- Links Card -->
+        <!-- 5. Technical Decisions Card -->
+        @if (p.technicalDecisions.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="6" y1="3" x2="6" y2="15"/>
+                <circle cx="18" cy="6" r="3"/>
+                <circle cx="6" cy="18" r="3"/>
+                <path d="M18 9a9 9 0 0 1-9 9"/>
+              </svg>
+              <span>{{ copy().projectTechnicalDecisionsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (decision of p.technicalDecisions; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-technicalDecisions-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ decision }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 6. Learnings Card -->
+        @if (p.learnings.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+              <span>{{ copy().projectLearningsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (learning of p.learnings; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-learnings-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ learning }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 7. Results Card (Special visual highlight) -->
+        @if (p.results.length) {
+          <section class="detail-card detail-card--results">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon card-heading-icon--results" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                <polyline points="17 6 23 6 23 12"/>
+              </svg>
+              <span>{{ copy().projectResultsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (result of p.results; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-results-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ result }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 8. Technologies Card (Last in technical narrative) -->
+        <section class="detail-card">
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+            <span>{{ copy().projectTechnologiesLabel }}</span>
+          </h2>
+          <app-project-technologies [technologies]="p.technologies" />
+        </section>
+
+        <!-- 9. Related Links Card -->
         @if (p.links.length) {
-          <section class="detail-card detail-card--full">
-            <h2 class="card-heading">{{ copy().projectLinksLabel }}</h2>
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              <span>{{ copy().projectLinksLabel }}</span>
+            </h2>
             <ul class="project-links-list">
               @for (link of p.links; track $index) {
                 <li>

@@ -183,6 +183,34 @@ describe('ProjectDetail routes', () => {
     expect(badge?.textContent).toContain('Privado');
   });
 
+  it('renders project cards in the approved sequential order with results highlighted before technologies', async () => {
+    const harness = await RouterTestingHarness.create('/projetos/demo');
+    await TestBed.inject(PortfolioLanguageService);
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    const element = harness.routeNativeElement!;
+    const cardHeadings = [...element.querySelectorAll('.detail-card .card-heading')].map((h) =>
+      h.textContent?.trim(),
+    );
+
+    expect(cardHeadings).toEqual([
+      'Contexto',
+      'Papel desempenhado',
+      'Solução',
+      'Imagens do projeto',
+      'Decisões técnicas',
+      'Aprendizados',
+      'Resultados',
+      'Tecnologias',
+      'Links relacionados',
+    ]);
+
+    const resultsCard = element.querySelector('.detail-card--results');
+    expect(resultsCard).not.toBeNull();
+    expect(resultsCard?.querySelector('.card-heading')?.textContent).toContain('Resultados');
+  });
+
   it('resolves dedicated SVG icons for RxJS, Bootstrap, Chart.js, OpenLayers, CUDA, and OCR', () => {
     expect(technologyIcon('RxJS')).toBe('/assets/skills/rxjs.svg');
     expect(technologyIcon('Bootstrap')).toBe('/assets/skills/bootstrap.svg');
@@ -190,5 +218,13 @@ describe('ProjectDetail routes', () => {
     expect(technologyIcon('OpenLayers')).toBe('/assets/skills/openlayers.svg');
     expect(technologyIcon('CUDA')).toBe('/assets/skills/cuda.svg');
     expect(technologyIcon('OCR')).toBe('/assets/skills/ocr.svg');
+  });
+
+  it('resolves icons for enterprise stack: Spring Framework, PrimeFaces, Hibernate, SQL, and ERP', () => {
+    expect(technologyIcon('Spring Framework')).toBe('/assets/technologies/spring.svg');
+    expect(technologyIcon('PrimeFaces')).toBe('/assets/skills/jsf.svg');
+    expect(technologyIcon('Hibernate')).toBe('/assets/skills/java.png');
+    expect(technologyIcon('SQL')).toBe('/assets/skills/sql-server.png');
+    expect(technologyIcon('ERP')).toBe('/assets/technologies/sap.svg');
   });
 });
