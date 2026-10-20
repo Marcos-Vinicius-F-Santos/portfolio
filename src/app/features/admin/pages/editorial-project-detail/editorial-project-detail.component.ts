@@ -133,13 +133,56 @@ export class EditorialProjectDetailComponent {
     await this.refresh();
   }
 
-  protected async saveList(ids: string[], value: string): Promise<void> {
+  protected async saveList(collectionKey: string, ids: string[], value: string): Promise<void> {
     const next = value
       .split(/\r?\n/)
       .map((item) => item.trim())
       .filter(Boolean);
-    for (let i = 0; i < Math.min(ids.length, next.length); i++)
-      await this.saveField(ids[i], 'text', next[i]);
+    const parentId = this.currentProjectId();
+    if (!parentId) return;
+
+    // 1. Atualizar itens existentes que sofreram alteração textual
+    const commonCount = Math.min(ids.length, next.length);
+    for (let i = 0; i < commonCount; i++) {
+      if (this.field(ids[i], 'text') !== next[i]) {
+        await this.saveField(ids[i], 'text', next[i]);
+      }
+    }
+
+    // 2. Remover itens excedentes caso o usuário tenha apagado linhas
+    for (let i = next.length; i < ids.length; i++) {
+      await this.autosave.enqueue({
+        operationId: createUuid(),
+        target: `${ids[i]}.remove`,
+        command: {
+          type: 'remove_entity',
+          entityId: ids[i],
+        },
+      });
+    }
+
+    // 3. Adicionar novas entidades caso o usuário tenha inserido novas linhas
+    const locales = this.draft()?.locales ?? [];
+    for (let i = ids.length; i < next.length; i++) {
+      const newId = createUuid();
+      await this.autosave.enqueue({
+        operationId: createUuid(),
+        target: `${newId}.create`,
+        command: {
+          type: 'add_entity',
+          entityId: newId,
+          kind: 'listItem',
+          parentId,
+          position: i,
+          data: { collection: collectionKey },
+          translations: Object.fromEntries(
+            locales.map((locale) => [locale.code, { text: next[i] }]),
+          ),
+        },
+      });
+    }
+
+    await this.refresh();
   }
 
   protected async toggleTechnology(
