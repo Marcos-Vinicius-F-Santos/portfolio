@@ -2,7 +2,7 @@
 
 Data: 2026-10-23  
 Projeto Supabase: `portfolio-profissional` (`jjndvtjhxutuerwvjocy`)  
-Status: correções aplicadas no Supabase e publicadas; upload final depende da permissão de arquivo do navegador
+Status: correção publicada no Supabase; o SVG real foi validado localmente e aguarda uma nova tentativa manual no painel
 
 ## Sintomas observados
 
@@ -24,10 +24,12 @@ O `map` do frontend já possui uma guarda `Array.isArray` na árvore local. O er
 capturado no navegador pode vir de um bundle remoto anterior à guarda ou de outro
 caminho que ainda entrega uma coleção indefinida; ele não é a causa do `409` remoto.
 
-O `422` posterior foi causado pelo sanitizador rejeitar a declaração XML e o
-comentário de metadados presentes no SVG do AWS SQS. Esses elementos não executam
-código; a correção remove ambos antes da análise e mantém a rejeição de scripts,
-`foreignObject`, entidades, CDATA, URLs e esquemas perigosos.
+O `422` posterior teve duas causas no sanitizador: primeiro, a declaração XML e o
+comentário de metadados presentes no SVG do AWS SQS; depois, a URL do namespace
+XML padrão (`http://www.w3.org/2000/svg`) também era rejeitada pela regra global
+de URLs. Esses elementos não executam código; a correção remove prólogo e
+comentários, permite somente o namespace SVG padrão e mantém a rejeição de URLs
+externas, scripts, `foreignObject`, entidades, CDATA e esquemas perigosos.
 
 ## Correção preparada
 
@@ -42,11 +44,15 @@ código; a correção remove ambos antes da análise e mantém a rejeição de s
   privada.
 - O sanitizador passou a aceitar prólogo XML e comentários não executáveis,
   removendo-os antes da validação estrutural.
+- O sanitizador passou a aceitar exclusivamente `xmlns="http://www.w3.org/2000/svg"`
+  e continua rejeitando namespaces e URLs externos.
 
 ## Verificações locais
 
 - `deno test --allow-net supabase/functions/validate-editorial-svg/index.test.ts` —
-  7/7 testes aprovados.
+  8/8 testes aprovados.
+- O arquivo real `C:\Users\marco\Downloads\aws-svgrepo-com.svg` foi reproduzido
+  localmente e aceito pelo sanitizador, com 3.835 bytes sanitizados.
 - `npm test -- --watch=false --no-progress` — 37 arquivos e 195 testes aprovados.
 - `npm run build` — aprovado.
 - `npm run check:white-label` — aprovado.
@@ -68,14 +74,16 @@ da reserva pela função.
 - Edge Function `validate-editorial-svg` republicada como versão 5, com JWT
   obrigatório e status `ACTIVE`.
 - Edge Function `validate-editorial-svg` republicada como versão 6, com JWT
-  obrigatório e status `ACTIVE`, contendo a correção do sanitizador.
+  obrigatório e status `ACTIVE`, contendo a primeira correção do sanitizador.
+- Edge Function `validate-editorial-svg` republicada como versão 7, com JWT
+  obrigatório e status `ACTIVE`, contendo a correção do namespace SVG.
 - Deploy de produção Vercel `dpl_A8k3XoqzUhGWaMPyru8JJDSGpopn` concluído com
   status `READY`, associado ao commit `a8e5dc8`.
 - Domínio principal respondeu HTTP `200` após a publicação.
 
-O fluxo de atualização de habilidade com SVG deve ser repetido no painel para
-confirmar a transição da reserva de `pending` para `ready` com uma sessão autenticada.
-Na tentativa automatizada posterior, o Brave bloqueou o preenchimento do arquivo
-por falta da permissão da extensão para acessar URLs de arquivo; portanto, ainda
-não há evidência de um POST `200` da versão 6 nem de uma reserva `ready` após esse
-deploy.
+As tentativas feitas às 19:00–19:02 UTC chegaram à versão 6 e retornaram `422`,
+deixando as reservas em `pending`. Depois da publicação da versão 7, a automação
+do navegador não conseguiu acionar o `<input type="file">` da aba já aberta; por
+isso, ainda não há evidência de um POST `200` da versão 7 nem de uma reserva
+`ready` após esse deploy. O próximo teste deve ser uma nova seleção manual do
+SVG no painel autenticado.

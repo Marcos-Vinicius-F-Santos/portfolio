@@ -5,7 +5,7 @@ export function sanitizeSvg(input: string): string | null {
   const normalized = input
     .replace(/^\s*<\?xml(?:\s[^?]*)?\?>\s*/i, '')
     .replace(/<!--[\s\S]*?-->/g, '');
-  if (/<!doctype|<!entity|<!--|-->|<!\[CDATA|<script|<foreignObject|javascript:|data:|https?:\/\//i.test(normalized)) return null;
+  if (/<!doctype|<!entity|<!--|-->|<!\[CDATA|<script|<foreignObject|javascript:|data:/i.test(normalized)) return null;
   const stack: string[] = [], output: string[] = [];
   const tokens = normalized.match(/<[^>]+>/g);
   if (!tokens || tokens.length === 0 || !/^\s*<svg(?:\s|>)/i.test(tokens[0])) return null;
@@ -17,7 +17,22 @@ export function sanitizeSvg(input: string): string | null {
     const name = open[1].toLowerCase(); if (!ELEMENTS.has(name)) return null;
     const attrs = open[2]; const names = new Set<string>();
     let stripped = '';
-    try { stripped = attrs.replace(/([:\w-]+)\s*=\s*("[^"]*"|'[^']*')/g, (_, key: string, value: string) => { const normalized = key; if (!ATTRIBUTES.has(normalized) || names.has(normalized) || /^on/i.test(normalized) || /url\s*\(|expression\s*\(/i.test(value)) throw new Error('invalid attribute'); names.add(normalized); return ''; }); } catch { return null; }
+    try {
+      stripped = attrs.replace(/([:\w-]+)\s*=\s*("[^"]*"|'[^']*')/g, (_, key: string, value: string) => {
+        const normalized = key;
+        const namespace = value.slice(1, -1).trim();
+        const safeNamespace = normalized === 'xmlns' && namespace === 'http://www.w3.org/2000/svg';
+        if (
+          !ATTRIBUTES.has(normalized) ||
+          names.has(normalized) ||
+          /^on/i.test(normalized) ||
+          /url\s*\(|expression\s*\(/i.test(value) ||
+          (/https?:\/\//i.test(value) && !safeNamespace)
+        ) throw new Error('invalid attribute');
+        names.add(normalized);
+        return '';
+      });
+    } catch { return null; }
     if (stripped.replace(/\s|\//g, '') !== '') return null;
     output.push(token); if (open[3] !== '/') stack.push(name);
   }

@@ -8,7 +8,7 @@ Deno.test('accepts a minimal static SVG', () => {
 });
 
 Deno.test('accepts an XML declaration and a non-executable comment', () => {
-  const result = sanitizeForTest('<?xml version="1.0"?><!-- source metadata --><svg viewBox="0 0 10 10"><path d="M0 0h10v10z"/></svg>');
+  const result = sanitizeForTest('<?xml version="1.0"?><!-- source metadata --><svg width="800px" height="800px" viewBox="0 -30 150 150" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10v10z" fill="#F90"/></svg>');
   assert(result !== null);
   assert(!result.includes('<?xml'));
   assert(!result.includes('source metadata'));
@@ -20,6 +20,7 @@ for (const [name, payload] of [
   ['external-url', '<svg><image href="https://evil.test/x"/></svg>'],
   ['javascript-url', '<svg><a href="javascript:alert(1)"></a></svg>'],
   ['event-handler', '<svg onload="alert(1)"></svg>'],
+  ['unsafe-namespace', '<svg xmlns="https://evil.test/svg"><path d="M0 0h10v10z"/></svg>'],
 ] as const) {
   Deno.test(`rejects ${name}`, () => assertEquals(sanitizeForTest(payload), null));
 }
