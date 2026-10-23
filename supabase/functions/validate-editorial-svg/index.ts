@@ -89,12 +89,12 @@ Deno.serve(async (request) => {
     .eq('user_id', user.id)
     .maybeSingle();
   if (!admin) return json({ error: 'forbidden' }, 403);
-  const { data: media, error } = (await adminClient
-    .schema('portfolio_editorial')
-    .from('media')
-    .select('id,actor_id,revision,bucket,path,status,purpose')
-    .eq('id', payload.media_id)
-    .maybeSingle()) as { data: Row | null; error: unknown };
+  const { data: mediaRows, error } = (await adminClient.rpc('get_pending_editorial_media', {
+    requested_media_id: payload.media_id,
+    expected_revision: payload.expected_revision,
+    requested_actor: user.id,
+  })) as { data: Row[] | null; error: unknown };
+  const media = Array.isArray(mediaRows) ? mediaRows[0] ?? null : null;
   if (
     error ||
     !media ||
