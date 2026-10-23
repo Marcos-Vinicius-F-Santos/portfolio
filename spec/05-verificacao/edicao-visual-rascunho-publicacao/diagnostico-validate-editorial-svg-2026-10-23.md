@@ -2,7 +2,7 @@
 
 Data: 2026-10-23  
 Projeto Supabase: `portfolio-profissional` (`jjndvtjhxutuerwvjocy`)  
-Status: correção preparada localmente; aplicação remota pendente de autorização
+Status: correção aplicada no Supabase e publicada na Vercel
 
 ## Sintomas observados
 
@@ -51,9 +51,17 @@ enquanto os uploads correspondentes no Storage retornaram `200`. As três reserv
 continuavam `pending`, confirmando que a falha ocorria entre o upload e a leitura
 da reserva pela função.
 
-## Pendência operacional
+## Resultado da publicação
 
-A migration ainda precisa ser aplicada no Supabase e a Edge Function precisa ser
-republicada. Após essas duas ações, deve ser repetido o fluxo de atualização de
-habilidade para confirmar que a reserva muda de `pending` para `ready` e que o
-frontend não recebe mais o `409`.
+- Migration `allow_svg_validator_private_media_lookup` aplicada com sucesso no
+  projeto Supabase `jjndvtjhxutuerwvjocy`.
+- RPC verificada remotamente: proprietária de `portfolio_editorial_executor`,
+  executável por `service_role` e sem execução por `anon` ou `authenticated`.
+- Edge Function `validate-editorial-svg` republicada como versão 5, com JWT
+  obrigatório e status `ACTIVE`.
+- Deploy de produção Vercel `dpl_A8k3XoqzUhGWaMPyru8JJDSGpopn` concluído com
+  status `READY`, associado ao commit `a8e5dc8`.
+- Domínio principal respondeu HTTP `200` após a publicação.
+
+O fluxo de atualização de habilidade com SVG deve ser repetido no painel para
+confirmar a transição da reserva de `pending` para `ready` com uma sessão autenticada.
