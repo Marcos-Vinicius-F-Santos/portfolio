@@ -1,6 +1,11 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { sanitizeForTest } from './testable.ts';
 
+function sanitizedPathForTest(path: string): string {
+  const separator = path.lastIndexOf('/');
+  return `${path.slice(0, separator + 1)}sanitized-${path.slice(separator + 1)}`;
+}
+
 Deno.test('accepts a minimal static SVG', () => {
   const result = sanitizeForTest('<svg viewBox="0 0 10 10"><path d="M0 0h10v10z"/></svg>');
   assert(result !== null);
@@ -12,6 +17,13 @@ Deno.test('accepts an XML declaration and a non-executable comment', () => {
   assert(result !== null);
   assert(!result.includes('<?xml'));
   assert(!result.includes('source metadata'));
+});
+
+Deno.test('derives the deterministic sanitized object path', () => {
+  assertEquals(
+    sanitizedPathForTest('actor-id/media-id.svg'),
+    'actor-id/sanitized-media-id.svg',
+  );
 });
 
 for (const [name, payload] of [

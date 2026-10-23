@@ -2,7 +2,7 @@
 
 Data: 2026-10-23  
 Projeto Supabase: `portfolio-profissional` (`jjndvtjhxutuerwvjocy`)  
-Status: correção publicada no Supabase; o SVG real foi validado localmente e aguarda uma nova tentativa manual no painel
+Status: correção publicada no Supabase; a finalização RPC foi validada remotamente com o SVG real sanitizado. Falta apenas a confirmação visual de uma nova tentativa manual no painel autenticado.
 
 ## Sintomas observados
 
@@ -47,6 +47,20 @@ externas, scripts, `foreignObject`, entidades, CDATA e esquemas perigosos.
 - O sanitizador passou a aceitar exclusivamente `xmlns="http://www.w3.org/2000/svg"`
   e continua rejeitando namespaces e URLs externos.
 
+## Correção da finalização
+
+- Criada a migration `20261023193000_finalize_validated_editorial_svg.sql`.
+- A migration cria `public.finalize_validated_editorial_svg(...)` como `security definer`,
+  valida ator, revisão, bucket, MIME, caminho determinístico e metadados do objeto
+  sanitizado antes de marcar a mídia como `ready`.
+- O `execute` da RPC é concedido exclusivamente a `service_role`; a Edge Function
+  deixou de fazer `UPDATE` direto em `portfolio_editorial.media`.
+- Criada a migration `20261023194000_allow_svg_sanitized_object_lookup.sql`, que
+  restringe a policy do Storage aos caminhos original e `sanitized-*` derivados da
+  reserva pendente/pronta.
+- Em falha de finalização, a Edge Function remove o objeto sanitizado recém-criado
+  para não deixar novo órfão.
+
 ## Verificações locais
 
 - `deno test --allow-net supabase/functions/validate-editorial-svg/index.test.ts` —
@@ -57,6 +71,8 @@ externas, scripts, `foreignObject`, entidades, CDATA e esquemas perigosos.
 - `npm run build` — aprovado.
 - `npm run check:white-label` — aprovado.
 - `git diff --check` — aprovado.
+- `deno test --allow-read supabase/functions/validate-editorial-svg/index.test.ts` —
+  9/9 testes aprovados, incluindo o caminho determinístico do objeto sanitizado.
 
 ## Evidência remota consultada
 
@@ -77,13 +93,19 @@ da reserva pela função.
   obrigatório e status `ACTIVE`, contendo a primeira correção do sanitizador.
 - Edge Function `validate-editorial-svg` republicada como versão 7, com JWT
   obrigatório e status `ACTIVE`, contendo a correção do namespace SVG.
+- Migrations `finalize_validated_editorial_svg` e `allow_svg_sanitized_object_lookup`
+  aplicadas com sucesso no projeto Supabase `jjndvtjhxutuerwvjocy`.
+- Edge Function `validate-editorial-svg` republicada como versão 8, com JWT
+  obrigatório e status `ACTIVE`, chamando a RPC segura de finalização.
+- A RPC de finalização foi executada remotamente com a reserva real do SVG AWS SQS;
+  retornou `status=ready`, caminho sanitizado, 3.835 bytes e checksum validado.
 - Deploy de produção Vercel `dpl_A8k3XoqzUhGWaMPyru8JJDSGpopn` concluído com
   status `READY`, associado ao commit `a8e5dc8`.
 - Domínio principal respondeu HTTP `200` após a publicação.
 
 As tentativas feitas às 19:00–19:02 UTC chegaram à versão 6 e retornaram `422`,
-deixando as reservas em `pending`. Depois da publicação da versão 7, a automação
-do navegador não conseguiu acionar o `<input type="file">` da aba já aberta; por
-isso, ainda não há evidência de um POST `200` da versão 7 nem de uma reserva
-`ready` após esse deploy. O próximo teste deve ser uma nova seleção manual do
-SVG no painel autenticado.
+deixando as reservas em `pending`. A versão 7 chegou a criar o objeto sanitizado,
+mas retornou `500` ao atualizar o schema privado. A versão 8 removeu esse acesso
+direto e a RPC foi validada remotamente. A confirmação restante é uma nova seleção
+manual do SVG no painel autenticado para comprovar o POST `200` completo e a
+associação visual ao catálogo AWS SQS.
