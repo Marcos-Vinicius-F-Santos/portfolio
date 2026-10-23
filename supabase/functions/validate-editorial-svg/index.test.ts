@@ -7,6 +7,13 @@ Deno.test('accepts a minimal static SVG', () => {
   assert(result.includes('<svg'));
 });
 
+Deno.test('accepts an XML declaration and a non-executable comment', () => {
+  const result = sanitizeForTest('<?xml version="1.0"?><!-- source metadata --><svg viewBox="0 0 10 10"><path d="M0 0h10v10z"/></svg>');
+  assert(result !== null);
+  assert(!result.includes('<?xml'));
+  assert(!result.includes('source metadata'));
+});
+
 for (const [name, payload] of [
   ['script', '<svg><script>alert(1)</script></svg>'],
   ['foreignObject', '<svg><foreignObject><div>x</div></foreignObject></svg>'],

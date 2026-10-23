@@ -2,7 +2,7 @@
 
 Data: 2026-10-23  
 Projeto Supabase: `portfolio-profissional` (`jjndvtjhxutuerwvjocy`)  
-Status: correção aplicada no Supabase e publicada na Vercel
+Status: correções aplicadas no Supabase e publicadas; upload final depende da permissão de arquivo do navegador
 
 ## Sintomas observados
 
@@ -10,6 +10,7 @@ Status: correção aplicada no Supabase e publicada na Vercel
 - O upload do arquivo SVG para o bucket privado era concluído com HTTP `200`.
 - As reservas correspondentes permaneciam com status `pending`.
 - O console do frontend também registrava `Cannot read properties of undefined (reading 'map')`.
+- Depois da correção da consulta privada, o mesmo fluxo passou a retornar HTTP `422`.
 
 ## Causa confirmada
 
@@ -23,6 +24,11 @@ O `map` do frontend já possui uma guarda `Array.isArray` na árvore local. O er
 capturado no navegador pode vir de um bundle remoto anterior à guarda ou de outro
 caminho que ainda entrega uma coleção indefinida; ele não é a causa do `409` remoto.
 
+O `422` posterior foi causado pelo sanitizador rejeitar a declaração XML e o
+comentário de metadados presentes no SVG do AWS SQS. Esses elementos não executam
+código; a correção remove ambos antes da análise e mantém a rejeição de scripts,
+`foreignObject`, entidades, CDATA, URLs e esquemas perigosos.
+
 ## Correção preparada
 
 - Criada a migration
@@ -34,11 +40,13 @@ caminho que ainda entrega uma coleção indefinida; ele não é a causa do `409`
   continua sem exposição direta pelo PostgREST.
 - A Edge Function passou a usar essa RPC em vez de consultar diretamente a tabela
   privada.
+- O sanitizador passou a aceitar prólogo XML e comentários não executáveis,
+  removendo-os antes da validação estrutural.
 
 ## Verificações locais
 
 - `deno test --allow-net supabase/functions/validate-editorial-svg/index.test.ts` —
-  6/6 testes aprovados.
+  7/7 testes aprovados.
 - `npm test -- --watch=false --no-progress` — 37 arquivos e 195 testes aprovados.
 - `npm run build` — aprovado.
 - `npm run check:white-label` — aprovado.
@@ -59,9 +67,15 @@ da reserva pela função.
   executável por `service_role` e sem execução por `anon` ou `authenticated`.
 - Edge Function `validate-editorial-svg` republicada como versão 5, com JWT
   obrigatório e status `ACTIVE`.
+- Edge Function `validate-editorial-svg` republicada como versão 6, com JWT
+  obrigatório e status `ACTIVE`, contendo a correção do sanitizador.
 - Deploy de produção Vercel `dpl_A8k3XoqzUhGWaMPyru8JJDSGpopn` concluído com
   status `READY`, associado ao commit `a8e5dc8`.
 - Domínio principal respondeu HTTP `200` após a publicação.
 
 O fluxo de atualização de habilidade com SVG deve ser repetido no painel para
 confirmar a transição da reserva de `pending` para `ready` com uma sessão autenticada.
+Na tentativa automatizada posterior, o Brave bloqueou o preenchimento do arquivo
+por falta da permissão da extensão para acessar URLs de arquivo; portanto, ainda
+não há evidência de um POST `200` da versão 6 nem de uma reserva `ready` após esse
+deploy.
