@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { SUPABASE_CLIENT } from '../../../core/supabase/supabase-client';
 import { PortfolioContentService } from './portfolio-content.service';
 import { PublishedSnapshotService } from './published-snapshot.service';
+import { PublishedMediaUrlService } from './published-media-url.service';
 import { snapshotToProfileIdentity } from './editorial-snapshot-adapter';
 import type { EditorialSnapshotEntity, EditorialSnapshotV1 } from './editorial-snapshot.models';
 import type { PortfolioCopy } from './portfolio-content';
@@ -22,6 +23,7 @@ import type {
 @Injectable()
 export class PublishedSnapshotContentService extends PortfolioContentService {
   private readonly published = inject(PublishedSnapshotService);
+  private readonly mediaUrls = inject(PublishedMediaUrlService);
   private readonly snapshotClient = inject(SUPABASE_CLIENT);
   private readonly snapshotErrorState = signal<Error | null>(null);
 
@@ -87,7 +89,7 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
   override async listProjects(locale: PortfolioLocale): Promise<PortfolioProject[]> {
     const snapshot = await this.loadSnapshot();
     if (!snapshot) return super.listProjects(locale);
-    return this.entities(snapshot, 'project').map(([id, entity]) => {
+    return Promise.all(this.entities(snapshot, 'project').map(async ([id, entity]) => {
       const technologyIds = Array.isArray(entity.data['technologyIds'])
         ? entity.data['technologyIds'].map(String)
         : [];
@@ -114,10 +116,10 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
         results: this.list(snapshot, locale, id, 'results'),
         learnings: this.list(snapshot, locale, id, 'learnings'),
         links,
-        images: this.projectImages(snapshot, locale, id),
+        images: await this.projectImages(snapshot, locale, id),
         editorialListIds: this.listIds(snapshot, id),
       } satisfies PortfolioProject;
-    });
+    }));
   }
 
   override async getCurriculum(locale: PortfolioLocale): Promise<PortfolioFile | null> {
@@ -127,40 +129,49 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
     if (!id || !entity) return super.getCurriculum(locale);
     const mediaId = stringValue(entity.data['mediaId']);
     const media = snapshot.media[mediaId];
-    if (!media?.assetPath || media.mime !== 'application/pdf') return super.getCurriculum(locale);
+    if (!media || media.mime !== 'application/pdf') return super.getCurriculum(locale);
+    const publicUrl = media.source === 'managed'
+      ? await this.mediaUrls.resolve(mediaId, snapshot.publicationId)
+      : media.assetPath;
+    if (!publicUrl) return null;
     return {
       id,
       fileType: 'curriculum',
       locale,
-      storagePath: media.assetPath,
+      storagePath: media.assetPath ?? '',
       originalName: this.text(snapshot, locale, id, 'originalName') || 'curriculum.pdf',
       mimeType: 'application/pdf',
       sizeBytes: media.bytes,
-      publicUrl: media.assetPath,
+      publicUrl,
     };
   }
 
   override async listSkillCategories(locale: PortfolioLocale): Promise<PortfolioSkillCategory[]> {
     const snapshot = await this.loadSnapshot();
     if (!snapshot) return super.listSkillCategories(locale);
-    return this.entities(snapshot, 'skillCategory').map(([id, category]) => ({
+    return Promise.all(this.entities(snapshot, 'skillCategory').map(async ([id, category]) => ({
       id,
       labelKey: '',
       label: this.text(snapshot, locale, id, 'label'),
       displayOrder: category.position,
-      skills: this.entities(snapshot, 'skill')
+      skills: await Promise.all(this.entities(snapshot, 'skill')
         .filter(([, skill]) => skill.parentId === id)
-        .map(([skillId, skill]) => {
+        .map(async ([skillId, skill]) => {
           const technologyId = stringValue(skill.data['technologyId']);
           const technology = snapshot.technologies[technologyId];
           const media = technology?.iconMediaId ? snapshot.media[technology.iconMediaId] : undefined;
+          const iconPublicUrl = media?.source === 'managed' && technology?.iconMediaId
+            ? await this.mediaUrls.resolve(technology.iconMediaId, snapshot.publicationId)
+            : undefined;
           return {
             id: skillId.replace(/^skill-/, ''),
             name: this.text(snapshot, locale, skillId, 'name') || technology?.label || technologyId,
-            iconUrl: media?.assetPath,
+            ...(media?.source === 'managed'
+              ? { iconPublicUrl: iconPublicUrl ?? undefined }
+              : { iconUrl: media?.assetPath }),
           };
-        }),
-    }));
+        })),
+    })));
   }
 
   override async listAcademicEntries(locale: PortfolioLocale): Promise<PortfolioAcademicEntry[]> {
@@ -249,23 +260,29 @@ export class PublishedSnapshotContentService extends PortfolioContentService {
       .map(([id, entity]) => ({ label: this.text(snapshot, locale, id, 'label'), url: stringValue(entity.data['href']) }));
   }
 
-  private projectImages(snapshot: EditorialSnapshotV1, locale: PortfolioLocale, parentId: string): PortfolioProjectImage[] {
-    return this.entities(snapshot, 'projectImage')
+  private async projectImages(snapshot: EditorialSnapshotV1, locale: PortfolioLocale, parentId: string): Promise<PortfolioProjectImage[]> {
+    const images = await Promise.all(this.entities(snapshot, 'projectImage')
       .filter(([, entity]) => entity.parentId === parentId)
-      .flatMap(([id, entity]) => {
+      .map(async ([id, entity]) => {
         const media = snapshot.media[stringValue(entity.data['mediaId'])];
-        if (!media?.assetPath || (media.mime !== 'image/png' && media.mime !== 'image/jpeg')) return [];
-        return [{
+        const mediaId = stringValue(entity.data['mediaId']);
+        if (!media || (media.mime !== 'image/png' && media.mime !== 'image/jpeg')) return null;
+        const publicUrl = media.source === 'managed'
+          ? await this.mediaUrls.resolve(mediaId, snapshot.publicationId)
+          : media.assetPath;
+        if (!publicUrl) return null;
+        return {
           id,
           projectId: parentId,
-          storagePath: media.assetPath,
+          storagePath: media.assetPath ?? '',
           originalName: this.text(snapshot, locale, id, 'originalName') || id,
           mimeType: media.mime,
           sizeBytes: media.bytes,
           displayOrder: entity.position,
-          publicUrl: media.assetPath,
-        }];
-      });
+          publicUrl,
+        };
+      }));
+    return images.filter((image): image is PortfolioProjectImage => image !== null);
   }
 }
 
