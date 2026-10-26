@@ -83,9 +83,9 @@ Não se aplica. Este é um projeto novo.
     adicionar e editar o conteúdo principal do portfólio, incluindo textos,
     experiências e projetos, além de adicionar imagens de projetos. As alterações devem
     ser persistidas no Supabase e ficar imediatamente públicas na página pública.
-12. **Publicação e verificação** — configurar o repositório no GitHub e o deploy na
-    Vercel, validar os fluxos públicos e administrativos e revisar o resultado antes da
-    aprovação para publicação.
+12. **Publicação e verificação** — configurar o repositório no GitHub e o deploy no
+    GitHub Pages por GitHub Actions, validar os fluxos públicos e administrativos e
+    revisar o resultado antes da aprovação para publicação.
 
 ## 4. Fora de escopo
 
@@ -117,7 +117,7 @@ portfólio. O site público continua sendo uma experiência de página única.
 | Armazenamento de arquivos | Supabase Storage | Necessário para armazenar imagens dos projetos e os arquivos de currículo em português e inglês. A definição detalhada de buckets e políticas fica para a arquitetura. |
 | Autenticação administrativa | Supabase Auth com e-mail e senha | A área administrativa será acessível somente por Marcos, usando seu e-mail e sua senha. Não haverá outros usuários administradores nem fluxo OAuth nesta fase. |
 | Código e versionamento | GitHub | Será o repositório do projeto e a origem do fluxo de integração com a hospedagem. |
-| Deploy/Hospedagem | Vercel, em um novo projeto conectado ao GitHub | É a opção recomendada para integração com GitHub, deploy automático, previews e separação de variáveis de ambiente entre desenvolvimento e produção. A conexão com a conta Vercel de Marcos e a criação do projeto serão feitas na etapa de deploy, após o repositório estar disponível. |
+| Deploy/Hospedagem | GitHub Pages, publicado por GitHub Actions | É o destino oficial do portfólio nesta direção, com build reprodutível a partir da branch `master`, artefato estático e variáveis públicas configuradas no repositório. |
 
 Segredos, chaves e tokens não devem ser armazenados no repositório. As configurações
 devem ser fornecidas por variáveis de ambiente e as políticas do Supabase devem impedir
@@ -161,7 +161,7 @@ Visão geral dos limites:
      ├── [PostgreSQL]
      └── [Supabase Storage]
 
-[GitHub] → [Vercel] → [Aplicação Angular publicada]
+[GitHub] → [GitHub Actions] → [GitHub Pages] → [Aplicação Angular publicada]
 ```
 
 O código deve ser organizado por domínio ou feature, e não por um agrupamento global de
@@ -191,7 +191,7 @@ O produto será considerado funcional quando:
 - nenhum visitante não autenticado conseguir alterar o conteúdo público;
 - não houver bug crítico nos fluxos principais público, alternância de idioma,
   autenticação administrativa, edição de conteúdo e download de currículo;
-- o deploy pela integração GitHub–Vercel estiver configurado e o resultado publicado for
+- o deploy pela integração GitHub–GitHub Pages estiver configurado e o resultado publicado for
   revisado por Marcos antes da aprovação final.
 
 ## 8. Quem usa IA e como
@@ -209,8 +209,9 @@ O produto será considerado funcional quando:
 - Os nomes das empresas e os cargos das experiências profissionais podem ser publicados
   quando fizerem parte do conteúdo aprovado por Marcos. Informações confidenciais de
   empresas, clientes ou sistemas internos continuam fora de escopo.
-- Será criado um novo projeto na conta Vercel de Marcos, conectado ao repositório GitHub
-  do portfólio. O domínio final será definido durante essa configuração.
+- O portfólio será publicado no GitHub Pages do repositório
+  `Marcos-Vinicius-F-Santos/portfolio`, em `https://marcos-vinicius-f-santos.github.io/portfolio/`,
+  usando a branch padrão `master`.
 - A identidade visual inicial será baseada em padrões comuns de portfólios técnicos de
   desenvolvedores, com foco em colocar o produto em funcionamento. O refinamento visual
   conforme as preferências de Marcos ocorrerá depois da primeira versão funcional.

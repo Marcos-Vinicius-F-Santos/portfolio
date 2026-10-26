@@ -1,5 +1,8 @@
 # Spec da Feature — Hospedagem e Deploy na Vercel (João Vitor)
 
+> Feature arquivada e superseded por `spec/03-features/migracao-hospedagem-github-pages/spec.md`.
+> Não deve gerar novos deploys.
+
 Status: Rascunho — pronto para revisão e aprovação de João Vitor  
 Data: 2026-10-13  
 Projeto: Portfólio Profissional — João Vitor Dias Fernandes  

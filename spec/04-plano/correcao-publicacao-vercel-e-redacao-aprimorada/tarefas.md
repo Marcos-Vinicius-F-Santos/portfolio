@@ -1,5 +1,7 @@
 # Plano de Tarefas — Correção da Publicação na Vercel e Aprimoramento da Redação
 
+> Tarefas históricas arquivadas; não executar novos deploys Vercel.
+
 Feature: `correcao-publicacao-vercel-e-redacao-aprimorada`  
 Status: Proposta para Aprovação  
 Data: 15/10/2026  

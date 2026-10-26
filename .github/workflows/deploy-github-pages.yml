@@ -1,0 +1,74 @@
+name: Deploy portfolio to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+      SUPABASE_ADMIN_USER_ID: ${{ vars.SUPABASE_ADMIN_USER_ID }}
+      PORTFOLIO_AUTHOR_NAME: ${{ vars.PORTFOLIO_AUTHOR_NAME }}
+      PORTFOLIO_BRAND_INITIALS: ${{ vars.PORTFOLIO_BRAND_INITIALS }}
+      PORTFOLIO_PROFILE_ID: ${{ vars.PORTFOLIO_PROFILE_ID }}
+      PORTFOLIO_PROFILE_IMAGE_URL: ${{ vars.PORTFOLIO_PROFILE_IMAGE_URL }}
+      WEB3FORMS_ACCESS_KEY: ${{ vars.WEB3FORMS_ACCESS_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build Angular application
+        run: npm run build:github-pages
+
+      - name: Prepare GitHub Pages artifact
+        run: npm run prepare:github-pages
+
+      - name: Validate artifact
+        run: npm run check:github-pages
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/portfolio/browser
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

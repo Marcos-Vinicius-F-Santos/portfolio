@@ -20,8 +20,11 @@ serviços através de uma camada de serviços da própria aplicação.
                            [GitHub]
                               │
                               ▼
-                           [Vercel]
+                       [GitHub Actions]
                               │ deploy
+                              ▼
+                        [GitHub Pages]
+                              │
                               ▼
                     [Aplicação Angular]
                        │             │
@@ -40,7 +43,7 @@ serviços através de uma camada de serviços da própria aplicação.
 
 Fluxos principais:
 
-1. O visitante acessa a aplicação publicada na Vercel.
+1. O visitante acessa a aplicação publicada no GitHub Pages.
 2. A página pública lê o conteúdo disponível no Supabase e apresenta a versão do idioma
    selecionado.
 3. Marcos acessa a área administrativa e autentica-se com e-mail e senha.
@@ -131,11 +134,13 @@ Imagens de projetos e arquivos de currículo serão armazenados no Supabase Stor
 PostgreSQL manterá as referências e os metadados necessários para o conteúdo utilizar
 esses arquivos.
 
-### 3.6 GitHub como origem e Vercel como deploy
+### 3.6 GitHub como origem e GitHub Pages como deploy
 
-O código será versionado no GitHub. Um novo projeto será criado na conta Vercel de Marcos
-e conectado ao repositório do portfólio. A configuração do domínio será definida durante
-o deploy.
+O código é versionado no GitHub e o repositório `joaovitordf/portfolio` publica a branch
+`master` no GitHub Pages por GitHub Actions. O artefato é gerado em
+`dist/portfolio/browser`, com base `/portfolio/` e fallback `404.html` para as rotas
+profundas do Angular. Variáveis públicas são fornecidas por Actions Variables; nenhum
+segredo administrativo chega ao artefato.
 
 ## 4. Limites que não devem ser cruzados
 
@@ -179,5 +184,5 @@ o deploy.
 - aplicação mobile nativa;
 - integração de escrita ou sincronização automática com LinkedIn, GitHub ou outros perfis
   profissionais;
-- definição do domínio público final da Vercel;
+- definição de domínio customizado para o GitHub Pages;
 - refinamento definitivo da identidade visual além da primeira versão funcional.

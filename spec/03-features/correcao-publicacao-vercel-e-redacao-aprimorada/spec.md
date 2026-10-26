@@ -1,5 +1,8 @@
 # Spec da Feature — Correção da Publicação na Vercel e Aprimoramento da Redação (White-Label)
 
+> Registro histórico arquivado. O fluxo ativo de publicação não usa mais Vercel; consulte
+> `spec/03-features/migracao-hospedagem-github-pages/spec.md`.
+
 Status: Proposta para Aprovação de João Vitor  
 Data: 15/10/2026  
 Projeto: Portfólio Profissional (`joaovitordf/portfolio`)  
