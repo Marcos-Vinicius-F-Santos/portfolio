@@ -1,5 +1,7 @@
 # Lista de Tarefas — Hospedagem e Deploy na Vercel (João Vitor)
 
+> Tarefas arquivadas e superseded pela migração para GitHub Pages.
+
 Status: Em andamento  
 Spec: [Hospedagem e Deploy na Vercel](../../03-features/hospedagem-vercel-joao-vitor/spec.md)  
 Plano: [Plano de Implementação](./plano.md)

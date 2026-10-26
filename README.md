@@ -44,6 +44,18 @@ To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use th
 ng test
 ```
 
+## GitHub Pages
+
+O deploy de produção é feito pelo workflow `.github/workflows/deploy-github-pages.yml` na
+branch `master`. O site usa o subcaminho `https://marcos-vinicius-f-santos.github.io/portfolio/` e o
+artefato é preparado com `npm run build:github-pages`, `npm run prepare:github-pages` e
+`npm run check:github-pages`.
+
+Antes do primeiro deploy, cadastre no GitHub Actions Variables `SUPABASE_URL`,
+`SUPABASE_PUBLISHABLE_KEY` e `SUPABASE_ADMIN_USER_ID`, além das variáveis opcionais de
+identidade e contato descritas em
+[`spec/06-deploy/migracao-hospedagem-github-pages/deploy.md`](spec/06-deploy/migracao-hospedagem-github-pages/deploy.md).
+
 ## Running end-to-end tests
 
 For end-to-end (e2e) testing, run:

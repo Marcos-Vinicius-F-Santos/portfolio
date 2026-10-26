@@ -210,9 +210,9 @@ visitante selecionar o idioma correspondente.
 - [x] Decisão de produto proposta: WhatsApp será a ação principal e e-mail será o
       fallback no mesmo painel.
 - [x] Confirmado por Marcos: o número de WhatsApp deve reutilizar o telefone público já
-      definido na feature de contato: `+55 37 998292763`.
+      definido na feature de contato: `+55 11 99999-0000`.
 - [x] Confirmado por Marcos: o destinatário do e-mail deve reutilizar o endereço público
-      já definido: `marcossantosjdev@gmail.com`.
+      já definido: `contato@exemplo.com`.
 - [x] Confirmado por Marcos: não haverá mensagem padrão fixa; o campo de mensagem terá
       somente um placeholder editável por idioma. O assunto do e-mail também permanece
       editável e poderá ser preenchido posteriormente por Marcos.

@@ -46,14 +46,29 @@ describe('ProjectCardComponent', () => {
     expect(element.querySelector('app-project-technologies')).toBeTruthy();
   });
 
-  it('renders SVG placeholder when project has no images', async () => {
-    const project = mockProject({ images: [] });
+  it('renders SVG padlock placeholder when private project has no images', async () => {
+    const project = mockProject({ visibility: 'private', images: [] });
     const { element } = await renderCard(project);
 
     expect(element.querySelector('[data-testid="project-cover"]')).toBeNull();
     const placeholder = element.querySelector('[data-testid="project-cover-placeholder"]');
     expect(placeholder).toBeTruthy();
-    expect(placeholder?.textContent).toContain('PE'); // Initials of "Projeto Exemplo"
+    expect(placeholder?.querySelector('[data-testid="placeholder-lock-icon"]')).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-label"]')?.textContent).toContain(
+      'Código Proprietário',
+    );
+  });
+
+  it('renders code placeholder when public project has no images', async () => {
+    const project = mockProject({ visibility: 'public', images: [] });
+    const { element } = await renderCard(project);
+
+    const placeholder = element.querySelector('[data-testid="project-cover-placeholder"]');
+    expect(placeholder).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-code-icon"]')).toBeTruthy();
+    expect(placeholder?.querySelector('[data-testid="placeholder-label"]')?.textContent).toContain(
+      'Código Aberto',
+    );
   });
 
   it('renders cover image when available, and falls back to placeholder on error', async () => {
@@ -87,16 +102,17 @@ describe('ProjectCardComponent', () => {
     expect(element.querySelector('[data-testid="project-cover-placeholder"]')).toBeTruthy();
   });
 
-  it('renders demo badge linking to external URL when link is present', async () => {
+  it('renders external link badge with actual link label when link is present', async () => {
     const project = mockProject({
-      links: [{ label: 'Demo', url: 'https://exemplo.com/demo' }],
+      links: [{ label: 'GitHub', url: 'https://exemplo.com/repo' }],
     });
     const { element } = await renderCard(project);
 
     const demoBadge = element.querySelector<HTMLAnchorElement>('[data-testid="project-demo-link"]');
     expect(demoBadge).toBeTruthy();
-    expect(demoBadge?.href).toBe('https://exemplo.com/demo');
+    expect(demoBadge?.href).toBe('https://exemplo.com/repo');
     expect(demoBadge?.target).toBe('_blank');
+    expect(demoBadge?.textContent).toContain('GitHub');
   });
 
   it('navigates to public details URL by default and admin editor URL in editorial mode', async () => {
@@ -108,6 +124,39 @@ describe('ProjectCardComponent', () => {
     const { element: adminEl } = await renderCard(project, true);
     const linkAdmin = adminEl.querySelector<HTMLAnchorElement>('.project-card__details-btn');
     expect(linkAdmin?.href).toContain('/admin/editor/projetos/proj-xyz');
+  });
+
+  it('renders public visibility badge when project visibility is public', async () => {
+    const project = mockProject({ visibility: 'public' });
+    const { element } = await renderCard(project);
+
+    const badge = element.querySelector('[data-testid="project-visibility-public"]');
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Público');
+  });
+
+  it('renders private visibility badge when project visibility is private', async () => {
+    const project = mockProject({ visibility: 'private', links: [] });
+    const { element } = await renderCard(project);
+
+    const badge = element.querySelector('[data-testid="project-visibility-private"]');
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Privado');
+  });
+
+  it('renders English visibility badge when locale is en', async () => {
+    const project = mockProject({ visibility: 'private' });
+    const fixture = TestBed.createComponent(ProjectCardComponent);
+    fixture.componentRef.setInput('project', project);
+    fixture.componentRef.setInput('editorialMode', false);
+    fixture.componentRef.setInput('locale', 'en');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const badge = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-testid="project-visibility-private"]',
+    );
+    expect(badge?.textContent).toContain('Private');
   });
 });
 

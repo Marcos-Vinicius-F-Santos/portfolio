@@ -11,21 +11,45 @@ export class PublishedVersionExpiredError extends Error {}
 export class PublishedSnapshotService {
   private readonly client = inject(SUPABASE_CLIENT);
   private readonly snapshotState = signal<EditorialSnapshotV1 | null>(null);
+  private inFlight: {
+    publicationId: string | null;
+    promise: Promise<EditorialSnapshotV1>;
+  } | null = null;
   readonly snapshot = this.snapshotState.asReadonly();
 
   async load(): Promise<EditorialSnapshotV1> {
     const fixed = this.snapshotState();
     if (fixed) return fixed;
-    return this.fetch(null);
+    return this.loadOrFetch(null);
   }
 
   async loadFixed(publicationId: string): Promise<EditorialSnapshotV1> {
     const fixed = this.snapshotState();
     if (fixed?.publicationId === publicationId) return fixed;
-    return this.fetch(publicationId);
+    return this.loadOrFetch(publicationId);
   }
 
   clear(): void { this.snapshotState.set(null); }
+
+  private loadOrFetch(publicationId: string | null): Promise<EditorialSnapshotV1> {
+    if (this.inFlight?.publicationId === publicationId) {
+      return this.inFlight.promise;
+    }
+
+    const promise = this.fetch(publicationId);
+    this.inFlight = { publicationId, promise };
+    promise.then(
+      () => this.clearInFlight(promise),
+      () => this.clearInFlight(promise),
+    );
+    return promise;
+  }
+
+  private clearInFlight(promise: Promise<EditorialSnapshotV1>): void {
+    if (this.inFlight?.promise === promise) {
+      this.inFlight = null;
+    }
+  }
 
   private async fetch(publicationId: string | null): Promise<EditorialSnapshotV1> {
     if (!this.client) throw new Error('Supabase is not configured');

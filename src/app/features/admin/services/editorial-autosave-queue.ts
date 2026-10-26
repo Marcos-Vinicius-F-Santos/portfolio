@@ -92,7 +92,13 @@ export class EditorialAutosaveQueue {
 function classifyFailure(error: unknown): EditorialAutosaveFailure['reason'] {
   if (!error || typeof error !== 'object') return 'unknown';
   const value = error as Record<string, unknown>;
-  if (value['code'] === '40001') return 'conflict';
+  const message = typeof value['message'] === 'string' ? value['message'] : '';
+  if (
+    value['code'] === '40001' ||
+    value['code'] === 'P0409' ||
+    (value['code'] === 'P0001' && message.includes('revision conflict'))
+  )
+    return 'conflict';
   if (value['code'] === '42501' || value['status'] === 401 || value['status'] === 403)
     return 'unauthorized';
   if (value['status'] === 0 || value['name'] === 'TypeError') return 'network';

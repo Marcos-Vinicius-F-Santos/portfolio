@@ -73,10 +73,11 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
   });
 
   it('contains the approved skills catalogue and academic entries', () => {
-    expect(PORTFOLIO_SKILL_CATEGORIES).toHaveLength(6);
-    expect(
-      PORTFOLIO_SKILL_CATEGORIES.flatMap((category) => category.skills.map((skill) => skill.name)),
-    ).toEqual(
+    expect(PORTFOLIO_SKILL_CATEGORIES).toHaveLength(7);
+    const allSkillNames = PORTFOLIO_SKILL_CATEGORIES.flatMap((category) =>
+      category.skills.map((skill) => skill.name),
+    );
+    expect(allSkillNames).toEqual(
       expect.arrayContaining([
         'TypeScript',
         'Python',
@@ -93,7 +94,6 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
         'Flutter',
         'HTML',
         'CSS',
-        'React',
         'Docker',
         'Gradle',
         'Maven',
@@ -108,8 +108,12 @@ describe('portfolio content fallback (FR-005/FR-006)', () => {
         'GitKraken',
         'OpenCV',
         'YOLOv8',
+        'MediaPipe',
+        'OCR',
       ]),
     );
+    expect(allSkillNames).not.toContain('React');
+    expect(allSkillNames).not.toContain('Node.js');
     expect(PORTFOLIO_ACADEMIC_ENTRIES.map((entry) => entry.nameKey)).toEqual([
       'educationDataScience',
     ]);

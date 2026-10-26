@@ -1,5 +1,8 @@
 # Spec da Feature — Hospedagem e Deploy na Vercel (João Vitor)
 
+> Feature arquivada e superseded por `spec/03-features/migracao-hospedagem-github-pages/spec.md`.
+> Não deve gerar novos deploys.
+
 Status: Rascunho — pronto para revisão e aprovação de João Vitor  
 Data: 2026-10-13  
 Projeto: Portfólio Profissional — João Vitor Dias Fernandes  
@@ -74,7 +77,7 @@ Configurar e disponibilizar a hospedagem oficial do portfólio profissional de *
 ### AC-003 — Canais de Contato Pessoais de João Vitor
 - **Dado** o portfólio publicado
 - **Quando** o usuário preencher o painel de contato e acionar WhatsApp ou E-mail
-- **Então** o link gerado deve direcionar para o número `553799429018` e e-mail `profissional.joaovitordf@gmail.com`.
+- **Então** o link gerado deve direcionar para o telefone e o e-mail configurados no snapshot publicado da instância.
 
 ### AC-004 — Download de Currículos
 - **Dado** o site em produção

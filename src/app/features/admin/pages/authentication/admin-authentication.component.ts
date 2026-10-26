@@ -18,11 +18,16 @@ export class AdminAuthenticationComponent {
 
   protected readonly email = signal('');
   protected readonly password = signal('');
+  protected readonly showPassword = signal(false);
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal('');
 
   constructor() {
     void this.restoreSession();
+  }
+
+  protected toggleShowPassword(): void {
+    this.showPassword.update((visible) => !visible);
   }
 
   protected async submit(): Promise<void> {

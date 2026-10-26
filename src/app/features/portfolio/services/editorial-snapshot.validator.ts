@@ -78,7 +78,7 @@ const ENTITY_DATA_FIELDS: Readonly<Record<EditorialEntityKind, readonly string[]
   skillCategory: [],
   skill: ['technologyId', 'iconMediaId'],
   academic: ['startDate', 'endDate', 'isCurrent'],
-  project: ['type', 'technologyIds'],
+  project: ['type', 'technologyIds', 'visibility'],
   contact: ['symbol', 'href'],
   projectLink: ['href'],
   projectImage: ['mediaId'],
@@ -290,6 +290,14 @@ function validateEntityData(
   }
   if (kind === 'project' && data['type'] !== 'professional' && data['type'] !== 'personal') {
     add(issues, 'invalid_value', `${path}.type`, 'Projeto deve ser professional ou personal.');
+  }
+  if (
+    kind === 'project' &&
+    data['visibility'] !== undefined &&
+    data['visibility'] !== 'public' &&
+    data['visibility'] !== 'private'
+  ) {
+    add(issues, 'invalid_value', `${path}.visibility`, 'Visibilidade do projeto deve ser public ou private.');
   }
   if (
     kind === 'project' &&

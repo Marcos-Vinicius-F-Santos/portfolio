@@ -52,20 +52,56 @@ label {
   font-size: 0.9rem;
 }
 
-input,
-button {
+input {
   min-height: 2.8rem;
   border: 1px solid #59635c;
   padding: 0.7rem 0.8rem;
   font: inherit;
-}
-
-input {
   background: #261a14;
   color: #f5f0e6;
 }
 
-button {
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.75rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border: none;
+  background: transparent;
+  color: #d8d9cf;
+  cursor: pointer;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  color: #b9efd2;
+}
+
+.password-toggle-btn:focus-visible {
+  outline: 2px solid #b9efd2;
+  outline-offset: 2px;
+}
+
+button[type="submit"] {
+  min-height: 2.8rem;
+  border: 1px solid #59635c;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
   margin-top: 0.5rem;
   background: #b9efd2;
   color: #261a14;
@@ -73,7 +109,7 @@ button {
   font-weight: 700;
 }
 
-button:disabled {
+button[type="submit"]:disabled {
   cursor: wait;
   opacity: 0.65;
 }

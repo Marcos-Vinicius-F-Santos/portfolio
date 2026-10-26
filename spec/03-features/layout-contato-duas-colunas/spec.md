@@ -28,19 +28,19 @@ Atualmente, a seção de contato exibe os links em uma grade horizontal de 5 blo
 
 ### FR-001 — Cabeçalho e Texto Explicativo de Contato
 QUANDO a seção `#contato` for renderizada  
-O SISTEMA DEVE apresentar:
+O SISTEMA DEVE apresentar no cabeçalho introdutório (ocupando a largura total das duas colunas, acima dos cards):
 1. Eyebrow de seção (`CONTATO` / `CONTACT`).
 2. Headline calorosa e profissional (`Vamos Trabalhar Juntos!` / `Let's Work Together!`).
 3. Subtítulo descritivo (`Tem um projeto, oportunidade ou desafio interessante? Vamos conversar.` / `Have a project, opportunity or interesting challenge? Let's talk.`).
-4. Parágrafo explicativo detalhado na coluna da esquerda contextualizando o perfil de João Vitor para contratação e projetos.
+4. Parágrafo explicativo detalhado preenchendo toda a largura superior antes da divisão das duas colunas de cards.
 
 ### FR-002 — Coluna da Esquerda: Cards Modernos de Plataformas
 QUANDO a seção `#contato` for renderizada  
 O SISTEMA DEVE exibir na coluna da esquerda os cards horizontais para cada canal de contato:
-1. **E-mail**: `profissional.joaovitordf@gmail.com`
-2. **WhatsApp / Telefone**: `+55 (37) 99942-9018`
-3. **LinkedIn**: `linkedin.com/in/xjoaovitordf`
-4. **GitHub**: `github.com/joaovitordf`
+1. **E-mail**: `contato@exemplo.com`
+2. **WhatsApp / Telefone**: `+55 (11) 99999-0000`
+3. **LinkedIn**: `linkedin.com/in/exemplo`
+4. **GitHub**: `github.com/exemplo`
 5. **Currículo (PDF)**: Botão de download do currículo no idioma ativo (`curriculum-pt.pdf` ou `curriculum-en.pdf`).
 
 Cada card deve conter:
@@ -49,9 +49,9 @@ Cada card deve conter:
 - Valor / link em destaque com truncamento seguro.
 - Efeito hover com elevação suave (`translateY(-2px)`) e realce de borda.
 
-### FR-003 — Coluna da Direita: Formulário de Mensagem Refinado
+### FR-003 — Coluna da Direita: Formulário de Mensagem Refinado e Alinhado
 QUANDO o formulário de contato (`app-contact-panel`) for renderizado na coluna da direita  
-O SISTEMA DEVE apresentar um card estilizado contendo:
+O SISTEMA DEVE apresentar um card estilizado ocupando o mesmo espaço e altura da coluna da esquerda (alinhado no topo e na base com a pilha de cards da esquerda), contendo:
 - Campos de Nome, E-mail e Mensagem com placeholders claros e foco visual consistente.
 - Botões de ação com ícone vetorial de envio (avião de papel).
 - Nota explicativa inferior: *"Você será redirecionado para o WhatsApp / E-mail para enviar a mensagem."*

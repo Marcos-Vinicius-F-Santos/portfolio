@@ -1,0 +1,22 @@
+<footer class="site-footer" data-testid="site-footer">
+  <div class="site-footer__container">
+    <a
+      href="/#apresentacao"
+      class="brand-logo site-footer__brand"
+      [attr.aria-label]="authorName() || 'Início'"
+    >
+      <span class="brand-logo__initials">{{ brandMonogram() }}</span>
+      <span class="brand-logo__suffix">.dev</span>
+    </a>
+
+    <div class="site-footer__info">
+      <p class="site-footer__copyright" data-testid="footer-copyright">
+        © {{ currentYear }} {{ authorName() }}. {{ ui().allRightsReserved }}
+      </p>
+      <p class="site-footer__credit" data-testid="footer-credit">
+        {{ ui().designedAndEngineeredBy }} {{ authorName() }}.
+      </p>
+    </div>
+  </div>
+</footer>
+

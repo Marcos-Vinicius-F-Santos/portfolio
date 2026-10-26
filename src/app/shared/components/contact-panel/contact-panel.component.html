@@ -149,11 +149,4 @@
       }
     </button>
   </div>
-  <p class="contact-panel__redirect-note">
-    @if (destinations().web3FormsAccessKey) {
-      {{ copy().contactPanelBody }}
-    } @else {
-      {{ $any(copy()).contactRedirectNote || 'Você será redirecionado para o WhatsApp ou cliente de e-mail para enviar a mensagem.' }}
-    }
-  </p>
 </section>

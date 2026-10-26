@@ -1,5 +1,8 @@
 <main class="editorial-project-detail">
-  <nav class="detail-nav"><a routerLink="/admin/editor"><span aria-hidden="true">←</span> Voltar ao editor visual</a></nav>
+  <nav class="detail-nav">
+    <a routerLink="/admin/editor"><span aria-hidden="true">←</span> Voltar ao editor visual</a>
+    <a routerLink="/admin/editor" class="publish-shortcut-btn">Revisar e Publicar Alterações ➔</a>
+  </nav>
   @if (draft(); as value) {
     @if (project(); as item) {
       <header class="project-header">
@@ -62,10 +65,13 @@
       <section class="editorial-panel">
         <div class="panel-heading"><div><p class="panel-kicker">Conteúdo aprofundado</p><h2>Listas do detalhe</h2></div><span class="panel-index">04</span></div>
         @for (list of lists(); track list.key) {
-          <label class="field-control"><span>{{ list.label }}</span><textarea [ngModel]="list.values.join('\n')" (blur)="saveList(list.ids, $any($event.target).value)"></textarea></label>
+          <label class="field-control"><span>{{ list.label }}</span><textarea [ngModel]="list.values.join('\n')" (blur)="saveList(list.key, list.ids, $any($event.target).value)"></textarea></label>
         }
       </section>
-      <p class="detail-save-state" role="status"><span class="save-dot" aria-hidden="true"></span>{{ autosave.status() }}</p>
+      <div class="detail-footer-bar">
+        <p class="detail-save-state" role="status"><span class="save-dot" aria-hidden="true"></span>{{ autosave.status() }}</p>
+        <a routerLink="/admin/editor" class="publish-shortcut-btn">Revisar e Publicar Alterações ➔</a>
+      </div>
     } @else { <p>Projeto não encontrado no rascunho.</p> }
   } @else { <p>Carregando rascunho…</p> }
 </main>

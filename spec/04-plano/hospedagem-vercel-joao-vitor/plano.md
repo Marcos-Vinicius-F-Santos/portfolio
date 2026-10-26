@@ -1,5 +1,7 @@
 # Plano de Implementação — Hospedagem e Deploy na Vercel (João Vitor)
 
+> Plano arquivado e superseded pela migração para GitHub Pages.
+
 Status: Rascunho — pronto para revisão e aprovação  
 Data: 2026-10-13  
 Spec de Referência: [Hospedagem e Deploy na Vercel](../../03-features/hospedagem-vercel-joao-vitor/spec.md)  

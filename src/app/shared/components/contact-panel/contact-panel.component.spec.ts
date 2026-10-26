@@ -166,8 +166,8 @@ describe('ContactPanelComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    fill(fixture, '#contact-panel-name', 'Maria Silva');
-    fill(fixture, '#contact-panel-email', 'maria@exemplo.com');
+    fill(fixture, '#contact-panel-name', 'Contato Teste');
+    fill(fixture, '#contact-panel-email', 'visitante@exemplo.com');
     fill(fixture, '#contact-panel-message', 'Gostaria de agendar uma reunião.');
 
     const emailBtn = fixture.nativeElement.querySelector('[data-testid="contact-panel-email"]') as HTMLButtonElement;
@@ -176,8 +176,8 @@ describe('ContactPanelComponent', () => {
 
     expect(emailSenderMock).toHaveBeenCalledWith({
       accessKey: 'test-key-abc',
-      name: 'Maria Silva',
-      email: 'maria@exemplo.com',
+      name: 'Contato Teste',
+      email: 'visitante@exemplo.com',
       message: 'Gostaria de agendar uma reunião.',
       subject: copy.contactEmailSubject,
     });

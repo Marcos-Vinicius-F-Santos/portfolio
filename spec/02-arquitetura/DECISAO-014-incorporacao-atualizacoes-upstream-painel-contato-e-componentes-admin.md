@@ -39,7 +39,7 @@ Ao realizar o merge do upstream, surgiram conflitos de mesclagem e divergências
    - **Migração para CSS Nativo**: converter todos os novos estilos (`contact-panel.scss`, `admin-card.scss`, `admin-feedback.scss`, `admin-page-header.scss`, `admin-section-header.scss`, `admin-ui.scss`) para CSS nativo limpo (`.css`), sem falso SCSS ou diretivas inválidas (`@use`, `@include`).
    - **Compatibilidade de Nomenclatura**: manter compatibilidade total exportando os aliases canônicos (`AdminCardComponent`, `AdminFeedbackComponent`, `AdminPageHeaderComponent`, `AdminSectionHeaderComponent`, `ContactPanelComponent`) juntamente com os nomes originais (`AdminCard`, etc.).
    - **Caminhos de Importação**: ajustar os imports relativos em `content-management.component.ts` e `media-management.component.ts` considerando a profundidade da pasta `pages/` (`../../../../shared/ui/...`).
-   - **Dados de Contato Próprios**: vincular o painel de contato na página pública de João Vitor aos seus próprios canais de contato (`+55 (37) 99429-018` e `profissional.joaovitordf@gmail.com`), mantendo os fallbacks e testes do upstream preservados.
+   - **Dados de Contato Próprios**: vincular o painel de contato na página pública aos canais configurados no snapshot publicado da instância, mantendo os fallbacks e testes do upstream preservados.
 
 ---
 

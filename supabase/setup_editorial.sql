@@ -315,7 +315,7 @@ create index if not exists publications_created_at_idx
 create index if not exists publications_retained_idx
   on portfolio_editorial.publications (retained, sequence desc);
 
-create function portfolio_editorial.protect_default_locale()
+create or replace function portfolio_editorial.protect_default_locale()
 returns trigger
 language plpgsql
 set search_path = ''
@@ -338,7 +338,7 @@ create trigger protect_default_locale
 before update or delete on portfolio_editorial.draft_locales
 for each row execute function portfolio_editorial.protect_default_locale();
 
-create function portfolio_editorial.protect_publication_payload()
+create or replace function portfolio_editorial.protect_publication_payload()
 returns trigger
 language plpgsql
 set search_path = ''
@@ -484,7 +484,7 @@ drop policy if exists draft_media_refs_owner_all on portfolio_editorial.draft_me
 create policy draft_media_refs_owner_all on portfolio_editorial.draft_media_refs
   for all to portfolio_editorial_owner using (true) with check (true);
 
-create function portfolio_editorial.require_editorial_admin(actor uuid)
+create or replace function portfolio_editorial.require_editorial_admin(actor uuid)
 returns uuid language plpgsql security invoker set search_path = '' as $$
 begin
   if actor is null or not exists (
@@ -494,7 +494,7 @@ begin
 end
 $$;
 
-create function portfolio_editorial.reserve_media(
+create or replace function portfolio_editorial.reserve_media(
   expected_revision bigint, purpose text, original_name text, mime text, bytes bigint, actor uuid
 ) returns table(media_id uuid, bucket text, path text)
 language plpgsql security definer set search_path = '' as $$
@@ -519,7 +519,7 @@ begin
 end
 $$;
 
-create function portfolio_editorial.can_access_pending_media(requested_bucket text, requested_path text, actor uuid)
+create or replace function portfolio_editorial.can_access_pending_media(requested_bucket text, requested_path text, actor uuid)
 returns boolean language sql stable security definer set search_path = '' as $$
   select exists (
     select 1 from portfolio_editorial.media m
@@ -528,7 +528,7 @@ returns boolean language sql stable security definer set search_path = '' as $$
   ) and exists (select 1 from public.portfolio_admins where user_id = actor)
 $$;
 
-create function portfolio_editorial.finalize_media(expected_revision bigint, requested_media_id uuid, actor uuid)
+create or replace function portfolio_editorial.finalize_media(expected_revision bigint, requested_media_id uuid, actor uuid)
 returns void language plpgsql security definer set search_path = '' as $$
 declare item portfolio_editorial.media%rowtype; object_mime text; object_bytes bigint;
 begin
@@ -546,7 +546,7 @@ begin
 end
 $$;
 
-create function portfolio_editorial.validate_media_reference()
+create or replace function portfolio_editorial.validate_media_reference()
 returns trigger language plpgsql set search_path = '' as $$
 begin
   if not exists (
@@ -574,14 +574,14 @@ drop policy if exists editorial_media_admin_select on storage.objects;
 create policy editorial_media_admin_select on storage.objects for select to authenticated
 using (portfolio_editorial.can_access_pending_media(bucket_id, name, (select auth.uid())));
 
-create function public.reserve_editorial_media(
+create or replace function public.reserve_editorial_media(
   expected_revision bigint, purpose text, original_name text, mime text, bytes bigint
 ) returns table(media_id uuid, bucket text, path text)
 language sql security definer set search_path = '' as $$
   select * from portfolio_editorial.reserve_media(expected_revision, purpose, original_name, mime, bytes,
     coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''), nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')::uuid)
 $$;
-create function public.finalize_editorial_media(expected_revision bigint, media_id uuid)
+create or replace function public.finalize_editorial_media(expected_revision bigint, media_id uuid)
 returns void language sql security definer set search_path = '' as $$
   select portfolio_editorial.finalize_media(expected_revision, media_id,
     coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''), nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')::uuid)
@@ -625,9 +625,15 @@ alter table portfolio_editorial.draft_entities add constraint draft_entities_kin
 
 -- Importação do snapshot inicial editorial parametrizado
 do $$ declare payload jsonb := '{"formatVersion":1,"publicationId":"00000000-0000-4000-8000-000000000001","createdAt":"2026-10-15T12:00:00.000Z","defaultLocale":"pt-BR","locales":[{"code":"pt-BR","label":"Português","direction":"ltr","position":0},{"code":"en","label":"English","direction":"ltr","position":1}],"sections":[{"id":"presentation-section","kind":"presentation","position":0},{"id":"about-section","kind":"about","position":1},{"id":"results-section","kind":"results","position":2},{"id":"experiences-section","kind":"experiences","position":3},{"id":"projects-section","kind":"projects","position":4},{"id":"skills-section","kind":"skills","position":5},{"id":"education-section","kind":"education","position":6},{"id":"contact-section","kind":"contact","position":7}],"entities":{"profile":{"kind":"profile","position":0,"data":{"profileId":"profile-generic","mediaId":"profile-image"}},"copy-aboutTitle":{"kind":"interfaceText","position":1,"data":{"key":"aboutTitle"}},"copy-resultsTitle":{"kind":"interfaceText","position":2,"data":{"key":"resultsTitle"}},"copy-intro":{"kind":"interfaceText","position":3,"data":{"key":"intro"}},"experience-1":{"kind":"experience","position":0,"data":{"startDate":"2024-01-01","endDate":null}},"experience-1-responsibility-1":{"kind":"listItem","parentId":"experience-1","position":0,"data":{"collection":"responsibilities"}},"experience-1-decision-1":{"kind":"listItem","parentId":"experience-1","position":0,"data":{"collection":"technicalDecisions"}},"experience-1-result-1":{"kind":"listItem","parentId":"experience-1","position":0,"data":{"collection":"results"}},"project-1":{"kind":"project","position":0,"data":{"type":"professional","technologyIds":["typescript"]}},"project-1-link-1":{"kind":"projectLink","parentId":"project-1","position":0,"data":{"href":"https://example.com/project"}},"skill-category":{"kind":"skillCategory","position":0,"data":{}},"skill-typescript":{"kind":"skill","parentId":"skill-category","position":0,"data":{"technologyId":"typescript"}},"academic-1":{"kind":"academic","position":0,"data":{"startDate":"2022-01-01","endDate":"2024-12-31","isCurrent":false}},"contact-github":{"kind":"contact","position":0,"data":{"symbol":"github","href":"https://github.com/example"}}},"translations":{"pt-BR":{"profile":{},"copy-aboutTitle":{"text":"Sobre o perfil"},"copy-resultsTitle":{"text":"Resultados"},"copy-intro":{"text":"Profissional de software com atuação em soluções digitais."},"experience-1":{"title":"Experiência de software","context":"Contexto profissional."},"experience-1-responsibility-1":{"text":"Desenvolvimento de soluções digitais."},"experience-1-decision-1":{"text":"Arquitetura modular."},"experience-1-result-1":{"text":"Entrega estável."},"project-1":{"name":"Projeto de referência","description":"Aplicação de referência.","problemContext":"Necessidade de uma solução digital.","solution":"Solução modular.","role":"Desenvolvimento"},"project-1-link-1":{"label":"Site"},"skill-category":{"label":"Linguagens"},"skill-typescript":{"name":"TypeScript"},"academic-1":{"name":"Formação em tecnologia","institution":"Instituição de referência"},"contact-github":{"label":"GitHub"}},"en":{"profile":{},"copy-aboutTitle":{"text":"About the profile"},"copy-resultsTitle":{"text":"Results"},"copy-intro":{"text":"Software professional working on digital solutions."},"experience-1":{"title":"Software experience","context":"Professional context."},"experience-1-responsibility-1":{"text":"Development of digital solutions."},"experience-1-decision-1":{"text":"Modular architecture."},"experience-1-result-1":{"text":"Stable delivery."},"project-1":{"name":"Reference project","description":"Reference application.","problemContext":"Need for a digital solution.","solution":"Modular solution.","role":"Development"},"project-1-link-1":{"label":"Website"},"skill-category":{"label":"Languages"},"skill-typescript":{"name":"TypeScript"},"academic-1":{"name":"Technology education","institution":"Reference institution"},"contact-github":{"label":"GitHub"}}},"technologies":{"typescript":{"label":"TypeScript","aliases":["TS"]}},"media":{"profile-image":{"source":"managed","mime":"image/png","bytes":128,"assetPath":"profile/default.png"}}}'::jsonb; begin
+set constraints all deferred;
+delete from portfolio_editorial.draft_media_refs where draft_id = 1;
+delete from portfolio_editorial.draft_translations where draft_id = 1;
+delete from portfolio_editorial.draft_entities where draft_id = 1;
+delete from portfolio_editorial.draft_locales where draft_id = 1 and code <> 'pt-BR';
+insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'pt-BR','Português','ltr','active',0) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'en','English','ltr','active',1) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_entities(draft_id,id,kind,parent_id,position,data) select 1,e.key,e.value->>'kind',nullif(e.value->>'parentId',''),(e.value->>'position')::int,e.value->'data' from jsonb_each(payload->'entities') e on conflict(draft_id,id) do update set kind=excluded.kind,parent_id=excluded.parent_id,position=excluded.position,data=excluded.data;
-insert into portfolio_editorial.draft_translations(draft_id,entity_id,locale_code,fields) select 1,e.key,l.key,l.value->e.key from jsonb_each(payload->'entities') e cross join jsonb_each(payload->'translations') l on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;
+insert into portfolio_editorial.draft_translations(draft_id,entity_id,locale_code,fields) select 1,e.key,l.key,l.value->e.key from jsonb_each(payload->'entities') e cross join jsonb_each(payload->'translations') l where l.value ? e.key on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;
 insert into portfolio_editorial.technologies(id,label,aliases,bundled_asset) select t.key,t.value->>'label',array(select jsonb_array_elements_text(t.value->'aliases')),case when t.value ? 'iconMediaId' then payload->'media'->(t.value->>'iconMediaId')->>'assetPath' end from jsonb_each(payload->'technologies') t on conflict(id) do update set label=excluded.label,aliases=excluded.aliases,bundled_asset=excluded.bundled_asset;
 insert into portfolio_editorial.publications(id,format_version,snapshot,hash,source_revision) values ('00000000-0000-4000-8000-000000000001',1,payload,'78e9a551d021a7163f4f59b2c8b124d006e37652a2a8fabc793171ea4531db67',0) on conflict(id) do nothing;
 update portfolio_editorial.draft set base_publication_id='00000000-0000-4000-8000-000000000001',updated_at=now() where id=1;
@@ -683,7 +689,7 @@ drop policy if exists operations_owner_all on portfolio_editorial.operations;
 create policy operations_owner_all on portfolio_editorial.operations
   for all to portfolio_editorial_owner using (true) with check (true);
 
-create function portfolio_editorial.allowed_entity_fields(entity_kind text, translated boolean)
+create or replace function portfolio_editorial.allowed_entity_fields(entity_kind text, translated boolean)
 returns text[] language sql immutable set search_path = '' as $$
   select case
     when translated and entity_kind = 'presentation' then array['eyebrow','title','displayName','summary']
@@ -712,7 +718,7 @@ returns text[] language sql immutable set search_path = '' as $$
     else array[]::text[] end
 $$;
 
-create function portfolio_editorial.apply_draft_command(
+create or replace function portfolio_editorial.apply_draft_command(
   expected_revision bigint, operation_id uuid, command jsonb, actor uuid
 ) returns jsonb language plpgsql security definer set search_path = '' as $$
 declare
@@ -821,7 +827,7 @@ begin
 end
 $$;
 
-create function public.save_editor_command(expected_revision bigint, operation_id uuid, command jsonb)
+create or replace function public.save_editor_command(expected_revision bigint, operation_id uuid, command jsonb)
 returns jsonb language sql security definer set search_path = '' as $$
   select portfolio_editorial.apply_draft_command(expected_revision,operation_id,command,
     coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
@@ -846,7 +852,7 @@ revoke create on schema portfolio_editorial from portfolio_editorial_executor;
 -- Migration: 20260926113000_validate_editorial_publication.sql
 -- T-010 / ADR-008: authoritative validation and deterministic review summary.
 
-create function portfolio_editorial.required_translation_fields(entity_kind text)
+create or replace function portfolio_editorial.required_translation_fields(entity_kind text)
 returns text[] language sql immutable set search_path = '' as $$
   select case entity_kind
     when 'presentation' then array['title','displayName','summary']
@@ -868,7 +874,7 @@ $$;
 
 grant select on portfolio_editorial.publications to portfolio_editorial_executor;
 
-create function portfolio_editorial.validate_publication(expected_revision bigint, actor uuid)
+create or replace function portfolio_editorial.validate_publication(expected_revision bigint, actor uuid)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare
   current_revision bigint; base_snapshot jsonb; errors jsonb; summary jsonb;
@@ -930,7 +936,7 @@ begin
     'errors',errors,'summary',summary,'reviewHash',review_hash);
 end $$;
 
-create function public.validate_editor_publication(expected_revision bigint)
+create or replace function public.validate_editor_publication(expected_revision bigint)
 returns jsonb language sql security definer set search_path='' as $$
   select portfolio_editorial.validate_publication(expected_revision,
     coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
@@ -975,7 +981,7 @@ drop policy if exists site_state_executor_update on portfolio_editorial.site_sta
 create policy site_state_executor_update on portfolio_editorial.site_state
   for update to portfolio_editorial_executor using (true) with check (true);
 
-create function portfolio_editorial.build_publication_content()
+create or replace function portfolio_editorial.build_publication_content()
 returns jsonb language plpgsql stable security definer set search_path='' as $$
 declare base_snapshot jsonb; result jsonb;
 begin
@@ -1003,7 +1009,7 @@ begin
   return result;
 end $$;
 
-create function portfolio_editorial.publish_draft(
+create or replace function portfolio_editorial.publish_draft(
   expected_revision bigint, operation_id uuid, review_hash text, actor uuid
 ) returns jsonb language plpgsql security definer set search_path='' as $$
 declare current_revision bigint; existing portfolio_editorial.operations%rowtype;
@@ -1044,7 +1050,7 @@ begin
   return receipt;
 end $$;
 
-create function public.publish_editor_draft(expected_revision bigint,operation_id uuid,review_hash text)
+create or replace function public.publish_editor_draft(expected_revision bigint,operation_id uuid,review_hash text)
 returns jsonb language sql security definer set search_path='' as $$
  select portfolio_editorial.publish_draft(expected_revision,operation_id,review_hash,
   coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
@@ -1081,7 +1087,7 @@ create policy publication_access_owner_all on portfolio_editorial.publication_ac
 insert into portfolio_editorial.publication_access(publication_id,public_until)
  select active_publication_id,null from portfolio_editorial.site_state where active_publication_id is not null;
 
-create function portfolio_editorial.track_publication_access()
+create or replace function portfolio_editorial.track_publication_access()
 returns trigger language plpgsql set search_path='' as $$ begin
  if old.active_publication_id is distinct from new.active_publication_id then
   if old.active_publication_id is not null then
@@ -1098,7 +1104,7 @@ drop trigger if exists track_publication_access on portfolio_editorial.site_stat
 create trigger track_publication_access before update of active_publication_id on portfolio_editorial.site_state
  for each row execute function portfolio_editorial.track_publication_access();
 
-create function portfolio_editorial.read_publication(requested uuid default null)
+create or replace function portfolio_editorial.read_publication(requested uuid default null)
 returns jsonb language plpgsql stable security definer set search_path='' as $$
 declare chosen uuid; result jsonb;
 begin
@@ -1112,7 +1118,7 @@ begin
  if result is null then raise exception 'VERSION_EXPIRED' using errcode='P0002'; end if;
  return result;
 end $$;
-create function public.get_published_snapshot(publication_id uuid default null)
+create or replace function public.get_published_snapshot(publication_id uuid default null)
 returns jsonb language sql stable security definer set search_path='' as $$
  select portfolio_editorial.read_publication(publication_id)
 $$;
@@ -1140,7 +1146,7 @@ drop policy if exists draft_locales_executor_write on portfolio_editorial.draft_
 create policy draft_locales_executor_write on portfolio_editorial.draft_locales
  for all to portfolio_editorial_executor using(true) with check(true);
 
-create function portfolio_editorial.discard_draft(expected_revision bigint,operation_id uuid,actor uuid)
+create or replace function portfolio_editorial.discard_draft(expected_revision bigint,operation_id uuid,actor uuid)
 returns jsonb language plpgsql security definer set search_path='' as $$
 declare current_revision bigint; existing portfolio_editorial.operations%rowtype; request_hash text;
  snapshot jsonb; receipt jsonb; locale record; entity record; translation record;
@@ -1186,7 +1192,7 @@ begin
  return receipt;
 end $$;
 
-create function public.discard_editor_draft(expected_revision bigint,operation_id uuid)
+create or replace function public.discard_editor_draft(expected_revision bigint,operation_id uuid)
 returns jsonb language sql security definer set search_path='' as $$
  select portfolio_editorial.discard_draft(expected_revision,operation_id,
   coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
@@ -1212,7 +1218,7 @@ drop policy if exists publications_executor_retention_update on portfolio_editor
 create policy publications_executor_retention_update on portfolio_editorial.publications
  for update to portfolio_editorial_executor using(true) with check(true);
 
-create function portfolio_editorial.enforce_publication_retention()
+create or replace function portfolio_editorial.enforce_publication_retention()
 returns trigger language plpgsql security definer set search_path='' as $$ begin
  with keep as materialized(
   select candidate.id from portfolio_editorial.publications candidate
@@ -1226,7 +1232,7 @@ drop trigger if exists enforce_publication_retention on portfolio_editorial.site
 create trigger enforce_publication_retention after update of active_publication_id on portfolio_editorial.site_state
  for each statement execute function portfolio_editorial.enforce_publication_retention();
 
-create function portfolio_editorial.list_history(actor uuid)
+create or replace function portfolio_editorial.list_history(actor uuid)
 returns jsonb language plpgsql stable security definer set search_path='' as $$
 begin
  actor:=portfolio_editorial.require_editorial_admin(actor);
@@ -1237,7 +1243,7 @@ begin
   where p.retained or s.active_publication_id=p.id),'[]'::jsonb);
 end $$;
 
-create function portfolio_editorial.restore_publication(source_id uuid,expected_revision bigint,operation_id uuid,actor uuid)
+create or replace function portfolio_editorial.restore_publication(source_id uuid,expected_revision bigint,operation_id uuid,actor uuid)
 returns jsonb language plpgsql security definer set search_path='' as $$
 declare current_revision bigint;existing portfolio_editorial.operations%rowtype;request_hash text;snapshot jsonb;receipt jsonb;
  locale record;entity record;translation record;
@@ -1260,8 +1266,8 @@ begin
  insert into portfolio_editorial.operations(operation_id,actor_id,type,request_hash,revision,result) values(operation_id,actor,'restore',request_hash,current_revision,receipt);return receipt;
 end $$;
 
-create function public.get_editor_history() returns jsonb language sql stable security definer set search_path='' as $$ select portfolio_editorial.list_history(coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid) $$;
-create function public.restore_editor_publication(publication_id uuid,expected_revision bigint,operation_id uuid) returns jsonb language sql security definer set search_path='' as $$ select portfolio_editorial.restore_publication(publication_id,expected_revision,operation_id,coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid) $$;
+create or replace function public.get_editor_history() returns jsonb language sql stable security definer set search_path='' as $$ select portfolio_editorial.list_history(coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid) $$;
+create or replace function public.restore_editor_publication(publication_id uuid,expected_revision bigint,operation_id uuid) returns jsonb language sql security definer set search_path='' as $$ select portfolio_editorial.restore_publication(publication_id,expected_revision,operation_id,coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid) $$;
 revoke all on function portfolio_editorial.enforce_publication_retention(),portfolio_editorial.list_history(uuid),portfolio_editorial.restore_publication(uuid,bigint,uuid,uuid) from public,anon,authenticated,service_role;
 revoke all on function public.get_editor_history(),public.restore_editor_publication(uuid,bigint,uuid) from public,anon;
 grant execute on function public.get_editor_history(),public.restore_editor_publication(uuid,bigint,uuid) to authenticated;
@@ -1279,7 +1285,7 @@ drop policy if exists publications_executor_select_for_draft on portfolio_editor
 create policy publications_executor_select_for_draft on portfolio_editorial.publications
   for select to portfolio_editorial_executor using (true);
 
-create function portfolio_editorial.read_draft(actor uuid)
+create or replace function portfolio_editorial.read_draft(actor uuid)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare result jsonb; base jsonb;
 begin
@@ -1299,12 +1305,12 @@ begin
   return result;
 end $$;
 
-create function public.get_editor_draft()
+create or replace function public.get_editor_draft()
 returns jsonb language sql security definer set search_path = '' as $$
   select portfolio_editorial.read_draft(coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
 $$;
 
-create function portfolio_editorial.set_draft_technologies(expected_revision bigint,operation_id uuid,entity_id text,technology_ids text[],actor uuid)
+create or replace function portfolio_editorial.set_draft_technologies(expected_revision bigint,operation_id uuid,entity_id text,technology_ids text[],actor uuid)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare current_revision bigint; existing portfolio_editorial.operations%rowtype; request_hash text; receipt jsonb;
 begin
@@ -1330,7 +1336,7 @@ begin
   return receipt;
 end $$;
 
-create function public.set_editor_technologies(expected_revision bigint,operation_id uuid,entity_id text,technology_ids text[])
+create or replace function public.set_editor_technologies(expected_revision bigint,operation_id uuid,entity_id text,technology_ids text[])
 returns jsonb language sql security definer set search_path = '' as $$
   select portfolio_editorial.set_draft_technologies(expected_revision,operation_id,entity_id,technology_ids,
     coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)
@@ -1368,7 +1374,7 @@ select 1,s.value->>'id',s.value->>'kind',(s.value->>'position')::integer
 from portfolio_editorial.draft d join portfolio_editorial.publications p on p.id=d.base_publication_id
 cross join lateral jsonb_array_elements(p.snapshot->'sections') s;
 
-create function portfolio_editorial.set_section_order(expected_revision bigint,operation_id uuid,section_ids text[],actor uuid)
+create or replace function portfolio_editorial.set_section_order(expected_revision bigint,operation_id uuid,section_ids text[],actor uuid)
 returns jsonb language plpgsql security definer set search_path='' as $$
 declare current_revision bigint;existing portfolio_editorial.operations%rowtype;request_hash text;receipt jsonb;i integer;
 begin
@@ -1386,7 +1392,7 @@ begin
  receipt:=jsonb_build_object('operationId',operation_id,'revision',current_revision,'repeated',false);
  insert into portfolio_editorial.operations(operation_id,actor_id,type,request_hash,revision,result)values(operation_id,actor,'draft_command',request_hash,current_revision,receipt);return receipt;
 end $$;
-create function public.set_editor_section_order(expected_revision bigint,operation_id uuid,section_ids text[])
+create or replace function public.set_editor_section_order(expected_revision bigint,operation_id uuid,section_ids text[])
 returns jsonb language sql security definer set search_path='' as $$select portfolio_editorial.set_section_order(expected_revision,operation_id,section_ids,coalesce(nullif(current_setting('request.jwt.claim.sub',true),''),nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid)$$;
 
 create or replace function portfolio_editorial.build_publication_content()
@@ -1411,7 +1417,7 @@ declare result jsonb;base jsonb;begin actor:=portfolio_editorial.require_editori
  'translations',(select coalesce(jsonb_object_agg(locale_code,items),'{}'::jsonb)from(select locale_code,jsonb_object_agg(entity_id,fields)items from portfolio_editorial.draft_translations where draft_id=1 group by locale_code)x),
  'technologies',base->'technologies','media',coalesce(base->'media','{}'::jsonb))into result from portfolio_editorial.draft d where d.id=1;return result;end$$;
 
-create function portfolio_editorial.sync_draft_sections_from_base()returns trigger language plpgsql security definer set search_path='' as $$begin
+create or replace function portfolio_editorial.sync_draft_sections_from_base()returns trigger language plpgsql security definer set search_path='' as $$begin
  if new.base_publication_id is distinct from old.base_publication_id or tg_op='UPDATE' then delete from portfolio_editorial.draft_sections where draft_id=new.id;insert into portfolio_editorial.draft_sections(draft_id,id,kind,position)select new.id,s.value->>'id',s.value->>'kind',(s.value->>'position')::integer from portfolio_editorial.publications p cross join lateral jsonb_array_elements(p.snapshot->'sections')s where p.id=new.base_publication_id;end if;return new;end$$;
 drop trigger if exists sync_draft_sections on portfolio_editorial.draft;
 create trigger sync_draft_sections after update of base_publication_id on portfolio_editorial.draft for each row execute function portfolio_editorial.sync_draft_sections_from_base();
@@ -1449,7 +1455,7 @@ where id = 'curricula';
 
 -- Migration: 20260927003000_add_editorial_locale_lifecycle.sql
 -- T-025: locale lifecycle through the same revisioned command boundary.
-create function public.set_editor_locale(
+create or replace function public.set_editor_locale(
   expected_revision bigint, operation_id uuid, code text, label text, status text, locale_position integer
 ) returns jsonb language plpgsql security definer set search_path = '' as $$
 declare actor uuid; current_revision bigint; existing portfolio_editorial.operations%rowtype; request_hash text; receipt jsonb;
@@ -1477,7 +1483,7 @@ grant execute on function public.set_editor_locale(bigint,uuid,text,text,text,in
 
 -- Migration: 20260927004000_add_editorial_media_association.sql
 -- T-023: associate a ready private asset with a draft entity atomically.
-create function public.associate_editorial_media(
+create or replace function public.associate_editorial_media(
   expected_revision bigint, operation_id uuid, entity_id text, media_id uuid, field_name text, media_position integer default 0
 ) returns jsonb language plpgsql security definer set search_path = '' as $$
 declare actor uuid; current_revision bigint; existing portfolio_editorial.operations%rowtype; request_hash text; receipt jsonb;

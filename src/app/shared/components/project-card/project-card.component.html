@@ -6,20 +6,30 @@
   [attr.data-editorial-value]="project().type"
   [attr.data-editorial-item-id]="project().id"
 >
-  <!-- Window Mockup Bar (3 dots inspired by Josias Broch) -->
-  <div class="project-card__window-bar" aria-hidden="true">
-    <div class="project-card__dots">
-      <span class="project-card__dot project-card__dot--red"></span>
-      <span class="project-card__dot project-card__dot--yellow"></span>
-      <span class="project-card__dot project-card__dot--green"></span>
-    </div>
-    <div class="project-card__window-title">
-      {{ project().name }}
-    </div>
-  </div>
-
   <!-- Cover Media (16:10 aspect ratio) -->
   <div class="project-card__cover-wrapper">
+    <span
+      class="project-card__visibility-badge"
+      [class.project-card__visibility-badge--public]="projectVisibility() === 'public'"
+      [class.project-card__visibility-badge--private]="projectVisibility() === 'private'"
+      [attr.data-testid]="'project-visibility-' + projectVisibility()"
+    >
+      @if (projectVisibility() === 'public') {
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>{{ ui().publicProject }}</span>
+      } @else {
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>{{ ui().privateProject }}</span>
+      }
+    </span>
+
     @if (coverImage(); as image) {
       <img
         [src]="image.publicUrl"
@@ -33,30 +43,59 @@
       />
     } @else {
       <!-- Clean SVG / CSS Placeholder -->
-      <div class="project-card__placeholder" data-testid="project-cover-placeholder">
+      <div
+        class="project-card__placeholder"
+        [class.project-card__placeholder--private]="projectVisibility() === 'private'"
+        [class.project-card__placeholder--public]="projectVisibility() === 'public'"
+        data-testid="project-cover-placeholder"
+      >
         <div class="project-card__placeholder-glow"></div>
         <div class="project-card__placeholder-content">
-          <svg
-            class="project-card__placeholder-icon"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.75"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <polyline points="16 18 22 12 16 6" />
-            <polyline points="8 6 2 12 8 18" />
-          </svg>
-          <span class="project-card__placeholder-monogram">{{ projectInitials() }}</span>
+          @if (projectVisibility() === 'private') {
+            <!-- Security Padlock for Private Projects -->
+            <svg
+              class="project-card__placeholder-icon project-card__placeholder-icon--lock"
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              data-testid="placeholder-lock-icon"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              <circle cx="12" cy="16.5" r="1.2" fill="currentColor" />
+            </svg>
+            <span class="project-card__placeholder-label" data-testid="placeholder-label">{{ ui().proprietaryCode }}</span>
+          } @else {
+            <!-- Code Brackets for Public Projects -->
+            <svg
+              class="project-card__placeholder-icon project-card__placeholder-icon--code"
+              width="34"
+              height="34"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              data-testid="placeholder-code-icon"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            <span class="project-card__placeholder-label" data-testid="placeholder-label">{{ ui().openSourceCode }}</span>
+          }
         </div>
       </div>
     }
 
-    <!-- Quick Action / Demo Overlay on Hover -->
+    <!-- Quick Action / External Link Overlay on Hover -->
     @if (externalUrl(); as url) {
       <a
         [href]="url"
@@ -65,9 +104,9 @@
         class="project-card__demo-badge"
         (click)="$event.stopPropagation()"
         data-testid="project-demo-link"
-        aria-label="Abrir demonstração ou repositório em nova aba"
+        [attr.aria-label]="externalLinkLabel() + ' — ' + project().name"
       >
-        <span>Demo</span>
+        <span>{{ externalLinkLabel() }}</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M7 17L17 7M17 7H7M17 7V17" />
         </svg>
@@ -84,7 +123,7 @@
         data-editorial-field="name"
         [attr.data-editorial-locale]="locale()"
       >
-        <a [href]="detailsUrl()" class="project-card__title-link">
+        <a [href]="detailsUrl()" (click)="navigateToDetails($event)" class="project-card__title-link">
           {{ project().name }}
         </a>
       </h3>
@@ -129,7 +168,7 @@
 
     <!-- Footer Action -->
     <div class="project-card__footer">
-      <a [href]="detailsUrl()" class="project-card__details-btn project-full-link">
+      <a [href]="detailsUrl()" (click)="navigateToDetails($event)" class="project-card__details-btn project-full-link">
         <span>{{ ui().viewFullProject }}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7"/>

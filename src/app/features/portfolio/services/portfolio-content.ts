@@ -45,6 +45,7 @@ export interface PortfolioCopy {
   skillsDevopsObservabilityLabel: string;
   skillsDatabasesLabel: string;
   skillsVersionControlLabel: string;
+  skillsComputerVisionLabel: string;
   educationTitle: string;
   educationBody: string;
   educationDataScience: string;
@@ -161,6 +162,12 @@ const FALLBACK_SKILL_ICON_URLS: Readonly<Record<string, string>> = {
   Gradle: '/assets/skills/gradle.svg',
   Maven: '/assets/skills/maven.svg',
   'Spring Boot': '/assets/technologies/spring.svg',
+  RxJS: '/assets/skills/rxjs.svg',
+  Bootstrap: '/assets/skills/bootstrap.svg',
+  'Chart.js': '/assets/skills/chartjs.svg',
+  OpenLayers: '/assets/skills/openlayers.svg',
+  CUDA: '/assets/skills/cuda.svg',
+  OCR: '/assets/skills/ocr.svg',
 };
 
 export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
@@ -172,12 +179,12 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'corporate-integrations',
     labelKey: 'skillsCorporateIntegrationsLabel',
-    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'Node.js', 'REST APIs', 'JSF'].map(fallbackSkill),
+    skills: ['FastAPI', 'Spring Boot', 'Laravel', 'REST APIs', 'JSF'].map(fallbackSkill),
   },
   {
     id: 'frontend',
     labelKey: 'skillsFrontendLabel',
-    skills: ['Angular', 'Flutter', 'HTML', 'CSS', 'React'].map(fallbackSkill),
+    skills: ['Angular', 'Flutter', 'HTML', 'CSS'].map(fallbackSkill),
   },
   {
     id: 'devops-observability',
@@ -192,7 +199,12 @@ export const PORTFOLIO_SKILL_CATEGORIES: readonly PortfolioSkillCategory[] = [
   {
     id: 'version-control',
     labelKey: 'skillsVersionControlLabel',
-    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken', 'OpenCV', 'YOLOv8', 'MediaPipe'].map(fallbackSkill),
+    skills: ['Git', 'GitHub', 'GitLab', 'GitKraken'].map(fallbackSkill),
+  },
+  {
+    id: 'computer-vision',
+    labelKey: 'skillsComputerVisionLabel',
+    skills: ['OpenCV', 'YOLOv8', 'MediaPipe', 'OCR'].map(fallbackSkill),
   },
 ];
 
@@ -232,7 +244,7 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   name: 'Desenvolvedor de Software',
   heroName: 'Desenvolvedor de Software',
   heroRole: 'Engenheiro de Software',
-  heroAvailability: 'Disponível para novos projetos · Remoto',
+  heroAvailability: 'Disponível para novos projetos',
   eyebrow: 'Portfólio profissional',
   presentationTitle: 'Apresentação',
   intro:
@@ -273,6 +285,7 @@ export const ORIGINAL_COPY: PortfolioCopy = {
   skillsDevopsObservabilityLabel: 'DevOps e ferramentas',
   skillsDatabasesLabel: 'Bancos de dados',
   skillsVersionControlLabel: 'Versionamento e ferramentas',
+  skillsComputerVisionLabel: 'Visão Computacional',
   educationTitle: 'Formação acadêmica',
   educationBody: 'Formação acadêmica e especializações.',
   educationDataScience: 'Computação e Engenharia de Software',

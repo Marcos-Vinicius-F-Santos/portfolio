@@ -131,8 +131,8 @@ Após a publicação, acesse a URL gerada pela Vercel e valide os seguintes pont
    - Aperte **F5** (Recarregar). O site deve manter o projeto carregado e **não** exibir página 404 da Vercel.
 3. **Painel de Contato**:
    - Preencha o formulário na seção de contato.
-   - Clique em "Enviar pelo WhatsApp" e confirme que a janela abre direcionando para o número de João (`+55 37 99429-018`).
-   - Clique em "Enviar por e-mail" e confirme que o cliente de e-mail abre com destino para `profissional.joaovitordf@gmail.com`.
+   - Clique em "Enviar pelo WhatsApp" e confirme que a janela abre direcionando para o número configurado no snapshot (`+55 11 99999-0000`).
+   - Clique em "Enviar por e-mail" e confirme que o cliente de e-mail abre com destino para o endereço configurado no snapshot (`contato@exemplo.com`).
 4. **Download de Currículo**:
    - Clique nos botões de download de currículo e verifique se os arquivos `curriculum-pt.pdf` e `curriculum-en.pdf` abrem normalmente.
 5. **Acesso Administrativo (`/admin`)**:

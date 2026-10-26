@@ -90,7 +90,13 @@ export class VisualEditorComponent {
       this.validation.set(
         await this.commands.validatePublication(this.autosave.confirmedRevision()),
       );
-    } catch {
+    } catch (error) {
+      if (isPublicationConsistencyError(error)) {
+        this.validation.set(null);
+        await this.loadDraft();
+        this.actionError.set('A revisão ficou desatualizada. Revise as alterações novamente.');
+        return;
+      }
       this.actionError.set('Não foi possível revisar enquanto há alterações pendentes.');
     }
   }
@@ -191,6 +197,7 @@ export class VisualEditorComponent {
       });
       const draft = await this.commands.loadDraft();
       this.draftContent.setDraft(draft);
+      this.autosave.initialize(draft.revision);
     } catch {
       this.actionError.set('Não foi possível adicionar o idioma.');
     }
@@ -204,7 +211,9 @@ export class VisualEditorComponent {
       const revision = this.autosave.confirmedRevision();
       const uploaded = await this.media.upload(revision, 'project_image', file);
       await this.media.associate(revision, entityId, uploaded.mediaId, 'projectImage');
-      this.draftContent.setDraft(await this.commands.loadDraft());
+      const draft = await this.commands.loadDraft();
+      this.draftContent.setDraft(draft);
+      this.autosave.initialize(draft.revision);
     } catch {
       this.actionError.set('Não foi possível enviar e associar a imagem.');
     } finally {
@@ -245,16 +254,27 @@ export class VisualEditorComponent {
   }
 }
 
+function isRevisionConflictError(value: Record<string, unknown>): boolean {
+  const message = typeof value['message'] === 'string' ? value['message'] : '';
+  return (
+    value['code'] === '40001' ||
+    value['code'] === 'P0409' ||
+    (value['code'] === 'P0001' &&
+      (message.includes('revision conflict') || message.includes('review hash conflict')))
+  );
+}
+
 function isPublicationConsistencyError(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
   const value = error as Record<string, unknown>;
-  return value['code'] === '40001' || value['code'] === '21000';
+  return isRevisionConflictError(value) || value['code'] === '21000';
 }
 
 function publicationErrorMessage(error: unknown): string {
   if (!error || typeof error !== 'object') return 'A publicação não foi confirmada. Revise novamente.';
   const value = error as Record<string, unknown>;
-  if (value['code'] === '40001') return 'A revisão ficou desatualizada. Revise as alterações novamente.';
+  if (isRevisionConflictError(value))
+    return 'A revisão ficou desatualizada. Revise as alterações novamente.';
   if (value['code'] === '21000')
     return 'O servidor encontrou uma inconsistência na revisão. Atualize a página e revise novamente.';
   if (value['code'] === '42501' || value['status'] === 401 || value['status'] === 403)

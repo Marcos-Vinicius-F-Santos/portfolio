@@ -54,3 +54,17 @@ Região: `sa-east-1`
   policies, configuração de buckets, transações reversíveis e fixtures de teste.
 - O upload HTTP real de uma imagem inválida ainda não foi executado.
 - Não foi executado deploy.
+
+## Correção operacional do loop do PostgREST — 2026-10-22
+
+- O usuário informou a execução, no projeto remoto `portfolio-profissional`, do script
+  registrado em [`correcao-loop-postgrest-2026-10-22.md`](correcao-loop-postgrest-2026-10-22.md).
+- A correção encerra sessões não ociosas do `authenticator`, ajusta o trigger de
+  retenção de publicações e substitui o SQLSTATE `40001` por `P0001` nas funções
+  editoriais listadas, evitando que o PostgREST trate o erro como falha transiente e
+  repita a chamada.
+- Esta sessão não reexecutou o script nem confirmou o catálogo remoto depois da
+  execução; o registro é uma evidência operacional baseada no relato do usuário.
+- O SQL foi executado manualmente e ainda não está representado por uma migration
+  versionada. Essa divergência fica registrada para normalização antes de uma futura
+  alteração/deploy que dependa dessas funções.

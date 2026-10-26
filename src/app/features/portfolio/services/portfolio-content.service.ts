@@ -30,6 +30,7 @@ import {
   type PortfolioProjectImage,
   type PortfolioProjectLink,
   type PortfolioProjectType,
+  type PortfolioProjectVisibility,
   type PortfolioSkill,
   type PortfolioSkillCategory,
 } from './portfolio-content.models';
@@ -220,7 +221,7 @@ export class PortfolioContentService {
       ]);
 
       const result = rows
-        .map((row) => {
+        .map((row): PortfolioProject | null => {
           const type = portfolioProjectType(row['project_type']);
           if (!type) return null;
 
@@ -229,11 +230,18 @@ export class PortfolioContentService {
           const images = (imageRows.get(id) ?? []).map((image) =>
             this.toProjectImage(client, image),
           );
+          const links = projectLinks(translation['links']);
+          const rawVisibility = row['visibility'];
+          const visibility: PortfolioProjectVisibility =
+            rawVisibility === 'public' || rawVisibility === 'private'
+              ? rawVisibility
+              : (links.length > 0 ? 'public' : 'private');
 
           return {
             id,
             displayOrder: Number(row['display_order']),
             type,
+            visibility,
             locale,
             name: String(translation['name'] ?? ''),
             description: String(translation['description'] ?? ''),
@@ -244,7 +252,7 @@ export class PortfolioContentService {
             technologies: stringArray(translation['technologies']),
             results: stringArray(translation['results']),
             learnings: stringArray(translation['learnings']),
-            links: projectLinks(translation['links']),
+            links,
             images,
           } satisfies PortfolioProject;
         })

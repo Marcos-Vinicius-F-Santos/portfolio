@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { extname, join, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
-const roots = ['src', 'scripts', 'supabase', 'public/assets', '.github', 'package.json'];
+const roots = ['src', 'scripts', 'supabase', 'public', '.github', 'package.json'];
 const ignoredFiles = new Set(['public/runtime-config.js', 'scripts/check-white-label-references.mjs']);
 const blocked = /joao|marcos|santos|joaovitordf|marcossantosjdev/i;
 const allowedExtensions = new Set(['.ts', '.html', '.css', '.mjs', '.js', '.json', '.sql', '.md']);
@@ -22,8 +22,14 @@ async function visit(path) {
     for (const child of await readdir(path)) await visit(join(path, child));
     return;
   }
+  if (relativePath.startsWith('public/') && extname(path).toLowerCase() === '.pdf') {
+    matches.push(`${relativePath} (static PDF in public/ is forbidden; use Supabase Storage)`);
+    return;
+  }
   if (path !== join(root, 'package.json') && !allowedExtensions.has(extname(path))) return;
-  const text = await readFile(path, 'utf8');
+  const text = (await readFile(path, 'utf8'))
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
   if (blocked.test(text)) matches.push(relativePath);
 }
 

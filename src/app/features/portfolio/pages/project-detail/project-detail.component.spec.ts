@@ -6,6 +6,7 @@ import { ProjectDetailComponent } from './project-detail.component';
 import { PortfolioContentService } from '../../services/portfolio-content.service';
 import { PortfolioLanguageService, BROWSER_LANGUAGE } from '../../services/portfolio-language.service';
 import { PortfolioProject } from '../../services/portfolio-content.models';
+import { technologyIcon } from '../../services/technology-icons';
 
 const project: PortfolioProject = {
   id: 'demo',
@@ -95,13 +96,42 @@ describe('ProjectDetail routes', () => {
       'https://example.com/second.png',
     ]);
     expect(element.querySelector('nav a')?.getAttribute('href')).toBe('/#projetos');
+    expect(element.querySelector('.site-header')).not.toBeNull();
+    expect(element.querySelector('.brand-logo')?.getAttribute('href')).toBe('/#apresentacao');
+    expect(element.querySelector('[data-testid="site-footer"]')).not.toBeNull();
+    expect(element.querySelector('[data-testid="site-footer"]')?.textContent).toContain(
+      'Todos os direitos reservados',
+    );
+    const externalLink = element.querySelector('.project-link-btn');
+    expect(externalLink?.getAttribute('href')).toBe('https://example.com');
+    expect(externalLink?.getAttribute('target')).toBe('_blank');
+    expect(externalLink?.getAttribute('rel')).toBe('noopener noreferrer');
+
+    const langTrigger = element.querySelector<HTMLButtonElement>('[data-testid="header-lang-trigger"]')!;
+    expect(langTrigger).not.toBeNull();
+    expect(element.querySelector('.dropdown-menu--lang')).toBeNull();
+    langTrigger.click();
+    harness.detectChanges();
+    expect(element.querySelector('.dropdown-menu--lang')).not.toBeNull();
+
     const select = element.querySelector('select')!;
+    expect(element.querySelector('[data-testid="project-type-badge"]')?.textContent).toContain(
+      'Projeto Pessoal',
+    );
+    expect(document.title).toContain('Demo —');
     select.value = 'en';
     select.dispatchEvent(new Event('change'));
     await harness.fixture.whenStable();
     harness.detectChanges();
     expect(element.textContent).toContain('English Demo');
+    expect(element.querySelector('[data-testid="project-type-badge"]')?.textContent).toContain(
+      'Personal Project',
+    );
+    expect(document.title).toContain('English Demo —');
     expect(element.textContent).toContain('Back to projects');
+    expect(element.querySelector('[data-testid="site-footer"]')?.textContent).toContain(
+      'All Rights Reserved',
+    );
   });
 
   it('keeps the detail gallery accessible when an image fails', async () => {
@@ -136,5 +166,65 @@ describe('ProjectDetail routes', () => {
     await harness.fixture.whenStable();
     harness.detectChanges();
     expect(harness.routeNativeElement?.textContent).toContain('Não foi possível carregar');
+  });
+
+  it('renders visibility badge for public and private projects', async () => {
+    service.listProjects.mockResolvedValue([
+      { ...project, id: 'private-proj', visibility: 'private', links: [] },
+    ]);
+    const harness = await RouterTestingHarness.create('/projetos/private-proj');
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    const badge = harness.routeNativeElement?.querySelector(
+      '[data-testid="project-visibility-private"]',
+    );
+    expect(badge).toBeTruthy();
+    expect(badge?.textContent).toContain('Privado');
+  });
+
+  it('renders project cards in the approved sequential order with results highlighted before technologies', async () => {
+    const harness = await RouterTestingHarness.create('/projetos/demo');
+    await TestBed.inject(PortfolioLanguageService);
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    const element = harness.routeNativeElement!;
+    const cardHeadings = [...element.querySelectorAll('.detail-card .card-heading')].map((h) =>
+      h.textContent?.trim(),
+    );
+
+    expect(cardHeadings).toEqual([
+      'Contexto',
+      'Papel desempenhado',
+      'Solução',
+      'Imagens do projeto',
+      'Decisões técnicas',
+      'Aprendizados',
+      'Resultados',
+      'Tecnologias',
+      'Links relacionados',
+    ]);
+
+    const resultsCard = element.querySelector('.detail-card--results');
+    expect(resultsCard).not.toBeNull();
+    expect(resultsCard?.querySelector('.card-heading')?.textContent).toContain('Resultados');
+  });
+
+  it('resolves dedicated SVG icons for RxJS, Bootstrap, Chart.js, OpenLayers, CUDA, and OCR', () => {
+    expect(technologyIcon('RxJS')).toBe('/assets/skills/rxjs.svg');
+    expect(technologyIcon('Bootstrap')).toBe('/assets/skills/bootstrap.svg');
+    expect(technologyIcon('Chart.js')).toBe('/assets/skills/chartjs.svg');
+    expect(technologyIcon('OpenLayers')).toBe('/assets/skills/openlayers.svg');
+    expect(technologyIcon('CUDA')).toBe('/assets/skills/cuda.svg');
+    expect(technologyIcon('OCR')).toBe('/assets/skills/ocr.svg');
+  });
+
+  it('resolves icons for enterprise stack: Spring Framework, PrimeFaces, Hibernate, SQL, and ERP', () => {
+    expect(technologyIcon('Spring Framework')).toBe('/assets/technologies/spring.svg');
+    expect(technologyIcon('PrimeFaces')).toBe('/assets/skills/jsf.svg');
+    expect(technologyIcon('Hibernate')).toBe('/assets/skills/java.png');
+    expect(technologyIcon('SQL')).toBe('/assets/skills/sql-server.png');
+    expect(technologyIcon('ERP')).toBe('/assets/technologies/sap.svg');
   });
 });

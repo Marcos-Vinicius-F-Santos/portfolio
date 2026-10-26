@@ -255,6 +255,10 @@ function sanitizeMigration(sql) {
   res = res.replace(/create index /gi, 'create index if not exists ');
   res = res.replace(/create index if not exists if not exists/gi, 'create index if not exists');
 
+  // Function creation idempotency
+  res = res.replace(/create function /gi, 'create or replace function ');
+  res = res.replace(/create or replace function or replace function /gi, 'create or replace function ');
+
   // Safe drop constraint
   res = res.replace(/drop constraint (?:if exists )?([a-zA-Z0-9_]+);/gi, 'drop constraint if exists $1;');
 
@@ -311,9 +315,15 @@ alter table portfolio_editorial.draft_entities add constraint draft_entities_kin
 
 -- Importação do snapshot inicial editorial parametrizado
 do $$ declare payload jsonb := '${compactSnapshot}'::jsonb; begin
+set constraints all deferred;
+delete from portfolio_editorial.draft_media_refs where draft_id = 1;
+delete from portfolio_editorial.draft_translations where draft_id = 1;
+delete from portfolio_editorial.draft_entities where draft_id = 1;
+delete from portfolio_editorial.draft_locales where draft_id = 1 and code <> 'pt-BR';
+insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'pt-BR','Português','ltr','active',0) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_locales(draft_id,code,label,direction,status,position) values (1,'en','English','ltr','active',1) on conflict(draft_id,code) do update set label=excluded.label,status=excluded.status,position=excluded.position;
 insert into portfolio_editorial.draft_entities(draft_id,id,kind,parent_id,position,data) select 1,e.key,e.value->>'kind',nullif(e.value->>'parentId',''),(e.value->>'position')::int,e.value->'data' from jsonb_each(payload->'entities') e on conflict(draft_id,id) do update set kind=excluded.kind,parent_id=excluded.parent_id,position=excluded.position,data=excluded.data;
-insert into portfolio_editorial.draft_translations(draft_id,entity_id,locale_code,fields) select 1,e.key,l.key,l.value->e.key from jsonb_each(payload->'entities') e cross join jsonb_each(payload->'translations') l on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;
+insert into portfolio_editorial.draft_translations(draft_id,entity_id,locale_code,fields) select 1,e.key,l.key,l.value->e.key from jsonb_each(payload->'entities') e cross join jsonb_each(payload->'translations') l where l.value ? e.key on conflict(draft_id,entity_id,locale_code) do update set fields=excluded.fields;
 insert into portfolio_editorial.technologies(id,label,aliases,bundled_asset) select t.key,t.value->>'label',array(select jsonb_array_elements_text(t.value->'aliases')),case when t.value ? 'iconMediaId' then payload->'media'->(t.value->>'iconMediaId')->>'assetPath' end from jsonb_each(payload->'technologies') t on conflict(id) do update set label=excluded.label,aliases=excluded.aliases,bundled_asset=excluded.bundled_asset;
 insert into portfolio_editorial.publications(id,format_version,snapshot,hash,source_revision) values ('${snapshot.publicationId}',1,payload,'${snapshotHash}',0) on conflict(id) do nothing;
 update portfolio_editorial.draft set base_publication_id='${snapshot.publicationId}',updated_at=now() where id=1;

@@ -13,6 +13,7 @@ import type {
   PortfolioProjectImage,
   PortfolioProjectLink,
   PortfolioProjectType,
+  PortfolioProjectVisibility,
   PortfolioSkill,
   PortfolioSkillCategory,
 } from './portfolio-content.models';
@@ -113,6 +114,12 @@ export function snapshotToProjects(
         }))
         .filter((link) => Boolean(link.url));
 
+      const rawVisibility = entity.data['visibility'];
+      const visibility: PortfolioProjectVisibility =
+        rawVisibility === 'public' || rawVisibility === 'private'
+          ? rawVisibility
+          : (links.length > 0 ? 'public' : 'private');
+
       const images: PortfolioProjectImage[] = Object.entries(snapshot.entities)
         .filter(
           ([, imgEntity]) => imgEntity.kind === 'projectImage' && imgEntity.parentId === id,
@@ -142,6 +149,7 @@ export function snapshotToProjects(
         id,
         displayOrder: entity.position,
         type,
+        visibility,
         locale,
         name: getSnapshotText(snapshot, locale, id, 'name'),
         description: getSnapshotText(snapshot, locale, id, 'description'),

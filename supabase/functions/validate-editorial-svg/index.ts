@@ -89,12 +89,12 @@ Deno.serve(async (request) => {
     .eq('user_id', user.id)
     .maybeSingle();
   if (!admin) return json({ error: 'forbidden' }, 403);
-  const { data: media, error } = (await adminClient
-    .schema('portfolio_editorial')
-    .from('media')
-    .select('id,actor_id,revision,bucket,path,status,purpose')
-    .eq('id', payload.media_id)
-    .maybeSingle()) as { data: Row | null; error: unknown };
+  const { data: mediaRows, error } = (await adminClient.rpc('get_pending_editorial_media', {
+    requested_media_id: payload.media_id,
+    expected_revision: payload.expected_revision,
+    requested_actor: user.id,
+  })) as { data: Row[] | null; error: unknown };
+  const media = Array.isArray(mediaRows) ? mediaRows[0] ?? null : null;
   if (
     error ||
     !media ||
@@ -122,24 +122,28 @@ Deno.serve(async (request) => {
       upsert: false,
     });
   if (uploadError) return json({ error: 'sanitization_failed' }, 500);
-  const checksum = await sha256(new TextEncoder().encode(sanitized));
-  const { error: updateError } = await adminClient
-    .schema('portfolio_editorial')
-    .from('media')
-    .update({
-      path: sanitizedPath,
-      mime: 'image/svg+xml',
-      bytes: new TextEncoder().encode(sanitized).byteLength,
-      checksum,
-      status: 'ready',
-    })
-    .eq('id', media.id);
-  if (updateError) return json({ error: 'sanitization_failed' }, 500);
-  return json({ media_id: media.id, status: 'ready', path: sanitizedPath, checksum });
+  const sanitizedBytes = new TextEncoder().encode(sanitized);
+  const checksum = await sha256(sanitizedBytes);
+  const { data: finalized, error: finalizeError } = await adminClient.rpc(
+    'finalize_validated_editorial_svg',
+    {
+      expected_revision: payload.expected_revision,
+      requested_media_id: media.id,
+      requested_actor: user.id,
+      sanitized_path: sanitizedPath,
+      sanitized_bytes: sanitizedBytes.byteLength,
+      sanitized_checksum: checksum,
+    },
+  );
+  if (finalizeError || !finalized) {
+    await adminClient.storage.from(media.bucket).remove([sanitizedPath]);
+    return json({ error: 'sanitization_failed' }, 500);
+  }
+  return json(finalized);
 });
 
 async function sha256(bytes: Uint8Array): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  const digest = await crypto.subtle.digest('SHA-256', bytes.slice().buffer as ArrayBuffer);
   return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, '0')).join('');
 }
 

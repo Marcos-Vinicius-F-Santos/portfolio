@@ -403,4 +403,41 @@ Esta atualização adaptou o design de apresentação e tipografia seguindo o po
 - **Arquitetura Preservada sem Regressões:**
   - Mantido CSS nativo limpo, estrutura canônica de pastas, ScrollSpy geométrico matemático, navegação em cápsula com 3 colunas e multi-tenancy dinâmico.
 
+---
+
+## 11. Alinhamento Simétrico da Seção de Contato, Idempotência SQL e Blindagem White-Label Raiz (15/10/2026)
+
+Esta iteração consolidou o alinhamento visual da seção de contato, a idempotência dos scripts SQL do Supabase e a auditoria completa White-Label a partir da raiz do projeto:
+
+### A. Alinhamento Simétrico de Duas Colunas na Seção `#contato`
+- **Arquivos**: `src/app/features/portfolio/pages/portfolio-page/portfolio-page.component.html`, `portfolio-page.component.css`, `src/app/shared/components/contact-panel/contact-panel.component.html` e `contact-panel.component.css`
+- **Melhorias**:
+  - O parágrafo introdutório (`contactExplanation`) foi movido para o cabeçalho `.contact-intro-header`, ocupando a largura total das duas colunas acima do grid.
+  - As colunas da esquerda (cards de plataformas + currículo) e da direita (formulário `<app-contact-panel>`) agora possuem mesma altura (`height: 100%`, `display: flex`, `flex: 1`), começando e terminando exatamente na mesma linha horizontal no desktop.
+  - A `textarea` de mensagem expande verticalmente (`flex: 1`) para preencher a altura do card da direita com equilíbrio visual.
+  - Removida a nota redundante de redirecionamento na base do `contact-panel.component.html`.
+
+### B. Resolução de Marcadores em `angular.json` e Idempotência em `bundle-editorial-sql.mjs`
+- **`angular.json`**: Removidos marcadores residuais de merge no budget `anyComponentStyle` (`maximumWarning: "26kB"`, `maximumError: "32kB"`).
+- **`scripts/bundle-editorial-sql.mjs` e `supabase/setup_editorial.sql`**:
+  - Sanitização automática de `CREATE FUNCTION` para `CREATE OR REPLACE FUNCTION`, evitando erro `42723` ao reaplicar o script em bancos já inicializados.
+  - Inclusão de `SET CONSTRAINTS ALL DEFERRED` e limpeza ordenada de `draft_media_refs`, `draft_translations` e `draft_entities` antes da importação do snapshot inicial, filtrando entidades sem tradução (`WHERE l.value ? e.key`, como `profile`).
+
+### C. Auditoria e Blindagem White-Label a Partir da Raiz
+- **Remoção de PDFs Pessoais Estáticos (`public/curriculum-pt.pdf` e `public/curriculum-en.pdf`)**:
+  - Os arquivos PDF estáticos anteriormente versionados em `public/` continham dados pessoais e eram usados como fallback em `downloadCurriculum()`.
+  - Ambos foram removidos do repositório e `downloadCurriculum()` em `portfolio-page.component.ts` agora utiliza exclusivamente `file?.publicUrl` vindo do Supabase Storage (`portfolio_files` / `editorial-curricula`).
+- **Reforço do Gate Automatizado (`scripts/check-white-label-references.mjs`)**:
+  - Adicionada normalização Unicode `NFD` (`.normalize('NFD').replace(/[\u0300-\u036f]/g, '')`) para detectar nomes acentuados (ex.: `"João"`).
+  - Expandida a varredura para toda a pasta `public/` (não apenas `public/assets`), bloqueando qualquer arquivo `.pdf` estático dentro de `public/`.
+- **Neutralização Total de Testes Unitários e Specs**:
+  - Substituídos todos os nomes de pessoas reais ou históricas em `contact-email-sender.spec.ts`, `contact-panel.component.spec.ts` e `portfolio-page.component.spec.ts` por rótulos neutros (`'Contato Teste'`, `'Usuario Principal'`, `'Conta Teste'`, `'Perfil de Exemplo'`).
+  - Substituídos exemplos de e-mails e telefones reais nas documentações em `spec/` por placeholders genéricos (`contato@exemplo.com`, `+55 11 99999-0000`).
+  - Removida a pasta legada `spec/05-verificacao/historico/` (390 KB) e ignorados no `.gitignore` artefatos locais de carga de instância.
+  - Documentadas as variáveis de ambiente White-Label (`PORTFOLIO_AUTHOR_NAME`, `PORTFOLIO_BRAND_INITIALS`, `PORTFOLIO_PROFILE_ID`, `PORTFOLIO_PROFILE_IMAGE_URL`) em `.env.example`.
+
+### D. Evidências de Qualidade
+- **`npm run check:white-label`**: Aprovado (`White-label reference gate passed`).
+- **`npm test`**: **35 arquivos de teste / 180 testes unitários** passando com 100% de sucesso.
+
 

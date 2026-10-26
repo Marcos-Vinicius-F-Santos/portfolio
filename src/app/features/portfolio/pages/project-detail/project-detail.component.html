@@ -1,129 +1,419 @@
-<main [attr.lang]="language.language()">
-  <nav>
-    <a href="/#projetos">← {{ ui().backToProjects }}</a>
-    <label
-      >{{ copy().languageLabel
-      }}<select #locale [value]="language.language()" (change)="choose(locale.value)">
-        <option value="pt-BR">Português (Brasil)</option>
-        <option value="en">English</option>
-      </select></label
+<header class="site-header">
+  <div class="site-header__container">
+    <!-- 1. Left: Dynamic Brand Monogram -->
+    <a
+      href="/#apresentacao"
+      (click)="navigateToHomeSection($event, 'apresentacao')"
+      class="brand-logo"
+      [attr.aria-label]="copy().name || 'Início'"
     >
-  </nav>
+      <span class="brand-logo__initials">{{ brandMonogram() }}</span>
+      <span class="brand-logo__suffix">.dev</span>
+    </a>
+
+    <!-- 2. Center: Back navigation pill -->
+    <nav class="nav-capsule" [attr.aria-label]="ui().backToProjects">
+      <a
+        href="/#projetos"
+        (click)="navigateToHomeSection($event, 'projetos')"
+        class="nav-back-pill"
+        data-testid="nav-back-projects"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="back-icon"
+          aria-hidden="true"
+        >
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+        <span>{{ ui().backToProjects }}</span>
+      </a>
+    </nav>
+
+    <!-- 3. Right: Language discreet dropdown + sr-only select -->
+    <div class="site-header__actions">
+      <div class="header-dropdown" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          class="action-pill action-pill--lang"
+          [attr.aria-expanded]="languageMenuOpen()"
+          aria-haspopup="true"
+          (click)="toggleLanguageMenu($event)"
+          data-testid="header-lang-trigger"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+            <path d="M2 12h20" />
+          </svg>
+          <span>{{ language.language() === 'en' ? 'EN' : 'PT' }}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="chevron-icon"
+            [class.chevron-icon--open]="languageMenuOpen()"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+
+        @if (languageMenuOpen()) {
+          <div class="dropdown-menu dropdown-menu--lang" role="menu">
+            <button
+              type="button"
+              class="dropdown-item"
+              [class.dropdown-item--active]="language.language() === 'pt-BR'"
+              role="menuitem"
+              (click)="choose('pt-BR'); closeAllMenus()"
+              data-testid="lang-option-pt"
+            >
+              <span class="dropdown-item__label">Português (Brasil)</span>
+              @if (language.language() === 'pt-BR') {
+                <span class="check-icon" aria-hidden="true">✓</span>
+              }
+            </button>
+            <button
+              type="button"
+              class="dropdown-item"
+              [class.dropdown-item--active]="language.language() === 'en'"
+              role="menuitem"
+              (click)="choose('en'); closeAllMenus()"
+              data-testid="lang-option-en"
+            >
+              <span class="dropdown-item__label">English</span>
+              @if (language.language() === 'en') {
+                <span class="check-icon" aria-hidden="true">✓</span>
+              }
+            </button>
+          </div>
+        }
+
+        <label class="sr-only">
+          {{ copy().languageLabel }}
+          <select
+            #locale
+            class="sr-only-select"
+            [value]="language.language()"
+            (change)="choose(locale.value)"
+            data-testid="language-select"
+            aria-label="Selecionar idioma / Select language"
+          >
+            <option value="pt-BR">Português (Brasil)</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="project-detail-main" [attr.lang]="language.language()">
   @if (loading()) {
-    <p role="status">{{ ui().loadingProject }}</p>
+    <div class="state-container state-container--loading">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p role="status">{{ ui().loadingProject }}</p>
+    </div>
   } @else if (error()) {
-    <h1>{{ ui().errorLoadingProject }}</h1>
-    <p>{{ ui().refreshToTryAgain }}</p>
+    <div class="state-container state-container--error">
+      <h1>{{ ui().errorLoadingProject }}</h1>
+      <p>{{ ui().refreshToTryAgain }}</p>
+    </div>
   } @else if (project(); as p) {
-    <header>
-      <p class="eyebrow">
-        {{
-          p.type === 'personal' ? copy().personalProjectsTitle : copy().professionalProjectsTitle
-        }}
-      </p>
-      <h1
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="name"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.name }}
-      </h1>
-      <p
-        class="intro"
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="description"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.description }}
-      </p>
-    </header>
-    <section>
-      <h2>{{ copy().projectContextLabel }}</h2>
-      <p
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="problemContext"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.problemContext }}
-      </p>
-    </section>
-    @if (p.solution) {
-      <section>
-        <h2>{{ ui().solution }}</h2>
-        <p
+    <div class="project-detail-container">
+      <header class="project-hero">
+        <div class="project-badges">
+          <span class="project-type-badge" data-testid="project-type-badge">
+            {{
+              p.type === 'personal' ? ui().personalProjectSingular : ui().professionalProjectSingular
+            }}
+          </span>
+          <span
+            class="project-visibility-badge"
+            [class.project-visibility-badge--public]="(p.visibility || (p.links.length > 0 ? 'public' : 'private')) === 'public'"
+            [class.project-visibility-badge--private]="(p.visibility || (p.links.length > 0 ? 'public' : 'private')) === 'private'"
+            [attr.data-testid]="'project-visibility-' + (p.visibility || (p.links.length > 0 ? 'public' : 'private'))"
+          >
+            @if ((p.visibility || (p.links.length > 0 ? 'public' : 'private')) === 'public') {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>{{ ui().publicProject }}</span>
+            } @else {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>{{ ui().privateProject }}</span>
+            }
+          </span>
+        </div>
+        <h1
+          class="project-title"
           [attr.data-editorial-entity]="p.id"
-          data-editorial-field="solution"
+          data-editorial-field="name"
           [attr.data-editorial-locale]="language.language()"
         >
-          {{ p.solution }}
+          {{ p.name }}
+        </h1>
+        <p
+          class="project-intro"
+          [attr.data-editorial-entity]="p.id"
+          data-editorial-field="description"
+          [attr.data-editorial-locale]="language.language()"
+        >
+          {{ p.description }}
         </p>
-      </section>
-    }
-    <section>
-      <h2>{{ copy().projectRoleLabel }}</h2>
-      <p
-        [attr.data-editorial-entity]="p.id"
-        data-editorial-field="role"
-        [attr.data-editorial-locale]="language.language()"
-      >
-        {{ p.role }}
-      </p>
-    </section>
-    <section>
-      <h2>{{ copy().projectTechnologiesLabel }}</h2>
-      <app-project-technologies [technologies]="p.technologies" />
-    </section>
-    @for (list of lists(); track list.title) {
-      <section>
-        <h2>{{ list.title }}</h2>
-        <ul>
-          @for (value of list.values; track $index) {
-            <li
-              [attr.data-editorial-entity]="p.id + '-' + list.field + '-' + ($index + 1)"
-              data-editorial-field="text"
+      </header>
+
+      <div class="project-content-grid">
+        <!-- 1. Context Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+            </svg>
+            <span>{{ copy().projectContextLabel }}</span>
+          </h2>
+          <p
+            class="card-text"
+            [attr.data-editorial-entity]="p.id"
+            data-editorial-field="problemContext"
+            [attr.data-editorial-locale]="language.language()"
+          >
+            {{ p.problemContext }}
+          </p>
+        </section>
+
+        <!-- 2. Role Card -->
+        <section class="detail-card">
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>{{ copy().projectRoleLabel }}</span>
+          </h2>
+          <p
+            class="card-text"
+            [attr.data-editorial-entity]="p.id"
+            data-editorial-field="role"
+            [attr.data-editorial-locale]="language.language()"
+          >
+            {{ p.role }}
+          </p>
+        </section>
+
+        <!-- 3. Solution Card (if exists) -->
+        @if (p.solution) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 18h6"/>
+                <path d="M10 22h4"/>
+                <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+              </svg>
+              <span>{{ ui().solution }}</span>
+            </h2>
+            <p
+              class="card-text"
+              [attr.data-editorial-entity]="p.id"
+              data-editorial-field="solution"
               [attr.data-editorial-locale]="language.language()"
             >
-              {{ value }}
-            </li>
-          }
-        </ul>
-      </section>
-    }
-    @if (p.images.length) {
-      <section>
-        <h2>{{ en() ? 'Project images' : 'Imagens do projeto' }}</h2>
-        <div class="gallery">
-          @for (image of p.images; track image.id) {
-            <figure>
-              @if (!failedImages().includes(image.id)) {
-                <a [href]="image.publicUrl" target="_blank" rel="noopener noreferrer">
-                  <img
-                    [src]="image.publicUrl"
-                    [alt]="p.name + ' — ' + image.originalName"
-                    loading="lazy"
-                    (error)="imageFailed(image.id)"
-                /></a>
-              } @else {
-                <p>{{ en() ? 'Image unavailable' : 'Imagem indisponível' }}</p>
+              {{ p.solution }}
+            </p>
+          </section>
+        }
+
+        <!-- 4. Images Gallery Card (if exists) -->
+        @if (p.images.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <span>{{ en() ? 'Project images' : 'Imagens do projeto' }}</span>
+            </h2>
+            <div class="gallery">
+              @for (image of p.images; track image.id) {
+                <figure class="gallery-figure">
+                  @if (!failedImages().includes(image.id)) {
+                    <a [href]="image.publicUrl" target="_blank" rel="noopener noreferrer" class="gallery-link">
+                      <img
+                        [src]="image.publicUrl"
+                        [alt]="p.name + ' — ' + image.originalName"
+                        loading="lazy"
+                        (error)="imageFailed(image.id)"
+                        class="gallery-img"
+                      />
+                    </a>
+                  } @else {
+                    <div class="image-placeholder">
+                      <p>{{ en() ? 'Image unavailable' : 'Imagem indisponível' }}</p>
+                    </div>
+                  }
+                </figure>
               }
-            </figure>
-          }
-        </div>
-      </section>
-    }
-    @if (p.links.length) {
-      <section>
-        <h2>{{ copy().projectLinksLabel }}</h2>
-        <ul>
-          @for (link of p.links; track $index) {
-            <li>
-              <a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }} ↗</a>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+            </div>
+          </section>
+        }
+
+        <!-- 5. Technical Decisions Card -->
+        @if (p.technicalDecisions.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="6" y1="3" x2="6" y2="15"/>
+                <circle cx="18" cy="6" r="3"/>
+                <circle cx="6" cy="18" r="3"/>
+                <path d="M18 9a9 9 0 0 1-9 9"/>
+              </svg>
+              <span>{{ copy().projectTechnicalDecisionsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (decision of p.technicalDecisions; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-technicalDecisions-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ decision }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 6. Learnings Card -->
+        @if (p.learnings.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+              <span>{{ copy().projectLearningsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (learning of p.learnings; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-learnings-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ learning }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 7. Results Card (Special visual highlight) -->
+        @if (p.results.length) {
+          <section class="detail-card detail-card--results">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon card-heading-icon--results" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                <polyline points="17 6 23 6 23 12"/>
+              </svg>
+              <span>{{ copy().projectResultsLabel }}</span>
+            </h2>
+            <ul class="card-list">
+              @for (result of p.results; track $index) {
+                <li
+                  class="card-list-item"
+                  [attr.data-editorial-entity]="p.id + '-results-' + ($index + 1)"
+                  data-editorial-field="text"
+                  [attr.data-editorial-locale]="language.language()"
+                >
+                  {{ result }}
+                </li>
+              }
+            </ul>
+          </section>
+        }
+
+        <!-- 8. Technologies Card (Last in technical narrative) -->
+        <section class="detail-card">
+          <h2 class="card-heading">
+            <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+            <span>{{ copy().projectTechnologiesLabel }}</span>
+          </h2>
+          <app-project-technologies [technologies]="p.technologies" />
+        </section>
+
+        <!-- 9. Related Links Card -->
+        @if (p.links.length) {
+          <section class="detail-card">
+            <h2 class="card-heading">
+              <svg class="card-heading-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+              </svg>
+              <span>{{ copy().projectLinksLabel }}</span>
+            </h2>
+            <ul class="project-links-list">
+              @for (link of p.links; track $index) {
+                <li>
+                  <a [href]="link.url" target="_blank" rel="noopener noreferrer" class="project-link-btn">
+                    <span>{{ link.label }}</span>
+                    <span class="external-icon" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+    </div>
   } @else {
-    <h1>{{ en() ? 'Project not found' : 'Projeto não encontrado' }}</h1>
+    <div class="state-container state-container--not-found">
+      <h1>{{ en() ? 'Project not found' : 'Projeto não encontrado' }}</h1>
+    </div>
   }
 </main>
+
+<app-site-footer
+  [brandMonogram]="brandMonogram()"
+  [authorName]="authorName()"
+  [locale]="language.language()"
+/>

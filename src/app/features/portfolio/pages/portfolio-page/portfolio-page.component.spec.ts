@@ -130,12 +130,18 @@ describe('PortfolioPage', () => {
 
     expect(element.querySelector('.hero-name')?.textContent).toContain(ORIGINAL_COPY.heroName);
     expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Engenheiro de Software');
+    expect(element.querySelector('.hero-status__text')?.textContent).toBe('Disponível para novos projetos');
+    expect(element.querySelector('.hero-status__text')?.textContent).not.toContain('Remoto');
     expect(element.querySelector('.eyebrow')).toBeNull();
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Habilidades');
-    expect(element.querySelectorAll('.skill-category')).toHaveLength(6);
+    expect(element.querySelectorAll('.skill-category')).toHaveLength(7);
     expect(
       element.querySelector('[data-testid="skills-languages-runtime"]')?.textContent,
     ).toContain('JavaScript');
+    expect(
+      element.querySelector('[data-testid="skills-computer-vision"]')?.textContent,
+    ).toContain('OpenCV');
+    expect(document.title).toContain('Engenheiro de Software');
     expect(element.querySelector('#formacao-academica')).toBeNull();
     expect(element.querySelector('a[href="#formacao-academica"]')).toBeNull();
     expect(element.querySelector('#contato')).toBeTruthy();
@@ -159,14 +165,24 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
       'Fale comigo',
     );
+    const compactLinks = element.querySelectorAll<HTMLAnchorElement>(
+      '[data-testid="compact-contact-links"] .compact-contact-link',
+    );
+    expect(compactLinks).toHaveLength(3);
+    compactLinks.forEach((link) => {
+      expect(link.target).toBe('_blank');
+      expect(link.rel).toBe('noopener noreferrer');
+    });
     expect(
-      element.querySelectorAll('[data-testid="compact-contact-links"] .compact-contact-link'),
-    ).toHaveLength(4);
+      element.querySelector('[data-testid="compact-contact-links"] a[href^="mailto:"]'),
+    ).toBeNull();
     const heroContactBtn = element.querySelector('[data-testid="hero-contact-button"]') as HTMLAnchorElement;
     expect(heroContactBtn).toBeTruthy();
     expect(heroContactBtn.getAttribute('href')).toBe('#contato');
     expect(element.querySelectorAll('.section-index')).toHaveLength(0);
     const contactContent = element.querySelector('#contato')!;
+    expect(contactContent.querySelector('.contact-intro-header .contact-explanation')).toBeTruthy();
+    expect(contactContent.querySelector('.contact-left-col .contact-explanation')).toBeNull();
     expect(
       [...contactContent.querySelectorAll('[data-testid="contact-links"], [data-testid="contact-panel"], [data-testid="contact-curriculum"]')].map(
         (node) => node.getAttribute('data-testid'),
@@ -190,6 +206,8 @@ describe('PortfolioPage', () => {
     await fixture.whenStable();
 
     expect(element.querySelector('.hero-subtitle')?.textContent).toContain('Software Engineer');
+    expect(element.querySelector('.hero-status__text')?.textContent).toBe('Open to new opportunities');
+    expect(element.querySelector('.hero-status__text')?.textContent).not.toContain('Remote');
     expect(element.querySelector('#stack-tecnica h2')?.textContent).toContain('Skills');
     expect(element.querySelector('#formacao-academica')).toBeNull();
     expect(element.querySelector('#contact-panel-title')?.textContent).toContain(
@@ -429,6 +447,7 @@ describe('PortfolioPage', () => {
     const { element } = await render();
 
     expect(element.querySelector('#portfolio')).toBeTruthy();
+    expect(element.querySelector('#portfolio .portfolio-subtitle')).toBeNull();
     expect(element.querySelector('#projetos')).toBeTruthy();
     expect(element.querySelector('a[href="#portfolio"]')).toBeTruthy();
     expect(element.querySelector('.hero-action--primary')?.getAttribute('href')).toBe('#portfolio');
@@ -590,6 +609,14 @@ describe('PortfolioPage', () => {
     expect(element.querySelector('[data-testid="header-cv-trigger"]')?.textContent).toContain('Currículo');
   });
 
+  it('renders the modern site footer at the base of the portfolio page', async () => {
+    const { element } = await render();
+    const footer = element.querySelector('[data-testid="site-footer"]');
+    expect(footer).toBeTruthy();
+    expect(footer?.querySelector('[data-testid="footer-copyright"]')?.textContent).toContain('Todos os direitos reservados.');
+    expect(footer?.querySelector('.brand-logo__initials')?.textContent).toBe('PF');
+  });
+
   it('toggles CV download dropdown and triggers download on selection', async () => {
     const fixture = TestBed.createComponent(PortfolioPageComponent);
     fixture.detectChanges();
@@ -672,18 +699,18 @@ describe('PortfolioPage', () => {
       expect(extractBrandInitials('Desenvolvedor de Software', 'GX')).toBe('GX');
     });
 
-    it('extracts initials dynamically from personal names', () => {
-      expect(extractBrandInitials('Ada Lovelace')).toBe('AL');
-      expect(extractBrandInitials('Ada Byron')).toBe('AB');
-      expect(extractBrandInitials('Grace Hopper')).toBe('GH');
-      expect(extractBrandInitials('Alan Turing')).toBe('AT');
+    it('extracts initials dynamically from multi-word labels', () => {
+      expect(extractBrandInitials('Usuario Principal')).toBe('UP');
+      expect(extractBrandInitials('Conta Teste')).toBe('CT');
+      expect(extractBrandInitials('Perfil Exemplo')).toBe('PE');
+      expect(extractBrandInitials('Autor Demonstracao')).toBe('AD');
     });
 
     it('skips Portuguese and English prepositions/stopwords', () => {
-      expect(extractBrandInitials('Lucas de Souza')).toBe('LS');
-      expect(extractBrandInitials('Ana da Silva')).toBe('AS');
-      expect(extractBrandInitials('Carlos do Carmo')).toBe('CC');
-      expect(extractBrandInitials('John of York')).toBe('JY');
+      expect(extractBrandInitials('Perfil de Exemplo')).toBe('PE');
+      expect(extractBrandInitials('Sistema da Plataforma')).toBe('SP');
+      expect(extractBrandInitials('Conta do Sistema')).toBe('CS');
+      expect(extractBrandInitials('Brand of System')).toBe('BS');
     });
   });
 
