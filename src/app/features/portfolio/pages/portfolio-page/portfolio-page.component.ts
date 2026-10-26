@@ -6,6 +6,7 @@ import { SiteFooterComponent } from '../../../../shared/components/site-footer/s
 import type { ContactPanelDestinations } from '../../../../shared/components/contact-panel/contact-panel.models';
 import { supabaseRuntimeConfig } from '../../../../core/config/supabase-runtime-config';
 import { technologyIcon } from '../../services/technology-icons';
+import { resolvePortfolioAssetUrl } from '../../services/portfolio-asset-url';
 import {
   afterNextRender,
   Component,
@@ -266,17 +267,20 @@ export class PortfolioPageComponent {
   });
   protected readonly profileImageFailed = signal(false);
   protected readonly profileImageUrl = computed(() => {
-    if (this.profileImageFailed()) return GENERIC_PROFILE_IMAGE;
+    if (this.profileImageFailed()) {
+      return resolvePortfolioAssetUrl(GENERIC_PROFILE_IMAGE) ?? GENERIC_PROFILE_IMAGE;
+    }
     const config =
       typeof globalThis !== 'undefined' ? globalThis.__PORTFOLIO_SUPABASE_CONFIG__ : undefined;
     const configuredUrl = config?.profileImageUrl?.trim();
-    if (configuredUrl) return configuredUrl;
+    if (configuredUrl) return resolvePortfolioAssetUrl(configuredUrl) ?? configuredUrl;
     const profileIdentity = (
       this.content as PortfolioContentService & {
         profileIdentity?: () => { imageUrl?: string } | null;
       }
     ).profileIdentity?.();
-    return profileIdentity?.imageUrl?.trim() || GENERIC_PROFILE_IMAGE;
+    const imageUrl = profileIdentity?.imageUrl?.trim();
+    return resolvePortfolioAssetUrl(imageUrl || GENERIC_PROFILE_IMAGE) ?? GENERIC_PROFILE_IMAGE;
   });
   protected onProfileImageError(): void {
     this.profileImageFailed.set(true);
@@ -433,17 +437,25 @@ export class PortfolioPageComponent {
   }
 
   protected skillIcon(skill: PortfolioSkill): string | null {
-    return skill.iconPublicUrl || skill.iconUrl || technologyIcon(skill.name) || null;
+    return resolvePortfolioAssetUrl(skill.iconPublicUrl || skill.iconUrl || technologyIcon(skill.name)) || null;
   }
 
   protected onSkillIconError(event: Event, skill: PortfolioSkill): void {
     const image = event.currentTarget as HTMLImageElement;
-    if (skill.iconUrl && image.src !== skill.iconUrl) {
-      image.src = skill.iconUrl;
+    const fallbackIcon = resolvePortfolioAssetUrl(skill.iconUrl);
+    if (fallbackIcon && image.src !== fallbackIcon) {
+      image.src = fallbackIcon;
       return;
     }
     image.hidden = true;
   }
+
+  protected contactIcon(link: PortfolioContactLink): string {
+    return resolvePortfolioAssetUrl(link.iconPath) ?? link.iconPath;
+  }
+
+  protected readonly curriculumIconPath =
+    resolvePortfolioAssetUrl('/assets/contact/curriculum.svg') ?? 'assets/contact/curriculum.svg';
 
   protected projectGalleryImages(project: PortfolioProject): PortfolioProjectImage[] {
     const failedIds = new Set(this.failedProjectImageIds()[project.id] ?? []);

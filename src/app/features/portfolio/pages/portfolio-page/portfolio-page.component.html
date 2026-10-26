@@ -651,7 +651,7 @@
                       rel="noopener noreferrer"
                     >
                       <div class="contact-platform-icon" aria-hidden="true">
-                        <img [src]="link.iconPath" alt="" aria-hidden="true" />
+                        <img [src]="contactIcon(link)" alt="" aria-hidden="true" />
                       </div>
                       <div class="contact-platform-content">
                         <span class="contact-label">
@@ -680,7 +680,7 @@
                     data-testid="contact-curriculum"
                   >
                     <div class="contact-platform-icon" aria-hidden="true">
-                      <img src="/assets/contact/curriculum.svg" alt="" aria-hidden="true" />
+                      <img [src]="curriculumIconPath" alt="" aria-hidden="true" />
                     </div>
                     <div class="contact-platform-content">
                       <span class="contact-label">

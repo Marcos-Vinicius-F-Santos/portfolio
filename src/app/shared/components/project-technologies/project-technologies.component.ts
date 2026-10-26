@@ -1,4 +1,5 @@
 import { Component, input, signal } from '@angular/core';
+import { resolvePortfolioAssetUrl } from '../../../features/portfolio/services/portfolio-asset-url';
 import { technologyIcon } from '../../../features/portfolio/services/technology-icons';
 
 @Component({
@@ -15,6 +16,6 @@ export class ProjectTechnologiesComponent {
   }
 
   protected icon(name: string): string | undefined {
-    return technologyIcon(name);
+    return resolvePortfolioAssetUrl(technologyIcon(name));
   }
 }
